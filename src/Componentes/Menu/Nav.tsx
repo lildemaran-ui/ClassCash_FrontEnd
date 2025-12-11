@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import Logo5 from "../assets/Logo5.png"
-import Logo55 from "../assets/Logo5.5.png"
+import Logo5 from "../../assets/Logo5.png"
+import Logo55 from "../../assets/Logo5.5.png"
 import { Link } from "react-router-dom";
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -35,7 +35,7 @@ const navbarClasses = `fixed top-0 w-full z-50 transition-colors duration-700 ${
 const textClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? 'text-white hover:text-[#268CFF]' : 'text-[#268CFF] hover:text-white'}`
 
   return (
-    <header className=" fixed top-0 w-full scrooll-smooth transparent-bg z-50 " >
+    <header className=" fixed top-0 w-full scrooll-smooth transparent-bg z-50 antialiased" >
      <div className={navbarClasses}>
        <nav className="flex h-16 sm:h-20 items-center justify-between px-6">
         <div className="text-[#268CFF] flex items-center font-semibold text-xl sm:text-3xl">
@@ -51,14 +51,14 @@ const textClasses = `font-semibold cursor-pointer transition-colors duration-700
          </div>
         </div>
         <div className="hidden md:items-center md:flex gap-4 text-white font-semibold text-base sm:text-lg ">
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-700 ">Início</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-700 ">Sobre Nós</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-700 ">Contacto</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-700 ">Instituições</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-700 ">FAQ's</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-700 ">Funcionalidades</a>
+          
+          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF] ">Sobre Nós</a>
+          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF]  ">Contacto</a>
+          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF]  ">Instituições</a>
+          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF]  ">FAQ's</a>
+          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF]  ">Funcionalidades</a>
           <Link to="/Login">
-           <button className="  px-3 py-2 rounded-lg  bg-[#268CFF] transition-colors duration-700 font-medium hover:bg-[#04458f] text-white transition-colors duration-700 " >
+           <button className="  px-3 py-2 rounded-lg border-2 border-[#268CFF] hover:bg-[#268CFF] transition-colors duration-700 font-medium text-white" >
               Entrar
             </button> 
           </Link>
@@ -80,9 +80,7 @@ const textClasses = `font-semibold cursor-pointer transition-colors duration-700
         <div className="flex absolute right-4  top-4 ">
           <X className="text-white " onClick={CloseMenu}></X>
         </div>
-        <a href="" onClick={CloseMenu} className="mb-2 mt-20">
-          Início
-        </a>
+        
         <a href="" className="mb-2 ">
           Sobre Nós
         </a>
@@ -102,3 +100,6 @@ const textClasses = `font-semibold cursor-pointer transition-colors duration-700
     </header>
   );
 }
+
+
+

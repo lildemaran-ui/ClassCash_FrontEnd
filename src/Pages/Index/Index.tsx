@@ -1,15 +1,15 @@
-import Nav from "../Componentes/Nav";
-import Objetivo from "../Pages/Objetivos";
-import fundo from "../assets/fundo1.jpg";
-import Footer from "../Componentes/Footer";
-import ilustr from "../assets/ilstr1.jpg";
-import ilustr2 from "../assets/ilstr2.jpg";
-import ilustr3 from "../assets/ilstr3.jpg";
-import Cards from "../Pages/Cards";
-import FrasesRotativas from "../Hooks/FrasesRotativas";
-import express from "../assets/Express.png"
-import paypay from "../assets/paypay.png"
-import paypal from "../assets/PayPal.png"
+import Nav from "../../Componentes/Menu/Nav";
+import Objetivo from "../../Pages/Index/Objetivos";
+import fundo from "../../assets/fundo1.jpg";
+import Footer from "../../Componentes/Footer/Footer";
+import ilustr from "../../assets/ilstr1.jpg";
+import ilustr2 from "../../assets/ilstr2.jpg";
+import ilustr3 from "../../assets/ilstr3.jpg";
+import Cards from "../../Pages/Index/Cards";
+import FrasesRotativas from "../../Hooks/FrasesRotativas";
+import express from "../../assets/Express.png"
+import paypay from "../../assets/paypay.png"
+import paypal from "../../assets/PayPal.png"
 import { Link } from "react-router-dom";
 
 export default function PaginaInicial() {
@@ -23,17 +23,19 @@ export default function PaginaInicial() {
           className="absolute top-0 left-0 w-full h-full object-cover z-0 "
         />
         <div className="relative z-10 flex flex-col  items-center justify-center h-full text-center text-2xl  sm:text-4xl font-extrabold cursor-default  text-white  px-4">
-          <h1>
+          <h1 className="drop-shadow-lg">
             Pagamentos <FrasesRotativas />{" "}
           </h1>
           <div className="drop-shadow-lg mb-10 font-roboto text-white font-semibold text-lg sm:text-xl mt-6 cursor-default">
             <p>Sua escola no controlo, Seus pagamentos sob gestão.</p>
           </div>
-          <a href="#Serviços">
+          
+            <Link to="/DashboardAdmin">
             <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#04458f]  transition-colors duration-700 sm:p-3 ">
               Saiba Mais
             </button>
-          </a>
+            </Link>
+          
         </div>
       </div>
       {/* /**Nossos Serviços */}
@@ -143,7 +145,7 @@ export default function PaginaInicial() {
         </div>
         
       </div>
-      <Link to="/Pagamentos">
+      <Link to="/teste">
       <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#1675e2]  transition-colors duration-700 sm:p-3 mx-auto flex mb-20 ">
               Fazer pagamentos
             </button></Link>

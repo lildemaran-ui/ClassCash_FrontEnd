@@ -3,13 +3,13 @@ import { CreditCard, Check, Eye, Lock } from "lucide-react";
 export default function Objetivo() {
   return (
     <div className="overflow-x-auto sm:ovverflow-none">
-      <div className="flex   justify-center items-center space-y-8  mt-10  flex-col animate-fade-in   ">
+      <div className="flex   justify-center items-center space-y-8  mt-10  flex-col animate-fade-in  ">
         <div className=" flex flex-col sm:flex-row  gap-4 ">
-          <div className="group bg-white  p-8 rounded-xl shadow-xl w-64 items-center justify-center flex-col flex mb-20 transition-transform duration-300 hover:scale-105">
+          <div className="group p-8 rounded-xl shadow-xl w-64 items-center justify-center flex-col flex mb-20 transition-transform duration-300 hover:scale-105">
             <h3 className=" flex items-center flex-col  font-bold pb-5 justify-center">
               <CreditCard
                 size={48}
-                className="inline-block mb-4 h-10 text-[#268CFF] transition-transform duration-300 "
+                className="inline-block mb-4 h-10  text-[#268CFF] transition-transform duration-300 "
               ></CreditCard>
               Pagamentos Digitais
             </h3>

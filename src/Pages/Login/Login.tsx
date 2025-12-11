@@ -1,8 +1,8 @@
-import Fundo from "../assets/fundoLogin.jpg";
-import Eyeoff from "../assets/Eyeoff.png";
-import Logo55 from "../assets/Logo5.5.png";
+import Fundo from "../../assets/fundoLogin.jpg";
+import Eyeoff from "../../assets/Eyeoff.png";
+import Logo55 from "../../assets/Logo5.5.png";
 import { Link } from "react-router-dom";
-import FrasesRotativasLogin from "../Hooks/FrasesRotativasLogin";
+import FrasesRotativasLogin from "../../Hooks/FrasesRotativasLogin";
 export default function Login() {
   return (
     /*Tela de login*/
@@ -18,10 +18,8 @@ export default function Login() {
         </div>
 
         <h1 className="text-start flex justify-start px-6 mt-[80%]  ">
-          
-          <FrasesRotativasLogin/>
+          <FrasesRotativasLogin />
         </h1>
-        
       </div>
 
       <div id="login" className="flex items-center bg-white  w-1/2">

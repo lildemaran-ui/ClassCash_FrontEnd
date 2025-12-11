@@ -6,7 +6,7 @@ import { MessageCircleQuestionMark,
   MessageCircle,
   ArrowLeft,
 } from "lucide-react";
-import Logo from "../assets/Logo5.5.png"
+import Logo from "../../assets/Logo5.5.png"
 
 export default function Pagamentos() {
   const [pagamento, setPagamento] = useState({

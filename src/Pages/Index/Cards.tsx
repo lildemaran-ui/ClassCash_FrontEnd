@@ -1,11 +1,11 @@
-import icone1 from "../assets/pagamento-em-dinheiro 1.png"
-import icone2 from "../assets/camisa 1.png"
-import icone3 from "../assets/transferir 1.png"
-import icone4 from "../assets/cartao-de-estudante.png"
-import icone5 from "../assets/declaracao.png"
-import icone6 from "../assets/certificado 1.png"
-import icone7 from "../assets/uniforme 1.png"
-import icone8 from "../assets/caderno 1.png"
+import icone1 from "../../assets/pagamento-em-dinheiro 1.png"
+import icone2 from "../../assets/camisa 1.png"
+import icone3 from "../../assets/transferir 1.png"
+import icone4 from "../../assets/cartao-de-estudante.png"
+import icone5 from "../../assets/declaracao.png"
+import icone6 from "../../assets/certificado 1.png"
+import icone7 from "../../assets/uniforme 1.png"
+import icone8 from "../../assets/caderno 1.png"
 
 export default function Cards (){
     return(

@@ -48,3 +48,1061 @@ body {
   -webkit-background-clip: text;
   color: transparent;
 }
+#teste{
+  /* Gestão de Instituições */
+
+position: relative;
+width: 9120px;
+height: 10124px;
+
+background: #F3F6F8;
+
+
+
+
+/* Settings
+
+Keywords: cog, edit, gear, preferences
+*/
+
+position: absolute;
+width: 200px;
+height: 200px;
+left: 8368px;
+top: 388px;
+
+
+
+/* Icon */
+
+position: absolute;
+left: 4.17%;
+right: 4.17%;
+top: 4.17%;
+bottom: 4.17%;
+
+border: 5px solid #268CFF;
+
+
+/* Rectangle 340 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 2520px;
+height: 273px;
+left: 5745px;
+top: 330px;
+
+background: #FBFBFB;
+border: 1px solid #268CFF;
+box-shadow: 0px 1px 1px #DBDBDB;
+border-radius: 50px;
+
+
+/* iconamoon:search-thin */
+
+position: absolute;
+width: 200px;
+height: 200px;
+left: 5878px;
+top: 366px;
+
+background: #FFFFFF;
+
+
+/* Vector */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 12.5%;
+bottom: 12.5%;
+
+border: 1px solid #268CFF;
+
+
+/* Procurar por um serviço... */
+
+position: absolute;
+width: 1208px;
+height: 120px;
+left: 6207px;
+top: 417px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 300;
+font-size: 80px;
+line-height: 120px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+
+color: #B3B3B3;
+
+
+
+/* Frame 87 */
+
+position: absolute;
+width: 250px;
+height: 265px;
+left: 8671px;
+top: 338px;
+
+
+
+/* Bell
+
+Keywords: alarm, notification, sound
+*/
+
+position: absolute;
+width: 250px;
+height: 250px;
+left: 0px;
+top: 15px;
+
+
+
+/* Icon */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 8.33%;
+bottom: 8.35%;
+
+border: 5px solid #268CFF;
+
+
+/* Ellipse 10 */
+
+position: absolute;
+left: 60%;
+right: 0%;
+top: 0%;
+bottom: 62.26%;
+
+background: #FF0000;
+
+
+/* iconamoon:trend-down-light */
+
+position: absolute;
+width: 30px;
+height: 30px;
+left: 998px;
+top: 384px;
+
+
+
+/* Group */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 29.17%;
+bottom: 29.17%;
+
+
+
+/* Vector */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 29.17%;
+bottom: 29.17%;
+
+border: 1.5px solid #FA3636;
+
+
+/* Vector */
+
+position: absolute;
+left: 70.83%;
+right: 12.5%;
+top: 54.17%;
+bottom: 29.17%;
+
+border: 1.5px solid #FA3636;
+
+
+/* iconamoon:trend-down-light */
+
+position: absolute;
+width: 117px;
+height: 107px;
+left: 3316px;
+top: 2942px;
+
+
+
+/* icon */
+
+position: absolute;
+height: 50px;
+left: 33.96%;
+right: 65.15%;
+top: calc(50% - 50px/2 - 4865px);
+
+background: #BDBDBD;
+
+
+/* icon */
+
+position: absolute;
+height: 50px;
+left: 50.73%;
+right: 48.38%;
+top: calc(50% - 50px/2 - 4865px);
+
+background: #BDBDBD;
+
+
+/* icon */
+
+position: absolute;
+height: 50px;
+left: 67.61%;
+right: 31.5%;
+top: calc(50% - 50px/2 - 4865px);
+
+background: #BDBDBD;
+
+
+/* Frame 106 */
+
+position: absolute;
+width: 2000px;
+height: 13352px;
+left: 2px;
+top: 0px;
+
+
+
+/* Rectangle 20 */
+
+position: absolute;
+left: 0%;
+right: 0%;
+top: 0%;
+bottom: 0%;
+
+background: #268CFF;
+/* Drop Shadow/600 */
+box-shadow: 0px 16px 32px -8px rgba(12, 12, 13, 0.4);
+border-radius: 0px;
+
+
+/* DashBoard */
+
+position: absolute;
+width: 677px;
+height: 180px;
+left: 485px;
+top: 1511px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Home
+
+Keywords: house, living
+*/
+
+position: absolute;
+width: 200px;
+height: 200px;
+left: 204px;
+top: 1491px;
+
+
+
+/* Icon */
+
+position: absolute;
+left: 12.5%;
+right: 12.5%;
+top: 8.33%;
+bottom: 8.33%;
+
+border: 15px solid #FFFFFF;
+
+
+/* Gestão de Instituições */
+
+position: absolute;
+width: 1354px;
+height: 180px;
+left: 485px;
+top: 1934px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Administradores */
+
+position: absolute;
+width: 1027px;
+height: 180px;
+left: 485px;
+top: 2357px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Estudantes */
+
+position: absolute;
+left: 22.5%;
+right: 39.85%;
+top: 20.82%;
+bottom: 77.74%;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Relatório */
+
+position: absolute;
+left: 24.25%;
+right: 48.35%;
+top: 24.08%;
+bottom: 74.48%;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Group 1 */
+
+position: absolute;
+width: 902px;
+height: 180px;
+left: 485px;
+top: 3650px;
+
+
+
+/* Configurações */
+
+position: absolute;
+width: 902px;
+height: 180px;
+left: 485px;
+top: 3650px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Settings
+
+Keywords: cog, edit, gear, preferences
+*/
+
+position: absolute;
+width: 200px;
+height: 200px;
+left: 216px;
+top: 3630px;
+
+
+
+/* Icon */
+
+position: absolute;
+left: 4.17%;
+right: 4.17%;
+top: 4.17%;
+bottom: 4.17%;
+
+border: 15px solid #FFFFFF;
+
+
+/* Rectangle 341 */
+
+position: absolute;
+width: 2000px;
+height: 525px;
+left: 0px;
+top: 0px;
+
+background: #268CFF;
+
+
+/* Frame 97 */
+
+position: absolute;
+width: 1086px;
+height: 459px;
+left: 154px;
+top: 33px;
+
+
+
+/* Rectangle 20 */
+
+position: absolute;
+width: 430px;
+height: 459px;
+left: 0px;
+top: 0px;
+
+background: url(ChatGPT_Image_4_11_2025__11_07_37-removebg-preview.png);
+
+
+/* ClassCash */
+
+position: absolute;
+width: 656px;
+height: 180px;
+left: 430px;
+top: 139px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* sort */
+
+position: absolute;
+width: 250px;
+height: 208px;
+left: 1632px;
+top: 172px;
+
+
+
+/* Gestão de Instituições */
+
+position: absolute;
+width: 1354px;
+height: 180px;
+left: 2176px;
+top: 186px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #268CFF;
+
+
+
+/* Frame 110 */
+
+position: absolute;
+width: 6537px;
+height: 5721px;
+left: 1931px;
+top: 1865px;
+
+border-radius: 100px;
+
+
+/* Frame 115 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 6083px;
+height: 897px;
+left: 202px;
+top: 215px;
+
+background: #FFFFFF;
+border: 1px solid #000000;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+
+/* Instituto Médio Politécnico Kibangas */
+
+position: absolute;
+width: 2220px;
+height: 180px;
+left: 1049px;
+top: 217px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Rua : António Pedro Benje, nº 107, Vila-Alice - Luanda */
+
+position: absolute;
+width: 3207px;
+height: 180px;
+left: 1049px;
+top: 499px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #808080;
+
+
+
+/* kk 3 */
+
+position: absolute;
+width: 510px;
+height: 721px;
+left: 272px;
+top: 88px;
+
+background: url(kk.png);
+border-radius: 800px;
+
+
+/* Frame 116 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 6083px;
+height: 897px;
+left: 202px;
+top: 1112px;
+
+background: #FFFFFF;
+border: 1px solid #000000;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+
+/* Colégio Caracol */
+
+position: absolute;
+width: 982px;
+height: 180px;
+left: 1034px;
+top: 201px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Rua da Liberdade, Vila-Alice - Luanda */
+
+position: absolute;
+width: 2315px;
+height: 180px;
+left: 1034px;
+top: 408px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #808080;
+
+
+
+/* Frame 117 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 6083px;
+height: 897px;
+left: 202px;
+top: 2009px;
+
+background: #FFFFFF;
+border: 1px solid #000000;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+
+/* Colégio Elizangêla Filomena */
+
+position: absolute;
+width: 1712px;
+height: 180px;
+left: 1003px;
+top: 281px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Avenida Ho-Chi-Min, Praça da Independência - Luanda */
+
+position: absolute;
+width: 3409px;
+height: 180px;
+left: 1003px;
+top: 516px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #808080;
+
+
+
+/* Frame 118 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 6083px;
+height: 897px;
+left: 202px;
+top: 2891px;
+
+background: #FFFFFF;
+border: 1px solid #000000;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+
+/* Centro MAPTESS */
+
+position: absolute;
+width: 992px;
+height: 180px;
+left: 1038px;
+top: 211px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Rua: B6, Rangel - Luanda */
+
+position: absolute;
+width: 1522px;
+height: 180px;
+left: 1038px;
+top: 446px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #808080;
+
+
+
+/* Frame 119 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 6083px;
+height: 897px;
+left: 202px;
+top: 3788px;
+
+background: #FFFFFF;
+border: 1px solid #000000;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+
+/* Centro Infantil Kiesse */
+
+position: absolute;
+width: 1295px;
+height: 180px;
+left: 983px;
+top: 281px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Bairro Nelito Soares, Rangel - Luanda */
+
+position: absolute;
+width: 2264px;
+height: 180px;
+left: 983px;
+top: 461px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #808080;
+
+
+
+/* Frame 120 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 6083px;
+height: 897px;
+left: 202px;
+top: 4685px;
+
+background: #FFFFFF;
+border: 1px solid #000000;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+
+/* Gamek, Morro-Bento - Luanda */
+
+position: absolute;
+width: 1869px;
+height: 180px;
+left: 983px;
+top: 441px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #808080;
+
+
+
+/* Instituto Superior Politécnico de Ciências e Tecnologia - INSUTEC */
+
+position: absolute;
+width: 3933px;
+height: 180px;
+left: 983px;
+top: 206px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Rectangle 444 */
+
+position: absolute;
+width: 1117px;
+height: 317px;
+left: 6402px;
+top: 1130px;
+
+background: #268CFF;
+box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+border-radius: 20px;
+
+
+/* Rectangle 445 */
+
+box-sizing: border-box;
+
+position: absolute;
+width: 1117px;
+height: 317px;
+left: 7585px;
+top: 1130px;
+
+border: 5px solid #268CFF;
+filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+border-radius: 20px;
+
+
+/* Adicionar */
+
+position: absolute;
+width: 486px;
+height: 150px;
+left: calc(50% - 486px/2 + 2401px);
+top: 1213px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 100px;
+line-height: 150px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+
+color: #FFFFFF;
+
+
+
+/* Remover */
+
+position: absolute;
+width: 451px;
+height: 150px;
+left: calc(50% - 451px/2 + 3597.5px);
+top: 1213px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 100px;
+line-height: 150px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+
+color: #268CFF;
+
+
+
+/* Frame 111 */
+
+position: absolute;
+width: 1047px;
+height: 349px;
+left: 2176px;
+top: 1691px;
+
+background: #417FC4;
+border-radius: 100px 100px 0px 0px;
+
+
+/* Instituições */
+
+position: absolute;
+width: 706px;
+height: 180px;
+left: 49px;
+top: -4115px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #000000;
+
+
+
+/* Instituições */
+
+position: absolute;
+width: 706px;
+height: 180px;
+left: 171px;
+top: 84px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+
+
+
+/* Frame 120 */
+
+position: absolute;
+width: 1047px;
+height: 349px;
+left: 3561px;
+top: 1691px;
+
+background: #268CFF;
+border-radius: 100px 100px 0px 0px;
+
+
+/* Perfil */
+
+position: absolute;
+width: 304px;
+height: 180px;
+left: 372px;
+top: 84px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 600;
+font-size: 120px;
+line-height: 180px;
+/* idêntico à altura da caixa */
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #FFFFFF;
+}

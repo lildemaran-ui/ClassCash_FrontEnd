@@ -1,9 +1,15 @@
+import logo from "../../assets/Logo5.5.png"
 export default function Footer() {
   return (
     <div>
       <footer className="bg-[#268CFF] text-white w-full">
-        <div className="max-w-7xl mx-auto py-12 px-6 grid grid-cols-1 sm:grid-cols-4 gap-20">
-        
+        <div className="max-w-7xl mx-auto py-12 px-10 grid grid-cols-1 sm:grid-cols-4 gap-15">
+        <div>
+          <div className="flex items-center " >
+            <img src={logo} alt="" className="h-28" />
+            <p className="text-xl ">ClassCash</p>
+          </div>
+        </div>
            <div>
             <h3 className="text-base sm:text-lg font-semibold text-white mb-4 cursor-default">
               Navegação
@@ -38,10 +44,10 @@ export default function Footer() {
                 Multicaixa Express
               </li>
               <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
-               PayPay
+               Unitel Money
               </li>
               <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
-               PayPal
+               Afrimoney
               </li>
               
             </ol>

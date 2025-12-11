@@ -1,8 +1,7 @@
-import Fundo1 from "../assets/fundo1.jpg";
-import Logo55 from "../assets/Logo5.5.png";
-import Logo5 from "../assets/Logo5.png";
-
-import Eyeoff from "../assets/Eyeoff.png";
+import Fundo1 from "../../assets/fundo1.jpg";
+import Logo55 from "../../assets/Logo5.5.png";
+import Logo5 from "../../assets/Logo5.png";
+import Eyeoff from "../../assets/Eyeoff.png";
 
 export default function Cadastro() {
   return (

@@ -27,7 +27,8 @@ import {
   Lock, // Ícone para Configurações de Segurança
   BellRing, // Ícone para Configurações de Notificações
   UploadCloud, // Ícone para upload de logo
-  X, // Ícone de fechar modal
+  X,
+  Shell, // Ícone de fechar modal
 } from 'lucide-react';
 
 // --- DADOS MOCK (Simulação de Dados para o Dashboard) ---
@@ -47,24 +48,22 @@ interface MiniMetric {
 }
 
 const mainMetrics: Metric[] = [
-  { title: "Total de contas bancárias", value: "12", unit: "contas", trend: 50, trendText: "+50", isKz: false },
-  { title: "Estudantes ativos", value: "1,000", unit: "ativos", trend: -95, trendText: "-950", isKz: false },
-  { title: "Total de transações", value: "1,500", unit: "operações", trend: 10, trendText: "+10", isKz: false },
-  { title: "Servidores alocados", value: "2", unit: "alocados", trend: 0, trendText: "sem alteração", isKz: false },
+  { title: "Total de instituições", value: "12", unit: "No último mês", trend: 50, trendText: "+50", isKz: false },
+  { title: "Total de estudantes", value: "1,000", unit: "No último mês", trend: 95, trendText: "+30", isKz: false },
+  { title: "Total de Encarregados", value: "1,500", unit: "No último mês", trend: 10, trendText: "+10", isKz: false },
+  { title: "Total de Administradores", value: "2", unit: "No último mês", trend: 0, trendText: "sem alteração", isKz: false },
   { title: "Orçamento total", value: "200,000", unit: "KZ", trend: 5, trendText: "+10,000", isKz: true },
+  
 ];
 
 const miniMetrics: MiniMetric[] = [
-  { title: "Total de Cadastros", trend: 3 },
-  { title: "Contribuições de Mês", trend: 1 },
+  { title: "Estudantes Ativos", trend: 30 },
+  { title: "Estudantes Inativos", trend: -60 },
   { title: "Alunos Recadastrados", trend: 10 },
   { title: "Novos Ingressos", trend: 20 },
 ];
 
-const miniMetricsBottom: MiniMetric[] = [
-  { title: "Investimento Inst. Sociais", trend: -1 },
-  { title: "Apoio Técnico Resolvido", trend: -1 },
-];
+
 
 // --- DADOS MOCK (Simulação de Dados para Gestão de Instituições) ---
 
@@ -162,7 +161,7 @@ const MetricCard: React.FC<{ metric: Metric }> = ({ metric }) => {
   const isPositive = metric.trend >= 0;
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col justify-between h-36">
+    <div className="bg-white p-6 rounded-xl border  flex flex-col justify-between h-36">
       <h3 className="text-sm font-medium text-gray-500">{metric.title}</h3>
       <div className="text-2xl font-bold text-gray-900 mt-1">
         {metric.isKz && <span className="text-xl">KZ </span>}
@@ -188,38 +187,22 @@ const MetricCard: React.FC<{ metric: Metric }> = ({ metric }) => {
 };
 
 // Componente para o card de mini métrica (apenas tendência)
-const MiniMetricCard: React.FC<{ metric: MiniMetric }> = ({ metric }) => {
-  const isPositive = metric.trend >= 0;
-  const TrendIcon = isPositive ? ArrowUp : ArrowDown;
 
-  return (
-    <div className="bg-white p-4 rounded-xl shadow flex flex-col items-center">
-      <div
-        className={`flex items-center text-xl font-bold ${
-          isPositive ? 'text-green-600' : 'text-red-600'
-        }`}
-      >
-        <TrendIcon className="w-5 h-5 mr-1" />
-        {metric.trend > 0 ? `+${metric.trend}` : metric.trend}
-      </div>
-      <h3 className="text-xs text-gray-500 mt-1 text-center">{metric.title}</h3>
-    </div>
-  );
-};
 
 // Componente para simular o gráfico de barras horizontais (Análise Gráfico)
 const VerticalBarChartSimulation: React.FC = () => {
   // Dados simulados (rótulo, valor percentual, cor)
   const data = [
-    { label: "Relações ativas", value: 75, color: 'bg-[#268cff]' },
-    { label: "Estudantes utilizados", value: 50, color: 'bg-[#268cff]' },
-    { label: "Estudantes inativos", value: 30, color: 'bg-[#268cff]' },
-    { label: "Outros", value: 90, color: 'bg-[#268cff]' },
+    { label: "Total de instituições", value: 75, color: 'bg-[#268cff]' },
+    { label: "Total de estudantes", value: 50, color: 'bg-[#268cff]' },
+    { label: "Total de encarregados", value: 30, color: 'bg-[#268cff]' },
+    { label: "Total de Administradores", value: 90, color: 'bg-[#268cff]' },
+    {label: "Total de Orçamento", value: 60, color: 'bg-[#268cff]' },
   ];
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg mt-6">
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">Análise Gráfico</h2>
+    <div className="bg-white p-6 rounded-xl border mt-6 ">
+      <h2 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 p-2">Análise Gráfico</h2>
       <div className="space-y-4">
         {data.map((item, index) => (
           <div key={index} className="flex items-center">
@@ -244,12 +227,12 @@ const MonthlyBarChartSimulation: React.FC = () => {
   const values = [40, 65, 80, 5, 95, 20, 40, 60, 50, 5, 45, 35]; // Altura da barra (0 a 100)
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg mt-6">
+    <div className="bg-white p-8 rounded-xl border mt-6 ">
       <h2 className="text-lg font-semibold text-gray-800 mb-8">Gráfico dos meses com mais cadastros</h2>
       <div className="flex items-end h-64 border-l border-b border-gray-300 relative">
         {/* Linhas de grade e valores Y simulados */}
         {[0, 20, 40, 60, 80, 100].map(y => (
-          <div key={y} className="absolute left-0 w-full text-xs text-gray-500" style={{ bottom: `${y}%`, transform: 'translateY(50%)' }}>
+          <div key={y} className="absolute left-0 w-full text-xs text-gray-500 " style={{ bottom: `${y}%`, transform: 'translateY(50%)' }}>
             {y}%
             {y > 0 && <div className="absolute left-0 bottom-0 w-full border-t border-gray-200 -z-10" />}
           </div>
@@ -263,7 +246,7 @@ const MonthlyBarChartSimulation: React.FC = () => {
             style={{ width: `${100 / months.length}%` }}
           >
             <div
-              className="w-3/5 bg-[#268CFF] hover:bg-blue-600 transition-all duration-300 rounded-t-md"
+              className="w-12 bg-[#268CFF] hover:bg-blue-600 transition-all duration-300 rounded-t-md"
               style={{ height: `${value}%` }}
               title={`${months[index]}: ${value} cadastros`}
             />
@@ -284,21 +267,22 @@ const MonthlyBarChartSimulation: React.FC = () => {
 
 // --- CONTEÚDO DA PÁGINA: DASHBOARD ---
 
-const DashboardContent: React.FC = () => (
+const   DashboardContent: React.FC = () => (
   <main className="p-6 md:p-8 space-y-8">
     {/* Seção de Filtros e Alerta */}
-    <div className="bg-white p-6 rounded-xl shadow-lg">
+    <div className="bg-white p-6 border rounded-xl ">
       <div className="flex justify-between items-center mb-4 border-b pb-4">
-        <div className="flex items-center text-lg font-semibold text-yellow-600">
-          <AlertCircle className="w-6 h-6 mr-2" />
+        <div className="flex items-center text-lg font-semibold text-gray-700">
+          <Bell className="w-6 h-6 mr-2  " />
           Alerta das Instituições
         </div>
         <button className="bg-[#268cff] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-700 shadow-md">
           Ver Alertas
         </button>
       </div>
+    </div>
 
-      {/* Filtros */}
+{/* Filtros */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {['Ano', 'Semestre', 'Mês', 'Instituição'].map((filter) => (
           <div key={filter} className="space-y-1">
@@ -317,8 +301,6 @@ const DashboardContent: React.FC = () => (
           </div>
         ))}
       </div>
-    </div>
-
     {/* Cartões de Métricas Principais (Linha 1) */}
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
       {mainMetrics.map((metric, index) => (
@@ -334,25 +316,13 @@ const DashboardContent: React.FC = () => (
       </div>
 
       {/* Coluna dos Mini-Cartões de Tendência (Topo) */}
-      <div className="grid grid-cols-2 gap-4">
-        {miniMetrics.slice(0, 2).map((metric, index) => (
-          <MiniMetricCard key={index} metric={metric} />
-        ))}
-        {miniMetrics.slice(2).map((metric, index) => (
-          <MiniMetricCard key={index + 2} metric={metric} />
-        ))}
-      </div>
+     
+     
     </div>
 
-    {/* Cartões de Tendência Adicionais e Gráfico Inferior */}
-    <div className="space-y-6">
-      {/* Mini-Cartões de Tendência (Linha Inferior) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {miniMetricsBottom.map((metric, index) => (
-          <MiniMetricCard key={`bottom-${index}`} metric={metric} />
-        ))}
-        <div className="col-span-2 hidden md:block" /> {/* Espaçamento para alinhar */}
-      </div>
+
+    <div className="space-y-6 ">
+     
 
       {/* Gráfico de Meses (Horizontal Bar Chart) */}
       <MonthlyBarChartSimulation />
@@ -1134,9 +1104,10 @@ export const App: React.FC = () => {
   return (
     <div className="flex h-screen bg-gray-50 antialiased text-gray-800">
       {/* Sidebar (Menu Lateral) */}
-      <div className="hidden lg:flex flex-col w-64 bg-blue-600 shadow-xl z-20">
-        <div className="flex items-center justify-center h-16 border-b border-blue-700 p-4">
-          <span className="text-xl font-extrabold text-white tracking-wider">ClassCash</span>
+      <div className="hidden lg:flex flex-col w-64 bg-[#268cff] shadow-xl z-20">
+        <div className="flex items-center justify-center h-16 border-b border-white p-4">
+          <img src={logo} alt="" className="w-16" />
+          <span className="text-white font-medium">ClassCash</span>
         </div>
         <nav className="flex-1 py-4 space-y-1">
           <NavItem
@@ -1175,8 +1146,8 @@ export const App: React.FC = () => {
       {/* Conteúdo Principal */}
       <div className="flex flex-col flex-1 overflow-y-auto">
         {/* Header (Topo) */}
-        <header className="flex items-center justify-between h-16 bg-white border-b border-gray-200 px-6 sticky top-0 z-10 shadow-sm">
-          <h1 className="text-xl font-bold text-gray-900">{getPageTitle(activeMenu)}</h1>
+        <header id="menu-translucido"  className="flex items-center justify-between z-10 top-5  px-6 sticky h-22 mb-20  ">
+          <h1 className="text-xl font-bold text-[#268cff]">{getPageTitle(activeMenu)}</h1>
           <div className="flex items-center space-x-4">
             {/* Campo de Pesquisa */}
             <div className="relative hidden md:block">
@@ -1192,7 +1163,7 @@ export const App: React.FC = () => {
             <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
               <Bell className="w-6 h-6" />
             </button>
-            <CircleUser className="w-8 h-8 text-blue-600" />
+            <CircleUser className="w-8 h-8 text-gray-500 hover:text-gray-700" />
           </div>
         </header>
 

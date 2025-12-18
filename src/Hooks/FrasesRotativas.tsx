@@ -19,8 +19,8 @@ export default function FrasesRotativas() {
       setTimeout(() => {
         setIndex((prev) => (prev + 1) % frases.length);
         setFade(true); 
-      }, 500); 
-    }, 2500); 
+      }, 700); 
+    }, 3500); 
 
     return () => clearInterval(interval);
   }, []);

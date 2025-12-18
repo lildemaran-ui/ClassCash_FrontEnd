@@ -7,9 +7,7 @@ import ilustr2 from "../../assets/ilstr2.jpg";
 import ilustr3 from "../../assets/ilstr3.jpg";
 import Cards from "../../Pages/Index/Cards";
 import FrasesRotativas from "../../Hooks/FrasesRotativas";
-import express from "../../assets/Express.png"
-import paypay from "../../assets/paypay.png"
-import paypal from "../../assets/PayPal.png"
+import appacounts from "../../assets/appcounts.png";
 import { Link } from "react-router-dom";
 
 export default function PaginaInicial() {
@@ -22,11 +20,12 @@ export default function PaginaInicial() {
           alt="Uma senhora a fazer um pagamento online"
           className="absolute top-0 left-0 w-full h-full object-cover z-0 "
         />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/40  z-5 "></div>
         <div className="relative z-10 flex flex-col  items-center justify-center h-full text-center text-2xl  sm:text-4xl font-extrabold cursor-default  text-white  px-4">
           <h1 className="drop-shadow-lg">
             Pagamentos <FrasesRotativas />{" "}
           </h1>
-          <div className="drop-shadow-lg mb-10 font-roboto text-white font-semibold text-lg sm:text-xl mt-6 cursor-default">
+          <div className="drop-shadow-lg mb-10 font-roboto shadow-sm text-white font-semibold text-lg sm:text-xl mt-6 cursor-default">
             <p>Sua escola no controlo, Seus pagamentos sob gestão.</p>
           </div>
           
@@ -134,15 +133,10 @@ export default function PaginaInicial() {
         Multicaixa Express ou também pode fazer por meio do PayPal e o PayPay.
       </p>
       <div className="mx-auto items-center flex gap-8 justify-center">
-        <div className="w-44  mb-20 flex  shadow-lg rounded-full">
-          <img src={paypal} alt="" className="bg-cover bg-center " />
+        <div className="w-68  mb-20 flex   rounded-full">
+          <img src={appacounts} alt="" className="bg-cover bg-center " />
         </div>
-        <div className="w-44  mb-20 flex  shadow-lg rounded-full">
-          <img src={express} alt="" className="bg-cover bg-center " />
-        </div>
-         <div className="w-44  mb-20 flex  shadow-lg rounded-full">
-          <img src={paypay} alt="" className=" " />
-        </div>
+        
         
       </div>
       <Link to="/teste">

@@ -3,11 +3,11 @@ export default function Footer() {
   return (
     <div>
       <footer className="bg-[#268CFF] text-white w-full">
-        <div className="max-w-7xl mx-auto py-12 px-10 grid grid-cols-1 sm:grid-cols-4 gap-15">
+        <div className="max-w-7xl mx-auto py-12 px-10 grid grid-cols-1 sm:grid-cols-4 gap-20">
         <div>
-          <div className="flex items-center " >
+          <div className="flex border-b  items-center " >
             <img src={logo} alt="" className="h-28" />
-            <p className="text-xl ">ClassCash</p>
+            <p className="text-xl font-medium ">ClassCash</p>
           </div>
         </div>
            <div>

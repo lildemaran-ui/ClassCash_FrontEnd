@@ -30,9 +30,10 @@ useEffect(()=>{
   }
 },[])
 
-const navbarClasses = `fixed top-0 w-full z-50 transition-colors duration-700 ${scrolled ? 'transparent-bg-nav-scroll' : 'transparent-bg'}`
+const navbarClasses = `fixed top-0 w-full z-50 transition-colors duration-700 ${scrolled ? 'menu-translucido' : 'transparent-bg '}`
 
 const textClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? 'text-white hover:text-[#268CFF]' : 'text-[#268CFF] hover:text-white'}`
+const borderClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? 'border-white px-3 py-2 rounded-lg border-2 transition-colors duration-700 font-medium text-white' : 'border-[#268CFF] hover:border-white px-3 py-2 rounded-lg border-2 transition-colors duration-700 font-medium text-white'}`
 
   return (
     <header className=" fixed top-0 w-full scrooll-smooth transparent-bg z-50 antialiased" >
@@ -43,22 +44,22 @@ const textClasses = `font-semibold cursor-pointer transition-colors duration-700
             <img
             src={scrolled ? Logo55 : Logo5}
             alt="Sosoft Logo"
-            className="h-16 sm:h-24 object-contain transition-all duration-700" 
+            className="h-16 sm:h-24 object-contain transition-all drop-shadow-md duration-700" 
           />
          
          <div className={textClasses}>
-           <p className="cursor-default ">ClassCash</p>
+           <p className="cursor-default drop-shadow-md ">ClassCash</p>
          </div>
         </div>
         <div className="hidden md:items-center md:flex gap-4 text-white font-semibold text-base sm:text-lg ">
           
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF] ">Sobre Nós</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF]  ">Contacto</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF]  ">Instituições</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF]  ">FAQ's</a>
-          <a href="" className="hover:text-[#268CFF] transition-colors duration-300 hover:border-b hover:border-[#268CFF]  ">Funcionalidades</a>
+          <a href="" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md ">Sobre Nós</a>
+          <a href="" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md ">Contacto</a>
+          <a href="" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md ">Instituições</a>
+          <a href="" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md ">FAQ's</a>
+          <a href="" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md ">Funcionalidades</a>
           <Link to="/Login">
-           <button className="  px-3 py-2 rounded-lg border-2 border-[#268CFF] hover:bg-[#268CFF] transition-colors duration-700 font-medium text-white" >
+           <button className={borderClasses}>
               Entrar
             </button> 
           </Link>
@@ -71,7 +72,7 @@ const textClasses = `font-semibold cursor-pointer transition-colors duration-700
      </div>
       {/* Menu  mobile */}
       <div
-        className={` md:hidden fixed flex  flex-col items-start   px-6 bg-[#268CFF] w-40 justify-start  right-0 top-0 h-screen shadow-lg z-50 ${
+        className={` md:hidden fixed flex  flex-col items-start   px-6 bg-[#268CFF]  w-40 justify-start  right-0 top-0 h-screen shadow-lg z-50 ${
           menuOpen
             ? "translate-x-0 opacity-100 font-semibold text-white"
             : "translate-x-full opacity-0"

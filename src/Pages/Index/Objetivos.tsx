@@ -5,7 +5,7 @@ export default function Objetivo() {
     <div className="overflow-x-auto sm:ovverflow-none">
       <div className="flex   justify-center items-center space-y-8  mt-10  flex-col animate-fade-in  ">
         <div className=" flex flex-col sm:flex-row  gap-4 ">
-          <div className="group p-8 rounded-xl shadow-xl w-64 items-center justify-center flex-col flex mb-20 transition-transform duration-300 hover:scale-105">
+          <div className="group p-8 rounded-xl shadow-xl w-64 items-center justify-center flex-col flex mb-20 transition-transform duration-300 hover:scale-105 border border-gray-100">
             <h3 className=" flex items-center flex-col  font-bold pb-5 justify-center">
               <CreditCard
                 size={48}
@@ -17,7 +17,7 @@ export default function Objetivo() {
               Multicaixa Express, PayPay, PayPal
             </p>
           </div>
-          <div className="group bg-white  p-8 rounded-xl shadow-xl w-64 items-center justify-center flex-col flex mb-20 transition-transform duration-300 hover:scale-105">
+          <div className="group bg-white  p-8 rounded-xl shadow-xl w-64 items-center justify-center flex-col flex mb-20 transition-transform duration-300 hover:scale-105 border border-gray-100">
             <h3 className=" flex items-center flex-col  font-bold pb-5 justify-center">
               <Check
                 size={48}
@@ -30,7 +30,7 @@ export default function Objetivo() {
               burocracia.
             </p>
           </div>
-          <div className="group bg-white  p-8 rounded-xl shadow-xl w-64 items-center justify-center flex-col flex mb-20 transition-transform duration-300 hover:scale-105">
+          <div className="group bg-white  p-8 rounded-xl shadow-xl w-64 items-center justify-center flex-col flex mb-20 transition-transform duration-300 hover:scale-105 border border-gray-100">
             <h3 className=" flex items-center flex-col font-bold pb-5 justify-center">
               <Eye
                 size={45}
@@ -42,7 +42,7 @@ export default function Objetivo() {
               Acompanhe as suas transferências, gere rela- tórios em PDF.
             </p>
           </div>
-          <div className="group bg-white  p-4 rounded-xl shadow-xl w-64 items-center justify-center flex-col h-auto mb-20   flex transition-transform duration-300 hover:scale-105 ">
+          <div className="group bg-white  p-4 rounded-xl shadow-xl w-64 items-center justify-center flex-col h-auto mb-20   flex transition-transform duration-300 hover:scale-105 border border-gray-100 ">
             <h3 className=" flex items-center flex-col font-bold pb-5 justify-center">
               <Lock
                 size={48}

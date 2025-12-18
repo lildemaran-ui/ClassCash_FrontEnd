@@ -40,7 +40,8 @@ body {
   }
 }
 .animate-slide{
-  animation: slide 25s linear infinite;
+  animation: slide 90s linear infinite;
+  
 }
 .gradient-text {
   background: linear-gradient(90deg, #ffff, #268CFF);
@@ -617,8 +618,6 @@ text-align: center;
 
 color: #000000;
 
-
-
 /* Rua : António Pedro Benje, nº 107, Vila-Alice - Luanda */
 
 position: absolute;
@@ -1105,4 +1104,9 @@ align-items: center;
 text-align: center;
 
 color: #FFFFFF;
+}
+.menu-translucido{
+  background-color: #268CFF;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }

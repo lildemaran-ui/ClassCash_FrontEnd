@@ -9,7 +9,7 @@ export default function Login() {
 
     <div className="flex h-screen">
       <div
-        className=" bg-cover bg-center w-1/2 border-r-gray-300 border"
+        className=" bg-cover bg-center w-1/2  "
         style={{ backgroundImage: `url(${Fundo})` }}
       >
         <div className="flex items-center ">
@@ -34,14 +34,14 @@ export default function Login() {
                 Insira os seus dados de utilizador abaixo para fazer login
               </p>
             </div>
-            <form className="rounded-xl">
+            <form className="rounded-xl" >
               <label className="flex text-sm mb-2 text-[#1e88e5]"> Email</label>
               <input
                 required
                 className="border-2 rounded-lg h-10 w-80 mb-9 text-xs px-4 focus:outline-none focus:border-[#1e88e5] placeholder:text-[#8fbdf1]"
                 placeholder="exemploalguem@gmail.com"
                 type="email"
-                id=""
+                
               />
               <label className="text-sm mb-2 text-[#1e88e5]">
                 {" "}
@@ -50,22 +50,27 @@ export default function Login() {
               <div className="relative">
                 <input
                   required
+                  minLength={6}
+                  pattern="(?=.*\d)(?=.*[!@#$%^&*]).{6,}"
+                  title="A senha deve ter 6 caracteres, um número e um símbolo."
                   className="border-2 rounded-lg h-10 w-80 text-xs px-4 focus:outline-none focus:border-[#1e88e5] placeholder:text-[#8fbdf1]"
                   type="password"
                   placeholder="........"
-                  id=""
+                  
                 />
                 <img
                   src={Eyeoff}
                   className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5"
                 />
               </div>
+              <Link to="/DashboardEstud">
               <button
                 className="bg-[#1e88e5] mt-12 h-10 w-80 rounded-lg text-white hover:bg-blue-600"
                 type="submit"
               >
                 Login
               </button>
+              </Link>
             </form>
 
             <div className=" flex flex-wrap gap-1 justify-center  ">

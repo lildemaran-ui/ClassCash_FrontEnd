@@ -1106,7 +1106,13 @@ text-align: center;
 color: #FFFFFF;
 }
 .menu-translucido{
-  background-color: #268CFF;
+  background-color: #268bffdc;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+.bg-translucido{
+  background-color: #ffffff5c;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+

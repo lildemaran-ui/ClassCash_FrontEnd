@@ -1,4 +1,4 @@
-import Nav from "../../Componentes/Menu/Nav";
+import Nav from "../../Componentes/Menu/Menu";
 import Objetivo from "../../Pages/Index/Objetivos";
 import fundo from "../../assets/fundo1.jpg";
 import Footer from "../../Componentes/Footer/Footer";
@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 export default function PaginaInicial() {
   return (
-    <div className="overflow-y-auto  scroll-smooth">
+    <div className="">
       <Nav></Nav>
       <div className="relative w-full h-screen overflow-hidden  ">
         <img
@@ -28,13 +28,12 @@ export default function PaginaInicial() {
           <div className="drop-shadow-lg mb-10 font-roboto shadow-sm text-white font-semibold text-lg sm:text-xl mt-6 cursor-default">
             <p>Sua escola no controlo, Seus pagamentos sob gestão.</p>
           </div>
-          
-            <Link to="/DashboardAdmin">
+
+          <Link to="/DashboardAdmin">
             <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#04458f]  transition-colors duration-700 sm:p-3 ">
               Saiba Mais
             </button>
-            </Link>
-          
+          </Link>
         </div>
       </div>
       {/* /**Nossos Serviços */}
@@ -133,16 +132,15 @@ export default function PaginaInicial() {
         Multicaixa Express ou também pode fazer por meio do PayPal e o PayPay.
       </p>
       <div className="mx-auto items-center flex gap-8 justify-center">
-        <div className="w-68  mb-20 flex   rounded-full">
+        <div className="w-68  mb-20 flex rounded-full">
           <img src={appacounts} alt="" className="bg-cover bg-center " />
         </div>
-        
-        
       </div>
-      <Link to="/teste">
-      <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#1675e2]  transition-colors duration-700 sm:p-3 mx-auto flex mb-20 ">
-              Fazer pagamentos
-            </button></Link>
+      <Link to="/Pagamentos">
+        <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#1675e2]  transition-colors duration-700 sm:p-3 mx-auto flex mb-20 ">
+          Fazer pagamentos
+        </button>
+      </Link>
       <Footer></Footer>
     </div>
   );

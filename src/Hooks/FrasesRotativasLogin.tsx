@@ -27,7 +27,7 @@ export default function FrasesRotativasLogin() {
 
   return (
     <span
-      className={`text-white text-2xl  sm:text-base font-normal cursor-default transition-opacity duration-700 ${
+      className={`text-white text-2xl  lg:text-lg   font-normal cursor-default transition-opacity duration-700 ${
         fade ? "opacity-100" : "opacity-0"
       }`}
     >

@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {},
+    color: {
+      MeuAzul: "#268cff",
+      bgLight: '#f8fafc',
+    },
   },
   plugins: [],
 }

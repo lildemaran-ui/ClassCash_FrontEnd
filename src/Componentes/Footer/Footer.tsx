@@ -15,22 +15,22 @@ export default function Footer() {
               Navegação
             </h3>
             <ol className="space-y-2 ">
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
                 Início
               </li>
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
                 Sobre nós
               </li>
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
                 Contacto
               </li>
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
                 Instituições
               </li>
-              <li className="hover:text-blue-200 text-xs sm:text-basetransition-colors duration-700 cursor-pointer">
+              <li className=" text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
                 FAQ's
               </li>
-              <li className="hover:text-blue-200 text-sm sm:text-basetransition-colors duration-700 cursor-pointer">
+              <li className=" text-sm sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
                 Funcionalidades
               </li>
             </ol>
@@ -40,14 +40,14 @@ export default function Footer() {
               Métodos de pagamento
             </h3>
             <ol className="space-y-2 ">
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
+              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
                 Multicaixa Express
               </li>
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
+              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
                Unitel Money
               </li>
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
-               Afrimoney
+              <li className=" text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+               PayPay
               </li>
               
             </ol>
@@ -57,14 +57,14 @@ export default function Footer() {
               Contacto
             </h3>
             <ol className="space-y-2 ">
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
-                Tel.: +244 9-- --- --- (do adm)
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                Tel.: (da instituição)
               </li>
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
-               Email: instituto@gmail.com (do adm)
+              <li className=" text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+               Email: (da instituição)
               </li>
-              <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-700 cursor-pointer">
-               Localização: ENdereço da escola
+              <li className=" text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+               Localização: (da instituição)
               </li>
               
             </ol>

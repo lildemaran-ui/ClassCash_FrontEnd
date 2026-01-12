@@ -130,7 +130,7 @@ const [image, setImage] = useState<string | null>(null);
                       </label>
                       <input
                         required
-                        value={nome}
+                       
                         type="text"
                         placeholder="Nome"
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
@@ -140,7 +140,7 @@ const [image, setImage] = useState<string | null>(null);
                       <label className="block text-sm mb-1">Nº Proc.</label>
                       <input
                         required
-                        value={proc}
+                       
                         type="text"
                         placeholder="0000"
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
@@ -154,7 +154,7 @@ const [image, setImage] = useState<string | null>(null);
                       <label className="block text-sm mb-1">Instituição</label>
                       <select
                         required
-                        value={instituicao}
+                        
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
                       >
                         <option value="">Makarenka</option>
@@ -164,7 +164,7 @@ const [image, setImage] = useState<string | null>(null);
                       <label className="block text-sm mb-1">Classe</label>
                       <select
                         required
-                        value={classe}
+                       
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
                       >
                         <option value="">6ª</option>
@@ -183,7 +183,7 @@ const [image, setImage] = useState<string | null>(null);
                     <div className="flex-1">
                       <label className="block text-sm mb-1">Email</label>
                       <input
-                       value={email}
+                      
                         type="email"
                         placeholder="email@gmail.com"
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
@@ -192,7 +192,7 @@ const [image, setImage] = useState<string | null>(null);
                     <div className="flex-1">
                       <label className="block text-sm mb-1">Contacto</label>
                       <input
-                      value={contacto}
+                      
                         required
                         type="tel"
                         placeholder="91-------"
@@ -206,7 +206,7 @@ const [image, setImage] = useState<string | null>(null);
                     <label className="text-sm mb-1">Palavra-Passe</label>
                     <div className="relative">
                       <input
-                      value={senha}
+                     
                         required
                         type="password"
                         placeholder="........"
@@ -258,7 +258,7 @@ const [image, setImage] = useState<string | null>(null);
                         Nome Completo
                       </label>
                       <input
-                      value={nome}
+                     
                         required
                         type="text"
                         placeholder="Nome"
@@ -272,7 +272,7 @@ const [image, setImage] = useState<string | null>(null);
                     <div className="flex-1">
                       <label className="block text-sm mb-1">Instituição</label>
                       <select
-                      value={instituicao}
+                    
                         required
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
                       >
@@ -286,7 +286,7 @@ const [image, setImage] = useState<string | null>(null);
                     <div className="flex-1">
                       <label className="block text-sm mb-1">Email</label>
                       <input
-                        value={email}
+                    
                         type="email"
                         placeholder="email@gmail.com"
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
@@ -295,7 +295,7 @@ const [image, setImage] = useState<string | null>(null);
                     <div className="flex-1">
                       <label className="block text-sm mb-1">Contacto</label>
                       <input
-                        value={contacto}
+                      
                         required
                         type="tel"
                         placeholder="91-------"
@@ -309,7 +309,7 @@ const [image, setImage] = useState<string | null>(null);
                     <label className="text-sm mb-1">Palavra-Passe</label>
                     <div className="relative">
                       <input
-                        value={senha}
+                        
                         required
                         type="password"
                         placeholder="........"

@@ -29,7 +29,7 @@ export default function PaginaInicial() {
             <p>Sua escola no controlo, Seus pagamentos sob gestão.</p>
           </div>
 
-          <Link to="/DashboardAdmin">
+          <Link to="/FAQ's">
             <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#04458f]  transition-colors duration-700 sm:p-3 ">
               Saiba Mais
             </button>
@@ -136,11 +136,11 @@ export default function PaginaInicial() {
           <img src={appacounts} alt="" className="bg-cover bg-center " />
         </div>
       </div>
-      <Link to="/Pagamentos">
+      
         <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#1675e2]  transition-colors duration-700 sm:p-3 mx-auto flex mb-20 ">
           Fazer pagamentos
         </button>
-      </Link>
+    
       <Footer></Footer>
     </div>
   );

@@ -11,13 +11,34 @@ import {
 import Logo5 from "../../assets/Logo5.5.png";
 
 export default function Pagamentos() {
-  const [menu, setMenu] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [menu, setMenu] = useState(() => {
+    const saved = localStorage.getItem("menu_aberto");
+    return saved === "true";
+  });
+  {
+    /** Fazendo a input de selecão de imagens */
+  }
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Cria uma URL temporária para exibir a imagem no navegador
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   function OpenMenu() {
     setMenu(true);
+    localStorage.setItem("menu_aberto", "true");
   }
   function CloseMenu() {
     setMenu(false);
+    localStorage.setItem("menu_aberto", "false");
   }
   const [pagamento, setPagamento] = useState({
     metodo: "",
@@ -52,9 +73,7 @@ export default function Pagamentos() {
     setPagamento({ ...pagamento, [name]: value });
   };
 
-  const handleFileChange = (e: React.FormEvent<HTMLInputElement>) => {
-    setPagamento({ ...pagamento, comprovativo: e.target.files[0] });
-  };
+ 
 
   const enviarPagamento = () => {
     console.log(pagamento);
@@ -81,14 +100,14 @@ export default function Pagamentos() {
               <NavItem
                 icon={<LayoutDashboard size={20} />}
                 label="Página Inicial"
-                active
+                active={false}
               />
             </Link>
-            <NavItem icon={<Wallet size={20} />} label="Pagamentos" />
+            <NavItem icon={<Wallet size={20} />} label="Pagamentos" active={true} />
 
-            <NavItem icon={<MessageSquare size={20} />} label="Reclamações" />
-            <NavItem icon={<Settings size={20} />} label="Configurações" />
-            <NavItem icon={<LifeBuoy size={20} />} label="Suporte" />
+            <NavItem icon={<MessageSquare size={20} />} label="Reclamações" active={false} />
+            <NavItem icon={<Settings size={20} />} label="Configurações" active={false} />
+            <NavItem icon={<LifeBuoy size={20}  />} label="Suporte" active={false} />
           </nav>
         </aside>
       )}
@@ -100,16 +119,16 @@ export default function Pagamentos() {
             <Menu size={28} className="text-[#268cff]" />
           </button>
         )}
-        <div className=" px-20 py-24 border rounded  max-w-7xl mx-auto h-auto grid grid-cols-2 gap-20">
+        <div className=" px-20 py-24  rounded-lg mt-10 max-w-7xl mx-auto h-auto grid grid-cols-2 gap-20">
           {/* Coluna esquerda */}
           <div className="flex flex-col gap-4">
             <div className="mb-5">
               <label className="block mb-1">Código</label>
               <input
                 type="text"
-                value="DVP-2025-SV"
+                value="DVS-2025-KS"
                 readOnly
-                className="w-32  border rounded px-3 py-2 text-gray-700"
+                className="w-32  outline-none border rounded-lg px-3 py-2 text-gray-700"
               />
             </div>
 
@@ -141,9 +160,13 @@ export default function Pagamentos() {
                 name="servico"
                 value={pagamento.servico}
                 onChange={handleChange}
-                className="w-64 border rounded px-3 py-2"
+                className="w-64 border focus:outline-none focus:border-[#268cff] rounded-lg px-3 py-2"
               >
                 <option>Propina</option>
+                <option>Justificativo</option>
+                <option>Transferência</option>
+                <option>Certificado</option>
+                <option>Cartão de Estudante</option>
                 <option>Uniforme</option>
               </select>
             </div>
@@ -158,7 +181,7 @@ export default function Pagamentos() {
                 min={1}
                 value={pagamento.meses}
                 onChange={handleChange}
-                className="w-20 border rounded px-3 py-2"
+                className="w-20 border rounded-lg px-3 py-2"
               />
             </div>
 
@@ -170,7 +193,7 @@ export default function Pagamentos() {
                 name="plataforma"
                 value={pagamento.plataforma}
                 onChange={handleChange}
-                className="w-64 border rounded px-3 py-2"
+                className="w-64 border rounded-lg px-3 py-2 focus:outline-none focus:border-[#268cff] pr-28"
               >
                 <option>Multicaixa Express</option>
                 <option>PayPay</option>
@@ -187,7 +210,7 @@ export default function Pagamentos() {
                 type="text"
                 value="Kz 15.000,00"
                 readOnly
-                className="w-40 border rounded px-5 py-2 text-gray-700"
+                className="w-40 border rounded-lg px-5 py-2 text-gray-700"
               />
             </div>
 
@@ -197,22 +220,33 @@ export default function Pagamentos() {
                 type="text"
                 value="AO006 0000 0000 0000 0000 0000 0"
                 readOnly
-                className="w-full border rounded px-5 py-2 text-gray-700"
+                className="w-full border rounded-lg px-5 py-2 text-gray-700"
               />
             </div>
 
-            <div>
-              <label className="block mb-1">Comprovativo</label>
+            <div className="">
+            
+              <div className="w-full h-60 border-2 border-dashed flex items-center justify-center rounded-lg overflow-hidden flex-shrink-0 mb-5">
+                {image ? (
+                  <img
+                    src={image}
+                    alt="Preview"
+                    className="w-full h-69 object-cover object-center"
+                  />
+                ) : (
+                  <span className="text-lg text-gray-400">Comprovativo</span>
+                )}
+              </div>
               <input
                 type="file"
-                onChange={handleFileChange}
-                className="w-full h-64 items-center flex justify-center  border rounded p-4 text-gray-400"
+                onChange={handleImageChange}
+                accept="image/*"
+                className="w-full  items-center flex justify-center file:px-4 file:py-2 text-gray-400 file:text-base file:bg-blue-50 file:border-none file:p-4 file:rounded-full  file:text-blue-700 "
               />
             </div>
-
             <button
               onClick={enviarPagamento}
-              className="mt-auto bg-blue-500 text-white py-3 rounded hover:bg-blue-600"
+              className="mt-auto bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600"
             >
               Enviar pagamento
             </button>

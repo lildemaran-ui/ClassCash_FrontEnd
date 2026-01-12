@@ -7,18 +7,23 @@ import {
   LifeBuoy,
   Menu,
 } from "lucide-react";
-import logo5 from "../../assets/Logo5.5.png";
+import logo5 from "../../../assets/Logo5.5.png";
 import { Link } from "react-router-dom";
 
 import DadosDashEstd from "./DadosDashEstd";
 export default function DashboardEstud() {
-  const [menu, setMenu] = useState(false);
+  const [menu, setMenu] = useState(() => {
+    const saved = localStorage.getItem("menu_aberto");
+    return saved === "true"
+  })
 
   function OpenMenu() {
     setMenu(true);
+    localStorage.setItem("menu_aberto", "true");
   }
   function CloseMenu() {
     setMenu(false);
+    localStorage.setItem("menu_aberto", "false");
   }
   // Sub-componentes auxiliares
   const NavItem = ({
@@ -59,14 +64,15 @@ export default function DashboardEstud() {
             <NavItem
               icon={<LayoutDashboard size={20} />}
               label="Página Inicial"
-              active
+              active={true}
             />
 
-            <Link to="/Pagamentos"><NavItem icon={<Wallet size={20} />} label="Pagamentos" /></Link>
-
-            <NavItem icon={<MessageSquare size={20} />} label="Reclamações" />
-            <NavItem icon={<Settings size={20} />} label="Configurações" />
-            <NavItem icon={<LifeBuoy size={20} />} label="Suporte" />
+            <Link to="/Pagamentos" className=" block w-full"><NavItem icon={<Wallet size={20} />} label="Pagamentos" active={false}/></Link>
+            <Link to="/reclamacoes">
+            <NavItem icon={<MessageSquare size={20} />} label="Reclamações" active={false} />
+            </Link>
+            <Link to="/Config"><NavItem icon={<Settings size={20} />} label="Configurações" active={false} /></Link>
+            <NavItem icon={<LifeBuoy size={20} />} label="Suporte" active={false}/>
           </nav>
         </aside>
       )}

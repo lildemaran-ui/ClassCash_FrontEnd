@@ -8,8 +8,13 @@ import SobreNos from "../Pages/Index/AboutUs";
 import Contactos from "../Pages/Index/Contacts";
 import Instituicoes from "../Pages/Instituições/Instituições";
 import FAQScreen from "../Pages/Index/FAQ's";
-import DashboardEstud from "../Pages/Dashboard/DashboardEstud";
-import type DadosDashEstd from "../Pages/Dashboard/DadosDashEstd";
+import DashboardEstud from "../Pages/Estudante/Dashboard/DashboardEstud";
+import Secretaria from "@/Pages/Secretaria/Secretaria";
+import GestaoAlunos from "@/Pages/Secretaria/Gestão de Alunos/GestaoAlunos";
+import GestaoPropinas from "@/Pages/Secretaria/Gestão de Propinas/GestaoPropinas";
+import GestaoPagamentos from "@/Pages/Secretaria/Gestão de Pagamentos/GestaoPagamentos";
+import Reclamacoes from "@/Pages/Estudante/reclamacoes";
+import ConfigurationScreen from "@/Pages/Estudante/Config";
 
 export default function AppRoutes() {
   return (
@@ -23,15 +28,28 @@ export default function AppRoutes() {
       <Route path="/Login" element={<Login></Login>}></Route>
       <Route path="/Pagamentos" element={<Pagamento></Pagamento>}></Route>
       <Route
-        path="/DashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
-       
+        path="/DashboardAdmin"
+        element={<DashboardAdmin></DashboardAdmin>}
+      ></Route>
+
       <Route path="/AboutUs" element={<SobreNos></SobreNos>}></Route>
       <Route path="/Contacts" element={<Contactos></Contactos>}></Route>
-      <Route path="/Instituições" element={<Instituicoes></Instituicoes>}></Route>
+      <Route
+        path="/Instituições"
+        element={<Instituicoes></Instituicoes>}
+      ></Route>
       <Route path="/FAQ's" element={<FAQScreen></FAQScreen>}></Route>
-      <Route path="/DashboardEstud" element={<DashboardEstud></DashboardEstud>}></Route>
-    
-      
+      <Route path="/reclamacoes" element={<Reclamacoes></Reclamacoes>
+      }></Route>
+      <Route path="Config" element={<ConfigurationScreen></ConfigurationScreen>}></Route>
+      <Route
+        path="/DashboardEstud"
+        element={<DashboardEstud></DashboardEstud>}
+      ></Route>
+      <Route path="/GestaoAlunos" element={<GestaoAlunos></GestaoAlunos>}></Route>
+      <Route path="/Secretaria" element={<Secretaria></Secretaria>}></Route>
+      <Route path="/GestaoPropinas" element={<GestaoPropinas></GestaoPropinas>}></Route>
+      <Route path="/GestaoPagamentos" element={<GestaoPagamentos></GestaoPagamentos>}></Route>
     </Routes>
   );
 }

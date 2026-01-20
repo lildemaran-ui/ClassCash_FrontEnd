@@ -1,11 +1,14 @@
 import Logo55 from "../../assets/Logo5.5.png";
 import img from "../../assets/ImgCadstro.png";
-import Eyeoff from "../../assets/Eyeoff.png";
+import { Link } from "react-router-dom";
 import FrasesRotativasLogin from "../../Hooks/FrasesRotativasLogin";
-import { useState} from "react";
+import { useState } from "react";
+import { EyeIcon, EyeOff } from "lucide-react";
 
 export default function Cadastro() {
-const [image, setImage] = useState<string | null>(null);
+  // 1. TODOS OS STATES DEVEM FICAR AQUI DENTRO
+  const [mostrarSenha, setMostrar] = useState<boolean>(false);
+  const [image, setImage] = useState<string | null>(null);
   const [perfil, setPerfil] = useState<string>("");
   const [nome, setNome] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -14,41 +17,79 @@ const [image, setImage] = useState<string | null>(null);
   const [proc, setProc] = useState<string>("");
   const [classe, setClasse] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
+  const [nomeEstudante, setNomeEstudante] = useState<string>("");
+  const [relacao, setRelacao] = useState<string>("");
 
+  const MudarPerfil = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const novoPerfil = event.target.value;
+    setPerfil(novoPerfil);
+    {
+      /*Limpando os campos ao mudar perfil*/
+    }
+    setNome("");
+    setProc("");
+    setClasse("");
+    setEmail("");
+    setContacto("");
+    setSenha("");
+    setNomeEstudante("");
+    setRelacao("");
+    setImage(null);
+  };
 
-
-
-  {
-    /** Para salvar dados no localStorage */
-  }
+  // 2. A FUNÇÃO DE CADASTRO TAMBÉM FICA AQUI DENTRO
   const DadosCadastro = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const dadosUsuario = {
-      perfil: perfil,
-      email: email,
+    const userExistente = JSON.parse(
+      localStorage.getItem("UserExistente") || "[]"
+    );
+
+    // Validação de E-mail Único
+    const emailJaEmUso = userExistente.some(
+      (u: { email: string }) =>
+        u.email.toLowerCase() === email.trim().toLowerCase()
+    );
+
+    if (emailJaEmUso) {
+      alert("Este e-mail já está cadastrado.");
+      return;
+    }
+
+    // Validação de Processo Único na mesma Instituição
+    const processoJaEmUso = userExistente.some(
+      (u: any) => u.processo === proc.trim() && u.instituicao === instituicao
+    );
+    if (processoJaEmUso && perfil === "Estudante") {
+      alert("Este número de processo já existe nesta instituição.");
+      return;
+    }
+
+    // Criar o objeto com TODOS os campos necessários
+    const novoUsuario = {
+      nome: nome.trim(),
+      email: email.trim().toLowerCase(),
+      senha: senha.trim(),
+      processo: proc.trim(),
+      instituicao,
+      perfil,
       contacto: contacto,
-      instituicao: instituicao,
-      imagem: image,
-      nome: nome,
-      processo: proc,
-      classe: classe,
+      foto: image, // Salva a string base64 da foto
+      classe: perfil === "Estudante" ? classe : "N/A",
+      nomeEstudante: perfil === "Encarregado" ? nomeEstudante : null,
+      relacao: perfil === "Encarregado" ? relacao : null,
     };
 
-    localStorage.setItem('usuarioCadastrado', JSON.stringify(dadosUsuario))
-    return(
-      <div className="fixed flex justify-center items-center mx-auto border border-black w-32 h-32 bg-white "></div>
-    )
-  }
-  {
-    /** Fazendo a input de selecão de imagens */
-  }
-  
+    userExistente.push(novoUsuario);
+    localStorage.setItem("UserExistente", JSON.stringify(userExistente));
+
+    alert("Cadastro realizado com sucesso!");
+    window.location.href = "/login";
+  };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Cria uma URL temporária para exibir a imagem no navegador
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result as string);
@@ -57,59 +98,46 @@ const [image, setImage] = useState<string | null>(null);
     }
   };
 
-
-  const MudarPerfil = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const valorSelecionado = event.target.value;
-    setPerfil(valorSelecionado);
-
-    if (valorSelecionado === "Estudante") {
-      return null;
-    } else if (valorSelecionado === "Encarregado") {
-      return null;
-    }
-  };
-
   return (
-    /*Tela de Cadastro*/
-
-    <div className="flex h-screen">
+    <div className="flex min-h-screen  ">
+      {/* ... (Parte visual da Esquerda igual) ... */}
       <div
-        className=" bg-cover bg-center w-1/2  "
+        className=" bg-cover bg-center w-1/2 "
         style={{ backgroundImage: `url(${img})` }}
       >
-        <div className="flex items-center ">
-          <img src={Logo55} className="h-24 bg-center bg-cover" alt="" />
-          <p className="font-bold text-white text-xl">ClassCash</p>
-        </div>
-
-        <h1 className="text-start flex justify-start px-6 mt-[80%]  ">
+        <Link to="/PaginaInicial">
+          <div className="flex items-center ">
+            <img src={Logo55} className="h-24 bg-center bg-cover" alt="Logo" />
+            <p className="font-bold text-white text-xl">ClassCash</p>
+          </div>
+        </Link>
+        <h1 className="text-start flex justify-start px-6 mt-[80%]">
           <FrasesRotativasLogin />
         </h1>
       </div>
 
-      {/*Formulário de Cadastro*/}
-      <div className="flex items-center bg-white   w-1/2">
+      <div className="flex items-center bg-white w-1/2">
         <div className="m-auto w-full lg:p-8">
-          <div className="mx-auto border border-gray-150 rounded-lg items-center flex flex-col w-full justify-center space-y-6 bg-white p-8 shadow-sm sm:w-[390px] text-black">
-            <div className="space-y-1">
-              <p className="flex-1 text-center text-[#268cff]">
-                {" "}
-                Crie a sua Conta
-              </p>
+          <div className="mx-auto border border-gray-150 rounded-lg flex flex-col w-full justify-center space-y-6 bg-white p-8 shadow-sm sm:w-[390px]">
+            <div className="space-y-1 text-center">
+              <p className="text-[#268cff] font-bold">Crie a sua Conta</p>
               <p className="text-xs text-gray-400">
-                Insira os seus dados de utilizador abaixo para criar uma conta
+                Insira os seus dados abaixo
               </p>
             </div>
+
             <form className="flex flex-col gap-4 w-80" onSubmit={DadosCadastro}>
-              {/* Perfil sempre visível */}
               <div className="flex flex-col">
                 <label className="text-sm mb-1 font-medium">
                   Perfil de Usuário
+                  {perfil === "Estudante"
+                    ? "Nome do aluno"
+                    : "Nome do Encarregado"}
                 </label>
                 <select
                   value={perfil}
                   onChange={MudarPerfil}
-                  className="border-2 rounded-lg h-10 w-full text-xs px-4 focus:outline-none focus:border-[#1e88e5]"
+                  className="border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#1e88e5]"
                   required
                 >
                   <option value="" disabled>
@@ -120,9 +148,9 @@ const [image, setImage] = useState<string | null>(null);
                 </select>
               </div>
 
-              {perfil === "Estudante" && (
+              {perfil && (
                 <div className="flex flex-col gap-4 animate-in fade-in duration-300">
-                  {/* Linha 1: Nome e Processo */}
+                  {/* Nome e Processo */}
                   <div className="flex gap-3">
                     <div className="flex-1">
                       <label className="block text-sm mb-1">
@@ -130,235 +158,174 @@ const [image, setImage] = useState<string | null>(null);
                       </label>
                       <input
                         required
-                       
+                        value={nome}
+                        onChange={(e) =>
+                          setNome(e.target.value.replace(/[0-9]/g, ""))
+                        }
                         type="text"
-                        placeholder="Nome"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                       />
                     </div>
                     <div className="w-24">
                       <label className="block text-sm mb-1">Nº Proc.</label>
                       <input
                         required
-                       
+                        value={proc}
+                        onChange={(e) =>
+                          setProc(e.target.value.replace(/\D/g, ""))
+                        }
+                        maxLength={5}
                         type="text"
-                        placeholder="0000"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                       />
                     </div>
                   </div>
 
-                  {/* Linha 2: Instituição e Classe */}
+                  {/* Instituição e Classe - AQUI ESTAVA O ERRO DE VALUE VAZIO */}
                   <div className="flex gap-3">
                     <div className="flex-1">
                       <label className="block text-sm mb-1">Instituição</label>
                       <select
                         required
-                        
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
+                        value={instituicao}
+                        onChange={(e) => setInstituicao(e.target.value)}
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                       >
-                        <option value="">Makarenka</option>
+                        <option value="" disabled>
+                          Selecione
+                        </option>
+                        <option value="Makarenko">Makarenko</option>
+                        <option value="Elizângela">Elizângela</option>
+                        <option value="Colina">Colina</option>
+                        <option value="MM">MM</option>
                       </select>
                     </div>
-                    <div className="w-24">
-                      <label className="block text-sm mb-1">Classe</label>
-                      <select
-                        required
-                       
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
-                      >
-                        <option value="">6ª</option>
-                        <option value="">7ª</option>
-                        <option value="">8ª</option>
-                        <option value="">9ª</option>
-                        <option value="">10ª</option>
-                        <option value="">11ª</option>
-                        <option value="">12ª</option>
-                      </select>
-                    </div>
+                    {perfil === "Estudante" && (
+                      <div className="w-24">
+                        <label className="block text-sm mb-1">Classe</label>
+                        <select
+                          required
+                          value={classe}
+                          onChange={(e) => setClasse(e.target.value)}
+                          className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                        >
+                          <option value="" disabled>
+                            Grau
+                          </option>
+                          <option value="7ª">7ª</option>
+                          <option value="8ª">8ª</option>
+                          <option value="9ª">9ª</option>
+                          <option value="10ª">10ª</option>
+                          <option value="11ª">11ª</option>
+                          <option value="12ª">12ª</option>
+                        </select>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Linha 3: Email e Contato */}
+                  {/* E-mail e Contacto */}
                   <div className="flex gap-3">
                     <div className="flex-1">
                       <label className="block text-sm mb-1">Email</label>
                       <input
-                      
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         type="email"
-                        placeholder="email@gmail.com"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                       />
                     </div>
                     <div className="flex-1">
                       <label className="block text-sm mb-1">Contacto</label>
                       <input
-                      
-                        required
+                        value={contacto}
+                        onChange={(e) =>
+                          setContacto(e.target.value.replace(/\D/g, ""))
+                        }
+                        maxLength={9}
                         type="tel"
-                        placeholder="91-------"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                       />
                     </div>
                   </div>
 
-                  {/* Palavra-Passe */}
+                  {/* Senha */}
                   <div className="flex flex-col">
                     <label className="text-sm mb-1">Palavra-Passe</label>
                     <div className="relative">
                       <input
-                     
                         required
-                        type="password"
-                        placeholder="........"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                        type={mostrarSenha ? "text" : "password"}
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                       />
-                      <img
-                        src={Eyeoff}
-                        className="absolute right-3 top-2.5 w-5 h-5 cursor-pointer"
-                        alt="ver senha"
-                      />
+                      <div
+                        className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                        onClick={() => setMostrar(!mostrarSenha)}
+                      >
+                        {mostrarSenha ? (
+                          <EyeIcon size={20} className="text-[#268cffb2]" />
+                        ) : (
+                          <EyeOff size={20} className="text-[#268cffb2]" />
+                        )}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Foto de Perfil - O segredo do layout está aqui */}
-                  <div className="flex items-center gap-4 py-2 border-t border-gray-100 mt-2">
-                    <div className="w-20 h-20 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden flex-shrink-0 bg-gray-50">
+                  {/* Campos do Encarregado */}
+                  {perfil === "Encarregado" && (
+                    <>
+                      <div className="flex flex-col">
+                        <label className="text-sm mb-1">Nome do Educando</label>
+                        <input
+                          required
+                          value={nomeEstudante}
+                          onChange={(e) =>
+                            setNomeEstudante(
+                              e.target.value.replace(/[0-9]/g, "")
+                            )
+                          }
+                          className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <label className="text-sm mb-1">Relação Parental</label>
+                        <input
+                          required
+                          value={relacao}
+                          onChange={(e) =>
+                            setRelacao(e.target.value.replace(/[0-9]/g, ""))
+                          }
+                          className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  {/* Upload de Foto */}
+                  <div className="flex items-center gap-4 py-2 border-t mt-2">
+                    <div className="w-16 h-16 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden bg-gray-50">
                       {image ? (
                         <img
                           src={image}
                           className="w-full h-full object-cover"
-                          alt="Preview"
                         />
                       ) : (
-                        <span className="text-[10px] text-gray-400">Foto</span>
+                        <span className="text-[10px]">Foto</span>
                       )}
                     </div>
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleImageChange}
-                      className="text-[10px] file:bg-blue-50 file:text-blue-700 file:text-sm file:border-none file:px-4 file:py-2 file:rounded-full file:cursor-pointer"
+                      className="text-[10px] file:bg-blue-50 file:px-3 file:py-2 file:border-none file:rounded-xl file:text-blue-700 file:font-medium"
                     />
                   </div>
 
                   <button
                     type="submit"
-                    className="bg-[#1e88e5] h-10 w-full rounded-lg text-white font-medium hover:bg-blue-600 transition-colors mt-2"
-                  >
-                    Cadastrar
-                  </button>
-                </div>
-              )}
-              {perfil === "Encarregado" && (
-                <div className="flex flex-col gap-4 animate-in fade-in duration-300">
-                  {/* Linha 1: Nome e Processo */}
-                  <div className="flex gap-3">
-                    <div className="flex-1">
-                      <label className="block text-sm mb-1">
-                        Nome Completo
-                      </label>
-                      <input
-                     
-                        required
-                        type="text"
-                        placeholder="Nome"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Linha 2: Instituição e Classe */}
-                  <div className="flex gap-3">
-                    <div className="flex-1">
-                      <label className="block text-sm mb-1">Instituição</label>
-                      <select
-                    
-                        required
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
-                      >
-                        <option value="">Makarenko</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Linha 3: Email e Contato */}
-                  <div className="flex gap-3">
-                    <div className="flex-1">
-                      <label className="block text-sm mb-1">Email</label>
-                      <input
-                    
-                        type="email"
-                        placeholder="email@gmail.com"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <label className="block text-sm mb-1">Contacto</label>
-                      <input
-                      
-                        required
-                        type="tel"
-                        placeholder="91-------"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Palavra-Passe */}
-                  <div className="flex flex-col">
-                    <label className="text-sm mb-1">Palavra-Passe</label>
-                    <div className="relative">
-                      <input
-                        
-                        required
-                        type="password"
-                        placeholder="........"
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
-                      />
-                      <img
-                        src={Eyeoff}
-                        className="absolute right-3 top-2.5 w-5 h-5 cursor-pointer"
-                        alt="ver senha"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <label className="text-sm mb-1">
-                      Relação com o Estudante
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Diga qual o seu grau parental"
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:border-[#1e88e5] outline-none"
-                    />
-                  </div>
-
-                  {/* Foto de Perfil - O segredo do layout está aqui */}
-                  <div className="flex items-center gap-4 py-2 border-t border-gray-100 mt-2">
-                    <div className="w-20 h-20 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden flex-shrink-0 bg-gray-50">
-                      {image ? (
-                        <img
-                          src={image}
-                          className="w-full h-full object-cover"
-                          alt="Preview"
-                        />
-                      ) : (
-                        <span className="text-[10px] text-gray-400">Foto</span>
-                      )}
-                    </div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="text-[10px] file:bg-blue-50 file:text-blue-700 file:text-sm file:border-none file:px-4 file:py-2 file:rounded-full file:cursor-pointer"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="bg-[#1e88e5] h-10 w-full rounded-lg text-white font-medium hover:bg-blue-600 transition-colors mt-2"
+                    className="bg-[#1e88e5] h-10 w-full rounded-lg text-white font-medium hover:bg-blue-500 transition-colors"
                   >
                     Cadastrar
                   </button>
@@ -366,13 +333,12 @@ const [image, setImage] = useState<string | null>(null);
               )}
             </form>
 
-            <div className=" flex flex-wrap gap-1 justify-center  ">
-              <p className="text-xs ">
-                Já tem uma conta?
-                <a className="text-[#1e88e5] hover:underline " href="#">
-                  {" "}
+            <div className="text-center">
+              <p className="text-xs">
+                Já tem uma conta?{" "}
+                <Link to="/login" className="text-[#1e88e5] hover:underline">
                   Faça o Login
-                </a>
+                </Link>
               </p>
             </div>
           </div>

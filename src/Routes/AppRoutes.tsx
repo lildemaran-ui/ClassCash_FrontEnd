@@ -10,11 +10,12 @@ import Instituicoes from "../Pages/Instituições/Instituições";
 import FAQScreen from "../Pages/Index/FAQ's";
 import DashboardEstud from "../Pages/Estudante/Dashboard/DashboardEstud";
 import Secretaria from "@/Pages/Secretaria/Secretaria";
-import GestaoAlunos from "@/Pages/Secretaria/Gestão de Alunos/GestaoAlunos";
-import GestaoPropinas from "@/Pages/Secretaria/Gestão de Propinas/GestaoPropinas";
-import GestaoPagamentos from "@/Pages/Secretaria/Gestão de Pagamentos/GestaoPagamentos";
+import GestaoAlunos from "@/Pages/Secretaria/GestãodeAlunos/GestaoAlunos";
+import GestaoPropinas from "@/Pages/Secretaria/GestãodePropinas/GestaoPropinas";
+import GestaoPagamentos from "@/Pages/Secretaria/GestãodePagamentos/GestaoPagamentos";
 import Reclamacoes from "@/Pages/Estudante/reclamacoes";
 import ConfigurationScreen from "@/Pages/Estudante/Config";
+import GestaodeEncarregados from "@/Pages/Secretaria/GestaodeEncarregados/GestaodeEncarregados";
 
 export default function AppRoutes() {
   return (
@@ -50,6 +51,7 @@ export default function AppRoutes() {
       <Route path="/Secretaria" element={<Secretaria></Secretaria>}></Route>
       <Route path="/GestaoPropinas" element={<GestaoPropinas></GestaoPropinas>}></Route>
       <Route path="/GestaoPagamentos" element={<GestaoPagamentos></GestaoPagamentos>}></Route>
+      <Route path="/GestaodeEncarregados" element={<GestaodeEncarregados></GestaodeEncarregados>}></Route>
     </Routes>
   );
 }

@@ -6,6 +6,7 @@ import {
   Coins,
   CheckCircle,
 } from "lucide-react";
+import { useState, useEffect } from "react";
 export default function DadosDashEstd() {
       const StatusCard = ({
     icon,
@@ -40,26 +41,43 @@ export default function DadosDashEstd() {
       <span className="text-xs text-gray-600">{label}</span>
     </div>
   );
+  const [user, setUser] = useState<any>(null);
+useEffect(()=>{
+  const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
+
+  if(dadosDoLogin){
+    setUser(JSON.parse(dadosDoLogin))
+  }else{
+    window.location.href = "/Login"
+  }
+},[])
+if(!user){
+  return (
+    <span>Carregado...</span>
+  )
+}
   return (
     <div>
-      <header className="flex justify-between items-start mb-8">
+      <header className="flex justify-between items-start mb-8 ">
         <div className="flex items-center gap-6">
           <div className="w-56 h-56 rounded-full overflow-hidden border-4 border-white shadow-sm  ">
-            <img
-              src="/api/placeholder/150/150"
+           {user.foto && (
+             <img
+              src={user.foto}
               alt="Estudante"
               className="w-full h-full object-cover"
             />
+           )}
           </div>
           <div className="space-y-1">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase">
-              Nome
-            </h2>
-            <p className="text-lg font-bold">Dário Valente de Sousa</p>
+            <p className="text-lg font-bold">{user.nome}</p>
             <p className="text-sm text-gray-600">
-              Email: dario.valente@gmail.com
+              <strong>Email:</strong> {user.email}
             </p>
-            <p className="text-sm text-gray-600">Nº de processo: 22354</p>
+            <p className="text-sm text-gray-600"><strong>Nº de processo:</strong> {user.processo}</p>
+            {user.perfil === "Estudante" && (
+              <p className="text-sm text-gray-600"><strong>Classe:</strong> {user.classe}</p>
+            )}
           </div>
         </div>
 

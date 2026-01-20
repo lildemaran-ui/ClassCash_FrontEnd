@@ -20,7 +20,7 @@ export default function FrasesRotativasLogin() {
         setPrimeiro((prev) => (prev + 1) % frases.length);
         setFade(true); 
       }, 500); 
-    }, 2500); 
+    }, 5000); 
 
     return () => clearInterval(interval);
   }, []);

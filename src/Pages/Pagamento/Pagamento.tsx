@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   LayoutDashboard,
@@ -7,107 +7,115 @@ import {
   Settings,
   LifeBuoy,
   Menu,
+  Bell,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
 
 export default function Pagamentos() {
+  const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
   const [menu, setMenu] = useState(() => {
     const saved = localStorage.getItem("menu_aberto");
     return saved === "true";
   });
-  {
-    /** Fazendo a input de selecão de imagens */
-  }
+
+  const [pagamento, setPagamento] = useState({
+    metodo: "",
+    servico: "Propina",
+    mesInicial: "Janeiro",
+    mesFinal: "Janeiro",
+    plataforma: "PayPay",
+    comprovativo: null,
+  });
+
+  const mesesDoAno = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+  ];
+
+  const PRECOS_SERVICOS: { [key: string]: number } = {
+    Propina: 15000,
+    Justificativo: 2000,
+    Transferência: 5000,
+    Certificado: 2000,
+    CartãodeEstudante: 1000,
+    Uniforme: 12000,
+  };
+
+  // --- FUNÇÕES DE LÓGICA ---
+
+  // UNIFICADA: Apenas uma função handleChange
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    setPagamento((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "metodo" && value === "Dinheiro Físico") {
+      setShowModal(true);
+    }
+  };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Cria uma URL temporária para exibir a imagem no navegador
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImage(reader.result as string);
-      };
+      reader.onloadend = () => setImage(reader.result as string);
       reader.readAsDataURL(file);
     }
   };
 
-  function OpenMenu() {
-    setMenu(true);
-    localStorage.setItem("menu_aberto", "true");
-  }
-  function CloseMenu() {
-    setMenu(false);
-    localStorage.setItem("menu_aberto", "false");
-  }
-  const [pagamento, setPagamento] = useState({
-    metodo: "",
-    servico: "Propina",
-    meses: 1,
-    plataforma: "PayPay",
-    comprovativo: null,
-  });
-  // Sub-componentes auxiliares
-  const NavItem = ({
-    icon,
-    label,
-    active = false,
-  }: {
-    icon: React.ReactNode;
-    label: string;
-    active?: boolean;
-  }) => (
-    <div
-      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
-        active ? "bg-white/10" : "hover:bg-white/5"
-      }`}
-    >
+  const OpenMenu = () => { 
+    setMenu(true); localStorage.setItem("menu_aberto", "true");
+   };
+  const CloseMenu = () => { 
+    setMenu(false); localStorage.setItem("menu_aberto", "false");
+   };
+
+  useEffect(() => {
+    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
+    if (dadosDoLogin) {
+      setUser(JSON.parse(dadosDoLogin));
+    } else {
+      window.location.href = "/Login";
+    }
+  }, []);
+
+  // --- CÁLCULOS ---
+  const precoBase = PRECOS_SERVICOS[pagamento.servico] || 0;
+  const indexInicio = mesesDoAno.indexOf(pagamento.mesInicial);
+  const indexFim = mesesDoAno.indexOf(pagamento.mesFinal);
+  const quantidadeMeses = indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
+  const valorTotal = precoBase * quantidadeMeses;
+
+  const formularioValido = pagamento.metodo !== "" && image !== null && indexFim >= indexInicio;
+
+  if (!user) return <span>Carregado...</span>;
+
+  const NavItem = ({ icon, label, active = false }: { icon: React.ReactNode; label: string; active?: boolean; }) => (
+    <div className={`flex items-center gap-3 p-3 mt-3 rounded-lg cursor-pointer transition-all duration-300 ${active ? "bg-white/10" : "hover:bg-white/5"}`}>
       {icon}
       <span className="text-sm font-medium">{label}</span>
     </div>
   );
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = event.target;
-    setPagamento({ ...pagamento, [name]: value });
-  };
-
- 
-
-  const enviarPagamento = () => {
-    console.log(pagamento);
-    alert("Pagamento enviado!");
-  };
 
   return (
     <div className="flex min-h-screen bg-gray-50 font-sans">
       {/* Sidebar */}
-
       {menu && (
-        <aside className="w-64 bg-[#268cff] text-white flex flex-col">
+        <aside className="w-64 bg-[#268cff] text-white flex-col block">
           <div className="mb-16 pt-4 flex relative justify-between items-center px-4">
-            <div className="flex items-center font-semibold">
+            <Link to="/DashboardEstud" className="flex items-center font-semibold">
               <img src={Logo5} alt="Logo" className="w-16 h-16" />
               <span>ClassCash</span>
-            </div>
-            <button onClick={CloseMenu}>
-              <Menu size={28} />
-            </button>
-          </div>
-          <nav className="flex-1 px-4 space-y-2  ">
-            <Link to="/DashboardEstud">
-              <NavItem
-                icon={<LayoutDashboard size={20} />}
-                label="Página Inicial"
-                active={false}
-              />
             </Link>
-            <NavItem icon={<Wallet size={20} />} label="Pagamentos" active={true} />
-
-            <NavItem icon={<MessageSquare size={20} />} label="Reclamações" active={false} />
-            <NavItem icon={<Settings size={20} />} label="Configurações" active={false} />
-            <NavItem icon={<LifeBuoy size={20}  />} label="Suporte" active={false} />
+            <button onClick={CloseMenu}><Menu size={28} /></button>
+          </div>
+          <nav className="flex-1 px-4 space-y-2">
+            <Link to="/DashboardEstud"><NavItem icon={<LayoutDashboard size={20} />} label="Painel" active={false}/></Link>
+            <Link to="/Pagamentos"><NavItem icon={<Wallet size={20} />} label="Pagamentos" active={true} /></Link>
+            <Link to="/reclamacoes"><NavItem icon={<MessageSquare size={20} />} label="Reclamações" active={false} /></Link>
+            <Link to="/Config"><NavItem icon={<Settings size={20} />} label="Configurações" active={false}/></Link>
+            <NavItem icon={<LifeBuoy size={20} />} label="Suporte" />
           </nav>
         </aside>
       )}
@@ -115,144 +123,122 @@ export default function Pagamentos() {
       {/* Conteúdo principal */}
       <div className="flex-1 p-4">
         {!menu && (
-          <button onClick={OpenMenu}>
-            <Menu size={28} className="text-[#268cff]" />
-          </button>
+          <button onClick={OpenMenu}><Menu size={28} className="text-[#268cff]" /></button>
         )}
-        <div className=" px-20 py-24  rounded-lg mt-10 max-w-7xl mx-auto h-auto grid grid-cols-2 gap-20">
-          {/* Coluna esquerda */}
-          <div className="flex flex-col gap-4">
-            <div className="mb-5">
-              <label className="block mb-1">Código</label>
-              <input
-                type="text"
-                value="DVS-2025-KS"
-                readOnly
-                className="w-32  outline-none border rounded-lg px-3 py-2 text-gray-700"
-              />
+        
+        <header className="flex justify-end items-center mb-5">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <Bell size={24} className="text-[#268cff]" />
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
             </div>
-
-            <div>
-              <label className="block mb-3">Como será feito o pagamento?</label>
-              <div className="flex flex-col gap-2">
-                {["De forma digital", "No banco", "Dinheiro Físico"].map(
-                  (m) => (
-                    <label key={m} className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        name="metodo"
-                        value={m}
-                        onChange={handleChange}
-                        className="accent-blue-500"
-                      />
-                      {m}
-                    </label>
-                  )
-                )}
-              </div>
-            </div>
-
-            <div>
-              <label className="block mb-3 mt-3">
-                Quais dos serviços fará o pagamento?
-              </label>
-              <select
-                name="servico"
-                value={pagamento.servico}
-                onChange={handleChange}
-                className="w-64 border focus:outline-none focus:border-[#268cff] rounded-lg px-3 py-2"
-              >
-                <option>Propina</option>
-                <option>Justificativo</option>
-                <option>Transferência</option>
-                <option>Certificado</option>
-                <option>Cartão de Estudante</option>
-                <option>Uniforme</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block mb-3 mt-3">
-                Vai pagar para quantos meses?
-              </label>
-              <input
-                type="number"
-                name="meses"
-                min={1}
-                value={pagamento.meses}
-                onChange={handleChange}
-                className="w-20 border rounded-lg px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-3 mt-3">
-                Quais dos serviços utilizará?
-              </label>
-              <select
-                name="plataforma"
-                value={pagamento.plataforma}
-                onChange={handleChange}
-                className="w-64 border rounded-lg px-3 py-2 focus:outline-none focus:border-[#268cff] pr-28"
-              >
-                <option>Multicaixa Express</option>
-                <option>PayPay</option>
-                <option>Unitel Money</option>
-              </select>
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 bg-cover bg-center">
+              {user.foto && <img src={user.foto} alt="User" className="w-full h-full object-cover" />}
             </div>
           </div>
+        </header>
 
-          {/* Coluna direita */}
-          <div className="flex flex-col gap-4">
-            <div>
-              <label className="block mb-3 ">Valor do serviço:</label>
-              <input
-                type="text"
-                value="Kz 15.000,00"
-                readOnly
-                className="w-40 border rounded-lg px-5 py-2 text-gray-700"
-              />
-            </div>
-
-            <div>
-              <label className="block mb-3 mt-3">IBAN:</label>
-              <input
-                type="text"
-                value="AO006 0000 0000 0000 0000 0000 0"
-                readOnly
-                className="w-full border rounded-lg px-5 py-2 text-gray-700"
-              />
-            </div>
-
-            <div className="">
-            
-              <div className="w-full h-60 border-2 border-dashed flex items-center justify-center rounded-lg overflow-hidden flex-shrink-0 mb-5">
-                {image ? (
-                  <img
-                    src={image}
-                    alt="Preview"
-                    className="w-full h-69 object-cover object-center"
-                  />
-                ) : (
-                  <span className="text-lg text-gray-400">Comprovativo</span>
-                )}
+        <div className="px-20 py-10 rounded-lg max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 gap-20">
+            {/* COLUNA ESQUERDA */}
+            <div className="flex flex-col gap-6">
+              <div>
+                <label className="block mb-1 font-medium text-gray-500">Código</label>
+                <input type="text" value="DVS-2025-KS" readOnly className="w-32 border bg-gray-100 rounded-lg px-3 py-2" />
               </div>
-              <input
-                type="file"
-                onChange={handleImageChange}
-                accept="image/*"
-                className="w-full  items-center flex justify-center file:px-4 file:py-2 text-gray-400 file:text-base file:bg-blue-50 file:border-none file:p-4 file:rounded-full  file:text-blue-700 "
-              />
+
+              <div className="p-4 border border-gray-100 rounded-xl">
+                <label className="block mb-3 font-bold text-gray-700">Como será feito o pagamento?</label>
+                <div className="flex flex-col gap-3">
+                  {["De forma digital", "No banco", "Dinheiro Físico"].map((m) => (
+                    <label key={m} className="flex items-center gap-2 cursor-pointer">
+                      <input type="radio" name="metodo" value={m} checked={pagamento.metodo === m} onChange={handleChange} className="w-4 h-4 accent-[#268cff]" />
+                      <span className={pagamento.metodo === m ? "font-semibold text-[#268cff]" : ""}>{m}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* CONTEÚDO CONDICIONAL */}
+              {pagamento.metodo !== "" && pagamento.metodo !== "Dinheiro Físico" && (
+                <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-4">
+                  <div>
+                    <label className="block mb-2 font-medium">Serviço:</label>
+                    <select name="servico" value={pagamento.servico} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 outline-none focus:border-blue-500">
+                      {Object.keys(PRECOS_SERVICOS).map(s => <option key={s}>{s}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="flex-1">
+                      <p className="text-[10px] font-bold text-gray-400">DE:</p>
+                      <select name="mesInicial" value={pagamento.mesInicial} onChange={handleChange} className="w-full border rounded-lg px-3 py-2">
+                        {mesesDoAno.map(m => <option key={m}>{m}</option>)}
+                      </select>
+                    </div>
+                    <span className="mt-5 text-gray-400">à</span>
+                    <div className="flex-1">
+                      <p className="text-[10px] font-bold text-gray-400">ATÉ:</p>
+                      <select name="mesFinal" value={pagamento.mesFinal} onChange={handleChange} className="w-full border rounded-lg px-3 py-2">
+                        {mesesDoAno.map(m => <option key={m}>{m}</option>)}
+                      </select>
+                    </div>
+                   
+                  </div>
+                   <div className="">
+                    <label htmlFor="" className="font-semibold block">Plataforma a ser usada:</label>
+                      <select className="p-3 border rounded-lg w-full">
+                        <option value="Multicaxa Express">Multicaixa Express</option>
+                        <option value="Unitel Money">Unitel Money</option>
+                        <option value="PayPay">Pay Pay</option>
+                      </select>
+                    </div>
+                </div>
+              )}
+             
             </div>
-            <button
-              onClick={enviarPagamento}
-              className="mt-auto bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600"
-            >
-              Enviar pagamento
-            </button>
+
+            {/* COLUNA DIREITA (Apenas se não for dinheiro físico) */}
+            {pagamento.metodo !== "" && pagamento.metodo !== "Dinheiro Físico" && (
+              <div className="flex flex-col gap-4 animate-in fade-in">
+                <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                  <label className="block text-sm text-blue-600">Total a pagar:</label>
+                  <div className="text-3xl font-bold text-blue-700">KZ {valorTotal.toLocaleString("pt-PT")},00</div>
+                  <p className="text-xs text-blue-400">{quantidadeMeses} mês(es) selecionado(s)</p>
+                </div>
+
+                <div>
+                  <label className="block mb-2 font-medium">Comprovativo:</label>
+                  <div className="w-full h-48 border border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white overflow-hidden">
+                    {image ? <img src={image} className="w-full h-full object-cover" /> : <span className="text-gray-400">Nenhuma imagem</span>}
+                  </div>
+                  <input type="file" onChange={handleImageChange} className="mt-2 text-sm file:bg-blue-50 file:text-blue-600 file:border-none file:p-3 file:rounded-full " />
+                </div>
+
+                <button onClick={() => alert("Pagamento enviado!")} disabled={!formularioValido} className={`py-3 rounded-lg font-bold ${formularioValido ? 'bg-[#268cff] text-white' : 'bg-gray-200 hover:bg-blue-600 transition-all duration-500 text-gray-400'}`}>
+                  Enviar Pagamento
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
+      {/* MODAL */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
+            <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Wallet size={32} />
+            </div>
+            <h2 className="text-2xl font-bold mb-2">Pagamento Presencial</h2>
+            <p className="text-gray-600 mb-6">Por favor, dirija-se à Secretaria da Instituição para efetuar o pagamento em numerário.</p>
+            <button onClick={() => { setShowModal(false); setPagamento(p => ({...p, metodo: ""})); }} className="w-full bg-[#268cff] text-white py-3 rounded-lg font-bold">
+              Entendido
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -6,7 +6,6 @@ import {
   Receipt,
   AlertOctagon,
   FileText,
-  UserCog,
   Settings,
   MessageSquare,
   Bell,
@@ -164,13 +163,20 @@ export default function Secretaria() {
           <nav className="flex-1 flex flex-col gap-1">
             <SidebarItem
               icon={LayoutDashboard}
-              label="DashBoard"
+              label="Painel Geral"
               active={true}
             />
             <Link to="/GestaoAlunos">
               <SidebarItem
                 icon={Users}
                 label="Gestão de Alunos"
+                active={false}
+              />
+            </Link>
+            <Link to="/GestaodeEncarregados">
+              <SidebarItem
+                icon={Users }
+                label="Gestão de Encarregados"
                 active={false}
               />
             </Link>
@@ -181,32 +187,32 @@ export default function Secretaria() {
                 active={false}
               />
             </Link>
-           <Link to="/GestaoPagamentos">
-            <SidebarItem icon={Receipt} label="Gestão de Pagamentos" active={false} />
-             </Link>
-            <SidebarItem
-              icon={AlertOctagon}
-              label="Módulo de Multas"
-              active={false}
-            />
-          
-            <SidebarItem icon={FileText} label="Relatório" active={false} />
-            <SidebarItem
-              icon={UserCog}
-              label="Gestão de Usuários"
-              active={false}
-            />
+            <Link to="/GestaoPagamentos">
+              <SidebarItem
+                icon={Receipt}
+                label="Gestão de Pagamentos"
+                active={false}
+              />
+            </Link>
+
             <SidebarItem
               icon={Settings}
               label="Gestão de Serviços"
               active={false}
             />
-
             <SidebarItem
               icon={MessageSquare}
-              label="Reclamações"
+              label="Gestão de Reclamações"
               active={false}
             />
+            <SidebarItem
+              icon={AlertOctagon}
+              label="Gestão de Multas"
+              active={false}
+            />
+
+            <SidebarItem icon={FileText} label="Relatório" active={false} />
+
             <SidebarItem icon={Settings} label="Configurações" active={false} />
           </nav>
         </aside>
@@ -241,7 +247,10 @@ export default function Secretaria() {
               />
             </div>
             <div className="flex items-center gap-4 ml-4">
-              <Bell className="text-[#268cff] cursor-pointer" />
+              <div className="relative">
+                <Bell className="text-[#268cff] cursor-pointer" />
+                <div className="absolute bg-red-500 w-3 h-3 flex -top-1 -right-1 rounded-full border border-white"></div>
+              </div>
               <div className="w-10 h-10 rounded-full bg-gray-200 border overflow-hidden">
                 <img src="https://via.placeholder.com/40" alt="User" />
               </div>
@@ -265,7 +274,7 @@ export default function Secretaria() {
               ))}
             </div>
             <button className="flex items-center gap-2 px-4 py-2 bg-[#268cff] text-white rounded-md text-base font-semibold hover:bg-blue-600 hover:text-white transition-all duration-500">
-              Gerar PDF
+              Gerar PDF <Download />
             </button>
           </div>
 

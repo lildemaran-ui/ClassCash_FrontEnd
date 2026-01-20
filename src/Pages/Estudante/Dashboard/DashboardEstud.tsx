@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   LayoutDashboard,
   Wallet,
@@ -14,8 +14,8 @@ import DadosDashEstd from "./DadosDashEstd";
 export default function DashboardEstud() {
   const [menu, setMenu] = useState(() => {
     const saved = localStorage.getItem("menu_aberto");
-    return saved === "true"
-  })
+    return saved === "true";
+  });
 
   function OpenMenu() {
     setMenu(true);
@@ -36,7 +36,7 @@ export default function DashboardEstud() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
+      className={`flex items-center gap-3 p-3 mt-2 rounded-lg cursor-pointer transition-all duration-300 ${
         active ? "bg-white/10" : "hover:bg-white/5"
       }`}
     >
@@ -46,11 +46,11 @@ export default function DashboardEstud() {
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50 font-sans">
+    <div className="flex h-screen overflow-hidden bg-gray-50 font-sans">
       {/* Sidebar */}
 
       {menu && (
-        <aside className="w-64 bg-[#268cff] text-white flex flex-col">
+        <aside className="w-64 bg-[#268cff] text-white flex flex-col h-sreen top-0 sticky">
           <div className="mb-16 pt-4 flex relative justify-between items-center px-4">
             <div className="flex items-center font-semibold">
               <img src={logo5} alt="Logo" className="w-16 h-16" />
@@ -63,16 +63,36 @@ export default function DashboardEstud() {
           <nav className="flex-1 px-4 space-y-2  ">
             <NavItem
               icon={<LayoutDashboard size={20} />}
-              label="Página Inicial"
+              label="Painel"
               active={true}
             />
 
-            <Link to="/Pagamentos" className=" block w-full"><NavItem icon={<Wallet size={20} />} label="Pagamentos" active={false}/></Link>
-            <Link to="/reclamacoes">
-            <NavItem icon={<MessageSquare size={20} />} label="Reclamações" active={false} />
+            <Link to="/Pagamentos" className=" block w-full">
+              <NavItem
+                icon={<Wallet size={20} />}
+                label="Pagamentos"
+                active={false}
+              />
             </Link>
-            <Link to="/Config"><NavItem icon={<Settings size={20} />} label="Configurações" active={false} /></Link>
-            <NavItem icon={<LifeBuoy size={20} />} label="Suporte" active={false}/>
+            <Link to="/reclamacoes">
+              <NavItem
+                icon={<MessageSquare size={20} />}
+                label="Reclamações"
+                active={false}
+              />
+            </Link>
+            <Link to="/Config">
+              <NavItem
+                icon={<Settings size={20} />}
+                label="Configurações"
+                active={false}
+              />
+            </Link>
+            <NavItem
+              icon={<LifeBuoy size={20} />}
+              label="Suporte"
+              active={false}
+            />
           </nav>
         </aside>
       )}

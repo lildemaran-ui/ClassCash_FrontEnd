@@ -203,19 +203,21 @@ export default function GestaoPagamentos() {
                 active={false}
               />
             </Link>
-            <Link to="/GestaoPagamentos">
+            
               <SidebarItem
                 icon={Receipt }
                 label="Gestão de Pagamentos"
                 active={true}
               />
-            </Link>
+         
 
+            <Link to="GestaodeServiços">
             <SidebarItem
               icon={Settings }
               label="Gestão de Serviços"
               active={false}
             />
+           </Link>
             <SidebarItem
               icon={MessageSquare }
               label="Gestão de Reclamações"

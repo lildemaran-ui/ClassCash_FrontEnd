@@ -167,11 +167,13 @@ export default function GestaoAlunos() {
               />
             </Link>
             
+            <Link to="GestaodeServiços">
             <SidebarItem
-              icon={<Settings size={20}/>}
+              icon={<Settings size={20}/> }
               label="Gestão de Serviços"
               active={false}
             />
+           </Link>
             <SidebarItem
               icon={<MessageSquare size={20}/>}
               label="Gestão de Reclamações"
@@ -290,7 +292,7 @@ export default function GestaoAlunos() {
               </th>
               <th className="border border-gray-300 px-4 py-2">Classe</th>
               <th className="border border-gray-300 px-4 py-2">Status</th>
-              <th className="border border-gray-300 px-4 py-2">Situação</th>
+              
             </tr>
           </thead>
           <tbody>
@@ -308,13 +310,11 @@ export default function GestaoAlunos() {
                 <td className=" px-4 py-2 border-r border-l border-gray-300">
                   {aluno.classe}
                 </td>
-                <td className=" px-4 py-2 border-r border-l border-gray-300">
-                  {aluno.status}
-                </td>
+                
                 <div className="flex  justify-between items-center">
                   <div className="flex justify-center mx-auto">
                     <td className={`px-4 py-2 ${colorsSit(aluno.situacao)}`}>
-                      {aluno.situacao}{" "}
+                      {aluno.status}{" "}
                     </td>
                   </div>
                   <Link

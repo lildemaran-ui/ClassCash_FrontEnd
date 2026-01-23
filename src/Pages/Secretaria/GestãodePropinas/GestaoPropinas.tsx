@@ -205,11 +205,13 @@ export default function GestaoPropinas() {
               />
             </Link>
 
+           <Link to="GestaodeServiços">
             <SidebarItem
               icon={Settings }
               label="Gestão de Serviços"
               active={false}
             />
+           </Link>
             <SidebarItem
               icon={MessageSquare }
               label="Gestão de Reclamações"

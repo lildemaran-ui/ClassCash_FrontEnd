@@ -16,6 +16,8 @@ import GestaoPagamentos from "@/Pages/Secretaria/GestãodePagamentos/GestaoPagam
 import Reclamacoes from "@/Pages/Estudante/reclamacoes";
 import ConfigurationScreen from "@/Pages/Estudante/Config";
 import GestaodeEncarregados from "@/Pages/Secretaria/GestaodeEncarregados/GestaodeEncarregados";
+import GestaodeServiços from "@/Pages/Secretaria/GestãodeServiços/GestaodeServiços";
+
 
 export default function AppRoutes() {
   return (
@@ -52,6 +54,8 @@ export default function AppRoutes() {
       <Route path="/GestaoPropinas" element={<GestaoPropinas></GestaoPropinas>}></Route>
       <Route path="/GestaoPagamentos" element={<GestaoPagamentos></GestaoPagamentos>}></Route>
       <Route path="/GestaodeEncarregados" element={<GestaodeEncarregados></GestaodeEncarregados>}></Route>
+      <Route path="GestaodeServiços" element={<GestaodeServiços></GestaodeServiços>}></Route>
     </Routes>
+
   );
 }

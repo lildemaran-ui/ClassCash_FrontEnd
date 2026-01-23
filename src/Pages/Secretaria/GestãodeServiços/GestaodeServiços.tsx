@@ -1,9 +1,74 @@
-import {Bell, Search,Users,Menu, FileText, AlertOctagon,Settings,MessageSquare, Receipt,CreditCard,LayoutDashboard} from "lucide-react";
 import { Link } from "react-router-dom";
-import Logo5 from "../../../assets/Logo5.5.png"
+import {
+  LayoutDashboard,
+  CreditCard,
+  Users,
+  Receipt,
+  AlertOctagon,
+  Menu,
+  Settings,
+  MessageSquare,
+  FileText,
+
+  ArrowDown,
+  ArrowUp,
+  Plus,
+  EyeIcon,
+  Pen,
+
+} from "lucide-react";
+import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
-export default function GestaodeEncarregados (){
- const SidebarItem = ({
+import ItemsDoCabeçalho from "@/Componentes/ItemsDoCabeçalho/ItemsDoCabeçalho";
+
+export default function GestaodeServiços() {
+  const [ordemCrescente, setOrdemCrescente] = useState(true);
+  const [dadosAlunos, setDadosAlunos] = useState([
+    {
+      servico: "Propina Escolar",
+      classe: "10ª Classe",
+      Valor: "KZ 35.000",
+      multa: "KZ 5.000",
+     
+    },
+    {
+     servico: "Justificativo",
+      classe: "10ª Classe",
+      Valor: "KZ 5.000",
+      multa: "KZ 500",
+    },
+    {
+    servico: "Propina Escolar",
+      classe: "10ª Classe",
+      Valor: "KZ 35.000",
+      multa: "5.000",
+    },
+    {
+     
+      servico: "Propina Escolar",
+      classe: "10ª Classe",
+      Valor: "KZ 35.000",
+      multa: "5.000",
+    },
+  ]);
+
+
+  {
+    /*Função de ordenação**/
+  }
+  const handleSort = (chave: "servico" ) => {
+    const dadosOrdenados = [...dadosAlunos].sort((a, b) => {
+      if (ordemCrescente) {
+        return a[chave].localeCompare(b[chave]);
+      } else {
+        return b[chave].localeCompare(a[chave]);
+      }
+    });
+
+    setDadosAlunos(dadosOrdenados);
+    setOrdemCrescente(!ordemCrescente);
+  };
+  const SidebarItem = ({
     icon: Icon,
     label,
     active = false,
@@ -22,14 +87,15 @@ export default function GestaodeEncarregados (){
     </div>
   );
   const [menu, setMenu] = useState(true);
-    function OpenMenu() {
-      setMenu(true);
-    }
-    function CloseMenu() {
-      setMenu(false);
-    }
-    return (
-          <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+  function OpenMenu() {
+    setMenu(true);
+  }
+  function CloseMenu() {
+    setMenu(false);
+  }
+ 
+  return (
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
       {/* Sidebar */}
 
       {menu && (
@@ -53,12 +119,14 @@ export default function GestaodeEncarregados (){
               />
             </Link>
 
+            <Link to = "/GestaoAlunos">
             <SidebarItem
               icon={Users }
               label="Gestão de Alunos"
               active={false}
             />
 
+            </Link>
             <Link to="/GestaodeEncarregados">
             <SidebarItem
               icon={Users }
@@ -73,19 +141,21 @@ export default function GestaodeEncarregados (){
                 active={false}
               />
             </Link>
-            <Link to="/GestaoPagamentos">
+             <Link to="GestaoPagamentos">
               <SidebarItem
                 icon={Receipt }
                 label="Gestão de Pagamentos"
                 active={false}
               />
-            </Link>
+         </Link>
 
+           
             <SidebarItem
               icon={Settings }
               label="Gestão de Serviços"
               active={true}
             />
+           
             <SidebarItem
               icon={MessageSquare }
               label="Gestão de Reclamações"
@@ -130,30 +200,95 @@ export default function GestaodeEncarregados (){
         </div>
         {/* Header */}
         <header className="flex justify-end items-center mb-8">
-          <div className="flex">
-            <div className="relative w-96">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
-              <input
-                type="search"
-                placeholder="Procurar por um código"
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-MeuAzul/20 focus:border-none"
-              />
-            </div>
-            <div className="flex items-center gap-4 ml-4">
-              <div className="relative">
-                <Bell className="text-[#268cff] cursor-pointer" />
-                <div className="absolute bg-red-500 w-3 h-3 flex -top-1 -right-1 rounded-full border border-white"></div>
-              </div>
-              <div className="w-10 h-10 rounded-full bg-gray-200 border overflow-hidden">
-                <img src="https://via.placeholder.com/40" alt="User" />
-              </div>
+         <ItemsDoCabeçalho/>
+        </header>
+
+        {/*Filtros*/}
+        <section className="mb-8">
+          <div className="flex justify-start items-center ">
+            <div className="flex gap-4 ">
+              {["Mês"].map(
+                (filtro) => (
+                  <div key={filtro}>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      {filtro}
+                    </label>
+                    <select className="bg-white border  rounded-md px-6 py-1 text-sm text-gray-400 outline-none">
+                      <option>Sem filtro</option>
+                    </select>
+                  </div>
+                )
+              )}
             </div>
           </div>
-        </header>
-        </main>
+          <div className="flex justify-center items-center  mt-3 border hover:border-[#268cff] hover:bg-white py-2 rounded-lg w-56 gap-3 hover:text-[#268cff] text-white font-medium shadow-sm bg-[#268cff] transition-all duration-500 hover:mr-2 ml-auto cursor-default ">
+            <div><Plus/></div>
+             <div>Adicionar Serviço</div>
+          </div>
+         
+        </section>
+        {/* Tabela de Dados */}
+        <div className="mt-16">
+          <h2 className="mb-2 text-gray-500 text-base font-semibold">
+            Tabela de Serviços
+          </h2>
+
+          <table className="w-full border-collapse border border-gray-300   ">
+            <thead>
+              <tr className="bg-[#268cff]/80 text-white">
+                
+                <th className="border border-gray-300 px-4 py-2 ">
+                  <div
+                    className="flex items-center justify-center gap-1 cursor-pointer"
+                    onClick={() => handleSort("servico")}
+                  >
+                    Serviço
+                    {ordemCrescente ? (
+                      <ArrowDown size={18} />
+                    ) : (
+                      <ArrowUp size={20} />
+                    )}
+                  </div>
+                </th>
+                
+                <th className="border border-gray-300 px-4 py-2">Classe</th>
+                <th className="border border-gray-300 px-4 py-2">Valor</th>
+                <th className="border border-gray-300 px-4 py-2">Multa</th>
+                <th className="border border-gray-300 px-4 py-2">
+                  Ações
+                </th>
+                
+              </tr>
+            </thead>
+            <tbody>
+              {dadosAlunos.map((aluno, index) => (
+                <tr
+                  key={index}
+                  className="hover:bg-[#268cff]/10 even:bg-[#268cff]/20 hover:border hover:border-dashed hover:border-black text-center"
+                >
+                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                    {aluno.servico}
+                  </td>
+                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                    {aluno.classe}
+                  </td>
+                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                    {aluno.Valor}
+                  </td>
+                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                    {aluno.multa}
+                  </td>
+                 <button className="justify-center items-center flex mr-5 bg-[#268cff]/50 px-3 rounded-lg text-white text-center ">
+                  <Pen/>
+                 </button>
+                 
+                 
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-    )
+      </main>
+    </div>
+  );
 }

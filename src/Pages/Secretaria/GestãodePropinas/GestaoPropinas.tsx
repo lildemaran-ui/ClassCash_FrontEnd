@@ -31,7 +31,7 @@ export default function GestaoPropinas() {
       Valor: "KZ 35.000",
       multa: "----",
       Estado: "Confimado",
-      Serviço: "Propina"
+      Serviço: "Propina",
     },
     {
       codigo: "EPJ-2025-AL",
@@ -41,7 +41,7 @@ export default function GestaoPropinas() {
       Valor: "KZ 30.000",
       multa: "----",
       Estado: "Pendente",
-      Serviço: "Propina"
+      Serviço: "Propina",
     },
     {
       codigo: "LSN-2025-EF",
@@ -51,7 +51,7 @@ export default function GestaoPropinas() {
       Valor: "KZ 25.000",
       multa: "----",
       Estado: "Pendente",
-      Serviço: "Propina"
+      Serviço: "Propina",
     },
     {
       codigo: "FMC-2025-KS",
@@ -61,7 +61,7 @@ export default function GestaoPropinas() {
       Valor: "KZ 20.000",
       multa: "KZ 5.000",
       Estado: "Em atraso",
-      Serviço: "Propina"
+      Serviço: "Propina",
     },
   ]);
   const colorsSit = (Estado: string) => {
@@ -170,132 +170,144 @@ export default function GestaoPropinas() {
           <nav className="flex-1 flex flex-col gap-1 text-white">
             <Link to="/Secretaria">
               <SidebarItem
-                icon={LayoutDashboard }
+                icon={LayoutDashboard}
                 label="Painel Geral"
                 active={false}
               />
             </Link>
+
             <Link to="/GestaoAlunos">
-            <SidebarItem
-              icon={Users }
-              label="Gestão de Alunos"
-              active={false}
-            />
+              <SidebarItem
+                icon={Users}
+                label="Gestão de Alunos"
+                active={false}
+              />
             </Link>
 
             <Link to="/GestaodeEncarregados">
-            <SidebarItem
-              icon={Users }
-              label="Gestão de Encarregados"
-              active={false}
-            />
+              <SidebarItem
+                icon={Users}
+                label="Gestão de Encarregados"
+                active={false}
+              />
             </Link>
             <Link to="/GestaoPropinas">
               <SidebarItem
-                icon={CreditCard }
+                icon={CreditCard}
                 label="Gestão de Propinas"
                 active={true}
               />
             </Link>
             <Link to="/GestaoPagamentos">
               <SidebarItem
-                icon={Receipt }
+                icon={Receipt}
                 label="Gestão de Pagamentos"
                 active={false}
               />
             </Link>
 
-           <Link to="GestaodeServiços">
-            <SidebarItem
-              icon={Settings }
-              label="Gestão de Serviços"
-              active={false}
-            />
-           </Link>
-            <SidebarItem
-              icon={MessageSquare }
-              label="Gestão de Reclamações"
-              active={false}
-            />
-            <SidebarItem
-              icon={AlertOctagon }
-              label="Gestão de Multas"
-              active={false}
-            />
-
-            <SidebarItem
-              icon={FileText }
-              label="Relatório"
-              active={false}
-            />
-
-            <SidebarItem
-              icon={Settings }
-              label="Configurações"
-              active={false}
-            />
+            <Link to="/GestaodeServiços">
+              <SidebarItem
+                icon={Settings}
+                label="Gestão de Serviços"
+                active={false}
+              />
+            </Link>
+            <Link to="/GestaodeReclamacoes">
+              <SidebarItem
+                icon={MessageSquare}
+                label="Gestão de Reclamações"
+                active={false}
+              />
+            </Link>
+            <Link to="/ModulodeMulta">
+              <SidebarItem
+                icon={AlertOctagon}
+                label="Gestão de Multas"
+                active={false}
+              />
+            </Link>
+            <Link to="/Relatorio">
+              <SidebarItem
+                icon={FileText}
+                label="Centro de Relatório"
+                active={false}
+              />
+            </Link>
+            <Link to="/Configuracao">
+              <SidebarItem
+                icon={Settings}
+                label="Configurações"
+                active={false}
+              />
+            </Link>
           </nav>
         </aside>
       )}
+
       {/* Main Content */}
-      {/* Main Content */}
-      <main className="flex-1 p-8 ">
-        <div className="flex gap-6">
-          {!menu && (
-            <button>
-              <Menu
-                className="text-[#268cff] flex items-start"
-                size={28}
+      <main className="flex-1 p-8 overflow-y-auto">
+        {/* Header com Título e Search */}
+        <div className="flex justify-between items-center mb-10">
+          <div className="flex items-center gap-6">
+            {!menu && (
+              <button
                 onClick={OpenMenu}
-              ></Menu>
-            </button>
-          )}
-          <h2 className="text-lg font-bold text-[#268cff]">
-            Gestão de Propinas
-          </h2>
-        </div>
-        {/* Header */}
-        <header className="flex justify-end items-center mb-8">
-          <div className="flex">
-            <div className="relative w-96">
+                className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
+              >
+                <Menu size={28} />
+              </button>
+            )}
+            <h2 className="text-2xl font-bold text-[#268cff]">
+              Gestão de Propinas
+            </h2>
+          </div>
+
+          <header className="flex items-center gap-6">
+            <div className="relative">
               <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
                 size={18}
               />
               <input
                 type="search"
-                placeholder="Procurar por um código"
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-MeuAzul/20 focus:border-none"
+                placeholder="Procurar por um código..."
+                className="w-80 pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#268cff]/20 outline-none transition-all"
               />
             </div>
-            <div className="flex items-center gap-4 ml-4">
-              <div className="relative">
-                <Bell className="text-[#268cff] cursor-pointer" />
-                <div className="absolute bg-red-500 w-3 h-3 flex -top-1 -right-1 rounded-full border border-white"></div>
+
+            <div className="flex items-center gap-4">
+              <div className="relative cursor-pointer group">
+                <Bell className="text-[#268cff] group-hover:scale-110 transition-transform" />
+                <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
               </div>
-              <div className="w-10 h-10 rounded-full bg-gray-200 border overflow-hidden">
-                <img src="https://via.placeholder.com/40" alt="User" />
+              <div className="w-10 h-10 rounded-full border-2 border-[#268cff]/20 p-0.5">
+                <img
+                  src="https://via.placeholder.com/40"
+                  alt="User"
+                  className="w-full h-full rounded-full object-cover"
+                />
               </div>
             </div>
+          </header>
+        </div>
+
+        {/* Filtros e KPIs */}
+        <section className="mb-12">
+          <div className="flex gap-4 mb-8">
+            {["Mês", "Classe", "Estado"].map((filtro) => (
+              <div key={filtro} className="flex flex-col gap-1">
+                <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider ml-1">
+                  {filtro}
+                </label>
+                <select className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 outline-none focus:border-[#268cff] min-w-[140px] cursor-pointer">
+                  <option>Sem filtro</option>
+                </select>
+              </div>
+            ))}
           </div>
-        </header>
-        {/*Filtros*/}
-        <section className="mb-8">
-          <div className="flex justify-start">
-            <div className="flex gap-4">
-              {["Mês", "Classe", "Estado"].map((filtro) => (
-                <div key={filtro}>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    {filtro}
-                  </label>
-                  <select className="bg-white border  rounded-md px-3 py-1 text-sm text-gray-400 outline-none">
-                    <option>Sem filtro</option>
-                  </select>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="grid grid-cols-4 gap-4 mt-10">
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <CardKpi
               title="Propinas Pagas"
               value="70"
@@ -316,73 +328,81 @@ export default function GestaoPropinas() {
             />
           </div>
         </section>
+
         {/* Tabela de Dados */}
-        <div className="mt-16">
-          <h2 className="mb-2 text-gray-500 text-base font-semibold">
-            Tabela de Propinas
-          </h2>
-          <table className="w-full border-collapse border border-gray-300   ">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
+          <div className="p-5 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
+            <h3 className="font-bold text-gray-700">Tabela de Propinas</h3>
+            <span className="text-xs text-gray-400 font-medium">
+              {dadosAlunos.length} registros encontrados
+            </span>
+          </div>
+
+          <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-[#268cff]/80 text-white">
-                <th className="border border-gray-300 px-4 py-2">Código</th>
-                <th className="border border-gray-300 px-4 py-2 ">
-                  <div
-                    className="flex items-center justify-center gap-1 cursor-pointer"
-                    onClick={() => handleSort("nome")}
-                  >
-                    Nome
+              <tr className="bg-gray-50/80 text-gray-500 text-[11px] uppercase font-black tracking-widest border-b border-gray-200">
+                <th className="px-4 py-4">Código</th>
+                <th
+                  className="px-4 py-4 cursor-pointer hover:text-[#268cff] transition-colors"
+                  onClick={() => handleSort("nome")}
+                >
+                  <div className="flex items-center justify-center gap-1">
+                    Nome{" "}
                     {ordemCrescente ? (
-                      <ArrowDown size={18} />
+                      <ArrowDown size={14} />
                     ) : (
-                      <ArrowUp size={20} />
+                      <ArrowUp size={14} />
                     )}
                   </div>
                 </th>
-                <th className="border border-gray-300 px-4 py-2">Classe</th>
-                <th className="border border-gray-300 px-4 py-2">Data</th>
-                <th className="border border-gray-300 px-4 py-2">Serviço</th>
-                <th className="border border-gray-300 px-4 py-2">Valor</th>
-                <th className="border border-gray-300 px-4 py-2">Multa</th>
-                <th className="border border-gray-300 px-4 py-2">Estado</th>
+                <th className="px-4 py-4">Classe</th>
+                <th className="px-4 py-4">Data</th>
+                <th className="px-4 py-4">Serviço</th>
+                <th className="px-4 py-4">Valor</th>
+                <th className="px-4 py-4">Multa</th>
+                <th className="px-4 py-4">Estado</th>
+                <th className="px-4 py-4">Ação</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-gray-100">
               {dadosAlunos.map((aluno, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-[#268cff]/10 even:bg-[#268cff]/20 hover:border hover:border-dashed hover:border-black text-center"
+                  className="hover:bg-blue-50/40 transition-colors group text-center"
                 >
-                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                  <td className="px-4 py-4 text-sm font-mono text-gray-500">
                     {aluno.codigo}
                   </td>
-                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                  <td className="px-4 py-4 text-sm font-bold text-gray-700">
                     {aluno.nome}
                   </td>
-                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                  <td className="px-4 py-4 text-sm text-gray-500">
                     {aluno.classe}
                   </td>
-                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                  <td className="px-4 py-4 text-sm text-gray-500">
                     {aluno.data}
                   </td>
-                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                  <td className="px-4 py-4 text-sm text-gray-600">
                     {aluno.Serviço}
                   </td>
-                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                  <td className="px-4 py-4 text-sm font-black text-gray-800">
                     {aluno.Valor}
                   </td>
-                  <td className=" px-4 py-2 border-r border-l border-gray-300">
+                  <td className="px-4 py-4 text-sm font-medium text-red-500">
                     {aluno.multa}
                   </td>
-                  <div className="flex  justify-between items-center">
-                    <div className="flex justify-center mx-auto">
-                      <td className={`px-4 py-2 ${colorsSit(aluno.Estado)}`}>
-                        {aluno.Estado}
-                      </td>
-                    </div>
-                    <button className=" justify-end flex items-end mr-5 bg-[#268cff]/50 px-3 rounded-lg">
-                      <EyeIcon className="text-white" />
+                  <td className="px-4 py-4">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold border inline-block min-w-[85px] ${colorsSit(aluno.Estado)}`}
+                    >
+                      {aluno.Estado}
+                    </span>
+                  </td>
+                  <td className="px-4 py-4 text-right">
+                    <button className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all">
+                      <EyeIcon size={18} />
                     </button>
-                  </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

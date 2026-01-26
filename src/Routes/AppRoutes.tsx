@@ -17,6 +17,10 @@ import Reclamacoes from "@/Pages/Estudante/reclamacoes";
 import ConfigurationScreen from "@/Pages/Estudante/Config";
 import GestaodeEncarregados from "@/Pages/Secretaria/GestaodeEncarregados/GestaodeEncarregados";
 import GestaodeServiços from "@/Pages/Secretaria/GestãodeServiços/GestaodeServiços";
+import ModulodeMulta from "@/Pages/Secretaria/MódulodeMultas/ModulodeMulta";
+import GestaodeReclamacoes from "@/Pages/Secretaria/GestãodeReclamações/GestaodeReclamacoes";
+import Relatorio from "@/Pages/Secretaria/Relatorio/Relatorio";
+import Configuracao from "@/Pages/Secretaria/Configuracao/Configuracao";
 
 
 export default function AppRoutes() {
@@ -55,7 +59,12 @@ export default function AppRoutes() {
       <Route path="/GestaoPagamentos" element={<GestaoPagamentos></GestaoPagamentos>}></Route>
       <Route path="/GestaodeEncarregados" element={<GestaodeEncarregados></GestaodeEncarregados>}></Route>
       <Route path="GestaodeServiços" element={<GestaodeServiços></GestaodeServiços>}></Route>
+      <Route path="/GestaodeReclamacoes" element={<GestaodeReclamacoes></GestaodeReclamacoes>}></Route>
+      <Route path="/ModulodeMulta" element={<ModulodeMulta></ModulodeMulta>}></Route>
+      <Route path="/Relatorio" element={<Relatorio></Relatorio>}></Route>
+      <Route path="/Configuracao" element={<Configuracao></Configuracao>}></Route>
     </Routes>
+
 
   );
 }

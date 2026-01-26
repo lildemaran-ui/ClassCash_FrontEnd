@@ -1,18 +1,18 @@
-import { ArrowDown, EyeIcon, PiIcon, Plus } from "lucide-react";
-import {
+import { ArrowDown, EyeIcon, 
+   Plus,
   LayoutDashboard,
   Users,
   CreditCard,
   Receipt,
   AlertOctagon,
   FileText,
-  UserCog,
   Settings,
   MessageSquare,
   Bell,
   Search,
   Menu,
   ArrowUp,
+  
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -101,7 +101,7 @@ export default function GestaoAlunos() {
     label,
     active = false,
   }: {
-    icon: React.ReactNode;
+    icon: any;
     label: string;
     active?: boolean;
   }) => (
@@ -110,7 +110,7 @@ export default function GestaoAlunos() {
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      {Icon ?? <PiIcon size={20} className="text-white" />}
+      <Icon size={20} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
@@ -131,203 +131,236 @@ export default function GestaoAlunos() {
           </div>
 
           <nav className="flex-1 flex flex-col gap-1 text-white">
-            <Link to="/Secretaria">
-              <SidebarItem
-                icon={<LayoutDashboard size={20}/>}
-                label="Painel Geral"
-                active={false}
-              />
-            </Link>
-
-            <SidebarItem
-              icon={<Users size={20}/>}
-              label="Gestão de Alunos"
-              active={true}
-            />
-
-            <Link to="/GestaodeEncarregados">
-            <SidebarItem
-              icon={<Users size={20}/>}
-              label="Gestão de Encarregados"
-              active={false}
-            />
-            </Link>
-            <Link to="/GestaoPropinas">
-              <SidebarItem
-                icon={<CreditCard size={20}/>}
-                label="Gestão de Propinas"
-                active={false}
-              />
-            </Link>
-            <Link to="/GestaoPagamentos">
-              <SidebarItem
-                icon={<Receipt size={20}/>}
-                label="Gestão de Pagamentos"
-                active={false}
-              />
-            </Link>
-            
-            <Link to="GestaodeServiços">
-            <SidebarItem
-              icon={<Settings size={20}/> }
-              label="Gestão de Serviços"
-              active={false}
-            />
-           </Link>
-            <SidebarItem
-              icon={<MessageSquare size={20}/>}
-              label="Gestão de Reclamações"
-              active={false}
-            />
-            <SidebarItem
-              icon={<AlertOctagon size={20}/>}
-              label="Gestão de Multas"
-              active={false}
-            />
-
-            <SidebarItem icon={<FileText size={20}/>} label="Relatório" active={false} />
-
-            <SidebarItem
-              icon={<Settings size={20}/>}
-              label="Configurações"
-              active={false}
-            />
+             <Link to="/Secretaria">
+                         <SidebarItem
+                           icon={LayoutDashboard}
+                           label="Painel Geral"
+                           active={false}
+                         />
+                       </Link>
+           
+                       <Link to="/GestaoAlunos">
+                         <SidebarItem
+                           icon={Users}
+                           label="Gestão de Alunos"
+                           active={true}
+                         />
+                       </Link>
+           
+                       <Link to="/GestaodeEncarregados">
+                         <SidebarItem
+                           icon={Users}
+                           label="Gestão de Encarregados"
+                           active={false}
+                         />
+                       </Link>
+                       <Link to="/GestaoPropinas">
+                         <SidebarItem
+                           icon={CreditCard}
+                           label="Gestão de Propinas"
+                           active={false}
+                         />
+                       </Link>
+                       <Link to="/GestaoPagamentos">
+                         <SidebarItem
+                           icon={Receipt}
+                           label="Gestão de Pagamentos"
+                           active={false}
+                         />
+                       </Link>
+           
+                       <Link to="/GestaodeServiços">
+                         <SidebarItem
+                           icon={Settings}
+                           label="Gestão de Serviços"
+                           active={false}
+                         />
+                       </Link>
+                       <Link to="/GestaodeReclamacoes">
+                         <SidebarItem
+                           icon={MessageSquare}
+                           label="Gestão de Reclamações"
+                           active={false}
+                         />
+                       </Link>
+                       <Link to="/ModulodeMulta">
+                         <SidebarItem
+                           icon={AlertOctagon}
+                           label="Gestão de Multas"
+                           active={false}
+                         />
+                       </Link>
+                       <Link to="/Relatorio">
+                         <SidebarItem
+                           icon={FileText}
+                           label="Centro de Relatório"
+                           active={false}
+                         />
+                       </Link>
+                       <Link to="/Configuracao">
+                         <SidebarItem
+                           icon={Settings}
+                           label="Configurações"
+                           active={false}
+                         />
+                       </Link>
           </nav>
         </aside>
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-4 ">
-        <div className="flex justify-between">
-          <div className="flex gap-6 items-center">
+      <main className="flex-1 p-8 overflow-y-auto bg-gray-50">
+        {/* Header Superior */}
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center gap-6">
             {!menu && (
-              <button>
-                <Menu
-                  className="text-[#268cff] flex items-start"
-                  size={28}
-                  onClick={OpenMenu}
-                ></Menu>
+              <button
+                onClick={OpenMenu}
+                className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
+              >
+                <Menu size={28} />
               </button>
             )}
-            <h2 className="text-lg font-bold text-[#268cff]">
+            <h2 className="text-2xl font-bold text-[#268cff]">
               Gestão de Alunos
             </h2>
           </div>
-          {/* Header */}
-          <header className="flex justify-end items-center mb-8">
-            <div className="flex">
-              <div className="flex items-center gap-4 ml-4">
-                <div className="relative">
-                  <Bell className="text-[#268cff] cursor-pointer" />
-                  <div className="absolute bg-red-500 w-3 h-3 flex -top-1 -right-1 rounded-full border border-white"></div>
-                </div>
-                <div className="w-10 h-10 rounded-full bg-gray-200 border overflow-hidden">
-                  <img src="https://via.placeholder.com/40" alt="User" />
-                </div>
-              </div>
+
+          <header className="flex items-center gap-4">
+            <div className="relative">
+              <Bell className="text-[#268cff] cursor-pointer" />
+              <span className="absolute bg-red-500 w-2.5 h-2.5 -top-1 -right-1 rounded-full border-2 border-white"></span>
+            </div>
+            <div className="w-10 h-10 rounded-full border-2 border-[#268cff]/20 overflow-hidden shadow-sm">
+              <img
+                src="https://via.placeholder.com/40"
+                alt="User"
+                className="w-full h-full object-cover"
+              />
             </div>
           </header>
         </div>
 
-        <section className="mb-8">
-          <div className="flex justify-start mb-6">
-            <div className="relative mr-5 w-auto ">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
-              <input
-                type="search"
-                placeholder="Procurar por um código/Nome"
-                className="w-80 pl-10 pr-5  py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-MeuAzul/20 focus:border-none"
-              />
-            </div>
-            <div className="flex gap-3 bg-[#268cff] w-32 py-2 px-2 text-white rounded-lg ">
-        <div><Plus/></div>
-        <div className="font-semibold">Cadastrar</div>
-       </div>
+        {/* Barra de Pesquisa e Ação */}
+        <section className="flex justify-between items-center mb-10 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+          <div className="relative">
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={20}
+            />
+            <input
+              type="search"
+              placeholder="Procurar por código ou nome..."
+              className="w-96 pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-[#268cff]/20 transition-all"
+            />
           </div>
+          <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
+            <Plus size={20} /> Cadastrar Aluno
+          </button>
         </section>
-        <div className=" border p-6 rounded-lg ">
-          <div>
-            <p className="text-sm text-gray-400 font-bold mb-4 justify-end flex ">
-              Melhor visão e Gestão de Alunos
+
+        {/* Dashboard de Visão Geral */}
+        <div className="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm mb-12 flex flex-col items-center">
+          <div className="w-full flex justify-between items-start mb-4">
+            <h3 className="font-bold text-gray-700 italic">
+              Visão Geral da Instituição
+            </h3>
+            <p className="text-xs text-gray-400 font-black uppercase tracking-widest">
+              Status de Matrículas
             </p>
-            <div className=" w-96 h-56 flex justify-center items-center mx-auto">
-              <div className="border-[20px] relative w-48 h-48 rounded-full  p-16 border-blue-500 border-l-blue-400 flex items-center justify-center">
-                <div className="absolute text-sm font-semibold">
-                  <p>70% Ativos</p>
-                </div>
-              </div>
+          </div>
+
+          <div className="relative w-56 h-56 flex items-center justify-center">
+            {/* Círculo de Fundo (Inativos) */}
+            <div className="absolute w-full h-full rounded-full border-[16px] border-blue-100"></div>
+            {/* Círculo de Progresso (Ativos) - Simulação usando border-l/t */}
+            <div className="absolute w-full h-full rounded-full border-[16px] border-[#268cff] border-l-transparent border-b-transparent rotate-45"></div>
+
+            <div className="text-center z-10">
+              <span className="text-4xl font-black text-[#268cff]">70%</span>
+              <p className="text-[10px] text-gray-400 font-bold uppercase">
+                Ativos
+              </p>
             </div>
-            <div className="flex gap-8 justify-center">
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-blue-500"></div>
-                <p>Alunos ativos</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 bg-blue-400"></div>
-                <p>Alunos inativos</p>
-              </div>
+          </div>
+
+          <div className="flex gap-10 mt-8">
+            <div className="flex items-center gap-3">
+              <div className="w-4 h-4 bg-[#268cff] rounded-sm shadow-sm"></div>
+              <span className="text-sm font-medium text-gray-600">
+                Alunos Ativos
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-4 h-4 bg-blue-100 rounded-sm shadow-sm"></div>
+              <span className="text-sm font-medium text-gray-600">
+                Alunos Inativos
+              </span>
             </div>
           </div>
         </div>
 
-        <table className="w-full border-collapse border border-gray-300 mt-28  ">
-          <thead>
-            <tr className="bg-[#268cff]/80 text-white">
-              <th className="border border-gray-300 px-4 py-2">Código</th>
-              <th className="border border-gray-300 px-4 py-2 ">
-                <div
-                  className="flex items-center justify-center gap-1 cursor-pointer"
+        {/* Tabela de Dados */}
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
+          <table className="w-full text-center border-collapse">
+            <thead>
+              <tr className="bg-gray-50/80 text-gray-400 text-[11px] uppercase font-black tracking-widest border-b border-gray-100">
+                <th className="px-6 py-4">Código</th>
+                <th
+                  className="px-6 py-4 cursor-pointer hover:text-[#268cff]"
                   onClick={() => handleSort("nome")}
                 >
-                  Nome
-                  {ordemCrescente ? (
-                    <ArrowDown size={18} />
-                  ) : (
-                    <ArrowUp size={20} />
-                  )}
-                </div>
-              </th>
-              <th className="border border-gray-300 px-4 py-2">Classe</th>
-              <th className="border border-gray-300 px-4 py-2">Status</th>
-              
-            </tr>
-          </thead>
-          <tbody>
-            {dadosAlunos.map((aluno, index) => (
-              <tr
-                key={index}
-                className="hover:bg-[#268cff]/10 even:bg-[#268cff]/20 hover:border hover:border-dashed hover:border-black text-center"
-              >
-                <td className=" px-4 py-2 border-r border-l border-gray-300">
-                  {aluno.codigo}
-                </td>
-                <td className=" px-4 py-2 border-r border-l border-gray-300">
-                  {aluno.nome}
-                </td>
-                <td className=" px-4 py-2 border-r border-l border-gray-300">
-                  {aluno.classe}
-                </td>
-                
-                <div className="flex  justify-between items-center">
-                  <div className="flex justify-center mx-auto">
-                    <td className={`px-4 py-2 ${colorsSit(aluno.situacao)}`}>
-                      {aluno.status}{" "}
-                    </td>
+                  <div className="flex items-center justify-center gap-1">
+                    Nome{" "}
+                    {ordemCrescente ? (
+                      <ArrowDown size={14} />
+                    ) : (
+                      <ArrowUp size={14} />
+                    )}
                   </div>
-                  <Link
-                    to="/DashboardEstud"
-                    className=" justify-end flex items-end mr-5 bg-[#268cff]/50 px-3 rounded-lg"
-                  >
-                    <EyeIcon className="text-white" />
-                  </Link>
-                </div>
+                </th>
+                <th className="px-6 py-4">Classe</th>
+                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Ação</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {dadosAlunos.map((aluno, index) => (
+                <tr
+                  key={index}
+                  className="hover:bg-blue-50/30 transition-colors group"
+                >
+                  <td className="px-6 py-4 text-sm font-mono text-gray-500">
+                    {aluno.codigo}
+                  </td>
+                  <td className="px-6 py-4 text-sm font-bold text-gray-700">
+                    {aluno.nome}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {aluno.classe}
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`px-4 py-1 rounded-full text-[10px] font-bold border inline-block min-w-[80px] ${colorsSit(aluno.situacao)}`}
+                    >
+                      {aluno.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex justify-center">
+                      <Link
+                        to="/DashboardEstud"
+                        className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm"
+                      >
+                        <EyeIcon size={18} />
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </main>
     </div>
   );

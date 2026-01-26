@@ -161,11 +161,14 @@ export default function Secretaria() {
           </div>
 
           <nav className="flex-1 flex flex-col gap-1">
-            <SidebarItem
-              icon={LayoutDashboard}
-              label="Painel Geral"
-              active={true}
-            />
+            <Link to="/Secretaria">
+              <SidebarItem
+                icon={LayoutDashboard}
+                label="Painel Geral"
+                active={true}
+              />
+            </Link>
+
             <Link to="/GestaoAlunos">
               <SidebarItem
                 icon={Users}
@@ -173,9 +176,10 @@ export default function Secretaria() {
                 active={false}
               />
             </Link>
+
             <Link to="/GestaodeEncarregados">
               <SidebarItem
-                icon={Users }
+                icon={Users}
                 label="Gestão de Encarregados"
                 active={false}
               />
@@ -195,27 +199,41 @@ export default function Secretaria() {
               />
             </Link>
 
-            <Link to="/GestaodeServiço">
-            <SidebarItem
-              icon={Settings}
-              label="Gestão de Serviços"
-              active={false}
-            />
+            <Link to="/GestaodeServiços">
+              <SidebarItem
+                icon={Settings}
+                label="Gestão de Serviços"
+                active={false}
+              />
             </Link>
-            <SidebarItem
-              icon={MessageSquare}
-              label="Gestão de Reclamações"
-              active={false}
-            />
-            <SidebarItem
-              icon={AlertOctagon}
-              label="Gestão de Multas"
-              active={false}
-            />
-
-            <SidebarItem icon={FileText} label="Relatório" active={false} />
-
-            <SidebarItem icon={Settings} label="Configurações" active={false} />
+            <Link to="/GestaodeReclamacoes">
+              <SidebarItem
+                icon={MessageSquare}
+                label="Gestão de Reclamações"
+                active={false}
+              />
+            </Link>
+            <Link to="/ModulodeMulta">
+              <SidebarItem
+                icon={AlertOctagon}
+                label="Gestão de Multas"
+                active={false}
+              />
+            </Link>
+            <Link to="/Relatorio">
+              <SidebarItem
+                icon={FileText}
+                label="Centro de Relatório"
+                active={false}
+              />
+            </Link>
+            <Link to="/Configuracao">
+              <SidebarItem
+                icon={Settings}
+                label="Configurações"
+                active={false}
+              />
+            </Link>
           </nav>
         </aside>
       )}
@@ -269,7 +287,7 @@ export default function Secretaria() {
                   <label className="block text-xs text-gray-500 mb-1">
                     {filtro}
                   </label>
-                  <select className="bg-white border  rounded-md px-3 py-1 text-sm text-gray-400 outline-none">
+                  <select className="bg-white border  rounded-md px-6 py-2 text-sm text-gray-400 outline-none">
                     <option>Sem filtro</option>
                   </select>
                 </div>

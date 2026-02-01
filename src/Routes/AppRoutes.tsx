@@ -23,6 +23,7 @@ import Relatorio from "@/Pages/Secretaria/Relatorio/Relatorio";
 import Configuracao from "@/Pages/Secretaria/Configuracao/Configuracao";
 
 
+
 export default function AppRoutes() {
   return (
     <Routes>

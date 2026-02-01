@@ -14,6 +14,8 @@ import {
   Menu,
   ArrowDown,
   ArrowUp,
+  TrendingUp,
+  TrendingDown,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
 import { Link } from "react-router-dom";
@@ -53,16 +55,16 @@ const CardKpi = ({
       <span className="text-2xl font-bold text-gray-800">{value}</span>
       {trend === "up" && (
         <span className="text-green-500 text-base">
-          <ArrowUp></ArrowUp>
+          <TrendingUp/>
         </span>
       )}
       {trend === "down" && (
         <span className="text-red-500 text-xs">
-          <ArrowDown></ArrowDown>
+          <TrendingDown/>
         </span>
       )}
     </div>
-    <p className="text-[14px] text-gray-400 mt-1">{subtext}</p>
+    <p className="text-sm text-gray-400 mt-1">{subtext}</p>
   </div>
 );
 
@@ -88,13 +90,13 @@ const MonthlyBarChartSimulation: React.FC = () => {
     <div className="bg-white p-8 rounded-xl  mt-6 ">
       <div className="flex items-end h-64 border-l border-b border-gray-300 relative">
         {/* Linhas de grade e valores Y simulados */}
-        {[0, 20, 40, 60, 80, 100].map((y) => (
+        {[0,20,40,60,80,100].map((y) => (
           <div
             key={y}
             className="absolute left-0 w-full text-xs text-gray-500 "
             style={{ bottom: `${y}%`, transform: "translateY(50%)" }}
           >
-            {y}%
+            {y}
             {y > 0 && (
               <div className="absolute left-0 bottom-0 w-full border-t border-gray-200 -z-10" />
             )}
@@ -172,7 +174,7 @@ export default function Secretaria() {
             <Link to="/GestaoAlunos">
               <SidebarItem
                 icon={Users}
-                label="Gestão de Alunos"
+                label="Gestão de Estudantes"
                 active={false}
               />
             </Link>
@@ -269,7 +271,7 @@ export default function Secretaria() {
             <div className="flex items-center gap-4 ml-4">
               <div className="relative">
                 <Bell className="text-[#268cff] cursor-pointer" />
-                <div className="absolute bg-red-500 w-3 h-3 flex -top-1 -right-1 rounded-full border border-white"></div>
+                <div className="absolute bg-red-500 w-3 h-3 flex -top-1 -right-1 rounded-full border-2 border-white"></div>
               </div>
               <div className="w-10 h-10 rounded-full bg-gray-200 border overflow-hidden">
                 <img src="https://via.placeholder.com/40" alt="User" />
@@ -284,10 +286,10 @@ export default function Secretaria() {
             <div className="flex gap-4">
               {["Ano", "Semestre", "Mês"].map((filtro) => (
                 <div key={filtro}>
-                  <label className="block text-xs text-gray-500 mb-1">
+                  <label className="block text-sm text-gray-500 mb-1">
                     {filtro}
                   </label>
-                  <select className="bg-white border  rounded-md px-6 py-2 text-sm text-gray-400 outline-none">
+                  <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#268cff]">
                     <option>Sem filtro</option>
                   </select>
                 </div>
@@ -370,9 +372,11 @@ export default function Secretaria() {
               </div>
             ))}
           </div>
+         <Link to="/GestaoAlunos">
           <button className="mt-4 bg-[#268cff] text-white px-6 py-2 rounded text-sm hover:px-7 hover:ml-2 transition-all duration-500 font-bold shadow-md">
             Ver mais
           </button>
+         </Link>
         </section>
 
         {/* Faturamento Chart Placeholder */}

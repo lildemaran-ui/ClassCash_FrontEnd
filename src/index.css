@@ -1115,4 +1115,12 @@ color: #FFFFFF;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
+.bg-translucido2{
+  background-color: #3835355c;
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+}
+button:active{
+  transform: scale(0.95);
+}
 

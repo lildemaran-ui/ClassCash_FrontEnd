@@ -5,10 +5,22 @@ import {
   Shirt,
   Coins,
   CheckCircle,
+  X,
+  Pen,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 export default function DadosDashEstd() {
-      const StatusCard = ({
+  const [Modal, setModal] = useState(false);
+
+  function ShowModal() {
+    setModal(true);
+  }
+
+  function CloseModal() {
+    setModal(false);
+  }
+  const StatusCard = ({
     icon,
     title,
     progress,
@@ -17,7 +29,7 @@ export default function DadosDashEstd() {
     title: string;
     progress: number;
   }) => (
-    <div className="bg-white p-6 rounded-2xl  border-2 border-gray-100 flex flex-col items-center">
+    <div className="bg-white p-6 rounded-2xl  border flex flex-col items-center">
       <div className="mb-4">{icon}</div>
       <h4 className="font-bold text-gray-800 mb-4">{title}</h4>
       <div className="w-full bg-gray-100 h-2 rounded-full mb-2">
@@ -29,7 +41,7 @@ export default function DadosDashEstd() {
       <span className="text-xs font-bold text-gray-500">Pago</span>
     </div>
   );
-    const SummaryRow = ({ label, value }: { label: string; value: string }) => (
+  const SummaryRow = ({ label, value }: { label: string; value: string }) => (
     <div className="flex justify-between text-sm">
       <span className="text-gray-500 font-medium">{label}</span>
       <span className="text-gray-800 font-bold">{value}</span>
@@ -42,47 +54,158 @@ export default function DadosDashEstd() {
     </div>
   );
   const [user, setUser] = useState<any>(null);
-useEffect(()=>{
-  const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
+  useEffect(() => {
+    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
 
-  if(dadosDoLogin){
-    setUser(JSON.parse(dadosDoLogin))
-  }else{
-    window.location.href = "/Login"
+    if (dadosDoLogin) {
+      setUser(JSON.parse(dadosDoLogin));
+    } else {
+      window.location.href = "/Login";
+    }
+  }, []);
+  if (!user) {
+    return <span>Carregado...</span>;
   }
-},[])
-if(!user){
-  return (
-    <span>Carregado...</span>
-  )
-}
   return (
     <div>
       <header className="flex justify-between items-start mb-8 ">
         <div className="flex items-center gap-6">
           <div className="w-56 h-56 rounded-full overflow-hidden border-4 border-white shadow-sm  ">
-           {user.foto && (
-             <img
-              src={user.foto}
-              alt="Estudante"
-              className="w-full h-full object-cover"
-            />
-           )}
+            {user.foto && (
+              <img
+                src={user.foto}
+                alt="Estudante"
+                className="w-full h-full object-cover"
+              />
+            )}
           </div>
           <div className="space-y-1">
             <p className="text-lg font-bold">{user.nome}</p>
             <p className="text-sm text-gray-600">
               <strong>Email:</strong> {user.email}
             </p>
-            <p className="text-sm text-gray-600"><strong>Nº de processo:</strong> {user.processo}</p>
+            <p className="text-sm text-gray-600">
+              <strong>Nº de processo:</strong> {user.processo}
+            </p>
             {user.perfil === "Estudante" && (
-              <p className="text-sm text-gray-600"><strong>Classe:</strong> {user.classe}</p>
+              <p className="text-sm text-gray-600">
+                <strong>Classe:</strong> {user.classe}
+              </p>
             )}
           </div>
         </div>
 
+        {Modal && (
+          <div className="  bg-translucido2 fixed inset-0 z-50 flex items-center justify-center ">
+            <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+              <div className="flex justify-between mb-4">
+                <div>
+                  <h2 className="text-xl font-bold ">Editar Perfil</h2>
+                  <p className="text-xs text-gray-400">
+                    Edite suas informações a baixo
+                  </p>
+                </div>
+                <div>
+                  <button onClick={CloseModal} className="text-[#268cff]">
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+              <form className="space-y-4">
+                <div className="w-48 h-48 rounded-full flex justify-center items-center mx-auto overflow-hidden border border-gray-400 shadow-sm group  ">
+            {user.foto && (
+              <img
+                src={user.foto}
+                alt="Estudante"
+                className="w-full h-full object-cover"
+              />
+            )}
+          </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {" "}
+                    Nome Completo
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full border-2 rounded-lg h-10 text-base px-4 outline-none focus:border-[#268cff]"
+                    value={user.nome || ""}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {" "}
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    className="w-full border-2 rounded-lg h-10 text-base px-4 outline-none focus:border-[#268cff]"
+                    value={user?.email || ""}
+                  />
+                </div>
+                <div className="flex justify-between gap-3">
+                  <div className="w-24">
+                  <label className="block text-sm mb-1">Classe</label>
+                  <select
+                    required
+                    value={user?.classe || ""}
+                    className="w-full border-2 rounded-lg h-10 text-base px-4 outline-none focus:border-[#268cff]"
+                  >
+                    <option value="" disabled>
+                      Grau
+                    </option>
+                    <option value="7ª">7ª</option>
+                    <option value="8ª">8ª</option>
+                    <option value="9ª">9ª</option>
+                    <option value="10ª">10ª</option>
+                    <option value="11ª">11ª</option>
+                    <option value="12ª">12ª</option>
+                  </select>
+                </div>
+                <div>
+                  <label className=" text-sm font-medium text-gray-700 mb-1">
+                    {" "}
+                    Nº de Processo
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full border-2 rounded-lg h-10 text-base px-4 outline-none focus:border-[#268cff]"
+                    value={user?.processo || ""}
+                  />
+                </div>
+                </div>
+                <div className="text-right">
+                 <div className="flex justify-end gap-2
+                  mt-20">
+                   <div className="">
+                     <button
+                    type="button"
+                    className="bg-white text-[#268cff] px-4 py-2 rounded-md border border-[#268cff] hover:bg-gray-100/50 transition-colors duration-500"
+                    onClick={CloseModal}
+                  >
+                   Cancelar
+                  </button>
+                  </div>
+                  <div>
+                    <button
+                    type="button"
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-500"
+                    onClick={CloseModal}
+                  >
+                    Concluído
+                  </button>
+                  </div>
+                 </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
         <div className="text-right">
-          <button className="text-[#268cff] text-sm font-medium flex items-center gap-2 mb-4 ml-auto">
+          <button
+            onClick={ShowModal}
+            className="text-[#268cff] text-sm font-medium flex items-center gap-2 mb-4 ml-auto"
+          >
             <Settings size={16} /> EDITAR PERFIL
           </button>
 
@@ -176,9 +299,7 @@ if(!user){
                 <td className="p-4">Propina</td>
                 <td className="p-4 font-medium text-gray-900">Kz 31.300,00</td>
                 <td className="p-4 text-gray-400">Kz 0,00</td>
-                <td className="p-4 text-green-500 font-medium italic">
-                  Em dia
-                </td>
+                <td className="p-4 text-green-500 font-medium ">Em dia</td>
               </tr>
             ))}
           </tbody>

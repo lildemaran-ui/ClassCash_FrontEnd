@@ -25,24 +25,28 @@ export default function GestaodeEncarregados() {
     {
       nome: "Valente de Sousa",
       nomedoeducando: "Dário Valente de Sousa",
+      parentesco: "Pai",
       Contacto: "924576878",
       Estado: "Ativo",
     },
     {
       nome: "Eduarda João",
       nomedoeducando: "Eduarda Paula João",
+      parentesco: "Mãe",
       Contacto: "924576878",
       Estado: "Ativo",
     },
     {
       nome: "Luana Ngola",
       nomedoeducando: "Luana da Silva Ngola",
+      parentesco: "Mãe",
       Contacto: "924576878",
       Estado: "Inativo",
     },
     {
       nome: "Felisberto Costa",
       nomedoeducando: "Felisberto Manuel Costa",
+      parentesco: "Pai",
       Contacto: "924576878",
       Estado: "Ativo",
     },
@@ -83,7 +87,7 @@ export default function GestaodeEncarregados() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors ${
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
@@ -127,7 +131,7 @@ export default function GestaodeEncarregados() {
             <Link to="/GestaoAlunos">
               <SidebarItem
                 icon={Users}
-                label="Gestão de Alunos"
+                label="Gestão de Estudantes"
                 active={false}
               />
             </Link>
@@ -250,14 +254,14 @@ export default function GestaodeEncarregados() {
 
             <button className="flex items-center gap-2 bg-[#268cff] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
               <Plus size={20} />
-              <span>Cadastrar Novo</span>
+              <span>Cadastrar </span>
             </button>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
-                <tr className="bg-gray-50/50 text-gray-500 text-[11px] uppercase font-black tracking-widest border-b border-gray-200 text-center">
+                <tr className="bg-[#268cff]/70 text-white text-base font-black tracking-widest border-b border-gray-200 text-center">
                   <th
                     className="px-6 py-4 cursor-pointer hover:text-[#268cff]"
                     onClick={() => handleSort("nome")}
@@ -272,6 +276,7 @@ export default function GestaodeEncarregados() {
                     </div>
                   </th>
                   <th className="px-6 py-4">Educando (Aluno)</th>
+                  <th className="px-6 py-4">Parentesco</th>
                   <th className="px-6 py-4">Contacto</th>
                   <th className="px-6 py-4">Estado</th>
                   <th className="px-6 py-4">Ação</th>
@@ -281,13 +286,16 @@ export default function GestaodeEncarregados() {
                 {dadosAlunos.map((aluno, index) => (
                   <tr
                     key={index}
-                    className="hover:bg-blue-50/30 transition-colors text-center"
+                    className="hover:bg-[#268cff]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#268cff]"
                   >
-                    <td className="px-6 py-4 text-sm font-bold text-gray-700">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-500 ">
                       {aluno.nome}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-600 italic">
+                    <td className="px-6 py-4 text-sm text-gray-600">
                       {aluno.nomedoeducando}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {aluno.parentesco}
                     </td>
                     <td className="px-6 py-4 text-sm font-medium text-gray-500">
                       {aluno.Contacto}

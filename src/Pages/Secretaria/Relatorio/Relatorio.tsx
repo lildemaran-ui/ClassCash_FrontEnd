@@ -26,7 +26,7 @@ export default function Relatorio() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors ${
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
@@ -58,79 +58,79 @@ export default function Relatorio() {
           </div>
 
           <nav className="flex-1 flex flex-col gap-1 text-white">
-              <Link to="/Secretaria">
-                          <SidebarItem
-                            icon={LayoutDashboard}
-                            label="Painel Geral"
-                            active={false}
-                          />
-                        </Link>
-            
-                        <Link to="/GestaoAlunos">
-                          <SidebarItem
-                            icon={Users}
-                            label="Gestão de Alunos"
-                            active={false}
-                          />
-                        </Link>
-            
-                        <Link to="/GestaodeEncarregados">
-                          <SidebarItem
-                            icon={Users}
-                            label="Gestão de Encarregados"
-                            active={false}
-                          />
-                        </Link>
-                        <Link to="/GestaoPropinas">
-                          <SidebarItem
-                            icon={CreditCard}
-                            label="Gestão de Propinas"
-                            active={false}
-                          />
-                        </Link>
-                        <Link to="/GestaoPagamentos">
-                          <SidebarItem
-                            icon={Receipt}
-                            label="Gestão de Pagamentos"
-                            active={false}
-                          />
-                        </Link>
-            
-                        <Link to="/GestaodeServiços">
-                          <SidebarItem
-                            icon={Settings}
-                            label="Gestão de Serviços"
-                            active={false}
-                          />
-                        </Link>
-                        <Link to="/GestaodeReclamacoes">
-                          <SidebarItem
-                            icon={MessageSquare}
-                            label="Gestão de Reclamações"
-                            active={false}
-                          />
-                        </Link>
-                        <Link to="/ModulodeMulta">
-                          <SidebarItem
-                            icon={AlertOctagon}
-                            label="Gestão de Multa"
-                            active={false}
-                          />
-                        </Link>
-                        <Link to="/Relatorio">
-                          <SidebarItem
-                            icon={FileText}
-                            label="Centro de Relatório"
-                            active={true}
-                          />
-                        </Link>
-                        <Link to="/Configuracao">
-                          <SidebarItem
-                            icon={Settings}
-                            label="Configurações"
-                            active={false}
-                          />
-                        </Link>
+            <Link to="/Secretaria">
+              <SidebarItem
+                icon={LayoutDashboard}
+                label="Painel Geral"
+                active={false}
+              />
+            </Link>
+
+            <Link to="/GestaoAlunos">
+              <SidebarItem
+                icon={Users}
+                label="Gestão de Estudantes"
+                active={false}
+              />
+            </Link>
+
+            <Link to="/GestaodeEncarregados">
+              <SidebarItem
+                icon={Users}
+                label="Gestão de Encarregados"
+                active={false}
+              />
+            </Link>
+            <Link to="/GestaoPropinas">
+              <SidebarItem
+                icon={CreditCard}
+                label="Gestão de Propinas"
+                active={false}
+              />
+            </Link>
+            <Link to="/GestaoPagamentos">
+              <SidebarItem
+                icon={Receipt}
+                label="Gestão de Pagamentos"
+                active={false}
+              />
+            </Link>
+
+            <Link to="/GestaodeServiços">
+              <SidebarItem
+                icon={Settings}
+                label="Gestão de Serviços"
+                active={false}
+              />
+            </Link>
+            <Link to="/GestaodeReclamacoes">
+              <SidebarItem
+                icon={MessageSquare}
+                label="Gestão de Reclamações"
+                active={false}
+              />
+            </Link>
+            <Link to="/ModulodeMulta">
+              <SidebarItem
+                icon={AlertOctagon}
+                label="Gestão de Multa"
+                active={false}
+              />
+            </Link>
+            <Link to="/Relatorio">
+              <SidebarItem
+                icon={FileText}
+                label="Centro de Relatório"
+                active={true}
+              />
+            </Link>
+            <Link to="/Configuracao">
+              <SidebarItem
+                icon={Settings}
+                label="Configurações"
+                active={false}
+              />
+            </Link>
           </nav>
         </aside>
       )}

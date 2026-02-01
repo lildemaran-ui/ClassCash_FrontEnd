@@ -25,7 +25,7 @@ export default function GestaodeReclamacoes() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors ${
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
@@ -68,7 +68,7 @@ export default function GestaodeReclamacoes() {
             <Link to="/GestaoAlunos">
               <SidebarItem
                 icon={Users}
-                label="Gestão de Alunos"
+                label="Gestão de Estudantes"
                 active={false}
               />
             </Link>

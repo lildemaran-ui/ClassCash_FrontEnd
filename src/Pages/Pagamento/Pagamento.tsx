@@ -30,8 +30,18 @@ export default function Pagamentos() {
   });
 
   const mesesDoAno = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
   ];
 
   const PRECOS_SERVICOS: { [key: string]: number } = {
@@ -46,7 +56,9 @@ export default function Pagamentos() {
   // --- FUNÇÕES DE LÓGICA ---
 
   // UNIFICADA: Apenas uma função handleChange
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = event.target;
     setPagamento((prev) => ({ ...prev, [name]: value }));
 
@@ -64,12 +76,14 @@ export default function Pagamentos() {
     }
   };
 
-  const OpenMenu = () => { 
-    setMenu(true); localStorage.setItem("menu_aberto", "true");
-   };
-  const CloseMenu = () => { 
-    setMenu(false); localStorage.setItem("menu_aberto", "false");
-   };
+  const OpenMenu = () => {
+    setMenu(true);
+    localStorage.setItem("menu_aberto", "true");
+  };
+  const CloseMenu = () => {
+    setMenu(false);
+    localStorage.setItem("menu_aberto", "false");
+  };
 
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
@@ -84,15 +98,27 @@ export default function Pagamentos() {
   const precoBase = PRECOS_SERVICOS[pagamento.servico] || 0;
   const indexInicio = mesesDoAno.indexOf(pagamento.mesInicial);
   const indexFim = mesesDoAno.indexOf(pagamento.mesFinal);
-  const quantidadeMeses = indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
+  const quantidadeMeses =
+    indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
   const valorTotal = precoBase * quantidadeMeses;
 
-  const formularioValido = pagamento.metodo !== "" && image !== null && indexFim >= indexInicio;
+  const formularioValido =
+    pagamento.metodo !== "" && image !== null && indexFim >= indexInicio;
 
   if (!user) return <span>Carregado...</span>;
 
-  const NavItem = ({ icon, label, active = false }: { icon: React.ReactNode; label: string; active?: boolean; }) => (
-    <div className={`flex items-center gap-3 p-3 mt-3 rounded-lg cursor-pointer transition-all duration-300 ${active ? "bg-white/10" : "hover:bg-white/5"}`}>
+  const NavItem = ({
+    icon,
+    label,
+    active = false,
+  }: {
+    icon: React.ReactNode;
+    label: string;
+    active?: boolean;
+  }) => (
+    <div
+      className={`flex items-center gap-3 p-3 mt-3 rounded-lg cursor-pointer transition-all duration-300 ${active ? "bg-white/10" : "hover:bg-white/5"}`}
+    >
       {icon}
       <span className="text-sm font-medium">{label}</span>
     </div>
@@ -104,17 +130,46 @@ export default function Pagamentos() {
       {menu && (
         <aside className="w-64 bg-[#268cff] text-white flex-col block">
           <div className="mb-16 pt-4 flex relative justify-between items-center px-4">
-            <Link to="/DashboardEstud" className="flex items-center font-semibold">
+            <Link
+              to="/DashboardEstud"
+              className="flex items-center font-semibold"
+            >
               <img src={Logo5} alt="Logo" className="w-16 h-16" />
               <span>ClassCash</span>
             </Link>
-            <button onClick={CloseMenu}><Menu size={28} /></button>
+            <button onClick={CloseMenu}>
+              <Menu size={28} />
+            </button>
           </div>
           <nav className="flex-1 px-4 space-y-2">
-            <Link to="/DashboardEstud"><NavItem icon={<LayoutDashboard size={20} />} label="Painel" active={false}/></Link>
-            <Link to="/Pagamentos"><NavItem icon={<Wallet size={20} />} label="Pagamentos" active={true} /></Link>
-            <Link to="/reclamacoes"><NavItem icon={<MessageSquare size={20} />} label="Reclamações" active={false} /></Link>
-            <Link to="/Config"><NavItem icon={<Settings size={20} />} label="Configurações" active={false}/></Link>
+            <Link to="/DashboardEstud">
+              <NavItem
+                icon={<LayoutDashboard size={20} />}
+                label="Painel"
+                active={false}
+              />
+            </Link>
+            <Link to="/Pagamentos">
+              <NavItem
+                icon={<Wallet size={20} />}
+                label="Pagamentos"
+                active={true}
+              />
+            </Link>
+            <Link to="/reclamacoes">
+              <NavItem
+                icon={<MessageSquare size={20} />}
+                label="Reclamações"
+                active={false}
+              />
+            </Link>
+            <Link to="/Config">
+              <NavItem
+                icon={<Settings size={20} />}
+                label="Configurações"
+                active={false}
+              />
+            </Link>
             <NavItem icon={<LifeBuoy size={20} />} label="Suporte" />
           </nav>
         </aside>
@@ -123,9 +178,11 @@ export default function Pagamentos() {
       {/* Conteúdo principal */}
       <div className="flex-1 p-4">
         {!menu && (
-          <button onClick={OpenMenu}><Menu size={28} className="text-[#268cff]" /></button>
+          <button onClick={OpenMenu}>
+            <Menu size={28} className="text-[#268cff]" />
+          </button>
         )}
-        
+
         <header className="flex justify-end items-center mb-5">
           <div className="flex items-center gap-4">
             <div className="relative">
@@ -133,96 +190,190 @@ export default function Pagamentos() {
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
             </div>
             <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 bg-cover bg-center">
-              {user.foto && <img src={user.foto} alt="User" className="w-full h-full object-cover" />}
+              {user.foto && (
+                <img
+                  src={user.foto}
+                  alt="User"
+                  className="w-full h-full object-cover"
+                />
+              )}
             </div>
           </div>
         </header>
+<div className="px-4 md:px-20 py-10 max-w-7xl mx-auto">
+  {/* SELEÇÃO DO MÉTODO (Topo) */}
+  <div className="flex flex-col gap-6 mb-10">
+    <div>
+      <label className="block mb-1 font-medium text-gray-500">Código</label>
+      <input
+        type="text"
+        value="DVS-2025-KS"
+        readOnly
+        className="w-32 border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono"
+      />
+    </div>
 
-        <div className="px-20 py-10 rounded-lg max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 gap-20">
-            {/* COLUNA ESQUERDA */}
-            <div className="flex flex-col gap-6">
-              <div>
-                <label className="block mb-1 font-medium text-gray-500">Código</label>
-                <input type="text" value="DVS-2025-KS" readOnly className="w-32 border bg-gray-100 rounded-lg px-3 py-2" />
-              </div>
+    <div className="p-4 border border-gray-100 rounded-xl bg-white shadow-sm max-w-md">
+      <label className="block mb-3 font-bold text-gray-700">Como será feito o pagamento?</label>
+      <div className="flex flex-col gap-3">
+        {["De forma digital", "No banco", "Dinheiro Físico"].map((m) => (
+          <label key={m} className="flex items-center gap-2 cursor-pointer group">
+            <input
+              type="radio"
+              name="metodo"
+              value={m}
+              checked={pagamento.metodo === m}
+              onChange={handleChange}
+              className="w-4 h-4 accent-[#268cff]"
+            />
+            <span className={`transition-colors ${pagamento.metodo === m ? "font-semibold text-[#268cff]" : "text-gray-600 group-hover:text-blue-400"}`}>
+              {m}
+            </span>
+          </label>
+        ))}
+      </div>
+    </div>
+  </div>
 
-              <div className="p-4 border border-gray-100 rounded-xl">
-                <label className="block mb-3 font-bold text-gray-700">Como será feito o pagamento?</label>
-                <div className="flex flex-col gap-3">
-                  {["De forma digital", "No banco", "Dinheiro Físico"].map((m) => (
-                    <label key={m} className="flex items-center gap-2 cursor-pointer">
-                      <input type="radio" name="metodo" value={m} checked={pagamento.metodo === m} onChange={handleChange} className="w-4 h-4 accent-[#268cff]" />
-                      <span className={pagamento.metodo === m ? "font-semibold text-[#268cff]" : ""}>{m}</span>
-                    </label>
-                  ))}
+  {/* ÁREA DE FORMULÁRIO (DUAS COLUNAS) */}
+  {(pagamento.metodo === "De forma digital" || pagamento.metodo === "No banco") && (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 animate-in fade-in slide-in-from-top-4">
+      
+      {/* --- COLUNA ESQUERDA --- */}
+      <div className="flex flex-col gap-6">
+        <h3 className="font-bold text-gray-800 border-b pb-2">Dados do Serviço</h3>
+        
+        {/* Serviço (Comum) */}
+        <div>
+          <label className="block mb-2 font-medium text-gray-700">Serviço:</label>
+          <select
+            name="servico"
+            value={pagamento.servico}
+            onChange={handleChange}
+            className="w-full border rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-100 outline-none transition-all"
+          >
+            {Object.keys(PRECOS_SERVICOS).map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+        </div>
+
+        {/* Lógica Condicional para a Esquerda */}
+        {pagamento.metodo === "De forma digital" ? (
+          /* DIGITAL: Plataforma fica aqui */
+          <div className="animate-in fade-in">
+            <label className="font-medium block mb-2 text-gray-700">Plataforma a ser usada:</label>
+            <select 
+              name="plataforma" 
+              value={pagamento.plataforma} 
+              onChange={handleChange} 
+              className="p-3 border rounded-lg w-full bg-white"
+            >
+              <option value="Multicaxa Express">Multicaixa Express</option>
+              <option value="Unitel Money">Unitel Money</option>
+              <option value="PayPay">Pay Pay</option>
+            </select>
+          </div>
+        ) : (
+          /* NO BANCO: Meses ficam aqui */
+          <div className="animate-in fade-in">
+             <label className="font-medium block mb-2 text-gray-700">Meses a pagar:</label>
+             <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase">De:</p>
+                  <select name="mesInicial" value={pagamento.mesInicial} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 bg-white">
+                    {mesesDoAno.map((m) => <option key={m}>{m}</option>)}
+                  </select>
                 </div>
-              </div>
-
-              {/* CONTEÚDO CONDICIONAL */}
-              {pagamento.metodo !== "" && pagamento.metodo !== "Dinheiro Físico" && (
-                <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-4">
-                  <div>
-                    <label className="block mb-2 font-medium">Serviço:</label>
-                    <select name="servico" value={pagamento.servico} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 outline-none focus:border-blue-500">
-                      {Object.keys(PRECOS_SERVICOS).map(s => <option key={s}>{s}</option>)}
-                    </select>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1">
-                      <p className="text-[10px] font-bold text-gray-400">DE:</p>
-                      <select name="mesInicial" value={pagamento.mesInicial} onChange={handleChange} className="w-full border rounded-lg px-3 py-2">
-                        {mesesDoAno.map(m => <option key={m}>{m}</option>)}
-                      </select>
-                    </div>
-                    <span className="mt-5 text-gray-400">à</span>
-                    <div className="flex-1">
-                      <p className="text-[10px] font-bold text-gray-400">ATÉ:</p>
-                      <select name="mesFinal" value={pagamento.mesFinal} onChange={handleChange} className="w-full border rounded-lg px-3 py-2">
-                        {mesesDoAno.map(m => <option key={m}>{m}</option>)}
-                      </select>
-                    </div>
-                   
-                  </div>
-                   <div className="">
-                    <label htmlFor="" className="font-semibold block">Plataforma a ser usada:</label>
-                      <select className="p-3 border rounded-lg w-full">
-                        <option value="Multicaxa Express">Multicaixa Express</option>
-                        <option value="Unitel Money">Unitel Money</option>
-                        <option value="PayPay">Pay Pay</option>
-                      </select>
-                    </div>
+                <span className="mt-5 text-gray-400 font-bold">à</span>
+                <div className="flex-1">
+                  <p className="text-[10px] font-bold text-gray-400 uppercase">Até:</p>
+                  <select name="mesFinal" value={pagamento.mesFinal} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 bg-white">
+                    {mesesDoAno.map((m) => <option key={m}>{m}</option>)}
+                  </select>
                 </div>
-              )}
-             
+             </div>
+          </div>
+        )}
+      </div>
+
+      <div>
+        {/* --- COLUNA DIREITA --- */}
+      <div className="flex flex-col gap-6 ">
+        <h3 className="font-bold text-gray-800 border-b pb-2">Finalização</h3>
+
+        {/* Lógica Condicional para a Direita */}
+        {pagamento.metodo === "De forma digital" && (
+          /* DIGITAL: Meses ficam aqui na direita */
+          <div className="animate-in fade-in">
+            <label className="font-medium block mb-2 text-gray-700">Período de Pagamento:</label>
+            <div className="flex items-center gap-3">
+               <div className="flex-1">
+                 <p className="text-[10px] font-bold text-gray-400 uppercase">De:</p>
+                 <select name="mesInicial" value={pagamento.mesInicial} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 bg-white">
+                   {mesesDoAno.map((m) => <option key={m}>{m}</option>)}
+                 </select>
+               </div>
+               <span className="mt-5 text-gray-400 font-bold">à</span>
+               <div className="flex-1">
+                 <p className="text-[10px] font-bold text-gray-400 uppercase">Até:</p>
+                 <select name="mesFinal" value={pagamento.mesFinal} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 bg-white">
+                   {mesesDoAno.map((m) => <option key={m}>{m}</option>)}
+                 </select>
+               </div>
             </div>
+          </div>
+        )}
 
-            {/* COLUNA DIREITA (Apenas se não for dinheiro físico) */}
-            {pagamento.metodo !== "" && pagamento.metodo !== "Dinheiro Físico" && (
-              <div className="flex flex-col gap-4 animate-in fade-in">
-                <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                  <label className="block text-sm text-blue-600">Total a pagar:</label>
-                  <div className="text-3xl font-bold text-blue-700">KZ {valorTotal.toLocaleString("pt-PT")},00</div>
-                  <p className="text-xs text-blue-400">{quantidadeMeses} mês(es) selecionado(s)</p>
-                </div>
+        {/* Resumo de Valores (Comum) */}
+        <div className="bg-blue-50 p-5 rounded-xl border border-blue-100 shadow-sm">
+          <label className="block text-sm text-blue-600 font-semibold uppercase tracking-wider">Total a pagar</label>
+          <div className="text-3xl font-black text-blue-700">
+            KZ {valorTotal.toLocaleString("pt-PT")},00
+          </div>
+          <p className="text-xs text-blue-400 mt-1 italic">
+            {quantidadeMeses} mês(es) selecionado(s)
+          </p>
+        </div>
 
-                <div>
-                  <label className="block mb-2 font-medium">Comprovativo:</label>
-                  <div className="w-full h-48 border border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white overflow-hidden">
-                    {image ? <img src={image} className="w-full h-full object-cover" /> : <span className="text-gray-400">Nenhuma imagem</span>}
-                  </div>
-                  <input type="file" onChange={handleImageChange} className="mt-2 text-sm file:bg-blue-50 file:text-blue-600 file:border-none file:p-3 file:rounded-full " />
-                </div>
-
-                <button onClick={() => alert("Pagamento enviado!")} disabled={!formularioValido} className={`py-3 rounded-lg font-bold ${formularioValido ? 'bg-[#268cff] text-white' : 'bg-gray-200 hover:bg-blue-600 transition-all duration-500 text-gray-400'}`}>
-                  Enviar Pagamento
-                </button>
+        {/* Comprovativo (Comum) */}
+        <div>
+          <label className="block mb-2 font-medium text-gray-700">Anexar Comprovativo:</label>
+          <div className="relative group w-full h-44 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white overflow-hidden transition-all hover:border-blue-400">
+            {image ? (
+              <img src={image} className="w-full h-full object-cover" alt="Preview" />
+            ) : (
+              <div className="text-center p-4">
+                <Wallet className="mx-auto text-gray-300 mb-2" size={32} />
+                <span className="text-gray-400 text-sm block">Clique abaixo para carregar o ficheiro</span>
               </div>
             )}
           </div>
+          <input 
+            type="file" 
+            onChange={handleImageChange} 
+            className="mt-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full" 
+          />
         </div>
+
+        {/* Botão de Envio */}
+        <button
+          onClick={() => alert("Pagamento enviado com sucesso!")}
+          disabled={!formularioValido}
+          className={`py-4 rounded-xl font-bold text-lg transition-all transform active:scale-95 shadow-lg ${
+            formularioValido 
+              ? "bg-[#268cff] text-white hover:bg-blue-600" 
+              : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none"
+          }`}
+        >
+          Enviar Pagamento
+        </button>
       </div>
+      </div>
+    </div>
+  )}
+</div>
+              </div>
 
       {/* MODAL */}
       {showModal && (
@@ -232,8 +383,17 @@ export default function Pagamentos() {
               <Wallet size={32} />
             </div>
             <h2 className="text-2xl font-bold mb-2">Pagamento Presencial</h2>
-            <p className="text-gray-600 mb-6">Por favor, dirija-se à Secretaria da Instituição para efetuar o pagamento em numerário.</p>
-            <button onClick={() => { setShowModal(false); setPagamento(p => ({...p, metodo: ""})); }} className="w-full bg-[#268cff] text-white py-3 rounded-lg font-bold">
+            <p className="text-gray-600 mb-6">
+              Por favor, dirija-se à Secretaria da Instituição para efetuar o
+              pagamento em numerário.
+            </p>
+            <button
+              onClick={() => {
+                setShowModal(false);
+                setPagamento((p) => ({ ...p, metodo: "" }));
+              }}
+              className="w-full bg-[#268cff] text-white py-3 rounded-lg font-bold"
+            >
               Entendido
             </button>
           </div>

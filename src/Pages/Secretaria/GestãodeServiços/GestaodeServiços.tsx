@@ -73,7 +73,7 @@ export default function GestaodeServiços() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors ${
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
@@ -117,7 +117,7 @@ export default function GestaodeServiços() {
             <Link to="/GestaoAlunos">
               <SidebarItem
                 icon={Users}
-                label="Gestão de Alunos"
+                label="Gestão de Estudantes"
                 active={false}
               />
             </Link>
@@ -211,7 +211,7 @@ export default function GestaodeServiços() {
               </select>
             </div>
             <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
-              <Plus size={20} /> Adicionar Serviço
+              <Plus size={20} /> Adicionar 
             </button>
           </div>
 
@@ -219,9 +219,7 @@ export default function GestaodeServiços() {
           <div className="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm flex flex-col items-center">
             <div className="w-full flex justify-between mb-4">
               <h3 className="text-gray-700 font-bold">Status de Atividade</h3>
-              <p className="text-xs text-gray-400 font-medium italic">
-                Visão Geral de Alunos
-              </p>
+              
             </div>
 
             {/* Gráfico Visual */}
@@ -265,7 +263,7 @@ export default function GestaodeServiços() {
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <table className="w-full text-center border-collapse">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200 text-gray-500 text-xs uppercase font-bold">
+                <tr className="bg-[#268cff]/70 text-white text-base font-black  border-b border-gray-200 text-center">
                   <th
                     className="px-6 py-4 cursor-pointer hover:text-[#268cff]"
                     onClick={() => handleSort("servico")}

@@ -1,5 +1,7 @@
-import { ArrowDown, EyeIcon, 
-   Plus,
+import {
+  ArrowDown,
+  EyeIcon,
+  Plus,
   LayoutDashboard,
   Users,
   CreditCard,
@@ -12,7 +14,7 @@ import { ArrowDown, EyeIcon,
   Search,
   Menu,
   ArrowUp,
-  
+  PencilIcon,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -75,7 +77,7 @@ export default function GestaoAlunos() {
   };
   const colorsSit = (situacao: string) => {
     switch (situacao) {
-      case "Estável":
+      case "Ativo":
         return "text-green-500";
       case "Razoável":
         return "text-orange-400";
@@ -106,7 +108,7 @@ export default function GestaoAlunos() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors ${
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
@@ -131,79 +133,79 @@ export default function GestaoAlunos() {
           </div>
 
           <nav className="flex-1 flex flex-col gap-1 text-white">
-             <Link to="/Secretaria">
-                         <SidebarItem
-                           icon={LayoutDashboard}
-                           label="Painel Geral"
-                           active={false}
-                         />
-                       </Link>
-           
-                       <Link to="/GestaoAlunos">
-                         <SidebarItem
-                           icon={Users}
-                           label="Gestão de Alunos"
-                           active={true}
-                         />
-                       </Link>
-           
-                       <Link to="/GestaodeEncarregados">
-                         <SidebarItem
-                           icon={Users}
-                           label="Gestão de Encarregados"
-                           active={false}
-                         />
-                       </Link>
-                       <Link to="/GestaoPropinas">
-                         <SidebarItem
-                           icon={CreditCard}
-                           label="Gestão de Propinas"
-                           active={false}
-                         />
-                       </Link>
-                       <Link to="/GestaoPagamentos">
-                         <SidebarItem
-                           icon={Receipt}
-                           label="Gestão de Pagamentos"
-                           active={false}
-                         />
-                       </Link>
-           
-                       <Link to="/GestaodeServiços">
-                         <SidebarItem
-                           icon={Settings}
-                           label="Gestão de Serviços"
-                           active={false}
-                         />
-                       </Link>
-                       <Link to="/GestaodeReclamacoes">
-                         <SidebarItem
-                           icon={MessageSquare}
-                           label="Gestão de Reclamações"
-                           active={false}
-                         />
-                       </Link>
-                       <Link to="/ModulodeMulta">
-                         <SidebarItem
-                           icon={AlertOctagon}
-                           label="Gestão de Multas"
-                           active={false}
-                         />
-                       </Link>
-                       <Link to="/Relatorio">
-                         <SidebarItem
-                           icon={FileText}
-                           label="Centro de Relatório"
-                           active={false}
-                         />
-                       </Link>
-                       <Link to="/Configuracao">
-                         <SidebarItem
-                           icon={Settings}
-                           label="Configurações"
-                           active={false}
-                         />
-                       </Link>
+            <Link to="/Secretaria">
+              <SidebarItem
+                icon={LayoutDashboard}
+                label="Painel Geral"
+                active={false}
+              />
+            </Link>
+
+            <Link to="/GestaoAlunos">
+              <SidebarItem
+                icon={Users}
+                label="Gestão de Estudantes"
+                active={true}
+              />
+            </Link>
+
+            <Link to="/GestaodeEncarregados">
+              <SidebarItem
+                icon={Users}
+                label="Gestão de Encarregados"
+                active={false}
+              />
+            </Link>
+            <Link to="/GestaoPropinas">
+              <SidebarItem
+                icon={CreditCard}
+                label="Gestão de Propinas"
+                active={false}
+              />
+            </Link>
+            <Link to="/GestaoPagamentos">
+              <SidebarItem
+                icon={Receipt}
+                label="Gestão de Pagamentos"
+                active={false}
+              />
+            </Link>
+
+            <Link to="/GestaodeServiços">
+              <SidebarItem
+                icon={Settings}
+                label="Gestão de Serviços"
+                active={false}
+              />
+            </Link>
+            <Link to="/GestaodeReclamacoes">
+              <SidebarItem
+                icon={MessageSquare}
+                label="Gestão de Reclamações"
+                active={false}
+              />
+            </Link>
+            <Link to="/ModulodeMulta">
+              <SidebarItem
+                icon={AlertOctagon}
+                label="Gestão de Multas"
+                active={false}
+              />
+            </Link>
+            <Link to="/Relatorio">
+              <SidebarItem
+                icon={FileText}
+                label="Centro de Relatório"
+                active={false}
+              />
+            </Link>
+            <Link to="/Configuracao">
+              <SidebarItem
+                icon={Settings}
+                label="Configurações"
+                active={false}
+              />
+            </Link>
           </nav>
         </aside>
       )}
@@ -222,7 +224,7 @@ export default function GestaoAlunos() {
               </button>
             )}
             <h2 className="text-2xl font-bold text-[#268cff]">
-              Gestão de Alunos
+              Gestão de Estudantes
             </h2>
           </div>
 
@@ -254,8 +256,8 @@ export default function GestaoAlunos() {
               className="w-96 pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-[#268cff]/20 transition-all"
             />
           </div>
-          <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
-            <Plus size={20} /> Cadastrar Aluno
+          <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-600 transition-all duration-500 shadow-md ">
+            <Plus size={20} /> Cadastrar
           </button>
         </section>
 
@@ -263,21 +265,18 @@ export default function GestaoAlunos() {
         <div className="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm mb-12 flex flex-col items-center">
           <div className="w-full flex justify-between items-start mb-4">
             <h3 className="font-bold text-gray-700 italic">
-              Visão Geral da Instituição
+              Visão Geral dos Estudantes
             </h3>
-            <p className="text-xs text-gray-400 font-black uppercase tracking-widest">
-              Status de Matrículas
-            </p>
           </div>
 
           <div className="relative w-56 h-56 flex items-center justify-center">
             {/* Círculo de Fundo (Inativos) */}
-            <div className="absolute w-full h-full rounded-full border-[16px] border-blue-100"></div>
+            <div className="absolute w-full h-full rounded-full border-[16px] border-blue-300"></div>
             {/* Círculo de Progresso (Ativos) - Simulação usando border-l/t */}
             <div className="absolute w-full h-full rounded-full border-[16px] border-[#268cff] border-l-transparent border-b-transparent rotate-45"></div>
 
             <div className="text-center z-10">
-              <span className="text-4xl font-black text-[#268cff]">70%</span>
+              <span className="text-4xl font-black">70%</span>
               <p className="text-[10px] text-gray-400 font-bold uppercase">
                 Ativos
               </p>
@@ -292,7 +291,7 @@ export default function GestaoAlunos() {
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <div className="w-4 h-4 bg-blue-100 rounded-sm shadow-sm"></div>
+              <div className="w-4 h-4 bg-blue-300 rounded-sm shadow-sm"></div>
               <span className="text-sm font-medium text-gray-600">
                 Alunos Inativos
               </span>
@@ -304,10 +303,10 @@ export default function GestaoAlunos() {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
           <table className="w-full text-center border-collapse">
             <thead>
-              <tr className="bg-gray-50/80 text-gray-400 text-[11px] uppercase font-black tracking-widest border-b border-gray-100">
+              <tr className="bg-[#268cff]/70 text-white text-[11px] uppercase font-black tracking-widest border-b border-gray-100">
                 <th className="px-6 py-4">Código</th>
                 <th
-                  className="px-6 py-4 cursor-pointer hover:text-[#268cff]"
+                  className="px-6 py-4 cursor-pointer "
                   onClick={() => handleSort("nome")}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -328,12 +327,12 @@ export default function GestaoAlunos() {
               {dadosAlunos.map((aluno, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-blue-50/30 transition-colors group"
+                  className="hover:bg-[#268cff]/5 transition-colors "
                 >
                   <td className="px-6 py-4 text-sm font-mono text-gray-500">
                     {aluno.codigo}
                   </td>
-                  <td className="px-6 py-4 text-sm font-bold text-gray-700">
+                  <td className="px-6 py-4 text-sm font-medium text-gray-500">
                     {aluno.nome}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-500">
@@ -347,13 +346,28 @@ export default function GestaoAlunos() {
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex justify-center">
+                    <div className="flex justify-center mx-auto gap-4">
+                      <div className="flex">
+                    <Link
+                      to="/EditarAluno"
+                      className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm"
+                    >
+                      <PencilIcon size={18} />
+                    </Link>
+                    </div>
+                     <div className="group relative w-max">
+                       <div className="flex ">
                       <Link
                         to="/DashboardEstud"
                         className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm"
                       >
                         <EyeIcon size={18} />
+                        
                       </Link>
+                      <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#268cff]/10 text-blue-400 text-xs px-2 py-2 opacity-0 transition-opacity group-hover:opacity-100  ">Visualizar</span>
+                    </div>
+                     </div>
+                    
                     </div>
                   </td>
                 </tr>

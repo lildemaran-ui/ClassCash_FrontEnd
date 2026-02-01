@@ -136,7 +136,7 @@ export default function ConfigurationScreen() {
               <Bell size={24} className="text-[#268cff]" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#f0f5fa]"></div>
             </div>
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-white shadow-sm bg-center bg-cover">
+            <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 shadow-sm bg-center bg-cover">
               {user.foto && (
                 <img
                   src={user.foto}

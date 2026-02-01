@@ -108,7 +108,7 @@ export default function GestaoPagamentos() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors ${
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
@@ -132,7 +132,7 @@ export default function GestaoPagamentos() {
     title: string;
     value: string;
     subtext: string;
-    trend?: "up" | "down" | "plus";
+    trend?: "up" | "down" ;
   }) => (
     <div className="bg-white px-2 py-4 rounded-xl flex flex-col items-center text-center border ">
       <p className="text-gray-400 text-base mb-1">{title}</p>
@@ -185,7 +185,7 @@ export default function GestaoPagamentos() {
             <Link to="/GestaoAlunos">
               <SidebarItem
                 icon={Users}
-                label="Gestão de Alunos"
+                label="Gestão de Estudantes"
                 active={false}
               />
             </Link>
@@ -273,17 +273,17 @@ export default function GestaoPagamentos() {
             <div className="flex gap-4">
               {["Mês", "Estado", "Classe"].map((filtro) => (
                 <div key={filtro}>
-                  <label className="block text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">
+                  <label className=" flex text-sm text-gray-500 mb-1">
                     {filtro}
                   </label>
-                  <select className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-600 outline-none hover:border-[#268cff]">
+                  <select className="bg-white border  rounded-lg px-10 py-2 text-sm text-gray-400  outline-none hover:border-[#268cff]">
                     <option>Todos</option>
                   </select>
                 </div>
               ))}
             </div>
             <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
-              <Plus size={20} /> Adicionar Pagamento
+              <Plus size={20} /> Adicionar
             </button>
           </div>
 
@@ -299,7 +299,6 @@ export default function GestaoPagamentos() {
               title="Confirmados"
               value="30"
               subtext="validados"
-              trend="plus"
             />
             <CardKpi
               title="Pendentes"
@@ -330,7 +329,7 @@ export default function GestaoPagamentos() {
 
           <table className="w-full text-center border-collapse">
             <thead>
-              <tr className="bg-gray-50/50 text-gray-400 text-[11px] uppercase font-black tracking-widest border-b border-gray-100">
+              <tr className="bg-[#268cff]/70  text-white text-[11px] uppercase font-black tracking-widest border-b border-gray-100">
                 <th className="px-4 py-4">Código</th>
                 <th
                   className="px-4 py-4 cursor-pointer hover:text-[#268cff]"
@@ -356,9 +355,9 @@ export default function GestaoPagamentos() {
               {dadosAlunos.map((aluno, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-blue-50/30 transition-colors"
+                  className="hover:bg-[#268cff]/5 transition-colors "
                 >
-                  <td className="px-4 py-4 text-sm font-mono text-gray-500">
+                  <td className="px-4 py-4 text-sm font-mono text-gray-500 ">
                     {aluno.codigo}
                   </td>
                   <td className="px-4 py-4 text-sm font-bold text-gray-700">

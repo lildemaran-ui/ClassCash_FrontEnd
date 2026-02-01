@@ -16,6 +16,8 @@ import {
   ArrowUp,
   Plus,
   EyeIcon,
+  TrendingDown,
+  TrendingUp,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -102,7 +104,7 @@ export default function GestaoPropinas() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors ${
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
@@ -126,7 +128,7 @@ export default function GestaoPropinas() {
     title: string;
     value: string;
     subtext: string;
-    trend?: "up" | "down" | "plus";
+    trend?: "up" | "down" ;
   }) => (
     <div className="bg-white p-4 rounded-xl flex flex-col items-center text-center border ">
       <p className="text-gray-400 text-base mb-1">{title}</p>
@@ -134,19 +136,15 @@ export default function GestaoPropinas() {
         <span className="text-2xl font-bold text-gray-800">{value}</span>
         {trend === "up" && (
           <span className="text-green-500 text-base">
-            <ArrowUp></ArrowUp>
+            <TrendingUp/>
           </span>
         )}
         {trend === "down" && (
           <span className="text-red-500 text-xs">
-            <ArrowDown></ArrowDown>
+           <TrendingDown/>
           </span>
         )}
-        {trend === "plus" && (
-          <span className="text-black/70">
-            <Plus></Plus>
-          </span>
-        )}
+        
       </div>
       <p className="text-[14px] text-gray-400 mt-1">{subtext}</p>
     </div>
@@ -179,7 +177,7 @@ export default function GestaoPropinas() {
             <Link to="/GestaoAlunos">
               <SidebarItem
                 icon={Users}
-                label="Gestão de Alunos"
+                label="Gestão de Estudantes"
                 active={false}
               />
             </Link>
@@ -318,7 +316,7 @@ export default function GestaoPropinas() {
               title="Propinas Pendentes"
               value="30"
               subtext="no último mês"
-              trend="plus"
+              
             />
             <CardKpi
               title="Propinas em Atraso"
@@ -340,7 +338,7 @@ export default function GestaoPropinas() {
 
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-gray-50/80 text-gray-500 text-[11px] uppercase font-black tracking-widest border-b border-gray-200">
+              <tr className="bg-[#268cff]/70 text-white text-[11px] uppercase font-black tracking-widest border-b border-gray-200">
                 <th className="px-4 py-4">Código</th>
                 <th
                   className="px-4 py-4 cursor-pointer hover:text-[#268cff] transition-colors"
@@ -370,10 +368,10 @@ export default function GestaoPropinas() {
                   key={index}
                   className="hover:bg-blue-50/40 transition-colors group text-center"
                 >
-                  <td className="px-4 py-4 text-sm font-mono text-gray-500">
+                  <td className="px-4 py-4 text-sm  text-gray-500">
                     {aluno.codigo}
                   </td>
-                  <td className="px-4 py-4 text-sm font-bold text-gray-700">
+                  <td className="px-4 py-4 text-sm  text-gray-700">
                     {aluno.nome}
                   </td>
                   <td className="px-4 py-4 text-sm text-gray-500">
@@ -385,10 +383,10 @@ export default function GestaoPropinas() {
                   <td className="px-4 py-4 text-sm text-gray-600">
                     {aluno.Serviço}
                   </td>
-                  <td className="px-4 py-4 text-sm font-black text-gray-800">
+                  <td className="px-4 py-4 text-sm  text-gray-800">
                     {aluno.Valor}
                   </td>
-                  <td className="px-4 py-4 text-sm font-medium text-red-500">
+                  <td className="px-4 py-4 text-sm  text-red-500">
                     {aluno.multa}
                   </td>
                   <td className="px-4 py-4">
@@ -398,7 +396,7 @@ export default function GestaoPropinas() {
                       {aluno.Estado}
                     </span>
                   </td>
-                  <td className="px-4 py-4 text-right">
+                  <td className="px-4 py-4  ">
                     <button className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all">
                       <EyeIcon size={18} />
                     </button>

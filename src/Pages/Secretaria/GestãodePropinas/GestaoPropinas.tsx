@@ -128,7 +128,7 @@ export default function GestaoPropinas() {
     title: string;
     value: string;
     subtext: string;
-    trend?: "up" | "down" ;
+    trend?: "up" | "down";
   }) => (
     <div className="bg-white p-4 rounded-xl flex flex-col items-center text-center border ">
       <p className="text-gray-400 text-base mb-1">{title}</p>
@@ -136,15 +136,14 @@ export default function GestaoPropinas() {
         <span className="text-2xl font-bold text-gray-800">{value}</span>
         {trend === "up" && (
           <span className="text-green-500 text-base">
-            <TrendingUp/>
+            <TrendingUp />
           </span>
         )}
         {trend === "down" && (
           <span className="text-red-500 text-xs">
-           <TrendingDown/>
+            <TrendingDown />
           </span>
         )}
-        
       </div>
       <p className="text-[14px] text-gray-400 mt-1">{subtext}</p>
     </div>
@@ -256,7 +255,7 @@ export default function GestaoPropinas() {
                 <Menu size={28} />
               </button>
             )}
-            <h2 className="text-2xl font-bold text-[#268cff]">
+            <h2 className="text-xl font-bold text-[#268cff]">
               Gestão de Propinas
             </h2>
           </div>
@@ -295,17 +294,15 @@ export default function GestaoPropinas() {
           <div className="flex gap-4 mb-8">
             {["Mês", "Classe", "Estado"].map((filtro) => (
               <div key={filtro} className="flex flex-col gap-1">
-                <label className="text-[10px] uppercase font-bold text-gray-400 tracking-wider ml-1">
-                  {filtro}
-                </label>
-                <select className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 outline-none focus:border-[#268cff] min-w-[140px] cursor-pointer">
+                <label className="text-sm  text-gray-500 ml-1">{filtro}</label>
+                <select className="bg-white border rounded-lg px-4 py-2 text-sm text-gray-400 outline-none focus:border-[#268cff] min-w-[140px] cursor-pointer">
                   <option>Sem filtro</option>
                 </select>
               </div>
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 cursor-default">
             <CardKpi
               title="Propinas Pagas"
               value="70"
@@ -316,7 +313,6 @@ export default function GestaoPropinas() {
               title="Propinas Pendentes"
               value="30"
               subtext="no último mês"
-              
             />
             <CardKpi
               title="Propinas em Atraso"
@@ -336,15 +332,15 @@ export default function GestaoPropinas() {
             </span>
           </div>
 
-          <table className="w-full border-collapse">
+          <table className="w-full border-collapse cursor-default">
             <thead>
-              <tr className="bg-[#268cff]/70 text-white text-[11px] uppercase font-black tracking-widest border-b border-gray-200">
+              <tr className="bg-[#268cff]/70 text-white text-[14px]   font-black tracking-widest border-b border-gray-200">
                 <th className="px-4 py-4">Código</th>
                 <th
                   className="px-4 py-4 cursor-pointer hover:text-[#268cff] transition-colors"
                   onClick={() => handleSort("nome")}
                 >
-                  <div className="flex items-center justify-center gap-1">
+                  <div className="flex items-center justify-center gap-1 cursor-pointer">
                     Nome{" "}
                     {ordemCrescente ? (
                       <ArrowDown size={14} />
@@ -357,7 +353,7 @@ export default function GestaoPropinas() {
                 <th className="px-4 py-4">Data</th>
                 <th className="px-4 py-4">Serviço</th>
                 <th className="px-4 py-4">Valor</th>
-                <th className="px-4 py-4">Multa</th>
+                <th className="px-4 py-4">Multa Estimada</th>
                 <th className="px-4 py-4">Estado</th>
                 <th className="px-4 py-4">Ação</th>
               </tr>
@@ -366,7 +362,7 @@ export default function GestaoPropinas() {
               {dadosAlunos.map((aluno, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-blue-50/40 transition-colors group text-center"
+                  className="hover:bg-[#268cff]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#268cff]"
                 >
                   <td className="px-4 py-4 text-sm  text-gray-500">
                     {aluno.codigo}
@@ -397,9 +393,18 @@ export default function GestaoPropinas() {
                     </span>
                   </td>
                   <td className="px-4 py-4  ">
-                    <button className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all">
-                      <EyeIcon size={18} />
-                    </button>
+                    <div className="group w-max relative flex items-center mx-auto cursor-pointer">
+                       <div className="flex ">
+                      <div
+                        
+                        className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm"
+                      >
+                        <EyeIcon size={18} />
+                        
+                      </div>
+                      <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">Visualizar</span>
+                    </div>
+                     </div>
                   </td>
                 </tr>
               ))}

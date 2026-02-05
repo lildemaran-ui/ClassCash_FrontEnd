@@ -12,8 +12,8 @@ import {
   ArrowDown,
   ArrowUp,
   Plus,
-  EyeIcon,
   Pen,
+  Trash2,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -26,13 +26,13 @@ export default function GestaodeServiços() {
       servico: "Propina Escolar",
       classe: "10ª Classe",
       Valor: "KZ 35.000",
-      multa: "KZ 5.000",
+      multa: "-----",
     },
     {
       servico: "Justificativo",
       classe: "10ª Classe",
       Valor: "KZ 5.000",
-      multa: "KZ 500",
+      multa: "-----",
     },
     {
       servico: "Propina Escolar",
@@ -192,7 +192,7 @@ export default function GestaodeServiços() {
                 <Menu size={28} />
               </button>
             )}
-            <h2 className="text-2xl font-bold text-[#268cff]">
+            <h2 className="text-xl font-bold text-[#268cff]">
               Gestão de Serviços
             </h2>
           </div>
@@ -203,10 +203,10 @@ export default function GestaodeServiços() {
         <section className="mb-10">
           <div className="flex justify-between items-end mb-6">
             <div>
-              <label className="block text-xs text-gray-500 mb-1 font-semibold uppercase">
+              <label className="block text-sm text-gray-500 mb-1 ">
                 Filtrar por Mês
               </label>
-              <select className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm text-gray-600 outline-none focus:ring-2 focus:ring-blue-100">
+              <select className="bg-white border  rounded-lg px-4 py-2 text-sm text-gray-400 outline-none cursor-pointer hover:border-[#268cff]">
                 <option>Sem filtro</option>
               </select>
             </div>
@@ -217,39 +217,7 @@ export default function GestaodeServiços() {
 
           {/* Card do Gráfico */}
           <div className="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm flex flex-col items-center">
-            <div className="w-full flex justify-between mb-4">
-              <h3 className="text-gray-700 font-bold">Status de Atividade</h3>
-              
-            </div>
-
-            {/* Gráfico Visual */}
-            <div className="relative w-48 h-48 mb-6">
-              {/* Círculo de Fundo */}
-              <div className="absolute inset-0 rounded-full border-[16px] border-blue-100"></div>
-              {/* Círculo de Progresso (Simulado com border-l) */}
-              <div className="absolute inset-0 rounded-full border-[16px] border-transparent border-l-[#268cff] border-t-[#268cff] rotate-45"></div>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-3xl font-black text-gray-800">70%</span>
-                <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">
-                  Ativos
-                </span>
-              </div>
-            </div>
-
-            <div className="flex gap-10">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#268cff]"></div>
-                <span className="text-sm text-gray-600 font-medium">
-                  Alunos ativos
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-100"></div>
-                <span className="text-sm text-gray-600 font-medium">
-                  Alunos inativos
-                </span>
-              </div>
-            </div>
+            
           </div>
         </section>
 
@@ -261,14 +229,14 @@ export default function GestaodeServiços() {
             Tabela de Serviços
           </h2>
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <table className="w-full text-center border-collapse">
+            <table className="w-full text-center border-collapse cursor-default">
               <thead>
-                <tr className="bg-[#268cff]/70 text-white text-base font-black  border-b border-gray-200 text-center">
+                <tr className="bg-[#268cff]/70 text-white text-[14px] font-black  border-b border-gray-200 text-center">
                   <th
                     className="px-6 py-4 cursor-pointer hover:text-[#268cff]"
                     onClick={() => handleSort("servico")}
                   >
-                    <div className="flex items-center justify-center gap-1">
+                    <div className="flex items-center justify-center gap-1 cursor-pointer">
                       Serviço{" "}
                       {ordemCrescente ? (
                         <ArrowDown size={14} />
@@ -287,7 +255,7 @@ export default function GestaodeServiços() {
                 {dadosAlunos.map((aluno, index) => (
                   <tr
                     key={index}
-                    className="hover:bg-blue-50/30 transition-colors"
+                    className="hover:bg-[#268cff]/5 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm font-semibold text-gray-700">
                       {aluno.servico}
@@ -295,18 +263,31 @@ export default function GestaodeServiços() {
                     <td className="px-6 py-4 text-sm text-gray-500">
                       {aluno.classe}
                     </td>
-                    <td className="px-6 py-4 text-sm font-bold text-gray-800">
+                    <td className="px-6 py-4 text-sm  text-gray-800">
                       {aluno.Valor}
                     </td>
                     <td className="px-6 py-4 text-sm text-red-500 font-medium">
                       {aluno.multa}
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex justify-center">
-                        <button className="p-2 bg-blue-50 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm">
-                          <Pen size={16} />
-                        </button>
+                      <div className="flex gap-3 justify-center mx-auto cursor-pointer">
+                      <div className="group relative w-max  ">
+                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                          <Pen size={18} />
+                        </div>
+                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                          Editar
+                        </span>
                       </div>
+                      <div className=" group relative w-max ">
+                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                          <Trash2 size={18} />
+                        </div>
+                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                          Deletar
+                        </span>
+                      </div>
+                    </div>
                     </td>
                   </tr>
                 ))}

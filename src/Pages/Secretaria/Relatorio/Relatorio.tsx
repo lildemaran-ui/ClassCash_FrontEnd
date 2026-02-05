@@ -139,7 +139,7 @@ export default function Relatorio() {
         {/* Header com Seleção de Período */}
         <div className="flex justify-between items-end mb-10">
           <div>
-            <h2 className="text-2xl font-bold text-gray-800">
+            <h2 className="text-xl font-bold text-[#268cff]">
               Centro de Relatórios
             </h2>
             <p className="text-gray-400 text-sm">
@@ -149,7 +149,7 @@ export default function Relatorio() {
 
           <div className="flex items-center gap-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100">
             <div className="flex flex-col px-3">
-              <label className="text-[10px] font-black text-gray-400 uppercase">
+              <label className="text-[10px] font-black text-gray-400  ">
                 Período
               </label>
               <select className="text-sm font-bold text-gray-700 outline-none cursor-pointer">
@@ -246,7 +246,7 @@ export default function Relatorio() {
             </div>
             <div className="flex items-center gap-8">
               <div className="w-48 h-48 rounded-full border-[15px] border-blue-500 border-l-orange-400 border-b-red-400 flex items-center justify-center">
-                <span className="text-xs font-black text-gray-400 uppercase">
+                <span className="text-xs font-black text-gray-400  ">
                   Propinas
                 </span>
               </div>

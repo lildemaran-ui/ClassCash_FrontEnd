@@ -140,20 +140,28 @@ export default function ModulodeMulta() {
       {/* Main Content */}
       <main className="flex-1 p-8 bg-gray-50 overflow-y-auto">
         {/* Header */}
+       
         <div className="flex justify-between items-center mb-10">
           <div>
-            <h2 className="text-2xl font-bold text-red-600">
-              Gestão de Multas
+            {!menu && (
+              <button>
+                <Menu
+                  className="text-[#268cff] flex items-start"
+                  size={28}
+                  onClick={OpenMenu}
+                ></Menu>
+              </button>
+            )}
+            <h2 className="text-xl font-bold text-[#268cff]">
+              Gestão de Reclamações
             </h2>
-            <p className="text-gray-400 text-sm">
-              Controle de penalidades e juros por atraso.
+            <p className="text-gray-400 text-sm ">
+             Controle de multas aplicadas aos estudantes, com detalhes sobre motivos, valores e status de pagamento.
             </p>
           </div>
 
           <div className="flex gap-3">
-            <button className="bg-white border border-gray-200 px-4 py-2 rounded-xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all shadow-sm">
-              Configurar Taxas %
-            </button>
+           
             <button className="bg-red-600 text-white px-6 py-2.5 rounded-xl font-bold hover:bg-red-700 shadow-md transition-all flex items-center gap-2">
               <Plus size={20} /> Aplicar Multa Manual
             </button>
@@ -164,7 +172,7 @@ export default function ModulodeMulta() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <div className="flex justify-between items-start">
-              <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
+              <p className="text-xs font-black text-gray-400   tracking-widest">
                 Total a Receber
               </p>
               <span className="p-2 bg-red-50 text-red-600 rounded-lg">
@@ -180,7 +188,7 @@ export default function ModulodeMulta() {
           </div>
 
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
+            <p className="text-xs font-black text-gray-400   tracking-widest">
               Multas Pagas (Mês)
             </p>
             <h3 className="text-3xl font-black text-gray-800 mt-2">
@@ -192,7 +200,7 @@ export default function ModulodeMulta() {
           </div>
 
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
+            <p className="text-xs font-black text-gray-400   tracking-widest">
               Inadimplência de Multas
             </p>
             <h3 className="text-3xl font-black text-gray-800 mt-2">65%</h3>
@@ -216,7 +224,7 @@ export default function ModulodeMulta() {
 
           <table className="w-full text-center border-collapse">
             <thead>
-              <tr className="bg-gray-50/50 text-gray-400 text-[11px] uppercase font-black tracking-widest border-b border-gray-100">
+              <tr className="bg-gray-50/50 text-gray-400 text-[14px]   font-black tracking-widest border-b border-gray-100">
                 <th className="px-6 py-4">Estudante</th>
                 <th className="px-6 py-4">Motivo</th>
                 <th className="px-6 py-4">Valor Original</th>
@@ -235,7 +243,7 @@ export default function ModulodeMulta() {
                     ID: 2024091
                   </div>
                 </td>
-                <td className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-tighter">
+                <td className="px-6 py-4 text-xs font-semibold text-gray-500   tracking-tighter">
                   Propina - Dezembro
                 </td>
                 <td className="px-6 py-4 text-sm text-gray-400">

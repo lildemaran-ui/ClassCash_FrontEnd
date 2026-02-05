@@ -10,6 +10,7 @@ import {
   Receipt,
   CreditCard,
   LayoutDashboard,
+  Trash2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo5 from "../../../assets/Logo5.5.png";
@@ -138,56 +139,52 @@ export default function GestaodeReclamacoes() {
         {/* Header e Ação rápida */}
         <div className="flex justify-between items-center mb-10">
           <div>
-            <h2 className="text-2xl font-bold text-[#268cff]">
+            {!menu && (
+              <button>
+                <Menu
+                  className="text-[#268cff] flex items-start"
+                  size={28}
+                  onClick={OpenMenu}
+                ></Menu>
+              </button>
+            )}
+            <h2 className="text-xl font-bold text-[#268cff]">
               Gestão de Reclamações
             </h2>
-            <p className="text-gray-400 text-sm italic">
+            <p className="text-gray-400 text-sm ">
               Escute, resolva e melhore a experiência escolar.
             </p>
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 bg-white text-[#268cff] border border-[#268cff] px-4 py-2 rounded-xl font-bold hover:bg-blue-50 transition-all">
+            <button className="flex items-center gap-2 bg-[#268cff]  text-white hover:bg-blue-500   px-4 py-2 rounded-xl font-bold transition-all duration-500">
               <Download size={18} /> Exportar Relatório
             </button>
-            <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] shadow-md">
-              <Plus size={20} /> Nova Reclamação
-            </button>
+            
           </div>
         </div>
 
         {/* Cards de Resumo de Feedback */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white p-6 rounded-2xl border-l-4 border-red-500 shadow-sm">
-            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
-              Críticas Urgentes
-            </p>
-            <h3 className="text-3xl font-black text-gray-800">12</h3>
-            <span className="text-red-500 text-xs font-bold">
-              Aguardando resposta
-            </span>
-          </div>
           <div className="bg-white p-6 rounded-2xl border-l-4 border-orange-400 shadow-sm">
-            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
+            <p className="text-sm font-medium text-gray-400  ">
               Em Tratamento
             </p>
-            <h3 className="text-3xl font-black text-gray-800">08</h3>
-            <span className="text-orange-400 text-xs font-bold">
-              Processando
-            </span>
+            <h3 className="text-3xl font-bold text-gray-800">01</h3>
+            <span className="text-orange-400 text-xs font-bold">Pendente</span>
           </div>
           <div className="bg-white p-6 rounded-2xl border-l-4 border-green-500 shadow-sm">
-            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
-              Resolvidas
+            <p className="text-sm font-medium text-gray-400  ">
+              Respondidas
             </p>
-            <h3 className="text-3xl font-black text-gray-800">145</h3>
+            <h3 className="text-3xl font-bold text-gray-800"> 45</h3>
             <span className="text-green-500 text-xs font-bold">+12 hoje</span>
           </div>
           <div className="bg-white p-6 rounded-2xl border-l-4 border-purple-500 shadow-sm">
-            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
+            <p className="text-sm font-medium text-gray-400  ">
               Satisfação Média
             </p>
-            <h3 className="text-3xl font-black text-gray-800">4.2/5</h3>
+            <h3 className="text-3xl font-bold text-gray-800">4.2/5</h3>
             <span className="text-purple-500 text-xs font-bold">
               Baseado em feedbacks
             </span>
@@ -198,10 +195,12 @@ export default function GestaodeReclamacoes() {
         <div className="flex gap-4 mb-6">
           {[
             "Todas",
-            "Financeiro",
-            "Pedagógico",
-            "Infraestrutura",
-            "Alimentação",
+            "Propinas",
+            "Uniformes",
+            "Justificativos",
+            "Certificados",
+            " Transferências",
+            "Cartão Escolar",
           ].map((cat) => (
             <button
               key={cat}
@@ -216,16 +215,16 @@ export default function GestaodeReclamacoes() {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50/80 text-gray-400 text-[11px] uppercase font-black tracking-widest border-b border-gray-100 text-center">
+              <tr className="bg-[#268cff]/70 text-white text-[14px]   font-black  border-b border-gray-100 text-center">
                 <th className="px-6 py-4">Data</th>
                 <th className="px-6 py-4">Encarregado/Aluno</th>
-                <th className="px-6 py-4">Assunto/Título</th>
+                <th className="px-6 py-4">Assunto</th>
                 <th className="px-6 py-4">Prioridade</th>
                 <th className="px-6 py-4">Status</th>
                 <th className="px-6 py-4">Ação</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-gray-50 cursor-default">
               {/* Exemplo de Linha */}
               <tr className="hover:bg-blue-50/30 transition-colors text-center">
                 <td className="px-6 py-4 text-sm text-gray-500">22 Jan 2024</td>
@@ -241,7 +240,7 @@ export default function GestaodeReclamacoes() {
                   Demora na entrega dos uniformes
                 </td>
                 <td className="px-6 py-4">
-                  <span className="bg-red-50 text-red-600 px-3 py-1 rounded-full text-[10px] font-black uppercase">
+                  <span className="bg-red-50 text-red-600 px-3 py-1 rounded-full text-[10px] font-black  ">
                     Alta
                   </span>
                 </td>
@@ -253,9 +252,24 @@ export default function GestaodeReclamacoes() {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <button className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all">
-                    <MessageSquare size={18} />
-                  </button>
+                    <div className="flex gap-3 justify-center mx-auto cursor-pointer">
+                      <div className="group relative w-max  ">
+                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                          <MessageSquare size={18} />
+                        </div>
+                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                          Editar
+                        </span>
+                      </div>
+                      <div className=" group relative w-max ">
+                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                          <Trash2 size={18} />
+                        </div>
+                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                          Deletar
+                        </span>
+                      </div>
+                    </div>
                 </td>
               </tr>
             </tbody>

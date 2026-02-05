@@ -15,10 +15,13 @@ import {
   Menu,
   ArrowUp,
   PencilIcon,
+  Trash2,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ChartGestaoEstud from "@/Componentes/Charts/chartGestaoEstud";
+import ChartGestaoEstud2 from "@/Componentes/Charts/ChartGestaoEstud2";
 
 export default function GestaoAlunos() {
   const [dadosAlunos, setDadosAlunos] = useState([
@@ -223,7 +226,7 @@ export default function GestaoAlunos() {
                 <Menu size={28} />
               </button>
             )}
-            <h2 className="text-2xl font-bold text-[#268cff]">
+            <h2 className="text-xl font-bold text-[#268cff]">
               Gestão de Estudantes
             </h2>
           </div>
@@ -256,60 +259,51 @@ export default function GestaoAlunos() {
               className="w-96 pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-[#268cff]/20 transition-all"
             />
           </div>
-          <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-600 transition-all duration-500 shadow-md ">
+          <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-500 transition-all duration-500 shadow-md ">
             <Plus size={20} /> Cadastrar
           </button>
         </section>
 
         {/* Dashboard de Visão Geral */}
-        <div className="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm mb-12 flex flex-col items-center">
-          <div className="w-full flex justify-between items-start mb-4">
-            <h3 className="font-bold text-gray-700 italic">
-              Visão Geral dos Estudantes
-            </h3>
-          </div>
+        <div className="flex flex-col md:flex-row gap-6 w-full mb-12">
+          {/* Card 1: Gráfico de Pizza/Pie */}
+          <div className="flex-1 bg-white border  p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col ">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-semibold text-gray-800 text-lg">
+                Distribuição de Ativos vs Inativos
+              </h3>
+            </div>
 
-          <div className="relative w-56 h-56 flex items-center justify-center">
-            {/* Círculo de Fundo (Inativos) */}
-            <div className="absolute w-full h-full rounded-full border-[16px] border-blue-300"></div>
-            {/* Círculo de Progresso (Ativos) - Simulação usando border-l/t */}
-            <div className="absolute w-full h-full rounded-full border-[16px] border-[#268cff] border-l-transparent border-b-transparent rotate-45"></div>
-
-            <div className="text-center z-10">
-              <span className="text-4xl font-black">70%</span>
-              <p className="text-[10px] text-gray-400 font-bold uppercase">
-                Ativos
-              </p>
+            <div className="flex-grow flex items-center justify-center min-h-[300px]">
+              <ChartGestaoEstud />
             </div>
           </div>
 
-          <div className="flex gap-10 mt-8">
-            <div className="flex items-center gap-3">
-              <div className="w-4 h-4 bg-[#268cff] rounded-sm shadow-sm"></div>
-              <span className="text-sm font-medium text-gray-600">
-                Alunos Ativos
-              </span>
+          {/* Card 2: Gráfico de Linha */}
+          <div className="flex-1 bg-white border  p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-semibold text-gray-800 text-lg">
+                Evolução Mensal de Estudantes
+              </h3>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="w-4 h-4 bg-blue-300 rounded-sm shadow-sm"></div>
-              <span className="text-sm font-medium text-gray-600">
-                Alunos Inativos
-              </span>
+
+            <div className="flex-grow flex items-center justify-center min-h-[300px]">
+              <ChartGestaoEstud2 />
             </div>
           </div>
         </div>
 
         {/* Tabela de Dados */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
-          <table className="w-full text-center border-collapse">
+          <table className="w-full text-center border-collapse cursor-default">
             <thead>
-              <tr className="bg-[#268cff]/70 text-white text-[11px] uppercase font-black tracking-widest border-b border-gray-100">
+              <tr className="bg-[#268cff]/70 text-white text-[14px]  font-black tracking-widest border-b border-gray-100">
                 <th className="px-6 py-4">Código</th>
                 <th
                   className="px-6 py-4 cursor-pointer "
                   onClick={() => handleSort("nome")}
                 >
-                  <div className="flex items-center justify-center gap-1">
+                  <div className="flex items-center justify-center gap-1 cursor-pointer">
                     Nome{" "}
                     {ordemCrescente ? (
                       <ArrowDown size={14} />
@@ -346,28 +340,40 @@ export default function GestaoAlunos() {
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex justify-center mx-auto gap-4">
-                      <div className="flex">
-                    <Link
-                      to="/EditarAluno"
-                      className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm"
-                    >
-                      <PencilIcon size={18} />
-                    </Link>
-                    </div>
-                     <div className="group relative w-max">
-                       <div className="flex ">
-                      <Link
-                        to="/DashboardEstud"
-                        className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm"
-                      >
-                        <EyeIcon size={18} />
-                        
-                      </Link>
-                      <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#268cff]/10 text-blue-400 text-xs px-2 py-2 opacity-0 transition-opacity group-hover:opacity-100  ">Visualizar</span>
-                    </div>
-                     </div>
-                    
+                    <div className="flex justify-center mx-auto gap-4 cursor-pointer">
+                      <div className="group relative w-max">
+                        <div className="flex">
+                          <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                            <PencilIcon size={18} />
+                          </div>
+                          <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                            Editar
+                          </span>
+                        </div>
+                      </div>
+                      <div className="group relative w-max">
+                        <div className="flex ">
+                          <Link
+                            to="/DashboardEstud"
+                            className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm"
+                          >
+                            <EyeIcon size={18} />
+                          </Link>
+                          <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                            Visualizar
+                          </span>
+                        </div>
+                      </div>
+                      <div className="group relative w-max">
+                        <div className="flex ">
+                          <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm">
+                            <Trash2 size={18} />
+                          </div>
+                          <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                            Excluir
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   </td>
                 </tr>

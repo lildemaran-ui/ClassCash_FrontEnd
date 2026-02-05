@@ -1,3 +1,4 @@
+import ChartEstud from "@/Componentes/Charts/ChartEstud";
 import {
   Settings,
   Download,
@@ -209,7 +210,7 @@ export default function DadosDashEstd() {
             <Settings size={16} /> EDITAR PERFIL
           </button>
 
-          <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 min-w-[250px] flex items-center gap-4">
+          <div className="bg-white p-8 rounded-xl border  min-w-[250px] flex items-center gap-4">
             <div>
               <CheckCircle size={48} className="text-green-600" />
             </div>
@@ -251,7 +252,7 @@ export default function DadosDashEstd() {
 
       {/* Financial Summary & Charts */}
       <div className="grid grid-cols-2 gap-8 mb-8">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+        <div className="bg-white p-6 rounded-xl  border ">
           <h3 className="font-bold mb-6 text-gray-800">Resumo Financeiro:</h3>
           <div className="space-y-4">
             <SummaryRow label="Último pagamento:" value="09/11/2025" />
@@ -261,17 +262,8 @@ export default function DadosDashEstd() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center">
-          <div className="relative w-48 h-48 rounded-full border-[20px] border-blue-500 border-l-blue-400 border-t-blue-00  flex items-center justify-center">
-            <div className="text-xs font-bold text-gray-400 ">
-              Serviços Solicitados
-            </div>
-          </div>
-          <div className="ml-8 space-y-2">
-            <LegendItem color="bg-blue-400" label="Propinas" />
-            <LegendItem color="bg-blue-600" label="Uniformes" />
-            <LegendItem color="bg-blue-800" label="Cartão Escolar" />
-          </div>
+        <div className="bg-white rounded-xl border p-4">
+          <ChartEstud  />
         </div>
       </div>
 

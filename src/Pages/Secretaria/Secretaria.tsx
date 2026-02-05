@@ -55,12 +55,12 @@ const CardKpi = ({
       <span className="text-2xl font-bold text-gray-800">{value}</span>
       {trend === "up" && (
         <span className="text-green-500 text-base">
-          <TrendingUp/>
+          <TrendingUp />
         </span>
       )}
       {trend === "down" && (
         <span className="text-red-500 text-xs">
-          <TrendingDown/>
+          <TrendingDown />
         </span>
       )}
     </div>
@@ -87,10 +87,10 @@ const MonthlyBarChartSimulation: React.FC = () => {
   const values = [40, 65, 80, 5, 95, 20, 40, 60, 50, 5, 45, 35]; // Altura da barra (0 a 100)
 
   return (
-    <div className="bg-white p-8 rounded-xl  mt-6 ">
+    <div className="bg-white p-8 rounded-xl  mt-6 cursor-default">
       <div className="flex items-end h-64 border-l border-b border-gray-300 relative">
         {/* Linhas de grade e valores Y simulados */}
-        {[0,20,40,60,80,100].map((y) => (
+        {[0, 20, 40, 60, 80, 100].map((y) => (
           <div
             key={y}
             className="absolute left-0 w-full text-xs text-gray-500 "
@@ -111,7 +111,7 @@ const MonthlyBarChartSimulation: React.FC = () => {
             style={{ width: `${100 / months.length}%` }}
           >
             <div
-              className="w-12 bg-[#268CFF] hover:bg-blue-600 transition-all duration-300 rounded-t-md"
+              className="w-12 bg-[#268CFF] hover:bg-blue-500 transition-all duration-300 rounded-t-md"
               style={{ height: `${value}%` }}
               title={`${months[index]}: ${value}% Pagos`}
             />
@@ -252,7 +252,7 @@ export default function Secretaria() {
               ></Menu>
             </button>
           )}
-          <h2 className="text-lg font-bold text-[#268cff]">Dashboard</h2>
+          <h2 className="text-xl font-bold text-[#268cff]">Painel Geral </h2>
         </div>
         {/* Header */}
         <header className="flex justify-end items-center mb-8">
@@ -281,9 +281,9 @@ export default function Secretaria() {
         </header>
 
         {/* Filters & KPI Cards */}
-        <section className="mb-8">
-          <div className="flex justify-between items-end mb-6 ">
-            <div className="flex gap-4">
+        <section className="mb-8 ">
+          <div className="flex justify-between items-end mb-6  ">
+            <div className="flex gap-4 cursor-pointer ">
               {["Ano", "Semestre", "Mês"].map((filtro) => (
                 <div key={filtro}>
                   <label className="block text-sm text-gray-500 mb-1">
@@ -295,12 +295,12 @@ export default function Secretaria() {
                 </div>
               ))}
             </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-[#268cff] text-white rounded-md text-base font-semibold hover:bg-blue-600 hover:text-white transition-all duration-500">
+            <button className="flex items-center gap-2 px-4 py-2 bg-[#268cff] text-white rounded-md text-base font-semibold hover:bg-blue-500 hover:text-white transition-all duration-500 cursor-pointer">
               Gerar PDF <Download />
             </button>
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-4 cursor-default">
             <CardKpi
               title="Total de estudantes"
               value="50"
@@ -347,7 +347,7 @@ export default function Secretaria() {
         </section>
 
         {/* Alunos Cadastrados */}
-        <section className="mb-8">
+        <section className="mb-8 cursor-default">
           <h3 className="text-gray-700 font-bold mb-4 text-base">
             Alunos Cadastrados
           </h3>
@@ -372,15 +372,15 @@ export default function Secretaria() {
               </div>
             ))}
           </div>
-         <Link to="/GestaoAlunos">
-          <button className="mt-4 bg-[#268cff] text-white px-6 py-2 rounded text-sm hover:px-7 hover:ml-2 transition-all duration-500 font-bold shadow-md">
-            Ver mais
-          </button>
-         </Link>
+          <Link to="/GestaoAlunos">
+            <button className="mt-4 bg-[#268cff] text-white px-6 py-2 rounded text-sm hover:px-7 hover:ml-2 transition-all duration-500 font-bold shadow-md cursor-pointer">
+              Ver mais
+            </button>
+          </Link>
         </section>
 
         {/* Faturamento Chart Placeholder */}
-        <section className="bg-white p-6 rounded-xl  border ">
+        <section className="bg-white p-6 rounded-xl  border cursor-default">
           <div className="flex justify-between mb-8 border-b pb-4">
             <div>
               <p className="text-xs text-gray-500">Faturamento mensal</p>

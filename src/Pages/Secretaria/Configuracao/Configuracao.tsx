@@ -138,7 +138,7 @@ export default function Configuracao() {
       <main className="flex-1 p-8 bg-gray-50 overflow-y-auto">
         <div className="max-w-4xl mx-auto">
           <header className="mb-10">
-            <h2 className="text-2xl font-bold text-gray-800">Configurações</h2>
+            <h2 className="text-xl font-bold text-[#268cff]">Configurações</h2>
             <p className="text-gray-400 text-sm">
               Gerencie as preferências da instituição e controle de acessos.
             </p>
@@ -199,7 +199,7 @@ export default function Configuracao() {
                 {/* Campo 1 */}
                 <div className="grid grid-cols-2 gap-6">
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-black text-gray-500 uppercase ml-1">
+                    <label className="text-xs font-black text-gray-500   ml-1">
                       Percentual de Multa (%)
                     </label>
                     <input
@@ -209,7 +209,7 @@ export default function Configuracao() {
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-xs font-black text-gray-500 uppercase ml-1">
+                    <label className="text-xs font-black text-gray-500   ml-1">
                       Dias de Carência
                     </label>
                     <input
@@ -237,7 +237,7 @@ export default function Configuracao() {
 
                 {/* Campo 3 - Multi-Select Simulado */}
                 <div className="flex flex-col gap-2">
-                  <label className="text-xs font-black text-gray-500 uppercase ml-1">
+                  <label className="text-xs font-black text-gray-500   ml-1">
                     Moeda Padrão
                   </label>
                   <select className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#268cff]/20">

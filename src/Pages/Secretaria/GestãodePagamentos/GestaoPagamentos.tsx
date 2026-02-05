@@ -132,7 +132,7 @@ export default function GestaoPagamentos() {
     title: string;
     value: string;
     subtext: string;
-    trend?: "up" | "down" ;
+    trend?: "up" | "down";
   }) => (
     <div className="bg-white px-2 py-4 rounded-xl flex flex-col items-center text-center border ">
       <p className="text-gray-400 text-base mb-1">{title}</p>
@@ -148,11 +148,7 @@ export default function GestaoPagamentos() {
             <TrendingDown />
           </span>
         )}
-        {trend === "plus" && (
-          <span className="text-black/70">
-            <Plus></Plus>
-          </span>
-        )}
+       
       </div>
       <p className="text-[14px] text-gray-400 mt-1">{subtext}</p>
     </div>
@@ -260,7 +256,7 @@ export default function GestaoPagamentos() {
                 <Menu size={28} />
               </button>
             )}
-            <h2 className="text-2xl font-bold text-[#268cff]">
+            <h2 className="text-xl font-bold text-[#268cff]">
               Gestão de Pagamentos
             </h2>
           </div>
@@ -276,7 +272,7 @@ export default function GestaoPagamentos() {
                   <label className=" flex text-sm text-gray-500 mb-1">
                     {filtro}
                   </label>
-                  <select className="bg-white border  rounded-lg px-10 py-2 text-sm text-gray-400  outline-none hover:border-[#268cff]">
+                  <select className="bg-white border  rounded-lg px-10 py-2 text-sm text-gray-400  outline-none cursor-pointer hover:border-[#268cff]">
                     <option>Todos</option>
                   </select>
                 </div>
@@ -288,18 +284,14 @@ export default function GestaoPagamentos() {
           </div>
 
           {/* Cards KPI */}
-          <div className="grid grid-cols-5 gap-4">
+          <div className="grid grid-cols-5 gap-4 cursor-default">
             <CardKpi
               title="Total recebido"
               value="KZ 50.000,00"
               subtext="este mês"
               trend="up"
             />
-            <CardKpi
-              title="Confirmados"
-              value="30"
-              subtext="validados"
-            />
+            <CardKpi title="Confirmados" value="30" subtext="validados" />
             <CardKpi
               title="Pendentes"
               value="50"
@@ -327,15 +319,15 @@ export default function GestaoPagamentos() {
             <h2 className="text-gray-700 font-bold">Histórico de Transações</h2>
           </div>
 
-          <table className="w-full text-center border-collapse">
+          <table className="w-full text-center border-collapse cursor-default">
             <thead>
-              <tr className="bg-[#268cff]/70  text-white text-[11px] uppercase font-black tracking-widest border-b border-gray-100">
+              <tr className="bg-[#268cff]/70  text-white text-[14px]   font-black tracking-widest border-b border-gray-100">
                 <th className="px-4 py-4">Código</th>
                 <th
                   className="px-4 py-4 cursor-pointer hover:text-[#268cff]"
                   onClick={() => handleSort("nome")}
                 >
-                  <div className="flex items-center justify-center gap-1">
+                  <div className="flex items-center justify-center gap-1 cursor-pointer">
                     Nome{" "}
                     {ordemCrescente ? (
                       <ArrowDown size={14} />
@@ -351,16 +343,16 @@ export default function GestaoPagamentos() {
                 <th className="px-4 py-4">Ação</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
+            <tbody className="divide-y divide-gray-50 cursor-default">
               {dadosAlunos.map((aluno, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-[#268cff]/5 transition-colors "
+                  className="hover:bg-[#268cff]/5 hover:border-b hover:border-dashed hover:border-[#268cff] transition-colors  "
                 >
                   <td className="px-4 py-4 text-sm font-mono text-gray-500 ">
                     {aluno.codigo}
                   </td>
-                  <td className="px-4 py-4 text-sm font-bold text-gray-700">
+                  <td className="px-4 py-4 text-sm  text-gray-700">
                     {aluno.nome}
                   </td>
                   <td className="px-4 py-4 text-sm text-gray-500">
@@ -369,12 +361,12 @@ export default function GestaoPagamentos() {
                   <td className="px-4 py-4 text-sm text-gray-600">
                     {aluno.servico}
                   </td>
-                  <td className="px-4 py-4 text-sm font-black text-gray-800">
+                  <td className="px-4 py-4 text-sm  text-gray-800">
                     {aluno.Valor}
                   </td>
                   <td className="px-4 py-4">
                     <span
-                      className={`px-3 py-1 rounded-full text-[10px] font-bold border ${
+                      className={`px-3 py-1 rounded-full text-[10px] font-bold border inline-block min-w-[85px] ${
                         aluno.Estado === "Confimado"
                           ? "bg-green-50 text-green-600 border-green-100"
                           : aluno.Estado === "Pendente"
@@ -386,10 +378,15 @@ export default function GestaoPagamentos() {
                     </span>
                   </td>
                   <td className="px-4 py-4">
-                    <div className="flex justify-center">
-                      <button className="p-2 text-gray-400 hover:text-[#268cff] hover:bg-blue-50 rounded-lg transition-all">
-                        <EyeIcon size={18} />
-                      </button>
+                    <div className="group relative w-max items-center mx-auto cursor-pointer">
+                      <div className="flex ">
+                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                          <EyeIcon size={18} />
+                        </div>
+                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                          Visualizar
+                        </span>
+                      </div>
                     </div>
                   </td>
                 </tr>

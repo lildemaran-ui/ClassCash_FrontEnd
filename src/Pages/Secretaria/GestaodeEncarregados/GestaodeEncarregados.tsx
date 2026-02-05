@@ -210,7 +210,7 @@ export default function GestaodeEncarregados() {
                 <Menu size={28} />
               </button>
             )}
-            <h2 className="text-2xl font-bold text-[#268cff]">
+            <h2 className="text-xl font-bold text-[#268cff]">
               Gestão de Encarregados
             </h2>
           </div>
@@ -242,7 +242,7 @@ export default function GestaodeEncarregados() {
 
         {/* Ações e Tabela */}
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
-          <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+          <div className="p-6 border-b border-gray-100 flex justify-between items-center cursor-default">
             <div>
               <h3 className="text-lg font-bold text-gray-700">
                 Lista de Encarregados
@@ -252,21 +252,21 @@ export default function GestaodeEncarregados() {
               </p>
             </div>
 
-            <button className="flex items-center gap-2 bg-[#268cff] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
+            <button className="flex items-center gap-2 bg-[#268cff] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95 cursor-pointer">
               <Plus size={20} />
               <span>Cadastrar </span>
             </button>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
+            <table className="w-full border-collapse cursor-default">
               <thead>
-                <tr className="bg-[#268cff]/70 text-white text-base font-black tracking-widest border-b border-gray-200 text-center">
+                <tr className="bg-[#268cff]/70 text-white text-[14px] font-black tracking-widest border-b border-gray-200 text-center">
                   <th
                     className="px-6 py-4 cursor-pointer hover:text-[#268cff]"
                     onClick={() => handleSort("nome")}
                   >
-                    <div className="flex items-center justify-center gap-1">
+                    <div className="flex items-center justify-center gap-1 cursor-pointer">
                       Encarregado{" "}
                       {ordemCrescente ? (
                         <ArrowDown size={14} />
@@ -308,11 +308,18 @@ export default function GestaodeEncarregados() {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex justify-center">
-                        <button className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm">
-                          <EyeIcon size={18} />
-                        </button>
+                      <div className="group w-max relative flex items-center mx-auto">
+                       <div className="flex ">
+                      <div
+                        
+                        className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm cursor-pointer"
+                      >
+                        <EyeIcon size={18} />
+                        
                       </div>
+                      <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">Visualizar</span>
+                    </div>
+                     </div>
                     </td>
                   </tr>
                 ))}

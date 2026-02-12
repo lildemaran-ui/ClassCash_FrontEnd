@@ -160,7 +160,7 @@ export default function Secretaria() {
             </button>
           </div>
 
-          <nav className="flex-1 flex flex-col gap-1">
+          <nav className="flex-1 flex flex-col gap-1  overflow-hidden">
             <Link to="/Secretaria">
               <SidebarItem
                 icon={LayoutDashboard}

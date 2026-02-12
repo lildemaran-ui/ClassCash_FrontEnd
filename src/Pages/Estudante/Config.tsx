@@ -68,7 +68,7 @@ export default function ConfigurationScreen() {
     return <span>Carregado...</span>;
   }
   return (
-    <div className="flex min-h-screen bg-[#f8fafc] font-sans">
+    <div className="flex min-h-screen bg-[#f8fafc] font-sans transition-all duration-500">
       {/* Sidebar */}
 
       {menu && (

@@ -12,8 +12,6 @@ import {
   Search,
   Download,
   Menu,
-  ArrowDown,
-  ArrowUp,
   TrendingUp,
   TrendingDown,
 } from "lucide-react";
@@ -289,7 +287,7 @@ export default function Secretaria() {
                   <label className="block text-sm text-gray-500 mb-1">
                     {filtro}
                   </label>
-                  <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#268cff]">
+                  <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#268cff] cursor-pointer">
                     <option>Sem filtro</option>
                   </select>
                 </div>

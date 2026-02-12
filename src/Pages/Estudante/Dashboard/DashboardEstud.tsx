@@ -46,7 +46,7 @@ export default function DashboardEstud() {
   );
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 font-sans">
+    <div className="flex h-screen overflow-hidden bg-gray-50 font-sans transition-all duration-500">
       {/* Sidebar */}
 
       {menu && (

@@ -215,10 +215,6 @@ export default function GestaodeServiços() {
             </button>
           </div>
 
-          {/* Card do Gráfico */}
-          <div className="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm flex flex-col items-center">
-            
-          </div>
         </section>
 
         {/* Tabela de Dados com Container para Margem */}

@@ -1123,4 +1123,7 @@ color: #FFFFFF;
 button:active{
   transform: scale(0.95);
 }
-
+.SidebarItem:active{
+  transform: scale(0.95);
+  animation-duration: 1000ms;
+}

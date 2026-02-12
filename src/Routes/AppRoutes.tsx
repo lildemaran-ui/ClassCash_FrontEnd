@@ -3,7 +3,7 @@ import Cadastro from "../Pages/Cadastros/Cadastro";
 import Login from "../Pages/Login/Login";
 import PaginaInicial from "../Pages/Index/Index";
 import Pagamento from "../Pages/Pagamento/Pagamento";
-import DashboardAdmin from "../Pages/Administrador/DashboardAdmin";
+import DashboardAdmin from "../Pages/Administrador/Administradores";
 import SobreNos from "../Pages/Index/AboutUs";
 import Contactos from "../Pages/Index/Contacts";
 import Instituicoes from "../Pages/Instituições/Instituições";
@@ -21,6 +21,8 @@ import ModulodeMulta from "@/Pages/Secretaria/MódulodeMultas/ModulodeMulta";
 import GestaodeReclamacoes from "@/Pages/Secretaria/GestãodeReclamações/GestaodeReclamacoes";
 import Relatorio from "@/Pages/Secretaria/Relatorio/Relatorio";
 import Configuracao from "@/Pages/Secretaria/Configuracao/Configuracao";
+import Encarregado from "@/Pages/Encarregado/Encarregado";
+import Administradores from "../Pages/Administrador/Administradores";
 
 
 
@@ -64,6 +66,9 @@ export default function AppRoutes() {
       <Route path="/ModulodeMulta" element={<ModulodeMulta></ModulodeMulta>}></Route>
       <Route path="/Relatorio" element={<Relatorio></Relatorio>}></Route>
       <Route path="/Configuracao" element={<Configuracao></Configuracao>}></Route>
+      <Route path="/Encarregado" element={<Encarregado></Encarregado>}></Route>
+      <Route path="/DashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
+      <Route path="/Administradores" element={<Administradores></Administradores>}></Route>
     </Routes>
 
 

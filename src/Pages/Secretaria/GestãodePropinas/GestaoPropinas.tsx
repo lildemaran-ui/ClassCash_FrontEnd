@@ -104,7 +104,7 @@ export default function GestaoPropinas() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500  ${
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
@@ -334,7 +334,7 @@ export default function GestaoPropinas() {
 
           <table className="w-full border-collapse cursor-default">
             <thead>
-              <tr className="bg-[#268cff]/70 text-white text-[14px]   font-black tracking-widest border-b border-gray-200">
+              <tr className="bg-[#268cff]/70 text-white text-[14px]   font-black  border-b border-gray-200">
                 <th className="px-4 py-4">Código</th>
                 <th
                   className="px-4 py-4 cursor-pointer hover:text-[#268cff] transition-colors"

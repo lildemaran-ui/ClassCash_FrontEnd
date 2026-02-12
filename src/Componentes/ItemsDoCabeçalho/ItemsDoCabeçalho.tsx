@@ -10,7 +10,7 @@ export default function ItemsDoCabeçalho () {
               />
               <input
                 type="search"
-                placeholder="Procurar por um código"
+                placeholder="Procurar por um nome/código"
                 className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-MeuAzul/20 focus:border-none"
               />
             </div>

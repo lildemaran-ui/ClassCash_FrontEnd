@@ -84,7 +84,7 @@ export default function Reclamacoes() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 mt-2 rounded-lg cursor-pointer transition-all duration-500 ${
+      className={`flex items-center gap-3 p-3 mt-3 rounded-lg cursor-pointer transition-all duration-500 ${
         active ? "bg-white/10" : "hover:bg-white/5"
       }`}
     >
@@ -132,7 +132,7 @@ export default function Reclamacoes() {
     return <span>Carregado...</span>;
   }
   return (
-    <div className="flex min-h-screen bg-white font-sans">
+    <div className="flex min-h-screen bg-white font-sans transition-all duration-500">
       {/* Sidebar Lateral */}
       {menu && (
         <aside className="w-64 bg-[#268cff] text-white flex flex-col">
@@ -187,7 +187,7 @@ export default function Reclamacoes() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-8 overflow-y-auto transition-all duration-500">
         {!menu && (
           <button onClick={OpenMenu}>
             <Menu size={28} className="text-[#268cff]" />

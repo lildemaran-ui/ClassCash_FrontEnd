@@ -102,7 +102,7 @@ export default function Cadastro() {
     <div className="flex min-h-screen  ">
       {/* ... (Parte visual da Esquerda igual) ... */}
       <div
-        className=" bg-cover bg-center w-1/2 "
+        className="  bg-cover bg-center w-1/2 flex flex-col justify-between p-8 "
         style={{ backgroundImage: `url(${img})` }}
       >
         <Link to="/PaginaInicial">
@@ -130,9 +130,7 @@ export default function Cadastro() {
               <div className="flex flex-col">
                 <label className="text-sm mb-1 font-medium">
                   Perfil de Usuário
-                  {perfil === "Estudante"
-                    ? "Nome do aluno"
-                    : "Nome do Encarregado"}
+                 
                 </label>
                 <select
                   value={perfil}

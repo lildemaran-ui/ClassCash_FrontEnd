@@ -286,7 +286,7 @@ export default function GestaodeEncarregados() {
                 {dadosAlunos.map((aluno, index) => (
                   <tr
                     key={index}
-                    className="hover:bg-[#268cff]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#268cff]"
+                    className="hover:bg-[#268cff]/5 transition-colors text-center "
                   >
                     <td className="px-6 py-4 text-sm font-medium text-gray-500 ">
                       {aluno.nome}

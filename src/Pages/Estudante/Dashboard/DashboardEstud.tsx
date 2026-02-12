@@ -98,7 +98,7 @@ export default function DashboardEstud() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-8 overflow-y-auto ">
         {!menu && (
           <button onClick={OpenMenu}>
             <Menu size={28} className="text-[#268cff]" />

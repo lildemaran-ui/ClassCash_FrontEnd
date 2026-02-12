@@ -14,6 +14,7 @@ import {
   Menu,
   TrendingUp,
   TrendingDown,
+  CircleUser,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
 import { Link } from "react-router-dom";
@@ -160,7 +161,7 @@ export default function Secretaria() {
             </button>
           </div>
 
-          <nav className="flex-1 flex flex-col gap-1">
+          <nav className="flex-1 flex flex-col gap-1  overflow-hidden">
             <Link to="/Secretaria">
               <SidebarItem
                 icon={LayoutDashboard}
@@ -240,7 +241,7 @@ export default function Secretaria() {
 
       {/* Main Content */}
       <main className="flex-1 p-8 ">
-        <div className="flex gap-6">
+        <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
           {!menu && (
             <button>
               <Menu
@@ -251,33 +252,30 @@ export default function Secretaria() {
             </button>
           )}
           <h2 className="text-xl font-bold text-[#268cff]">Painel Geral </h2>
-        </div>
+        
         {/* Header */}
-        <header className="flex justify-end items-center mb-8">
-          <div className="flex">
-            <div className="relative w-96">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+       <header className="flex justify-between ">
+          <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
+          <div className="flex items-center space-x-4">
+            {/* Campo de Pesquisa */}
+            <div className="relative hidden md:block">
+              <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
-                type="search"
-                placeholder="Procurar por um código"
-                className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-MeuAzul/20 focus:border-none"
+                type="text"
+                placeholder="Pesquisar..."
+                className="pl-10 pr-4 py-2 w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#268cff]/20 outline-none transition-all"
               />
             </div>
-            <div className="flex items-center gap-4 ml-4">
-              <div className="relative">
-                <Bell className="text-[#268cff] cursor-pointer" />
-                <div className="absolute bg-red-500 w-3 h-3 flex -top-1 -right-1 rounded-full border-2 border-white"></div>
-              </div>
-              <div className="w-10 h-10 rounded-full bg-gray-200 border overflow-hidden">
-                <img src="https://via.placeholder.com/40" alt="User" />
-              </div>
+
+            {/* Ícones de Notificação e Perfil */}
+            <div className="relative cursor-pointer">
+              <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+                <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
             </div>
+            <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
           </div>
         </header>
-
+</div>
         {/* Filters & KPI Cards */}
         <section className="mb-8 ">
           <div className="flex justify-between items-end mb-6  ">

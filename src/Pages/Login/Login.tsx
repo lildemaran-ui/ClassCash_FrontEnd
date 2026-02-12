@@ -36,7 +36,7 @@ export default function Login() {
 
     <div className="flex h-screen ">
       <div
-        className=" bg-cover bg-center w-1/2   "
+        className=" bg-cover bg-center w-1/2 flex flex-col justify-between p-8"
         style={{ backgroundImage: `url(${Fundo})` }}
       >
         <Link to="/PaginaInicial">
@@ -46,34 +46,34 @@ export default function Login() {
           </div>
         </Link>
 
-        <h1 className="text-start flex justify-start px-6 mt-[80%]  ">
+        <h1 className="text-start flex justify-start    ">
           <FrasesRotativasLogin />
         </h1>
       </div>
 
       <div id="login" className="flex items-center bg-white  w-1/2">
         <div className="m-auto w-full lg:p-8">
-          <div className="mx-auto items-center flex flex-col w-full justify-center space-y-6 roudend-md bg-white p-8 shadow-md sm:w-[390px] text-black">
+          <div className="mx-auto items-center flex flex-col w-full justify-center space-y-6 roudend-md bg-white p-8 border rounded-lg sm:w-[390px] text-black">
             <div className="space-y-1">
-              <p className="flex-1 text-center text-[#1e88e5]">
+              <p className="flex-1 text-center text-[#268cff]">
                 {" "}
                 Entre com a sua conta
               </p>
-              <p className="text-xs text-[#8fbdf1]">
+              <p className="text-xs text-gray-400">
                 Insira os seus dados de utilizador abaixo para fazer login
               </p>
             </div>
-            <form className="rounded-xl" onSubmit={handleLogin}>
-              <label className="flex text-sm mb-2 text-[#1e88e5]"> Email</label>
+            <form className="rounded-xl " onSubmit={handleLogin}>
+              <label className="flex text-sm mb-2 "> Email</label>
               <input
                 required
                 value={emailDigitado}
                 onChange={(e) => setEmail(e.target.value)}
-                className="border-2 rounded-lg h-10 w-80 mb-9 text-xs px-4 focus:outline-none focus:border-[#1e88e5] placeholder:text-[#8fbdf1]"
+                className="border-2 rounded-lg h-10 w-80 mb-9 text-xs px-4 focus:outline-none focus:border-[#1e88e5] placeholder:text-gray-300"
                 placeholder="exemploalguem@gmail.com"
                 type="email"
               />
-              <label className="text-sm mb-2 text-[#1e88e5]">
+              <label className="text-sm mb-2 ">
                 {" "}
                 Palavra-Passe{" "}
               </label>
@@ -83,7 +83,7 @@ export default function Login() {
                   minLength={6}
                   value={senhaDigitado}
                   onChange={(e) => setSenha(e.target.value)}
-                  className="border-2 rounded-lg h-10 w-80 text-xs px-4 focus:outline-none focus:border-[#1e88e5] placeholder:text-[#8fbdf1]"
+                  className="border-2 rounded-lg h-10 w-80 text-xs px-4 focus:outline-none focus:border-[#1e88e5] placeholder:text-gray-400"
                   type={mostrarSenha ? "text" : "password"}
                   placeholder="........"
                 />
@@ -92,9 +92,9 @@ export default function Login() {
                   onClick={() => setMostrar(!mostrarSenha)}
                 >
                   {mostrarSenha ? (
-                    <EyeIcon size={24} className="text-[#268cffb2]" />
+                    <EyeIcon size={22} className="text-[#268cffb2]" />
                   ) : (
-                    <EyeOff size={24} className="text-[#268cffb2]" />
+                    <EyeOff size={22} className="text-[#268cffb2]" />
                   )}
                 </div>
               </div>
@@ -108,19 +108,19 @@ export default function Login() {
             </form>
 
             <div className=" flex flex-wrap gap-1 justify-center  ">
-              <p className="text-xs text-[#1e88e5]">
+              <p className="text-xs ">
                 Não tem conta?
                 <Link
                   to="/Cadastro"
-                  className="text-[#8fbdf1] hover:underline "
+                  className="text-[#1e88e5] hover:underline "
                 >
                   {" "}
                   Cadastre-se
                 </Link>
               </p>
-              <p className="text-xs text-[#1e88e5]">
-                Esqueceu a senha?
-                <a className="text-[#8fbdf1] hover:underline" href="#">
+              <p className="text-xs ">
+                Esqueceu a senha? 
+                 <a className="text-[#1e88e5] hover:underline" href="#"> 
                   Alterar a senha
                 </a>
               </p>

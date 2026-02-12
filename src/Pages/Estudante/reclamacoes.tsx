@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import logo5 from "../../assets/Logo5.5.png";
 import { Link } from "react-router-dom";
+import Avatar from "@/Componentes/Avatar/Avatar";
 
 // Interface para os dados das reclamações
 interface ReclamacaoProps {
@@ -200,15 +201,7 @@ export default function Reclamacoes() {
               <Bell size={24} className="text-[#268cff]" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#f0f5fa]"></div>
             </div>
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 shadow-sm bg-center bg-cover">
-              {user.foto && (
-                <img
-                  src={user.foto}
-                  alt="Estudante"
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </div>
+            <Avatar name={user.nome} src={user.foto} size="md" />
           </div>
         </header>
 

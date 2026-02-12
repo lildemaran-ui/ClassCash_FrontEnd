@@ -1,3 +1,4 @@
+import Avatar from "@/Componentes/Avatar/Avatar";
 import ChartEstud from "@/Componentes/Charts/ChartEstud";
 import {
   Settings,
@@ -69,17 +70,31 @@ export default function DadosDashEstd() {
   }
   return (
     <div>
-      <header className="flex justify-between items-start mb-8 ">
+      <header className="flex justify-between items-start mb-8 transition-all duration-500">
         <div className="flex items-center gap-6">
-          <div className="w-56 h-56 rounded-full overflow-hidden border-4 border-white shadow-sm  ">
-            {user.foto && (
-              <img
-                src={user.foto}
-                alt="Estudante"
-                className="w-full h-full object-cover"
-              />
-            )}
-          </div>
+          <div className="w-56 h-56 rounded-full overflow-hidden border-4 border-white shadow-sm flex items-center justify-center bg-gray-100">
+  {user.foto ? (
+    <img
+      src={user.foto}
+      alt={user.nome}
+      className="w-full h-full object-cover"
+      // Caso a URL exista mas a imagem falhe ao carregar (erro 404),
+      // você pode opcionalmente adicionar um onError aqui.
+    />
+  ) : (
+    // Fallback: Iniciais do nome
+    <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-[#268cff] text-white text-6xl font-bold">
+      {(user.nome || "User")
+        .trim()
+        .split(' ')
+        .filter((_, i, arr) => i === 0 || i === arr.length - 1)
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()}
+    </div>
+  )}
+</div>
+         
           <div className="space-y-1">
             <p className="text-lg font-bold">{user.nome}</p>
             <p className="text-sm text-gray-600">
@@ -114,13 +129,26 @@ export default function DadosDashEstd() {
               </div>
               <form className="space-y-4">
                 <div className="w-48 h-48 rounded-full flex justify-center items-center mx-auto overflow-hidden border border-gray-400 shadow-sm group  ">
-            {user.foto && (
-              <img
-                src={user.foto}
-                alt="Estudante"
-                className="w-full h-full object-cover"
-              />
-            )}
+            {user.foto ? (
+    <img
+      src={user.foto}
+      alt={user.nome}
+      className="w-full h-full object-cover"
+      // Caso a URL exista mas a imagem falhe ao carregar (erro 404),
+      // você pode opcionalmente adicionar um onError aqui.
+    />
+  ) : (
+    // Fallback: Iniciais do nome
+    <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-[#268cff] text-white text-6xl font-bold">
+      {(user.nome || "User")
+        .trim()
+        .split(' ')
+        .filter((_, i, arr) => i === 0 || i === arr.length - 1)
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase()}
+    </div>
+  )}
           </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">

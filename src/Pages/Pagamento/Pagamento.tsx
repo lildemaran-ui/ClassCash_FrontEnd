@@ -10,6 +10,7 @@ import {
   Bell,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
+import Avatar from "@/Componentes/Avatar/Avatar";
 
 export default function Pagamentos() {
   const [showModal, setShowModal] = useState(false);
@@ -189,23 +190,15 @@ export default function Pagamentos() {
               <Bell size={24} className="text-[#268cff]" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
             </div>
-            <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 bg-cover bg-center">
-              {user.foto && (
-                <img
-                  src={user.foto}
-                  alt="User"
-                  className="w-full h-full object-cover"
-                />
-              )}
-            </div>
-          </div>
+            <Avatar name={user.nome} src={user.foto} size="md" />
+          </div> 
         </header>
         <div className="px-4 md:px-20 py-10 max-w-7xl mx-auto">
-  <div className="px-4 md:px-20 py-10 max-w-7xl mx-auto">
-  {/* GRID PRINCIPAL: Envolve desde o Código até o final */}
+ <div className="px-4 md:px-20 py-10 max-w-7xl mx-auto">
+  {/* GRID PRINCIPAL: Envolve tudo para permitir que as colunas fiquem lado a lado desde o topo */}
   <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
     
-    {/* COLUNA ESQUERDA: Código, Método e Dados do Serviço */}
+    {/* COLUNA ESQUERDA: Código, Método e Dados */}
     <div className="flex flex-col gap-8">
       {/* Bloco do Código */}
       <div>
@@ -240,7 +233,7 @@ export default function Pagamentos() {
         </div>
       </div>
 
-      {/* Dados do Serviço (Aparece condicionalmente) */}
+      {/* Dados do Serviço (Apenas se for Digital ou Banco) */}
       {(pagamento.metodo === "De forma digital" || pagamento.metodo === "No banco") && (
         <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-4">
           <h3 className="font-bold text-gray-800 border-b pb-2">Dados do Serviço</h3>
@@ -259,7 +252,7 @@ export default function Pagamentos() {
             </select>
           </div>
 
-          {/* Lógica da Plataforma ou Meses (Esquerda) */}
+          {/* Lógica Condicional da Esquerda */}
           {pagamento.metodo === "De forma digital" ? (
             <div className="animate-in fade-in">
               <label className="font-medium block mb-2 text-gray-700">Plataforma a ser usada:</label>
@@ -273,10 +266,7 @@ export default function Pagamentos() {
                 <option value="Unitel Money">Unitel Money</option>
                 <option value="PayPay">Pay Pay</option>
               </select>
-            </div>
-          ) : (
-            <div className="animate-in fade-in">
-              <label className="font-medium block mb-2 text-gray-700">Meses a pagar:</label>
+               <label className="font-medium block mb-2 text-gray-700">Meses a pagar:</label>
               <div className="flex items-center gap-3">
                 <div className="flex-1">
                   <p className="text-[10px] font-bold text-gray-400">De:</p>
@@ -293,6 +283,8 @@ export default function Pagamentos() {
                 </div>
               </div>
             </div>
+          ) : (
+            <div></div>
           )}
         </div>
       )}
@@ -304,26 +296,9 @@ export default function Pagamentos() {
         <div className="flex flex-col gap-6 animate-in fade-in">
           <h3 className="font-bold text-gray-800 border-b pb-2">Finalização</h3>
 
-          {/* Período de Pagamento (Só aparece no Digital na sua lógica original) */}
+          {/* Período de Pagamento (Digital) */}
           {pagamento.metodo === "De forma digital" && (
-            <div className="animate-in fade-in">
-              <label className="font-medium block mb-2 text-gray-700">Período de Pagamento:</label>
-              <div className="flex items-center gap-3">
-                <div className="flex-1">
-                  <p className="text-[10px] font-bold text-gray-400">De:</p>
-                  <select name="mesInicial" value={pagamento.mesInicial} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 bg-white">
-                    {mesesDoAno.map((m) => <option key={m}>{m}</option>)}
-                  </select>
-                </div>
-                <span className="mt-5 text-gray-400 font-bold">à</span>
-                <div className="flex-1">
-                  <p className="text-[10px] font-bold text-gray-400">Até:</p>
-                  <select name="mesFinal" value={pagamento.mesFinal} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 bg-white">
-                    {mesesDoAno.map((m) => <option key={m}>{m}</option>)}
-                  </select>
-                </div>
-              </div>
-            </div>
+            <div></div>
           )}
 
           {/* Resumo de Valores */}
@@ -349,7 +324,6 @@ export default function Pagamentos() {
             <input type="file" onChange={handleImageChange} className="mt-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full" />
           </div>
 
-          {/* Botão de Envio */}
           <button
             onClick={() => alert("Pagamento enviado com sucesso!")}
             disabled={!formularioValido}
@@ -361,11 +335,35 @@ export default function Pagamentos() {
           </button>
         </div>
       )}
+    </div>
+  </div>
+
+  {/* MODAL DE DINHEIRO FÍSICO (RESTAURADO) */}
+  {showModal && (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
+        <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Wallet size={32} />
+        </div>
+        <h2 className="text-2xl font-bold mb-2">Pagamento Presencial</h2>
+        <p className="text-gray-600 mb-6">
+          Por favor, dirija-se à Secretaria da Instituição para efetuar o
+          pagamento em numerário.
+        </p>
+        <button
+          onClick={() => {
+            setShowModal(false);
+            setPagamento((p) => ({ ...p, metodo: "" }));
+          }}
+          className="w-full bg-[#268cff] text-white py-3 rounded-lg font-bold"
+        >
+          Entendido
+        </button>
       </div>
-     </div>
-     </div>
-      </div>
-     </div>
-     </div>
-  );
-}
+    </div>
+  )}
+</div>
+</div>
+</div>
+ </div> 
+ ); }

@@ -20,6 +20,7 @@ import {
   CircleUser,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
+import DashboardAdmin from "./DashboardAdmin";
 export default function Administaradores() {
     const SidebarItem = ({
     icon: Icon,
@@ -47,7 +48,7 @@ export default function Administaradores() {
       setMenu(false);
     }
   return (
-     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+     <div className="flex h-screen bg-gray-50 font-sans overflow-y-auto">
       {/* Sidebar */}
 
       {menu && (
@@ -61,7 +62,7 @@ export default function Administaradores() {
               <Menu size={28} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
-          <nav className="flex-1 flex flex-col gap-1 text-white">
+          <nav className="flex-1 flex flex-col gap-1 text-white ">
             <Link to="">
               <SidebarItem
                 icon={LayoutDashboard}
@@ -70,11 +71,14 @@ export default function Administaradores() {
               />
             </Link>
 
-            <Link to="">
+            <div className="overflow-y-auto
+            flex flex-col">
+              <Link to="">
               <SidebarItem
                 icon={Users}
                 label="Gestão de Estudantes"
                 active={false}
+                
               />
             </Link>
 
@@ -170,13 +174,28 @@ export default function Administaradores() {
                 active={false}
               />
             </Link>
+            </div>
           </nav>
         </aside>
       )}
            {/* Conteúdo Principal */}
-      <div className="flex flex-col flex-1 overflow-y-auto">
+      <div className=" flex-col flex-1">
+         <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
+         <div className="flex items-center gap-6">
+            {!menu && (
+              <button
+                onClick={OpenMenu}
+                className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
+              >
+                <Menu size={28} />
+              </button>
+            )}
+            <h2 className="text-xl font-bold  text-[#268cff]">
+              Painel Geral 
+            </h2>
+          </div>
         {/* Header (Topo) */}
-        <header className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-10 bg-translucido ">
+        <header className=" ">
           <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
           <div className="flex items-center space-x-4">
             {/* Campo de Pesquisa */}
@@ -185,20 +204,22 @@ export default function Administaradores() {
               <input
                 type="text"
                 placeholder="Pesquisar..."
-                className="pl-10 pr-4 py-2 w-64 border border-gray-400 rounded-full focus:outline-none focus:ring-1 focus:border-none focus:ring-blue-500 text-sm"
+                className="pl-10 pr-4 py-2 w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#268cff]/20 outline-none transition-all"
               />
             </div>
 
             {/* Ícones de Notificação e Perfil */}
-            <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
-              <Bell className="w-6 h-6" />
-            </button>
-            <CircleUser className="w-8 h-8 text-gray-500 hover:text-gray-700" />
+            <div className="relative cursor-pointer">
+              <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+                <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
+            </div>
+            <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
           </div>
         </header>
-
+            </div>
         {/* Renderiza o conteúdo da página ativa */}
         {}
+        <DashboardAdmin/>
       </div>
       </div>
   )

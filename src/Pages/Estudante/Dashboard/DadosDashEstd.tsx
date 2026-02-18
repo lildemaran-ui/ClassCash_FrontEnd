@@ -1,4 +1,3 @@
-import Avatar from "@/Componentes/Avatar/Avatar";
 import ChartEstud from "@/Componentes/Charts/ChartEstud";
 import {
   Settings,
@@ -8,10 +7,9 @@ import {
   Coins,
   CheckCircle,
   X,
-  Pen,
+
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 export default function DadosDashEstd() {
   const [Modal, setModal] = useState(false);
 

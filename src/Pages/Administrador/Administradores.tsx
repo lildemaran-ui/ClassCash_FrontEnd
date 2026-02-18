@@ -10,7 +10,6 @@ import {
   MessageSquare,
   AlertOctagon,
   FileText,
-  Building,
   ScrollText,
   KeyIcon,
   School,

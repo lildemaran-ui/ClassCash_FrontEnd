@@ -88,7 +88,7 @@ export default function Administaradores() {
                 active={false}
               />
             </Link>
-            <Link to="">
+            <Link to="/GestaoDeInstituicao">
               <SidebarItem
                 icon={School}
                 label="Gestão de Instituições"

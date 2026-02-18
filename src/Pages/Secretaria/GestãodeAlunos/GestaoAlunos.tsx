@@ -16,6 +16,7 @@ import {
   ArrowUp,
   PencilIcon,
   Trash2,
+  CircleUser,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -216,36 +217,34 @@ export default function GestaoAlunos() {
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto bg-gray-50">
         {/* Header Superior */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-6">
-            {!menu && (
-              <button
+        <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
+          {!menu && (
+            <button>
+              <Menu
+                className="text-[#268cff] flex items-start"
+                size={28}
                 onClick={OpenMenu}
-                className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
-              >
-                <Menu size={28} />
-              </button>
-            )}
-            <h2 className="text-xl font-bold text-[#268cff]">
-              Gestão de Estudantes
-            </h2>
+              ></Menu>
+            </button>
+          )}
+          <h2 className="text-xl font-bold text-[#268cff]">Gestão de Estudantes </h2>
+        
+        {/* Header */}
+       <header className="flex justify-between ">
+          <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
+          <div className="flex items-center space-x-4">
+            {/* Campo de Pesquisa */}
+            
+
+            {/* Ícones de Notificação e Perfil */}
+            <div className="relative cursor-pointer">
+              <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+                <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
+            </div>
+            <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
           </div>
-
-          <header className="flex items-center gap-4">
-            <div className="relative">
-              <Bell className="text-[#268cff] cursor-pointer" />
-              <span className="absolute bg-red-500 w-2.5 h-2.5 -top-1 -right-1 rounded-full border-2 border-white"></span>
-            </div>
-            <div className="w-10 h-10 rounded-full border-2 border-[#268cff]/20 overflow-hidden shadow-sm">
-              <img
-                src="https://via.placeholder.com/40"
-                alt="User"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </header>
-        </div>
-
+        </header>
+</div>
         {/* Barra de Pesquisa e Ação */}
         <section className="flex justify-between items-center mb-10 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
           <div className="relative">

@@ -85,7 +85,7 @@ export default function DadosDashEstd() {
       {(user.nome || "User")
         .trim()
         .split(' ')
-        .filter((_, i, arr) => i === 0 || i === arr.length - 1)
+       
         .map((n) => n[0])
         .join('')
         .toUpperCase()}
@@ -141,7 +141,6 @@ export default function DadosDashEstd() {
       {(user.nome || "User")
         .trim()
         .split(' ')
-        .filter((_, i, arr) => i === 0 || i === arr.length - 1)
         .map((n) => n[0])
         .join('')
         .toUpperCase()}

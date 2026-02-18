@@ -15,6 +15,7 @@ import {
   ArrowUp,
   Plus,
   EyeIcon,
+  CircleUser,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -200,44 +201,40 @@ export default function GestaodeEncarregados() {
       {/* Main Content */}
       <main className="flex-1 p-8 overflow-y-auto bg-gray-50">
         {/* Header com Título e Search */}
-        <div className="flex justify-between items-center mb-10">
-          <div className="flex items-center gap-4">
-            {!menu && (
-              <button
+         <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
+          {!menu && (
+            <button>
+              <Menu
+                className="text-[#268cff] flex items-start"
+                size={28}
                 onClick={OpenMenu}
-                className="text-[#268cff] p-2 hover:bg-blue-50 rounded-lg"
-              >
-                <Menu size={28} />
-              </button>
-            )}
-            <h2 className="text-xl font-bold text-[#268cff]">
-              Gestão de Encarregados
-            </h2>
-          </div>
-
-          <div className="flex items-center gap-6">
-            <div className="relative">
-              <Search
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-                size={18}
-              />
+              ></Menu>
+            </button>
+          )}
+          <h2 className="text-xl font-bold text-[#268cff]">Gestão de Encarregados </h2>
+        
+         {/* Header */}
+         <header className="flex justify-between ">
+          <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
+          <div className="flex items-center space-x-4">
+            {/* Campo de Pesquisa */}
+             <div className="relative hidden md:block">
+              <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
-                type="search"
-                placeholder="Procurar por um nome..."
-                className="w-80 pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#268cff]/20 outline-none transition-all bg-white"
+                type="text"
+                placeholder="Pesquisar..."
+                className="pl-10 pr-4 py-2 w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#268cff]/20 outline-none transition-all"
               />
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="relative cursor-pointer">
-                <Bell className="text-[#268cff]" />
-                <span className="absolute -top-1 -right-1 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white"></span>
-              </div>
-              <div className="w-10 h-10 rounded-full bg-gray-200 border border-[#268cff]/20 overflow-hidden">
-                <img src="https://via.placeholder.com/40" alt="User" />
-              </div>
+            {/* Ícones de Notificação e Perfil */}
+            <div className="relative cursor-pointer">
+              <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+                <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
             </div>
+            <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
           </div>
+         </header>
         </div>
 
         {/* Ações e Tabela */}

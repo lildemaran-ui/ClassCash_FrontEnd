@@ -23,6 +23,7 @@ import Relatorio from "@/Pages/Secretaria/Relatorio/Relatorio";
 import Configuracao from "@/Pages/Secretaria/Configuracao/Configuracao";
 import Encarregado from "@/Pages/Encarregado/Encarregado";
 import Administradores from "../Pages/Administrador/Administradores";
+import GestaoDeInstituicao from "@/Pages/Administrador/GestaoDeInstituicao";
 
 
 
@@ -67,8 +68,8 @@ export default function AppRoutes() {
       <Route path="/Relatorio" element={<Relatorio></Relatorio>}></Route>
       <Route path="/Configuracao" element={<Configuracao></Configuracao>}></Route>
       <Route path="/Encarregado" element={<Encarregado></Encarregado>}></Route>
-      <Route path="/DashboardAdmin" element={<DashboardAdmin></DashboardAdmin>}></Route>
       <Route path="/Administradores" element={<Administradores></Administradores>}></Route>
+      <Route path="/GestaoDeInstituicao" element={<GestaoDeInstituicao></GestaoDeInstituicao>}></Route>
     </Routes>
 
 

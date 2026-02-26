@@ -78,7 +78,7 @@ function PieCenterLabel({ children }: { children: React.ReactNode }) {
 }
 
 // --- Componente Principal ---
-export default function TitanicSurvivalPie() {
+export default function ChartGestaoEstud() {
   const innerRadius = 60;
   const middleRadius = 130;
 

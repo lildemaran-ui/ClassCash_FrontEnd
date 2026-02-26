@@ -30,7 +30,7 @@ export default function Configuracao() {
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      <Icon size={20} className="text-white" />
+      <Icon size={22} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
@@ -42,18 +42,23 @@ export default function Configuracao() {
     setMenu(false);
   }
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
 
       {menu && (
         <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
-              <img src={Logo5} alt="Logo" className="w-16 h-16 " />
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
             <button>
-              <Menu size={28} className="text-white" onClick={CloseMenu} />
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
 
@@ -135,10 +140,10 @@ export default function Configuracao() {
         </aside>
       )}
       {/* Main Content */}
-      <main className="flex-1 p-8 bg-gray-50 overflow-y-auto">
+      <main className="flex-1 p-8 bg-gray-50 custom_scroll">
         <div className="max-w-4xl mx-auto">
           <header className="mb-10">
-            <h2 className="text-xl font-bold text-[#268cff]">Configurações</h2>
+            <h1 className="text-xl font-bold text-[#268cff]">Configurações</h1>
             <p className="text-gray-400 text-sm">
               Gerencie as preferências da instituição e controle de acessos.
             </p>

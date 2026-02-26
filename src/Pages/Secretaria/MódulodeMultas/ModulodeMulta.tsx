@@ -14,7 +14,6 @@ import {
   Receipt,
   CreditCard,
   LayoutDashboard,
-  Trash2,
   Download,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -34,7 +33,7 @@ export default function ModulodeMulta() {
       diasAtraso: "15 dias",
       estado: "Pendente",
     },
-     {
+    {
       nome: "Isabela Fortunato",
       codigo: "IF-2026-KB",
       motivo: "Propina - Dezembro",
@@ -68,7 +67,7 @@ export default function ModulodeMulta() {
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      <Icon size={20} className="text-white" />
+      <Icon size={22} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
@@ -80,18 +79,23 @@ export default function ModulodeMulta() {
     setMenu(false);
   }
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
 
       {menu && (
         <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
-              <img src={Logo5} alt="Logo" className="w-16 h-16 " />
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
             <button>
-              <Menu size={28} className="text-white" onClick={CloseMenu} />
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
 
@@ -173,7 +177,7 @@ export default function ModulodeMulta() {
         </aside>
       )}
       {/* Main Content */}
-      <main className="flex-1 p-8 bg-gray-50 overflow-y-auto">
+      <main className="flex-1 p-8 bg-gray-50 custom_scroll">
         {/* Header */}
 
         <div className="flex justify-between items-center mb-10">
@@ -182,40 +186,40 @@ export default function ModulodeMulta() {
               <button>
                 <Menu
                   className="text-[#268cff] flex items-start"
-                  size={28}
+                  size={22}
                   onClick={OpenMenu}
                 />
               </button>
             )}
             <div className="block">
-              <h2 className="text-xl font-bold text-[#268cff]">
-              Gestão de Multas
-            </h2>
-            <p className="text-gray-400 text-sm ">
-              Controle de multas aplicadas aos estudantes, com detalhes sobre
-              motivos, valores e status de pagamento.
-            </p>
+              <h1 className="text-xl font-bold text-[#268cff]">
+                Gestão de Multas
+              </h1>
+              <p className="text-gray-400 text-sm ">
+                Controle de multas aplicadas aos estudantes, com detalhes sobre
+                motivos, valores e status de pagamento.
+              </p>
             </div>
           </div>
-              <ItemsDoCabeçalho/>
+          <ItemsDoCabeçalho />
         </div>
-          <div className="flex justify-between items-end mb-6  ">
-            <div className="flex gap-4 cursor-pointer ">
-              {["Ano", "Semestre", "Mês"].map((filtro) => (
-                <div key={filtro}>
-                  <label className="block text-sm text-gray-500 mb-1">
-                    {filtro}
-                  </label>
-                  <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#268cff] cursor-pointer">
-                    <option>Sem filtro</option>
-                  </select>
-                </div>
-              ))}
-            </div>
-            <button className="flex items-center gap-2 px-4 py-2 bg-[#268cff] text-white rounded-md text-base font-semibold hover:bg-blue-500 hover:text-white transition-all duration-500 cursor-pointer">
-              Gerar PDF <Download />
-            </button>
+        <div className="flex justify-between items-end mb-6  ">
+          <div className="flex gap-4 cursor-pointer ">
+            {["Ano", "Semestre", "Mês"].map((filtro) => (
+              <div key={filtro}>
+                <label className="block text-sm text-gray-500 mb-1">
+                  {filtro}
+                </label>
+                <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#268cff] cursor-pointer">
+                  <option>Sem filtro</option>
+                </select>
+              </div>
+            ))}
           </div>
+          <button className="flex items-center gap-2 px-4 py-2 bg-[#268cff] text-white rounded-md text-base font-semibold hover:bg-blue-500 hover:text-white transition-all duration-500 cursor-pointer">
+            Gerar PDF <Download />
+          </button>
+        </div>
 
         {/* Cards Financeiros de Multas */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 cursor-default">
@@ -225,7 +229,7 @@ export default function ModulodeMulta() {
                 Total de multas pendentes
               </p>
               <span className="p-2 bg-red-50 text-red-600 rounded-lg">
-                <DollarSign size={20} />
+                <DollarSign size={22} />
               </span>
             </div>
             <h3 className="text-3xl font-black text-gray-800 mt-2">
@@ -258,7 +262,7 @@ export default function ModulodeMulta() {
             </div>
           </div>
         </div>
-  {/* Dashboard de Visão Geral */}
+        {/* Dashboard de Visão Geral */}
         <div className="flex flex-col md:flex-row gap-6 w-full mb-12">
           {/* Card 1: Gráfico de Pizza/Pie */}
           <div className="flex-1 bg-white border  p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col ">
@@ -269,7 +273,7 @@ export default function ModulodeMulta() {
             </div>
 
             <div className="flex-grow flex items-center justify-center min-h-[300px]">
-             <ChartGestaoMulta />
+              <ChartGestaoMulta />
             </div>
           </div>
 
@@ -282,7 +286,7 @@ export default function ModulodeMulta() {
             </div>
 
             <div className="flex-grow flex items-center justify-center min-h-[300px]">
-             <ChartGestaoMulta2 />
+              <ChartGestaoMulta2 />
             </div>
           </div>
         </div>
@@ -301,10 +305,10 @@ export default function ModulodeMulta() {
               </select>
             </div>
             <div className="flex gap-3">
-            <button className="bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-500 shadow-sm transition-all duration-500 flex items-center gap-2">
-              <Plus size={20} /> Aplicar Multa 
-            </button>
-          </div>
+              <button className="bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-500 shadow-sm transition-all duration-500 flex items-center gap-2">
+                <Plus size={22} /> Aplicar Multa
+              </button>
+            </div>
           </div>
 
           <table className="w-full text-center border-collapse cursor-default">
@@ -326,16 +330,16 @@ export default function ModulodeMulta() {
                   className="hover:bg-[#268cff]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#268cff]"
                 >
                   <td className="px-4 py-4 text-sm  ">
-                   <div className="flex flex-col items-center justify-center">
-                     <div className="font-bold text-gray-700">
-                      {devedores.nome}
-                     </div>
-                    <div className="text-[10px] text-gray-500">
-                      Código: {devedores.codigo}
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="font-bold text-gray-700">
+                        {devedores.nome}
+                      </div>
+                      <div className="text-[10px] text-gray-500">
+                        Código: {devedores.codigo}
+                      </div>
                     </div>
-                   </div>
                   </td>
-                  
+
                   <td className="px-4 py-4 text-sm  text-gray-500">
                     {devedores.motivo}
                   </td>
@@ -362,7 +366,7 @@ export default function ModulodeMulta() {
                     </span>
                   </td>
                   <td className="px-4 py-4">
-                     <div className="flex gap-3 justify-center mx-auto cursor-pointer">
+                    <div className="flex gap-3 justify-center mx-auto cursor-pointer">
                       <div className="group relative w-max  ">
                         <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
                           <EyeIcon size={18} />
@@ -373,7 +377,7 @@ export default function ModulodeMulta() {
                       </div>
                       <div className=" group relative w-max ">
                         <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
-                          <Trash2 size={18} />
+                          <Trash1 size={18} />
                         </div>
                         <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
                           Deletar

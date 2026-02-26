@@ -21,15 +21,15 @@ export default function DashboardAdmin() {
 
     return (
       <div className="bg-white p-8 rounded-xl border mt-6 ">
-        <h2 className="text-lg font-semibold text-gray-800 mb-8">
+        <h1 className="text-lg font-semibold text-gray-800 mb-8">
           Gráfico dos meses com mais cadastros
-        </h2>
+        </h1>
         <div className="flex items-end h-64 border-l border-b border-gray-300 relative">
           {/* Linhas de grade e valores Y simulados */}
           {[0, 20, 40, 60, 80, 100].map((y) => (
             <div
               key={y}
-              className="absolute left-0 w-full text-xs text-gray-500 "
+              className="absolute left-0 w-full text-base text-gray-500 "
               style={{ bottom: `${y}%`, transform: "translateY(50%)" }}
             >
               {y}%
@@ -59,7 +59,7 @@ export default function DashboardAdmin() {
           {months.map((month, index) => (
             <div
               key={index}
-              className="text-xs text-gray-600 font-medium text-center"
+              className="text-base text-gray-600 font-medium text-center"
               style={{ width: `${100 / months.length}%` }}
             >
               {month}
@@ -77,15 +77,19 @@ export default function DashboardAdmin() {
       { label: "Total de instituições", value: 75, color: "bg-[#268cff]" },
       { label: "Total de estudantes", value: 50, color: "bg-[#268cff]" },
       { label: "Total de encarregados", value: 30, color: "bg-[#268cff]" },
-      { label: "Total de Administradores", value: 90, color: "bg-[#268cff]" },
+      {
+        label: "Total de Gestão de Usuarios",
+        value: 90,
+        color: "bg-[#268cff]",
+      },
       { label: "Total de Orçamento", value: 60, color: "bg-[#268cff]" },
     ];
 
     return (
       <div className="bg-white p-6 rounded-xl border mt-6 ">
-        <h2 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 p-2">
+        <h1 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 p-2">
           Análise Gráfico
-        </h2>
+        </h1>
         <div className="space-y-4">
           {data.map((item, index) => (
             <div key={index} className="flex items-center">
@@ -121,7 +125,7 @@ export default function DashboardAdmin() {
   const mainMetrics: Metric[] = [
     {
       title: "Total de instituições",
-      value: "12",
+      value: "6",
       unit: "No último mês",
       trend: 50,
       trendText: "+50",
@@ -144,7 +148,7 @@ export default function DashboardAdmin() {
       isKz: false,
     },
     {
-      title: "Total de Administradores",
+      title: "Total de Gestão de Usuarios",
       value: "2",
       unit: "No último mês",
       trend: 0,
@@ -172,7 +176,7 @@ export default function DashboardAdmin() {
           {metric.value}
         </div>
         <div className="flex items-center justify-between mt-3 pt-2 border-t border-gray-100">
-          <div className="text-xs text-gray-500">{metric.unit}</div>
+          <div className="text-base text-gray-500">{metric.unit}</div>
           <div
             className={`flex items-center text-sm font-semibold ${
               isPositive ? "text-green-600" : "text-red-600"

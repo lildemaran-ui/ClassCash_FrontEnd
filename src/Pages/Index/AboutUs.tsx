@@ -13,7 +13,9 @@ const InfoCard = ({
   list?: string[];
 }) => (
   <div className="group border  border-[#268cff] hover:border-none hover:bg-gradient-to-b from-[#054781e4] to-[#107bd8] p-6 rounded-2xl  text-center flex flex-col items-center h-full hover:shadow-xl hover:text-white transition-all duration-500 ">
-    <h3 className="text-2xl font-semibold group-hover:text-white text-[#268cff] mb-6">{title}</h3>
+    <h3 className="text-2xl font-semibold group-hover:text-white text-[#268cff] mb-6">
+      {title}
+    </h3>
     {content && (
       <p className="text-base leading-relaxed opacity-90">{content}</p>
     )}
@@ -55,15 +57,16 @@ export default function SobreNos() {
             {/* Elemento Decorativo Azul atrás da imagem */}
             <div className="absolute -top-4 -left-4 w-full h-full rounded-lg"></div>
             <img
+              loading="lazy"
               src={img1}
               alt="Equipe ClassCash"
               className="rounded-lg  w-full h-80 object-cover "
             />
           </div>
           <div className="flex-1 space-y-4">
-            <h2 className="text-[#268cff] font-bold text-2xl underline decoration-2 underline-offset-8 mb-6">
+            <h1 className="text-[#268cff] font-bold text-2xl underline decoration-2 underline-offset-8 mb-6">
               ClassCash
-            </h2>
+            </h1>
             <p className="text-blue-900 font-bold text-2xl">
               Somos uma plataforma do futuro!
             </p>

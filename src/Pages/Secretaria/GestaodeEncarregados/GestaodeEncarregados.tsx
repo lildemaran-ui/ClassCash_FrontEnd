@@ -92,7 +92,7 @@ export default function GestaodeEncarregados() {
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      <Icon size={20} className="text-white" />
+      <Icon size={22} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
@@ -105,18 +105,23 @@ export default function GestaodeEncarregados() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
 
       {menu && (
         <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
-              <img src={Logo5} alt="Logo" className="w-16 h-16 " />
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
             <button>
-              <Menu size={28} className="text-white" onClick={CloseMenu} />
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
 
@@ -199,42 +204,44 @@ export default function GestaodeEncarregados() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto bg-gray-50">
+      <main className="flex-1 p-8 custom_scroll bg-gray-50">
         {/* Header com Título e Search */}
-         <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
+        <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
           {!menu && (
             <button>
               <Menu
                 className="text-[#268cff] flex items-start"
-                size={28}
+                size={22}
                 onClick={OpenMenu}
               ></Menu>
             </button>
           )}
-          <h2 className="text-xl font-bold text-[#268cff]">Gestão de Encarregados </h2>
-        
-         {/* Header */}
-         <header className="flex justify-between ">
-          <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
-          <div className="flex items-center space-x-4">
-            {/* Campo de Pesquisa */}
-             <div className="relative hidden md:block">
-              <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Pesquisar..."
-                className="pl-10 pr-4 py-2 w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#268cff]/20 outline-none transition-all"
-              />
-            </div>
+          <h1 className="text-xl font-bold text-[#268cff]">
+            Gestão de Encarregados{" "}
+          </h1>
 
-            {/* Ícones de Notificação e Perfil */}
-            <div className="relative cursor-pointer">
-              <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+          {/* Header */}
+          <header className="flex justify-between ">
+            <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
+            <div className="flex items-center space-x-4">
+              {/* Campo de Pesquisa */}
+              <div className="relative hidden md:block">
+                <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Pesquisar..."
+                  className="pl-10 pr-4 py-2 w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#268cff]/20 outline-none transition-all"
+                />
+              </div>
+
+              {/* Ícones de Notificação e Perfil */}
+              <div className="relative cursor-pointer">
+                <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
                 <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
+              </div>
+              <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
             </div>
-            <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
-          </div>
-         </header>
+          </header>
         </div>
 
         {/* Ações e Tabela */}
@@ -250,7 +257,7 @@ export default function GestaodeEncarregados() {
             </div>
 
             <button className="flex items-center gap-2 bg-[#268cff] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95 cursor-pointer">
-              <Plus size={20} />
+              <Plus size={22} />
               <span>Cadastrar </span>
             </button>
           </div>
@@ -258,7 +265,7 @@ export default function GestaodeEncarregados() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse cursor-default">
               <thead>
-                <tr className="bg-[#268cff]/70 text-white text-[14px] font-black tracking-widest border-b border-gray-200 text-center">
+                <tr className="bg-[#268cff]/70 text-white text-base font-black tracking-widest border-b border-gray-200 text-center">
                   <th
                     className="px-6 py-4 cursor-pointer hover:text-[#268cff]"
                     onClick={() => handleSort("nome")}
@@ -299,24 +306,22 @@ export default function GestaodeEncarregados() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-4 py-1.5 rounded-full text-[10px] font-bold border inline-block min-w-[90px] ${colorsSit(aluno.Estado)}`}
+                        className={`px-4 py-1.5 rounded-full text-base font-bold border inline-block min-w-[90px] ${colorsSit(aluno.Estado)}`}
                       >
                         {aluno.Estado}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       <div className="group w-max relative flex items-center mx-auto">
-                       <div className="flex ">
-                      <div
-                        
-                        className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm cursor-pointer"
-                      >
-                        <EyeIcon size={18} />
-                        
+                        <div className="flex ">
+                          <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm cursor-pointer">
+                            <EyeIcon size={18} />
+                          </div>
+                          <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-base px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                            Visualizar
+                          </span>
+                        </div>
                       </div>
-                      <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">Visualizar</span>
-                    </div>
-                     </div>
                     </td>
                   </tr>
                 ))}

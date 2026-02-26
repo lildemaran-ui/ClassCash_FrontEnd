@@ -1,16 +1,16 @@
-import logo from "../../assets/Logo5.5.png"
+import logo from "../../assets/Logo5.5.png";
 export default function Footer() {
   return (
     <div>
       <footer className="bg-[#268CFF] text-white w-full">
         <div className="max-w-7xl mx-auto py-12 px-10 grid grid-cols-1 sm:grid-cols-4 gap-20">
-        <div>
-          <div className="flex border-b  items-center " >
-            <img src={logo} alt="" className="h-28" />
-            <p className="text-xl font-medium ">ClassCash</p>
+          <div>
+            <div className="flex border-b  items-center ">
+              <img loading="lazy" src={logo} alt="" className="h-28" />
+              <p className="text-xl font-medium ">ClassCash</p>
+            </div>
           </div>
-        </div>
-           <div>
+          <div>
             <h3 className="text-base sm:text-lg font-semibold text-white mb-4 cursor-default">
               Navegação
             </h3>
@@ -44,15 +44,14 @@ export default function Footer() {
                 Multicaixa Express
               </li>
               <li className="hover:text-blue-200 text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
-               Unitel Money
+                Unitel Money
               </li>
               <li className=" text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
-               PayPay
+                PayPay
               </li>
-              
             </ol>
           </div>
-           <div>
+          <div>
             <h3 className="text-base sm:text-lg font-semibold text-white mb-4 cursor-default">
               Contacto
             </h3>
@@ -61,16 +60,17 @@ export default function Footer() {
                 Tel.: (da instituição)
               </li>
               <li className=" text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
-               Email: (da instituição)
+                Email: (da instituição)
               </li>
               <li className=" text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
-               Localização: (da instituição)
+                Localização: (da instituição)
               </li>
-              
             </ol>
           </div>
         </div>
-        <p className="text-sm sm:text-base items-center flex justify-center cursor-default pb-10">© 2025 ClassCash. Todos os direitos reservados.</p>
+        <p className="text-sm sm:text-base items-center flex justify-center cursor-default pb-10">
+          © 2025 ClassCash. Todos os direitos reservados.
+        </p>
       </footer>
     </div>
   );

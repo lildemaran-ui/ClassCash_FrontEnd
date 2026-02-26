@@ -30,7 +30,7 @@ export default function Relatorio() {
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      <Icon size={20} className="text-white" />
+      <Icon size={22} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
@@ -42,18 +42,23 @@ export default function Relatorio() {
     setMenu(false);
   }
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
 
       {menu && (
         <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
-              <img src={Logo5} alt="Logo" className="w-16 h-16 " />
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
             <button>
-              <Menu size={28} className="text-white" onClick={CloseMenu} />
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
 
@@ -135,13 +140,13 @@ export default function Relatorio() {
         </aside>
       )}
       {/* Main Content */}
-      <main className="flex-1 p-8 bg-gray-50 overflow-y-auto">
+      <main className="flex-1 p-8 bg-gray-50 custom_scroll">
         {/* Header com Seleção de Período */}
         <div className="flex justify-between items-end mb-10">
           <div>
-            <h2 className="text-xl font-bold text-[#268cff]">
+            <h1 className="text-xl font-bold text-[#268cff]">
               Centro de Relatórios
-            </h2>
+            </h1>
             <p className="text-gray-400 text-sm">
               Análise detalhada de performance e finanças.
             </p>
@@ -169,7 +174,7 @@ export default function Relatorio() {
           <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-md transition-all group cursor-pointer">
             <div className="flex justify-between items-center mb-4">
               <div className="p-3 bg-blue-50 text-[#268cff] rounded-xl group-hover:bg-[#268cff] group-hover:text-white transition-all">
-                <FileText size={24} />
+                <FileText size={22} />
               </div>
               <Download
                 size={18}
@@ -185,7 +190,7 @@ export default function Relatorio() {
           <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-md transition-all group cursor-pointer">
             <div className="flex justify-between items-center mb-4">
               <div className="p-3 bg-orange-50 text-orange-500 rounded-xl group-hover:bg-orange-500 group-hover:text-white transition-all">
-                <Users size={24} />
+                <Users size={22} />
               </div>
               <Download
                 size={18}
@@ -201,7 +206,7 @@ export default function Relatorio() {
           <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-md transition-all group cursor-pointer">
             <div className="flex justify-between items-center mb-4">
               <div className="p-3 bg-red-50 text-red-500 rounded-xl group-hover:bg-red-500 group-hover:text-white transition-all">
-                <AlertTriangle size={24} />
+                <AlertTriangle size={22} />
               </div>
               <Download
                 size={18}

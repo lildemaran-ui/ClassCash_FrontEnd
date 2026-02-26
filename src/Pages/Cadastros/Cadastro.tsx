@@ -42,13 +42,13 @@ export default function Cadastro() {
     event.preventDefault();
 
     const userExistente = JSON.parse(
-      localStorage.getItem("UserExistente") || "[]"
+      localStorage.getItem("UserExistente") || "[]",
     );
 
     // Validação de E-mail Único
     const emailJaEmUso = userExistente.some(
       (u: { email: string }) =>
-        u.email.toLowerCase() === email.trim().toLowerCase()
+        u.email.toLowerCase() === email.trim().toLowerCase(),
     );
 
     if (emailJaEmUso) {
@@ -58,7 +58,7 @@ export default function Cadastro() {
 
     // Validação de Processo Único na mesma Instituição
     const processoJaEmUso = userExistente.some(
-      (u: any) => u.processo === proc.trim() && u.instituicao === instituicao
+      (u: any) => u.processo === proc.trim() && u.instituicao === instituicao,
     );
     if (processoJaEmUso && perfil === "Estudante") {
       alert("Este número de processo já existe nesta instituição.");
@@ -107,7 +107,12 @@ export default function Cadastro() {
       >
         <Link to="/PaginaInicial">
           <div className="flex items-center ">
-            <img src={Logo55} className="h-24 bg-center bg-cover" alt="Logo" />
+            <img
+              loading="lazy"
+              src={Logo55}
+              className="h-24 bg-center bg-cover"
+              alt="Logo"
+            />
             <p className="font-bold text-white text-xl">ClassCash</p>
           </div>
         </Link>
@@ -130,7 +135,6 @@ export default function Cadastro() {
               <div className="flex flex-col">
                 <label className="text-sm mb-1 font-medium">
                   Perfil de Usuário
-                 
                 </label>
                 <select
                   value={perfil}
@@ -263,9 +267,9 @@ export default function Cadastro() {
                         onClick={() => setMostrar(!mostrarSenha)}
                       >
                         {mostrarSenha ? (
-                          <EyeIcon size={20} className="text-[#268cffb2]" />
+                          <EyeIcon size={22} className="text-[#268cffb2]" />
                         ) : (
-                          <EyeOff size={20} className="text-[#268cffb2]" />
+                          <EyeOff size={22} className="text-[#268cffb2]" />
                         )}
                       </div>
                     </div>
@@ -281,7 +285,7 @@ export default function Cadastro() {
                           value={nomeEstudante}
                           onChange={(e) =>
                             setNomeEstudante(
-                              e.target.value.replace(/[0-9]/g, "")
+                              e.target.value.replace(/[0-9]/g, ""),
                             )
                           }
                           className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
@@ -306,6 +310,7 @@ export default function Cadastro() {
                     <div className="w-16 h-16 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden bg-gray-50">
                       {image ? (
                         <img
+                          loading="lazy"
                           src={image}
                           className="w-full h-full object-cover"
                         />

@@ -13,7 +13,6 @@ import {
   ArrowUp,
   Plus,
   Pen,
-  Trash2,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -77,7 +76,7 @@ export default function GestaodeServiços() {
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      <Icon size={20} className="text-white" />
+      <Icon size={22} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
@@ -90,18 +89,23 @@ export default function GestaodeServiços() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto ">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll ">
       {/* Sidebar */}
 
       {menu && (
         <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
-              <img src={Logo5} alt="Logo" className="w-16 h-16 " />
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
             <button>
-              <Menu size={28} className="text-white" onClick={CloseMenu} />
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
 
@@ -184,17 +188,17 @@ export default function GestaodeServiços() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-8 custom_scroll">
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-4">
             {!menu && (
               <button onClick={OpenMenu} className="text-[#268cff]">
-                <Menu size={28} />
+                <Menu size={22} />
               </button>
             )}
-            <h2 className="text-xl font-bold text-[#268cff]">
+            <h1 className="text-xl font-bold text-[#268cff]">
               Gestão de Serviços
-            </h2>
+            </h1>
           </div>
           <ItemsDoCabeçalho />
         </div>
@@ -211,19 +215,18 @@ export default function GestaodeServiços() {
               </select>
             </div>
             <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
-              <Plus size={20} /> Adicionar 
+              <Plus size={22} /> Adicionar
             </button>
           </div>
-
         </section>
 
         {/* Tabela de Dados com Container para Margem */}
         <div className="mb-20">
           {" "}
           {/* Aqui a margem inferior vai funcionar! */}
-          <h2 className="mb-4 text-gray-700 text-lg font-bold">
+          <h1 className="mb-4 text-gray-700 text-lg font-bold">
             Tabela de Serviços
-          </h2>
+          </h1>
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <table className="w-full text-center border-collapse cursor-default">
               <thead>
@@ -267,23 +270,23 @@ export default function GestaodeServiços() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex gap-3 justify-center mx-auto cursor-pointer">
-                      <div className="group relative w-max  ">
-                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
-                          <Pen size={18} />
+                        <div className="group relative w-max  ">
+                          <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                            <Pen size={18} />
+                          </div>
+                          <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                            Editar
+                          </span>
                         </div>
-                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
-                          Editar
-                        </span>
-                      </div>
-                      <div className=" group relative w-max ">
-                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
-                          <Trash2 size={18} />
+                        <div className=" group relative w-max ">
+                          <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                            <Trash1 size={18} />
+                          </div>
+                          <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                            Deletar
+                          </span>
                         </div>
-                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
-                          Deletar
-                        </span>
                       </div>
-                    </div>
                     </td>
                   </tr>
                 ))}

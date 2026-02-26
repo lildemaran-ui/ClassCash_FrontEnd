@@ -4,7 +4,7 @@ export default function FrasesRotativas() {
   const frases = [
     " académicos sem complicações.",
     "feitos num só clique!",
-    "O futuro dos pagamentos escolares está aqui.",
+    "seu futuro escolar está aqui.",
     "seguros. Processos claros.",
     
   ];
@@ -27,7 +27,7 @@ export default function FrasesRotativas() {
 
   return (
     <span
-      className={`text-[#268CFF] text-2xl  sm:text-4xl font-extrabold cursor-default transition-opacity duration-700 ${
+      className={`text-[#268CFF] text-2xl  sm:text-4xl font-extrabold cursor-default animate-spin transition-opacity duration-700 ${
         fade ? "opacity-100" : "opacity-0"
       }`}
     >

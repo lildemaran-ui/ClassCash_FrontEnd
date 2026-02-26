@@ -10,7 +10,6 @@ import {
   Receipt,
   CreditCard,
   LayoutDashboard,
-  Trash2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo5 from "../../../assets/Logo5.5.png";
@@ -30,7 +29,7 @@ export default function GestaodeReclamacoes() {
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      <Icon size={20} className="text-white" />
+      <Icon size={22} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
@@ -42,18 +41,23 @@ export default function GestaodeReclamacoes() {
     setMenu(false);
   }
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
 
       {menu && (
         <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
-              <img src={Logo5} alt="Logo" className="w-16 h-16 " />
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
             <button>
-              <Menu size={28} className="text-white" onClick={CloseMenu} />
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
 
@@ -135,7 +139,7 @@ export default function GestaodeReclamacoes() {
         </aside>
       )}
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto bg-gray-50">
+      <main className="flex-1 p-8 custom_scroll bg-gray-50">
         {/* Header e Ação rápida */}
         <div className="flex justify-between items-center mb-10">
           <div>
@@ -143,14 +147,14 @@ export default function GestaodeReclamacoes() {
               <button>
                 <Menu
                   className="text-[#268cff] flex items-start"
-                  size={28}
+                  size={22}
                   onClick={OpenMenu}
                 ></Menu>
               </button>
             )}
-            <h2 className="text-xl font-bold text-[#268cff]">
+            <h1 className="text-xl font-bold text-[#268cff]">
               Gestão de Reclamações
-            </h2>
+            </h1>
             <p className="text-gray-400 text-sm ">
               Escute, resolva e melhore a experiência escolar.
             </p>
@@ -160,23 +164,18 @@ export default function GestaodeReclamacoes() {
             <button className="flex items-center gap-2 bg-[#268cff]  text-white hover:bg-blue-500   px-4 py-2 rounded-xl font-bold transition-all duration-500">
               <Download size={18} /> Exportar Relatório
             </button>
-            
           </div>
         </div>
 
         {/* Cards de Resumo de Feedback */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
           <div className="bg-white p-6 rounded-2xl border-l-4 border-orange-400 shadow-sm">
-            <p className="text-sm font-medium text-gray-400  ">
-              Em Tratamento
-            </p>
+            <p className="text-sm font-medium text-gray-400  ">Em Tratamento</p>
             <h3 className="text-3xl font-bold text-gray-800">01</h3>
             <span className="text-orange-400 text-xs font-bold">Pendente</span>
           </div>
           <div className="bg-white p-6 rounded-2xl border-l-4 border-green-500 shadow-sm">
-            <p className="text-sm font-medium text-gray-400  ">
-              Respondidas
-            </p>
+            <p className="text-sm font-medium text-gray-400  ">Respondidas</p>
             <h3 className="text-3xl font-bold text-gray-800"> 45</h3>
             <span className="text-green-500 text-xs font-bold">+12 hoje</span>
           </div>
@@ -252,24 +251,24 @@ export default function GestaodeReclamacoes() {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                    <div className="flex gap-3 justify-center mx-auto cursor-pointer">
-                      <div className="group relative w-max  ">
-                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
-                          <MessageSquare size={18} />
-                        </div>
-                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
-                          Editar
-                        </span>
+                  <div className="flex gap-3 justify-center mx-auto cursor-pointer">
+                    <div className="group relative w-max  ">
+                      <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                        <MessageSquare size={18} />
                       </div>
-                      <div className=" group relative w-max ">
-                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
-                          <Trash2 size={18} />
-                        </div>
-                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
-                          Deletar
-                        </span>
-                      </div>
+                      <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                        Editar
+                      </span>
                     </div>
+                    <div className=" group relative w-max ">
+                      <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                        <Trash1 size={18} />
+                      </div>
+                      <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
+                        Deletar
+                      </span>
+                    </div>
+                  </div>
                 </td>
               </tr>
             </tbody>

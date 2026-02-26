@@ -112,7 +112,7 @@ export default function GestaoPagamentos() {
         active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      <Icon size={20} className="text-white" />
+      <Icon size={22} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
@@ -148,24 +148,28 @@ export default function GestaoPagamentos() {
             <TrendingDown />
           </span>
         )}
-       
       </div>
       <p className="text-[14px] text-gray-400 mt-1">{subtext}</p>
     </div>
   );
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
 
       {menu && (
         <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
-              <img src={Logo5} alt="Logo" className="w-16 h-16 " />
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
             <button>
-              <Menu size={28} className="text-white" onClick={CloseMenu} />
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
 
@@ -247,18 +251,18 @@ export default function GestaoPagamentos() {
         </aside>
       )}
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto">
+      <main className="flex-1 p-8 custom_scroll">
         {/* Header Superior */}
         <header className="flex justify-between items-center mb-10">
           <div className="flex items-center gap-4">
             {!menu && (
               <button onClick={OpenMenu} className="text-[#268cff]">
-                <Menu size={28} />
+                <Menu size={22} />
               </button>
             )}
-            <h2 className="text-xl font-bold text-[#268cff]">
+            <h1 className="text-xl font-bold text-[#268cff]">
               Gestão de Pagamentos
-            </h2>
+            </h1>
           </div>
           <ItemsDoCabeçalho />
         </header>
@@ -279,7 +283,7 @@ export default function GestaoPagamentos() {
               ))}
             </div>
             <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
-              <Plus size={20} /> Adicionar
+              <Plus size={22} /> Adicionar
             </button>
           </div>
 
@@ -316,7 +320,7 @@ export default function GestaoPagamentos() {
         {/* Tabela de Dados */}
         <div className="mb-20 bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="p-5 border-b border-gray-50 bg-gray-50/50">
-            <h2 className="text-gray-700 font-bold">Histórico de Transações</h2>
+            <h1 className="text-gray-700 font-bold">Histórico de Transações</h1>
           </div>
 
           <table className="w-full text-center border-collapse cursor-default">

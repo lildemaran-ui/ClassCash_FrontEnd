@@ -21,9 +21,9 @@ const AccordionItem = ({
       >
         <span className="font-bold text-blue-900 text-sm">{question}</span>
         {isOpen ? (
-          <ChevronUp className="text-brandBlue" size={20} />
+          <ChevronUp className="text-brandBlue" size={22} />
         ) : (
-          <ChevronDown className="text-gray-400" size={20} />
+          <ChevronDown className="text-gray-400" size={22} />
         )}
       </button>
       {isOpen && (
@@ -42,13 +42,10 @@ export default function FAQScreen() {
       {/* Navbar Superior Padrão */}
       <MenuEstatico></MenuEstatico>
 
-     
-     
-
       <main className="flex-1 max-w-4xl mx-auto w-full mt-32 py-16 px-6">
         {/* Seção 1: Geral */}
         <div className="text-center mb-12">
-          <h2 className="font-bold text-gray-800 text-lg">Tem dúvidas?</h2>
+          <h1 className="font-bold text-gray-800 text-lg">Tem dúvidas?</h1>
           <p className="text-gray-500 text-sm">
             Consulte as questões mais frequentes
           </p>
@@ -77,9 +74,9 @@ export default function FAQScreen() {
 
         {/* Seção 2: Pagamentos Digitais */}
         <div className="text-center mb-12">
-          <h2 className="font-bold text-gray-800 text-lg leading-tight">
+          <h1 className="font-bold text-gray-800 text-lg leading-tight">
             Tem dúvidas sobre os serviços de pagamentos digitais?
-          </h2>
+          </h1>
           <p className="text-gray-500 text-sm">
             Consulte as questões mais frequentes
           </p>

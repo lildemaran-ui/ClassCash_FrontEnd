@@ -52,9 +52,9 @@ const ReclamacaoCard = ({
     </div>
     <div className="absolute right-6 bottom-6 text-gray-400">
       {isPublica ? (
-        <Eye size={24} className="text-[#268cffb2]" />
+        <Eye size={22} className="text-[#268cffb2]" />
       ) : (
-        <EyeOff size={24} className="text-[#268cffb2]" />
+        <EyeOff size={22} className="text-[#268cffb2]" />
       )}
     </div>
   </div>
@@ -140,18 +140,23 @@ export default function Reclamacoes() {
           <div className="mb-16 pt-4 flex relative justify-between items-center px-4">
             <Link to="/DashboardEstud">
               <div className="flex items-center font-semibold">
-                <img src={logo5} alt="Logo" className="w-16 h-16" />
+                <img
+                  loading="lazy"
+                  src={logo5}
+                  alt="Logo"
+                  className="w-16 h-16"
+                />
                 <span>ClassCash</span>
               </div>
             </Link>
             <button onClick={CloseMenu}>
-              <Menu size={28} />
+              <Menu size={22} />
             </button>
           </div>
           <nav className="flex-1 px-4 space-y-2  ">
             <Link to="/DashboardEstud">
               <NavItem
-                icon={<LayoutDashboard size={20} />}
+                icon={<LayoutDashboard size={22} />}
                 label="Painel"
                 active={false}
               />
@@ -159,27 +164,27 @@ export default function Reclamacoes() {
 
             <Link to="/Pagamentos" className=" block w-full">
               <NavItem
-                icon={<Wallet size={20} />}
+                icon={<Wallet size={22} />}
                 label="Pagamentos"
                 active={false}
               />
             </Link>
             <Link to="/reclamacoes">
               <NavItem
-                icon={<MessageSquare size={20} />}
+                icon={<MessageSquare size={22} />}
                 label="Reclamações"
                 active={true}
               />
             </Link>
             <Link to="/Config">
               <NavItem
-                icon={<Settings size={20} />}
+                icon={<Settings size={22} />}
                 label="Configurações"
                 active={false}
               />
             </Link>
             <NavItem
-              icon={<LifeBuoy size={20} />}
+              icon={<LifeBuoy size={22} />}
               label="Suporte"
               active={false}
             />
@@ -188,17 +193,17 @@ export default function Reclamacoes() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-8 overflow-y-auto transition-all duration-500">
+      <main className="flex-1 p-8 custom_scroll transition-all duration-500">
         {!menu && (
           <button onClick={OpenMenu}>
-            <Menu size={28} className="text-[#268cff]" />
+            <Menu size={22} className="text-[#268cff]" />
           </button>
         )}
         {/* Header Superior */}
         <header className="flex justify-end items-center mb-8">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <Bell size={24} className="text-[#268cff]" />
+              <Bell size={22} className="text-[#268cff]" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#f0f5fa]"></div>
             </div>
             <Avatar name={user.nome} src={user.foto} size="md" />

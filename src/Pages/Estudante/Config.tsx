@@ -77,46 +77,50 @@ export default function ConfigurationScreen() {
           <div className="mb-16 pt-4 flex relative justify-between items-center px-4">
             <Link to="/DashboardEstud">
               <div className="flex items-center font-semibold">
-                <img src={logo5} alt="Logo" className="w-16 h-16" />
+                <img
+                  loading="lazy"
+                  src={logo5}
+                  alt="Logo"
+                  className="w-16 h-16"
+                />
                 <span>ClassCash</span>
               </div>
             </Link>
             <button onClick={CloseMenu}>
-              <Menu size={28} />
+              <Menu size={22} />
             </button>
           </div>
           <nav className="flex-1 px-4 space-y-2  ">
             <Link to="/DashboardEstud">
-            <NavItem
-              icon={<LayoutDashboard size={20} />}
-              label="Painel"
-              active={false}
-            />
-
+              <NavItem
+                icon={<LayoutDashboard size={22} />}
+                label="Painel"
+                active={false}
+              />
             </Link>
             <Link to="/Pagamentos" className=" block w-full">
               <NavItem
-                icon={<Wallet size={20} />}
+                icon={<Wallet size={22} />}
                 label="Pagamentos"
                 active={false}
               />
             </Link>
             <Link to="/reclamacoes">
               <NavItem
-                icon={<MessageSquare size={20} />}
+                icon={<MessageSquare size={22} />}
                 label="Reclamações"
                 active={false}
               />
             </Link>
             <Link to="/Config">
               <NavItem
-                icon={<Settings size={20} />}
+                icon={<Settings size={22} />}
                 label="Configurações"
                 active={true}
               />
             </Link>
             <NavItem
-              icon={<LifeBuoy size={20} />}
+              icon={<LifeBuoy size={22} />}
               label="Suporte"
               active={false}
             />
@@ -125,22 +129,22 @@ export default function ConfigurationScreen() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-8  overflow-y-auto text-gray-700">
-          {!menu && (
+      <main className="flex-1 p-8  custom_scroll text-gray-700">
+        {!menu && (
           <button onClick={OpenMenu}>
-            <Menu size={28} className="text-[#268cff]" />
+            <Menu size={22} className="text-[#268cff]" />
           </button>
         )}
         <header className="flex justify-end items-center mb-8">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <Bell size={24} className="text-[#268cff]" />
+              <Bell size={22} className="text-[#268cff]" />
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#f0f5fa]"></div>
             </div>
             <Avatar name={user.nome} src={user.foto} size="md" />
           </div>
         </header>
-      
+
         <div className="max-w-3xl mx-auto space-y-10 mt-20">
           {/* Grupo: Perfil e Preferências */}
           <section>
@@ -153,9 +157,9 @@ export default function ConfigurationScreen() {
 
           {/* Grupo: Configurações de Pagamento */}
           <section>
-            <h2 className=" font-bold text-xl mb-4">
+            <h1 className=" font-bold text-xl mb-4">
               Configurações de Pagamento
-            </h2>
+            </h1>
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
               <SettingItem label="Métodos de pagamentos salvos" />
               <SettingItem label="Definir método padrão" />
@@ -165,7 +169,7 @@ export default function ConfigurationScreen() {
 
           {/* Grupo: Segurança */}
           <section>
-            <h2 className=" font-bold text-xl mb-4">Segurança</h2>
+            <h1 className=" font-bold text-xl mb-4">Segurança</h1>
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
               <SettingItem label="Alterar Senha" />
               <SettingItem label="Ver dispositivos conectados" />

@@ -16,50 +16,47 @@ import {
   ArrowUp,
   PencilIcon,
   CircleUser,
+  InfoIcon,
+  ScrollText,
+  KeyIcon,
+  School,
+  Trash2,
 } from "lucide-react";
-import Logo5 from "../../../assets/Logo5.5.png";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo5 from "../../assets/Logo5.5.png";
+import { useState } from "react";
 
-import ChartGestaoEstud2 from "@/Componentes/Charts/ChartGestaoEstud2";
-import ChartGestaoEstud from "@/Componentes/Charts/ChartGestaoEstud";
-
-export default function GestaoAlunos() {
+export default function GestaoEstudantes() {
   const [dadosAlunos, setDadosAlunos] = useState([
     {
       codigo: "DVS-2025-KS",
       nome: "Dário Valente de Sousa",
       classe: "10ª Classe",
       status: "Ativo",
-      situacao: "Estável",
     },
     {
       codigo: "EPJ-2025-AL",
       nome: "Eduarda Paula João",
       classe: "10ª Classe",
       status: "Ativo",
-      situacao: "Razoável",
     },
     {
       codigo: "LSN-2025-EF",
       nome: "Luana da Silva Ngola",
       classe: "7ª Classe",
       status: "Inativo",
-      situacao: "Sem assunto",
     },
     {
       codigo: "FMC-2025-KS",
       nome: "Felisberto Manuel Costa",
       classe: "8ª Classe",
       status: "Inativo",
-      situacao: "Sem assunto",
     },
     {
       codigo: "DCG-2025-EF",
       nome: "Diana Cristina Geraldo",
       classe: "10ª Classe",
       status: "Ativo",
-      situacao: "Em crise",
     },
   ]);
   const [ordemCrescente, setOrdemCrescente] = useState(true);
@@ -79,16 +76,12 @@ export default function GestaoAlunos() {
     setDadosAlunos(dadosOrdenados);
     setOrdemCrescente(!ordemCrescente);
   };
-  const colorsSit = (situacao: string) => {
-    switch (situacao) {
+  const colorsSit = (status: string) => {
+    switch (status) {
       case "Ativo":
         return "text-green-500";
-      case "Razoável":
-        return "text-orange-400";
-      case "Em crise":
+      case "Inativo":
         return "text-red-500";
-      case "Sem assunto":
-        return "text-gray-500";
       default:
         return "text-black";
     }
@@ -121,7 +114,7 @@ export default function GestaoAlunos() {
     </div>
   );
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll transition-all duration-500">
       {/* Sidebar */}
 
       {menu && (
@@ -140,9 +133,8 @@ export default function GestaoAlunos() {
               <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
-
-          <nav className="flex-1 flex flex-col gap-1 text-white">
-            <Link to="/Secretaria">
+          <nav className="flex-1 flex flex-col gap-1 transition-all duration-500 text-white max-h-screen custom_scroll">
+            <Link to="/Administradores">
               <SidebarItem
                 icon={LayoutDashboard}
                 label="Painel Geral"
@@ -150,98 +142,132 @@ export default function GestaoAlunos() {
               />
             </Link>
 
-            <Link to="/GestaoAlunos">
-              <SidebarItem
-                icon={Users}
-                label="Gestão de Estudantes"
-                active={true}
-              />
-            </Link>
+            <div
+              className="
+                       flex flex-col"
+            >
+              <Link to="">
+                <SidebarItem
+                  icon={Users}
+                  label="Gestão de Estudantes"
+                  active={true}
+                />
+              </Link>
 
-            <Link to="/GestaodeEncarregados">
-              <SidebarItem
-                icon={Users}
-                label="Gestão de Encarregados"
-                active={false}
-              />
-            </Link>
-            <Link to="/GestaoPropinas">
-              <SidebarItem
-                icon={CreditCard}
-                label="Gestão de Propinas"
-                active={false}
-              />
-            </Link>
-            <Link to="/GestaoPagamentos">
-              <SidebarItem
-                icon={Receipt}
-                label="Gestão de Pagamentos"
-                active={false}
-              />
-            </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={Users}
+                  label="Gestão de Encarregados"
+                  active={false}
+                />
+              </Link>
+              <Link to="/GestaoDeInstituicao">
+                <SidebarItem
+                  icon={School}
+                  label="Gestão de Instituições"
+                  active={false}
+                />
+              </Link>
+              <Link to="/GestaoDeUsuarios">
+                <SidebarItem
+                  icon={Users}
+                  label="Gestão de Usuarios"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={CreditCard}
+                  label="Gestão de Propinas"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={Receipt}
+                  label="Gestão de Pagamentos"
+                  active={false}
+                />
+              </Link>
 
-            <Link to="/GestaodeServiços">
-              <SidebarItem
-                icon={Settings}
-                label="Gestão de Serviços"
-                active={false}
-              />
-            </Link>
-            <Link to="/GestaodeReclamacoes">
-              <SidebarItem
-                icon={MessageSquare}
-                label="Gestão de Reclamações"
-                active={false}
-              />
-            </Link>
-            <Link to="/ModulodeMulta">
-              <SidebarItem
-                icon={AlertOctagon}
-                label="Gestão de Multas"
-                active={false}
-              />
-            </Link>
-            <Link to="/Relatorio">
-              <SidebarItem
-                icon={FileText}
-                label="Centro de Relatório"
-                active={false}
-              />
-            </Link>
-            <Link to="/Configuracao">
-              <SidebarItem
-                icon={Settings}
-                label="Configurações"
-                active={false}
-              />
-            </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={Settings}
+                  label="Gestão de Serviços"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={MessageSquare}
+                  label="Gestão de Reclamações"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={AlertOctagon}
+                  label="Gestão de Multas"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={FileText}
+                  label="Gestão de Relatórios"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={KeyIcon}
+                  label="Permissões e Acessos"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={ScrollText}
+                  label="Logs de Atividades"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={InfoIcon}
+                  label="Suporte e Ajuda"
+                  active={false}
+                />
+              </Link>
+              <Link to="">
+                <SidebarItem
+                  icon={Settings}
+                  label="Configurações"
+                  active={false}
+                />
+              </Link>
+            </div>
           </nav>
         </aside>
       )}
-
       {/* Main Content */}
-      <main className="flex-1 p-8 custom_scroll bg-gray-50">
-        {/* Header Superior */}
+      <div className=" flex-col flex-1">
         <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
-          {!menu && (
-            <button>
-              <Menu
-                className="text-[#268cff] flex items-start"
-                size={22}
+          <div className="flex items-center gap-6">
+            {!menu && (
+              <button
                 onClick={OpenMenu}
-              ></Menu>
-            </button>
-          )}
-          <h1 className="text-xl font-bold text-[#268cff]">
-            Gestão de Estudantes{" "}
-          </h1>
-
-          {/* Header */}
-          <header className="flex justify-between ">
+                className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
+              >
+                <Menu size={22} />
+              </button>
+            )}
+            <h1 className="text-xl font-bold  text-[#268cff]">Painel Geral</h1>
+          </div>
+          {/* Header (Topo) */}
+          <header className=" ">
             <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
             <div className="flex items-center space-x-4">
-              {/* Campo de Pesquisa */}
-
               {/* Ícones de Notificação e Perfil */}
               <div className="relative cursor-pointer">
                 <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
@@ -252,7 +278,7 @@ export default function GestaoAlunos() {
           </header>
         </div>
         {/* Barra de Pesquisa e Ação */}
-        <section className="flex justify-between items-center mb-10 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+        <section className="flex justify-between items-center mb-10 bg-white p-4 rounded-2xl shadow-sm border border-gray-100  m-8">
           <div className="relative">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -270,7 +296,7 @@ export default function GestaoAlunos() {
         </section>
 
         {/* Dashboard de Visão Geral */}
-        <div className="flex flex-col md:flex-row gap-6 w-full mb-12">
+        <div className="flex flex-col md:flex-row gap-6 w-full mb-12  p-8">
           {/* Card 1: Gráfico de Pizza/Pie */}
           <div className="flex-1 bg-white border  p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col ">
             <div className="flex justify-between items-center mb-6">
@@ -279,27 +305,12 @@ export default function GestaoAlunos() {
               </h3>
             </div>
 
-            <div className="flex-grow flex items-center justify-center min-h-[300px]">
-              <ChartGestaoEstud />
-            </div>
-          </div>
-
-          {/* Card 2: Gráfico de Linha */}
-          <div className="flex-1 bg-white border  p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-semibold text-gray-800 text-lg">
-                Evolução Mensal de Estudantes
-              </h3>
-            </div>
-
-            <div className="flex-grow flex items-center justify-center min-h-[300px]">
-              <ChartGestaoEstud2 />
-            </div>
+            <div className="flex-grow flex items-center justify-center min-h-[300px]"></div>
           </div>
         </div>
 
         {/* Tabela de Dados */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20  m-8">
           <table className="w-full text-center border-collapse cursor-default">
             <thead>
               <tr className="bg-[#268cff]/70 text-white text-base  font-black tracking-widest border-b border-gray-100">
@@ -339,7 +350,7 @@ export default function GestaoAlunos() {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-4 py-1 rounded-full text-base font-bold border inline-block min-w-[80px] ${colorsSit(aluno.situacao)}`}
+                      className={`px-4 py-1 rounded-full text-base font-bold border inline-block min-w-[80px] ${colorsSit(aluno.status)}`}
                     >
                       {aluno.status}
                     </span>
@@ -372,7 +383,7 @@ export default function GestaoAlunos() {
                       <div className="group relative w-max">
                         <div className="flex ">
                           <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm">
-                            <Trash1 size={18} />
+                            <Trash2 size={18} />
                           </div>
                           <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-base px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
                             Excluir
@@ -386,7 +397,7 @@ export default function GestaoAlunos() {
             </tbody>
           </table>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

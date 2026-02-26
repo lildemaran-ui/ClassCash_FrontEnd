@@ -20,7 +20,7 @@ export default function Login() {
     const usuarioLogado = users.find(
       (u: any) =>
         u.email === emailDigitado.trim().toLowerCase() &&
-        u.senha === senhaDigitado.trim()
+        u.senha === senhaDigitado.trim(),
     );
 
     if (usuarioLogado) {
@@ -36,12 +36,18 @@ export default function Login() {
 
     <div className="flex h-screen ">
       <div
-        className=" bg-cover bg-center w-1/2 flex flex-col justify-between p-8"
+      
+        className=" bg-cover bg-center w-1/2 flex flex-col justify-between p-8  "
         style={{ backgroundImage: `url(${Fundo})` }}
       >
         <Link to="/PaginaInicial">
           <div className="flex items-center ">
-            <img src={Logo55} className="h-24 bg-center bg-cover" alt="Logo" />
+            <img
+              loading="lazy"
+              src={Logo55}
+              className="h-24 bg-center bg-cover"
+              alt="Logo"
+            />
             <p className="font-bold text-white text-xl">ClassCash</p>
           </div>
         </Link>
@@ -73,10 +79,7 @@ export default function Login() {
                 placeholder="exemploalguem@gmail.com"
                 type="email"
               />
-              <label className="text-sm mb-2 ">
-                {" "}
-                Palavra-Passe{" "}
-              </label>
+              <label className="text-sm mb-2 "> Palavra-Passe </label>
               <div className="relative">
                 <input
                   required
@@ -119,8 +122,8 @@ export default function Login() {
                 </Link>
               </p>
               <p className="text-xs ">
-                Esqueceu a senha? 
-                 <a className="text-[#1e88e5] hover:underline" href="#"> 
+                Esqueceu a senha?
+                <a className="text-[#1e88e5] hover:underline" href="#">
                   Alterar a senha
                 </a>
               </p>

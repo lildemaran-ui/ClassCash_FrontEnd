@@ -12,16 +12,17 @@ import { Link } from "react-router-dom";
 
 export default function PaginaInicial() {
   return (
-    <div className="">
+    <div className=" flex-1 flex-col">
       <Nav></Nav>
       <div className="relative w-full h-screen overflow-hidden  ">
         <img
+          loading="lazy"
           src={fundo}
           alt="Uma senhora a fazer um pagamento online"
           className="absolute top-0 left-0 w-full h-full object-cover z-0 "
         />
-        <div className="absolute top-0 left-0 w-full h-full bg-black/40  z-5 "></div>
-        <div className="relative z-10 flex flex-col  items-center justify-center h-full text-center text-2xl  sm:text-4xl font-extrabold cursor-default  text-white  px-4">
+        <div className="absolute top-0 left-0 w-full h-full bg-black/45  z-5 "></div>
+        <div className="relative z-10 flex flex-col  items-center justify-center h-full text-center text-2xl  sm:text-4xl font-bold cursor-default  text-white  px-4">
           <h1 className="drop-shadow-lg">
             Pagamentos <FrasesRotativas />{" "}
           </h1>
@@ -30,7 +31,7 @@ export default function PaginaInicial() {
           </div>
 
           <Link to="/FAQ's">
-            <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#04458f]  transition-colors duration-700 sm:p-3 ">
+            <button className="bg-[#268CFF] hover:border hover:border-blue-300 hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-blue-600  transition-all duration-700 sm:p-3 ">
               Saiba Mais
             </button>
           </Link>
@@ -50,9 +51,10 @@ export default function PaginaInicial() {
         <div className="max-w-5xl justify-between text-start flex-col md:flex-row items-center gap-10 md:gap-20 flex mx-auto px-4 mt-28">
           <div className="w-full md:w-1/2">
             <img
+              loading="lazy"
               src={ilustr}
               alt=""
-              className=" w-full rounded-2xl bg-cover bg-center"
+              className=" w-full rounded-2xl bg-cover bg-center hover:scale-105 transition-transform duration-500"
             />
           </div>
           <div className="w-full md:w-1/2">
@@ -76,7 +78,7 @@ export default function PaginaInicial() {
               <span className="text-[#268CFF]">
                 {" "}
                 PAGAMENTOS SIMPLIFICADOS, GESTÃO FACILITADA
-              </span>
+              </span>{" "}
               Com a nossa plataforma, os pagamentos tornam-se mais rápidos,
               organizados e seguros. Pais, encarregados e instituições ganham
               mais controlo e transparência nas suas transações. Tudo digital,
@@ -85,18 +87,20 @@ export default function PaginaInicial() {
           </div>
           <div className="w-full md:w-1/2">
             <img
+              loading="lazy"
               src={ilustr2}
               alt=""
-              className="h-auto w-full rounded-2xl bg-cover bg-center"
+              className="h-auto w-full rounded-2xl bg-cover bg-center hover:scale-105 transition-transform duration-500"
             />
           </div>
         </div>
         <div className="max-w-5xl justify-between text-start flex-col md:flex-row items-center gap-10 md:gap-20 flex mx-auto px-4 mt-28">
           <div className="w-full md:w-1/2">
             <img
+              loading="lazy"
               src={ilustr3}
               alt=""
-              className=" w-full rounded-2xl bg-cover bg-center"
+              className=" w-full rounded-2xl bg-cover bg-center hover:scale-105 transition-transform duration-500"
             />
           </div>
           <div className="w-full md:w-1/2">
@@ -133,14 +137,19 @@ export default function PaginaInicial() {
       </p>
       <div className="mx-auto items-center flex gap-8 justify-center">
         <div className="w-68  mb-20 flex rounded-full">
-          <img src={appacounts} alt="" className="bg-cover bg-center " />
+          <img
+            loading="lazy"
+            src={appacounts}
+            alt=""
+            className="bg-cover bg-center "
+          />
         </div>
       </div>
-      
-        <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#1675e2]  transition-colors duration-700 sm:p-3 mx-auto flex mb-20 ">
-          Fazer pagamentos
-        </button>
-    
+
+      <button className="bg-[#268CFF]  hover:text-white text-base p-2 sm:text-xl  hover:text-lg rounded-xl drop-shadow-lg text-white hover:bg-[#1675e2]  transition-all duration-700 sm:p-3 mx-auto flex mb-20 ">
+        Fazer pagamentos
+      </button>
+
       <Footer></Footer>
     </div>
   );

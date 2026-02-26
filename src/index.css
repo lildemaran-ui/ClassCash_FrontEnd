@@ -1127,3 +1127,38 @@ button:active{
   transform: scale(0.95);
   animation-duration: 1000ms;
 }
+
+.custom_scroll {
+  overflow-y: auto;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: thin;
+  scrollbar-color: #1e77dccf transparent;
+}
+
+.custom_scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom_scroll::-webkit-scrollbar-thumb {
+  background-color: #ee732b;
+  border-radius: 5px;
+}
+
+.custom_scroll::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.custom_scroll::-webkit-scrollbar-button:single-button {
+  display: none;
+}
+.custom_scroll::-webkit-scrollbar-button:single-button:vertical:decrement {
+  display: none;
+}
+.custom_scroll::-webkit-scrollbar-button:single-button:vertical:increment {
+  display: none;
+}

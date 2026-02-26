@@ -32,7 +32,7 @@ const SidebarItem = ({
       active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
     }`}
   >
-    <Icon size={20} className="text-white" />
+    <Icon size={22} className="text-white" />
     <span className="text-white font-medium text-sm">{label}</span>
   </div>
 );
@@ -58,7 +58,7 @@ const CardKpi = ({
         </span>
       )}
       {trend === "down" && (
-        <span className="text-red-500 text-xs">
+        <span className="text-red-500 text-base">
           <TrendingDown />
         </span>
       )}
@@ -92,7 +92,7 @@ const MonthlyBarChartSimulation: React.FC = () => {
         {[0, 20, 40, 60, 80, 100].map((y) => (
           <div
             key={y}
-            className="absolute left-0 w-full text-xs text-gray-500 "
+            className="absolute left-0 w-full text-base text-gray-500 "
             style={{ bottom: `${y}%`, transform: "translateY(50%)" }}
           >
             {y}
@@ -121,12 +121,12 @@ const MonthlyBarChartSimulation: React.FC = () => {
       <div className="flex justify-between -mt-px border-t border-gray-300 pt-2">
         <div className="flex items-center">
           {" "}
-          <span className="text-gray-500 text-xs w-2 ">MM</span>
+          <span className="text-gray-500 text-base w-2 ">MM</span>
         </div>
         {months.map((month, index) => (
           <div
             key={index}
-            className="text-xs text-gray-600 font-medium text-center"
+            className="text-base text-gray-600 font-medium text-center"
             style={{ width: `${100 / months.length}%` }}
           >
             {month}
@@ -146,18 +146,23 @@ export default function Secretaria() {
     setMenu(false);
   }
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden overflow-y-auto">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
 
       {menu && (
         <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
-              <img src={Logo5} alt="Logo" className="w-16 h-16 " />
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
             <button>
-              <Menu size={28} className="text-white" onClick={CloseMenu} />
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
 
@@ -246,29 +251,28 @@ export default function Secretaria() {
             <button>
               <Menu
                 className="text-[#268cff] flex items-start"
-                size={28}
+                size={22}
                 onClick={OpenMenu}
               ></Menu>
             </button>
           )}
-          <h2 className="text-xl font-bold text-[#268cff]">Painel Geral </h2>
-        
-        {/* Header */}
-       <header className="flex justify-between ">
-          <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
-          <div className="flex items-center space-x-4">
-            {/* Campo de Pesquisa */}
-            
+          <h1 className="text-xl font-bold text-[#268cff]">Painel Geral </h1>
 
-            {/* Ícones de Notificação e Perfil */}
-            <div className="relative cursor-pointer">
-              <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+          {/* Header */}
+          <header className="flex justify-between ">
+            <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
+            <div className="flex items-center space-x-4">
+              {/* Campo de Pesquisa */}
+
+              {/* Ícones de Notificação e Perfil */}
+              <div className="relative cursor-pointer">
+                <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
                 <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
+              </div>
+              <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
             </div>
-            <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
-          </div>
-        </header>
-</div>
+          </header>
+        </div>
         {/* Filters & KPI Cards */}
         <section className="mb-8 ">
           <div className="flex justify-between items-end mb-6  ">
@@ -329,7 +333,7 @@ export default function Secretaria() {
               >
                 <p className="font-bold text-gray-700 mb-3">{servico}</p>
                 <div className="h-2 w-4 bg-[#268cff] rounded-full mb-2"></div>
-                <p className="text-[10px] text-gray-400">Serviço digital</p>
+                <p className="text-base text-gray-400">Serviço digital</p>
               </div>
             ))}
           </div>
@@ -355,7 +359,7 @@ export default function Secretaria() {
                 } rounded-sm`}
               >
                 <p className="font-bold text-sm">{aluno.nome}</p>
-                <p className="text-[10px] opacity-80">
+                <p className="text-base opacity-80">
                   Classe: 7ª | Nº de processo: {aluno.processo}
                 </p>
               </div>
@@ -372,15 +376,15 @@ export default function Secretaria() {
         <section className="bg-white p-6 rounded-xl  border cursor-default">
           <div className="flex justify-between mb-8 border-b pb-4">
             <div>
-              <p className="text-xs text-gray-500">Faturamento mensal</p>
+              <p className="text-base text-gray-500">Faturamento mensal</p>
               <p className="text-[#268cff] font-bold">375.600,00 Kz</p>
             </div>
             <div className="text-center">
-              <p className="text-xs text-gray-500">Mês</p>
+              <p className="text-base text-gray-500">Mês</p>
               <p className="text-blue-900 font-bold">Outubro</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Faturamento anual</p>
+              <p className="text-base text-gray-500">Faturamento anual</p>
               <p className="text-[#268cff] font-bold">4.507.200,00 Kz</p>
             </div>
           </div>

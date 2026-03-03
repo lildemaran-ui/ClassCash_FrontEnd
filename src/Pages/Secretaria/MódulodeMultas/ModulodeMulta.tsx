@@ -1,27 +1,27 @@
-import {
-  EyeIcon,
-  Percent,
-  Plus,
-  CheckCircle,
-  TrendingUp,
-  DollarSign,
-  Users,
-  Menu,
-  FileText,
-  AlertOctagon,
-  Settings,
-  MessageSquare,
-  Receipt,
-  CreditCard,
-  LayoutDashboard,
-  Download,
-} from "lucide-react";
-import { Link } from "react-router-dom";
-import Logo5 from "../../../assets/Logo5.5.png";
-import { useState } from "react";
-import ItemsDoCabeçalho from "@/Componentes/ItemsDoCabeçalho/ItemsDoCabeçalho";
 import ChartGestaoMulta from "@/Componentes/Charts/ChartGestaoMulta";
 import ChartGestaoMulta2 from "@/Componentes/Charts/ChartGestaoMulta2";
+import ItemsDoCabeçalho from "@/Componentes/ItemsDoCabeçalho/ItemsDoCabeçalho";
+import {
+  AlertOctagon,
+  CheckCircle,
+  CreditCard,
+  DollarSign,
+  Download,
+  EyeIcon,
+  FileText,
+  LayoutDashboard,
+  Menu,
+  MessageSquare,
+  Plus,
+  Receipt,
+  Settings,
+  Trash2,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import Logo5 from "../../../assets/Logo5.5.png";
 export default function ModulodeMulta() {
   const devedores = [
     {
@@ -377,7 +377,7 @@ export default function ModulodeMulta() {
                       </div>
                       <div className=" group relative w-max ">
                         <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
-                          <Trash1 size={18} />
+                          <Trash2 size={18} />
                         </div>
                         <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
                           Deletar

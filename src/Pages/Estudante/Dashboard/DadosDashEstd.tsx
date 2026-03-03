@@ -1,3 +1,4 @@
+
 import ChartEstud from "@/Componentes/Charts/ChartEstud";
 import {
   Settings,
@@ -10,13 +11,13 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 export default function DadosDashEstd() {
-  const [opcoes, setOpcoes] = useState (false);
+  const [opcoes, setOpcoes] = useState(false);
   function OpenOpcoes() {
     setOpcoes(true);
   }
   function CloseOpcoes() {
     setOpcoes(false);
-  } 
+  }
   const [Modal, setModal] = useState(false);
 
   function ShowModal() {
@@ -72,7 +73,7 @@ export default function DadosDashEstd() {
   if (!user) {
     return <span>Carregado...</span>;
   }
-  
+
   return (
     <div>
       <header className="flex justify-between items-start mb-8 transition-all duration-500">
@@ -116,7 +117,7 @@ export default function DadosDashEstd() {
             )}
           </div>
         </div>
-           
+
         {Modal && (
           <div className="  bg-translucido2 fixed inset-0 z-50 flex items-center justify-center ">
             <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
@@ -241,10 +242,13 @@ export default function DadosDashEstd() {
         <div className="text-right">
           <button
             onClick={OpenOpcoes}
-            className="text-[#268cff] text-[16px] font-medium flex items-center gap-2 mb-4 ml-auto"
+            className="text-[#268cff] text-[16px] font-medium flex items-center gap-2 mb-4 ml-auto transition-all duration-500"
           >
             <Settings size={22} /> EDITAR PERFIL
           </button>
+          {opcoes && (
+            <div className="border fixed ml-auto bg-black w-64 h-64 flex justify-end items-end transition-all duration-500 "></div>
+          )}
 
           <div className="bg-white p-8 rounded-xl border  min-w-[250px] flex items-center gap-4">
             <div>
@@ -299,7 +303,7 @@ export default function DadosDashEstd() {
         </div>
 
         <div className="bg-white rounded-xl border p-4">
-          <ChartEstud />
+          <ChartEstud/>
         </div>
       </div>
 

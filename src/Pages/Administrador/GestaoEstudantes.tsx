@@ -1,30 +1,28 @@
 import {
   ArrowDown,
-  EyeIcon,
-  Plus,
-  LayoutDashboard,
-  Users,
-  CreditCard,
-  Receipt,
-  AlertOctagon,
-  FileText,
-  Settings,
-  MessageSquare,
-  Bell,
-  Search,
-  Menu,
   ArrowUp,
-  PencilIcon,
+  Bell,
   CircleUser,
+  CreditCard,
+  EyeIcon,
+  FileText,
   InfoIcon,
-  ScrollText,
   KeyIcon,
+  LayoutDashboard,
+  Menu,
+  PencilIcon,
+  Plus,
+  Receipt,
   School,
+  ScrollText,
+  Settings,
   Trash2,
+  Users,
 } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Logo5 from "../../assets/Logo5.5.png";
-import { useState } from "react";
+import { colorsSit } from "@/lib/utils";
 
 export default function GestaoEstudantes() {
   const [dadosAlunos, setDadosAlunos] = useState([
@@ -32,30 +30,35 @@ export default function GestaoEstudantes() {
       codigo: "DVS-2025-KS",
       nome: "Dário Valente de Sousa",
       classe: "10ª Classe",
+      institution: "Kibangas",
       status: "Ativo",
     },
     {
       codigo: "EPJ-2025-AL",
       nome: "Eduarda Paula João",
       classe: "10ª Classe",
+      institution: "Kibangas",
       status: "Ativo",
     },
     {
       codigo: "LSN-2025-EF",
       nome: "Luana da Silva Ngola",
       classe: "7ª Classe",
+      institution: "Kibangas",
       status: "Inativo",
     },
     {
       codigo: "FMC-2025-KS",
       nome: "Felisberto Manuel Costa",
       classe: "8ª Classe",
+      institution: "Kibangas",
       status: "Inativo",
     },
     {
       codigo: "DCG-2025-EF",
       nome: "Diana Cristina Geraldo",
       classe: "10ª Classe",
+      institution: "Kibangas",
       status: "Ativo",
     },
   ]);
@@ -75,16 +78,6 @@ export default function GestaoEstudantes() {
 
     setDadosAlunos(dadosOrdenados);
     setOrdemCrescente(!ordemCrescente);
-  };
-  const colorsSit = (status: string) => {
-    switch (status) {
-      case "Ativo":
-        return "text-green-500";
-      case "Inativo":
-        return "text-red-500";
-      default:
-        return "text-black";
-    }
   };
 
   const [menu, setMenu] = useState(true);
@@ -142,25 +135,7 @@ export default function GestaoEstudantes() {
               />
             </Link>
 
-            <div
-              className="
-                       flex flex-col"
-            >
-              <Link to="">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Estudantes"
-                  active={true}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Encarregados"
-                  active={false}
-                />
-              </Link>
+            <div className="flex flex-col gap-1 text-white">
               <Link to="/GestaoDeInstituicao">
                 <SidebarItem
                   icon={School}
@@ -175,7 +150,7 @@ export default function GestaoEstudantes() {
                   active={false}
                 />
               </Link>
-              <Link to="">
+              <Link to="/GestaoPropinasAdmin">
                 <SidebarItem
                   icon={CreditCard}
                   label="Gestão de Propinas"
@@ -197,20 +172,7 @@ export default function GestaoEstudantes() {
                   active={false}
                 />
               </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={MessageSquare}
-                  label="Gestão de Reclamações"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={AlertOctagon}
-                  label="Gestão de Multas"
-                  active={false}
-                />
-              </Link>
+
               <Link to="">
                 <SidebarItem
                   icon={FileText}
@@ -225,7 +187,7 @@ export default function GestaoEstudantes() {
                   active={false}
                 />
               </Link>
-              <Link to="">
+              <Link to="/GestaoLogs">
                 <SidebarItem
                   icon={ScrollText}
                   label="Logs de Atividades"
@@ -239,7 +201,7 @@ export default function GestaoEstudantes() {
                   active={false}
                 />
               </Link>
-              <Link to="">
+              <Link to="/Configuracoes">
                 <SidebarItem
                   icon={Settings}
                   label="Configurações"
@@ -251,7 +213,7 @@ export default function GestaoEstudantes() {
         </aside>
       )}
       {/* Main Content */}
-      <div className=" flex-col flex-1">
+      <div className=" flex-col  flex-1">
         <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
           <div className="flex items-center gap-6">
             {!menu && (
@@ -262,7 +224,9 @@ export default function GestaoEstudantes() {
                 <Menu size={22} />
               </button>
             )}
-            <h1 className="text-xl font-bold  text-[#268cff]">Painel Geral</h1>
+            <h1 className="text-xl font-bold  text-[#268cff]">
+              Gestão de Estudantes
+            </h1>
           </div>
           {/* Header (Topo) */}
           <header className=" ">
@@ -278,39 +242,45 @@ export default function GestaoEstudantes() {
           </header>
         </div>
         {/* Barra de Pesquisa e Ação */}
-        <section className="flex justify-between items-center mb-10 bg-white p-4 rounded-2xl shadow-sm border border-gray-100  m-8">
-          <div className="relative">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              size={22}
-            />
-            <input
-              type="search"
-              placeholder="Procurar por código ou nome..."
-              className="w-96 pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-[#268cff]/20 transition-all"
-            />
+        <section className="flex justify-between items-center mb-10  p-4 rounded-2xl   m-8">
+          <div className="flex justify-between items-end mb-6  ">
+            <div className="flex gap-4 cursor-pointer ">
+              {["Nome/Código", "Instituição", "Classe"].map((filtro) => (
+                <div key={filtro}>
+                  <label className="block text-sm text-gray-500 mb-1">
+                    {filtro}
+                  </label>
+                  <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#268cff] cursor-pointer">
+                    <option>Sem filtro</option>
+                  </select>
+                </div>
+              ))}
+            </div>
           </div>
+        </section>
+        <div className="flex justify-end items-end mr-10">
           <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-500 transition-all duration-500 shadow-md ">
             <Plus size={22} /> Cadastrar
           </button>
-        </section>
-
+        </div>
         {/* Dashboard de Visão Geral */}
         <div className="flex flex-col md:flex-row gap-6 w-full mb-12  p-8">
           {/* Card 1: Gráfico de Pizza/Pie */}
           <div className="flex-1 bg-white border  p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col ">
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center mb-6">
               <h3 className="font-semibold text-gray-800 text-lg">
                 Distribuição de Ativos vs Inativos
               </h3>
             </div>
-
+            <div className="flex items-center justify-center italic text-gray-400">
+              Página em desenvolvimento
+            </div>
             <div className="flex-grow flex items-center justify-center min-h-[300px]"></div>
           </div>
         </div>
 
         {/* Tabela de Dados */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20  m-8">
+        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden  m-8">
           <table className="w-full text-center border-collapse cursor-default">
             <thead>
               <tr className="bg-[#268cff]/70 text-white text-base  font-black tracking-widest border-b border-gray-100">
@@ -329,7 +299,8 @@ export default function GestaoEstudantes() {
                   </div>
                 </th>
                 <th className="px-6 py-4">Classe</th>
-                <th className="px-6 py-4">Status</th>
+                <th className="px-6 py-4">Instituição</th>
+                <th className="px-6 py-4">Estado</th>
                 <th className="px-6 py-4">Ação</th>
               </tr>
             </thead>
@@ -339,18 +310,21 @@ export default function GestaoEstudantes() {
                   key={index}
                   className="hover:bg-[#268cff]/5 transition-colors "
                 >
-                  <td className="px-6 py-4 text-sm font-mono text-gray-500">
+                  <td className="px-6 py-4 text-base font-mono text-gray-500">
                     {aluno.codigo}
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium text-gray-500">
+                  <td className="px-6 py-4 text-base font-medium text-gray-500">
                     {aluno.nome}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
+                  <td className="px-6 py-4 text-base text-gray-500">
                     {aluno.classe}
+                  </td>
+                  <td className="px-6 py-4 text-base text-gray-500">
+                    {aluno.institution}
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`px-4 py-1 rounded-full text-base font-bold border inline-block min-w-[80px] ${colorsSit(aluno.status)}`}
+                      className={`px-4 py-1 rounded-full text-sm font-bold border inline-block min-w-[80px] ${colorsSit(aluno.status)}`}
                     >
                       {aluno.status}
                     </span>

@@ -16,6 +16,7 @@ import {
   ArrowUp,
   PencilIcon,
   CircleUser,
+  Trash2,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -220,7 +221,7 @@ export default function GestaoAlunos() {
       )}
 
       {/* Main Content */}
-      <main className="flex-1 p-8 custom_scroll bg-gray-50">
+      <main className="flex-1  custom_scroll bg-gray-50">
         {/* Header Superior */}
         <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
           {!menu && (
@@ -252,7 +253,7 @@ export default function GestaoAlunos() {
           </header>
         </div>
         {/* Barra de Pesquisa e Ação */}
-        <section className="flex justify-between items-center mb-10 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
+        <section className="flex justify-between items-center mb-10 m-8 bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
           <div className="relative">
             <Search
               className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -270,7 +271,7 @@ export default function GestaoAlunos() {
         </section>
 
         {/* Dashboard de Visão Geral */}
-        <div className="flex flex-col md:flex-row gap-6 w-full mb-12">
+        <div className="flex flex-col md:flex-row gap-6 w-full  m-2">
           {/* Card 1: Gráfico de Pizza/Pie */}
           <div className="flex-1 bg-white border  p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col ">
             <div className="flex justify-between items-center mb-6">
@@ -372,7 +373,7 @@ export default function GestaoAlunos() {
                       <div className="group relative w-max">
                         <div className="flex ">
                           <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all shadow-sm">
-                            <Trash1 size={18} />
+                            <Trash2 size={18} />
                           </div>
                           <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-base px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
                             Excluir

@@ -51,7 +51,7 @@ const CardKpi = ({
   <div className="bg-white p-4 rounded-xl flex flex-col items-center text-center border ">
     <p className="text-gray-400 text-base mb-1">{title}</p>
     <div className="flex items-center gap-2">
-      <span className="text-2xl font-bold text-gray-800">{value}</span>
+      <span className="text-xl font-bold text-gray-800">{value}</span>
       {trend === "up" && (
         <span className="text-green-500 text-base">
           <TrendingUp />

@@ -22,7 +22,7 @@ export default function PaginaInicial() {
           className="absolute top-0 left-0 w-full h-full object-cover z-0 "
         />
         <div className="absolute top-0 left-0 w-full h-full bg-black/45  z-5 "></div>
-        <div className="relative z-10 flex flex-col  items-center justify-center h-full text-center text-2xl  sm:text-4xl font-bold cursor-default  text-white  px-4">
+        <div className="relative z-10 flex flex-col  items-center justify-center h-full text-center text-xl  sm:text-4xl font-bold cursor-default  text-white  px-4">
           <h1 className="drop-shadow-lg">
             Pagamentos <FrasesRotativas />{" "}
           </h1>

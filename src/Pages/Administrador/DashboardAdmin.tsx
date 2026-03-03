@@ -1,3 +1,4 @@
+import { ChartAreaDefault } from "@/Componentes/Charts/ChartAdmin";
 import { Bell, ChevronDown, ArrowUp, ArrowDown } from "lucide-react";
 
 export default function DashboardAdmin() {
@@ -74,15 +75,15 @@ export default function DashboardAdmin() {
   const VerticalBarChartSimulation: React.FC = () => {
     // Dados simulados (rótulo, valor percentual, cor)
     const data = [
-      { label: "Total de instituições", value: 75, color: "bg-[#268cff]" },
-      { label: "Total de estudantes", value: 50, color: "bg-[#268cff]" },
-      { label: "Total de encarregados", value: 30, color: "bg-[#268cff]" },
+      { label: "Total de Instituições", value: 75, color: "bg-[#268cff]" },
+      { label: "Total de Estudantes", value: 50, color: "bg-[#268cff]" },
+      { label: "Total de Encarregados", value: 30, color: "bg-[#268cff]" },
       {
-        label: "Total de Gestão de Usuarios",
+        label: "Total de Serviços",
         value: 90,
         color: "bg-[#268cff]",
       },
-      { label: "Total de Orçamento", value: 60, color: "bg-[#268cff]" },
+      { label: "Total de Receita", value: 60, color: "bg-[#268cff]" },
     ];
 
     return (
@@ -148,15 +149,15 @@ export default function DashboardAdmin() {
       isKz: false,
     },
     {
-      title: "Total de Gestão de Usuarios",
+      title: "Total de Serviços",
       value: "2",
       unit: "No último mês",
-      trend: 0,
-      trendText: "sem alteração",
+      trend: 6,
+      trendText: "+6",
       isKz: false,
     },
     {
-      title: "Orçamento total",
+      title: "Total de Receita",
       value: "200,000",
       unit: "KZ",
       trend: 5,
@@ -171,7 +172,7 @@ export default function DashboardAdmin() {
     return (
       <div className="bg-white p-6 rounded-xl border  flex flex-col justify-between h-36">
         <h3 className="text-sm font-medium text-gray-500">{metric.title}</h3>
-        <div className="text-2xl font-bold text-gray-900 mt-1">
+        <div className="text-xl font-bold text-gray-900 mt-1">
           {metric.isKz && <span className="text-xl">KZ </span>}
           {metric.value}
         </div>
@@ -231,21 +232,24 @@ export default function DashboardAdmin() {
           ))}
         </div>
         {/* Cartões de Métricas Principais (Linha 1) */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 ">
           {mainMetrics.map((metric, index) => (
             <MetricCard key={index} metric={metric} />
           ))}
         </div>
 
         {/* Seção de Gráficos e Cartões de Tendência */}
+        {/* Container de Gráficos em Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 w-full ">
+          {/* Coluna 1: Análise Gráfico */}
+          <div className="w-full">
+            <VerticalBarChartSimulation />
+          </div>
 
-        <div className="lg:col-span-2">
-          <VerticalBarChartSimulation />
-        </div>
-
-        <div className="space-y-6 ">
-          {/* Gráfico de Meses (Horizontal Bar Chart) */}
-          <MonthlyBarChartSimulation />
+          {/* Coluna 2: Gráfico de Área (Limitado pela Grid) */}
+          <div className="w-full">
+            <ChartAreaDefault />
+          </div>
         </div>
       </main>
     </div>

@@ -418,7 +418,7 @@ export default function Pagamentos() {
                   <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Wallet size={32} />
                   </div>
-                  <h1 className="text-2xl font-bold mb-2">
+                  <h1 className="text-xl font-bold mb-2">
                     Pagamento Presencial
                   </h1>
                   <p className="text-gray-600 mb-6">

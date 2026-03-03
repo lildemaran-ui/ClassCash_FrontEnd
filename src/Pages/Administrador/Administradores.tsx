@@ -76,21 +76,6 @@ export default function Administaradores() {
             </Link>
 
             <div className="flex flex-col gap-1 text-white">
-              <Link to="/GestaoEstudantes">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Estudantes"
-                  active={false}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Encarregados"
-                  active={false}
-                />
-              </Link>
               <Link to="/GestaoDeInstituicao">
                 <SidebarItem
                   icon={School}
@@ -105,20 +90,6 @@ export default function Administaradores() {
                   active={false}
                 />
               </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={CreditCard}
-                  label="Gestão de Propinas"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={Receipt}
-                  label="Gestão de Pagamentos"
-                  active={false}
-                />
-              </Link>
 
               <Link to="">
                 <SidebarItem
@@ -127,20 +98,7 @@ export default function Administaradores() {
                   active={false}
                 />
               </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={MessageSquare}
-                  label="Gestão de Reclamações"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={AlertOctagon}
-                  label="Gestão de Multas"
-                  active={false}
-                />
-              </Link>
+
               <Link to="">
                 <SidebarItem
                   icon={FileText}
@@ -155,7 +113,7 @@ export default function Administaradores() {
                   active={false}
                 />
               </Link>
-              <Link to="">
+              <Link to="/GestaoLogs">
                 <SidebarItem
                   icon={ScrollText}
                   label="Logs de Atividades"
@@ -169,7 +127,7 @@ export default function Administaradores() {
                   active={false}
                 />
               </Link>
-              <Link to="">
+              <Link to="/Configuracoes">
                 <SidebarItem
                   icon={Settings}
                   label="Configurações"

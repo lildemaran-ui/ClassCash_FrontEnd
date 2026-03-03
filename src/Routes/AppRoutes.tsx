@@ -26,6 +26,9 @@ import GestaoEstudantes from "@/Pages/Administrador/GestaoEstudantes";
 import GestaoDeUsuarios from "@/Pages/Administrador/GestaoDeUsuarios";
 import DashboardAdmin from "@/Pages/Administrador/DashboardAdmin";
 import Administaradores from "@/Pages/Administrador/Administradores";
+import GestaoLogs from "@/Pages/Administrador/GestaoLogs";
+import GestaoPropinasAdmin from "@/Pages/Administrador/GestaoPropinasAdmin";
+import Configuracoes from "@/Pages/Administrador/Configuracoes";
 
 
 
@@ -61,6 +64,9 @@ export default function AppRoutes() {
       <Route path="/GestaoDeInstituicao" element={<GestaoDeInstituicao/>}></Route>
       <Route path="/GestaoEstudantes" element={<GestaoEstudantes/>}></Route>
       <Route path="/GestaoDeUsuarios" element={<GestaoDeUsuarios/>}></Route>
+      <Route path="/GestaoLogs" element={<GestaoLogs/>}></Route>
+      <Route path="/GestaoPropinasAdmin" element={<GestaoPropinasAdmin/>}></Route>
+      <Route path="/Configuracoes" element={<Configuracoes/>}></Route>
     </Routes>
 
 

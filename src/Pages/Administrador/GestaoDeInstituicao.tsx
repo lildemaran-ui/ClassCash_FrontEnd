@@ -316,6 +316,7 @@ export default function GestaoDeInstituicao() {
                   <div>
                     <label
                       htmlFor="adminName"
+                      De
                       className="block text-sm font-medium text-gray-700"
                     >
                       Nome
@@ -466,6 +467,20 @@ export default function GestaoDeInstituicao() {
     },
   ];
 
+  // --- DADOS MOCK (Simulação de Dados para Gestão de Instituições) ---
+
+  interface Institution {
+    id: number;
+    name: string;
+    address: string;
+    email: string;
+    phone: string;
+    status: "Ativo" | "Inativo";
+    totalPayment: string;
+    contactName: string;
+    dateAdded: string;
+  }
+
   // Componente para exibir os detalhes expandidos da instituição
   const ExpandedInstitutionDetails: React.FC<{ institution: Institution }> = ({
     institution,
@@ -521,8 +536,10 @@ export default function GestaoDeInstituicao() {
               </div>
             </div>
             <div className="space-y-1 col-span-2">
-              <p className="font-medium text-gray-600">Licença de software</p>
-              <p className="text-gray-800">Mensal / Anual / Completa (Mock)</p>
+              <p className="font-medium text-gray-600">
+                Estudantes Cadastrados
+              </p>
+              <p className="text-gray-800">10 Estudantes</p>
             </div>
           </div>
 
@@ -571,7 +588,7 @@ export default function GestaoDeInstituicao() {
       {/* Sidebar */}
 
       {menu && (
-        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen ">
+        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
               <img
@@ -586,8 +603,7 @@ export default function GestaoDeInstituicao() {
               <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
-          <nav className="max-h-screen overflow-y-auto  custom_scroll flex flex-col gap-1 text-white">
-            {" "}
+          <nav className="flex-1 flex flex-col gap-1 transition-all duration-500 text-white max-h-screen custom_scroll">
             <Link to="/Administradores">
               <SidebarItem
                 icon={LayoutDashboard}
@@ -595,25 +611,8 @@ export default function GestaoDeInstituicao() {
                 active={false}
               />
             </Link>
-            <div
-              className="
-                       flex flex-col"
-            >
-              <Link to="/GestaoEstudantes">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Estudantes"
-                  active={false}
-                />
-              </Link>
 
-              <Link to="">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Encarregados"
-                  active={false}
-                />
-              </Link>
+            <div className="flex flex-col gap-1 text-white">
               <Link to="">
                 <SidebarItem
                   icon={School}
@@ -628,20 +627,6 @@ export default function GestaoDeInstituicao() {
                   active={false}
                 />
               </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={CreditCard}
-                  label="Gestão de Propinas"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={Receipt}
-                  label="Gestão de Pagamentos"
-                  active={false}
-                />
-              </Link>
 
               <Link to="">
                 <SidebarItem
@@ -650,20 +635,7 @@ export default function GestaoDeInstituicao() {
                   active={false}
                 />
               </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={MessageSquare}
-                  label="Gestão de Reclamações"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={AlertOctagon}
-                  label="Gestão de Multas"
-                  active={false}
-                />
-              </Link>
+
               <Link to="">
                 <SidebarItem
                   icon={FileText}
@@ -678,7 +650,7 @@ export default function GestaoDeInstituicao() {
                   active={false}
                 />
               </Link>
-              <Link to="">
+              <Link to="/GestaoLogs">
                 <SidebarItem
                   icon={ScrollText}
                   label="Logs de Atividades"
@@ -692,7 +664,7 @@ export default function GestaoDeInstituicao() {
                   active={false}
                 />
               </Link>
-              <Link to="">
+              <Link to="/Configuracoes">
                 <SidebarItem
                   icon={Settings}
                   label="Configurações"
@@ -703,7 +675,6 @@ export default function GestaoDeInstituicao() {
           </nav>
         </aside>
       )}
-
       {/* Conteúdo Principal */}
       <div className="flex flex-col flex-1 custom_scroll">
         <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">

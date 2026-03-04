@@ -1,6 +1,6 @@
-import ChartGestaoMulta from "@/Componentes/Charts/ChartGestaoMulta";
-import ChartGestaoMulta2 from "@/Componentes/Charts/ChartGestaoMulta2";
-import ItemsDoCabeçalho from "@/Componentes/ItemsDoCabeçalho/ItemsDoCabeçalho";
+import ChartGestaoMulta from "@/components/Charts/ChartGestaoMulta";
+import ChartGestaoMulta2 from "@/components/Charts/ChartGestaoMulta2";
+import ItemsDoCabeçalho from "@/components/ItemsDoCabeçalho/ItemsDoCabeçalho";
 import {
   AlertOctagon,
   CheckCircle,
@@ -18,6 +18,7 @@ import {
   Trash2,
   TrendingUp,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -58,7 +59,7 @@ export default function ModulodeMulta() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (

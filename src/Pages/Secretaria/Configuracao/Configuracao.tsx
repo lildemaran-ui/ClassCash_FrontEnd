@@ -11,6 +11,7 @@ import {
   Receipt,
   CreditCard,
   LayoutDashboard,
+  type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo5 from "../../../assets/Logo5.5.png";
@@ -21,7 +22,7 @@ export default function Configuracao() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (

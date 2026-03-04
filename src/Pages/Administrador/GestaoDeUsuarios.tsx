@@ -12,7 +12,8 @@ import {
   School,
   ScrollText,
   Settings,
-  Users
+  Users,
+  type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -27,7 +28,7 @@ const SidebarItem = ({
   label,
   active = false,
 }: {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   active?: boolean;
 }) => (
@@ -142,7 +143,6 @@ export default function GestaoDeUsuarios() {
                   active={true}
                 />
               </Link>
-             
 
               <Link to="">
                 <SidebarItem

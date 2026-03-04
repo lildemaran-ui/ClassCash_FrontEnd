@@ -15,6 +15,7 @@ import {
   TrendingUp,
   TrendingDown,
   CircleUser,
+  type LucideIcon,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
 import { Link } from "react-router-dom";
@@ -23,7 +24,7 @@ const SidebarItem = ({
   label,
   active = false,
 }: {
-  icon: any;
+  icon: LucideIcon;
   label: string;
   active?: boolean;
 }) => (

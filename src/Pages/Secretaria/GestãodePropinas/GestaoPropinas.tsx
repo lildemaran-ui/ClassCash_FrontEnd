@@ -18,6 +18,7 @@ import {
   EyeIcon,
   TrendingDown,
   TrendingUp,
+  type LucideIcon,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -99,7 +100,7 @@ export default function GestaoPropinas() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (

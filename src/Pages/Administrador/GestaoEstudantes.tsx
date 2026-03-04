@@ -18,6 +18,7 @@ import {
   Settings,
   Trash2,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -93,7 +94,7 @@ export default function GestaoEstudantes() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (

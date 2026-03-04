@@ -1,4 +1,4 @@
-import { ChartAreaDefault } from "@/Componentes/Charts/ChartAdmin";
+import { ChartAdmin } from "@/components/Charts/ChartAdmin";
 import { Bell, ChevronDown, ArrowUp, ArrowDown } from "lucide-react";
 
 export default function DashboardAdmin() {
@@ -248,7 +248,7 @@ export default function DashboardAdmin() {
 
           {/* Coluna 2: Gráfico de Área (Limitado pela Grid) */}
           <div className="w-full">
-            <ChartAreaDefault />
+            <ChartAdmin />
           </div>
         </div>
       </main>

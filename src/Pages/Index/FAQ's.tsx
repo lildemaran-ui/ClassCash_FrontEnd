@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ArrowLeft, ChevronDown, ChevronUp, Menu } from "lucide-react";
-import Footer from "../../Componentes/Footer/Footer";
-import MenuEstatico from "../../Componentes/Menu/MenuEstatico";
+import Footer from "../../components/Footer/footer";
+import MenuEstatico from "../../components/Menu/MenuEstatico";
 
 // Componente para o Accordion de cada pergunta
 const AccordionItem = ({

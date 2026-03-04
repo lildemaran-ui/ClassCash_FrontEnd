@@ -1,5 +1,5 @@
 
-import ChartEstud from "@/Componentes/Charts/ChartEstud";
+import ChartEstud from "@/components/Charts/ChartEstud";
 import {
   Settings,
   Download,
@@ -11,13 +11,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect } from "react";
 export default function DadosDashEstd() {
-  const [opcoes, setOpcoes] = useState(false);
-  function OpenOpcoes() {
-    setOpcoes(true);
-  }
-  function CloseOpcoes() {
-    setOpcoes(false);
-  }
+
   const [Modal, setModal] = useState(false);
 
   function ShowModal() {
@@ -118,7 +112,36 @@ export default function DadosDashEstd() {
           </div>
         </div>
 
-        {Modal && (
+      
+        <div className="text-right">
+          <button
+            onClick={ShowModal}
+            className="text-[#268cff] text-[16px] font-medium flex items-center gap-2 mb-4 ml-auto transition-all duration-500"
+          >
+            <Settings size={24} /> 
+          </button>
+         
+
+          <div className="bg-white p-8 rounded-xl border  min-w-[250px] flex items-center gap-4">
+            <div>
+              <CheckCircle size={48} className="text-green-600" />
+            </div>
+            <div className="flex flex-col">
+              <h3 className="text-base font-bold text-gray-800 mb-1">
+                Situação Financeira
+              </h3>
+              <p className="text-green-600 text-sm font-medium">
+                Financeiramente está estável
+              </p>
+              <p className="text-xs text-gray-400">Sem pagamentos em atraso</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <hr className="mb-8 border-gray-200" />
+      {/* Modal de edição de perfil */}
+  {Modal && (
           <div className="  bg-translucido2 fixed inset-0 z-50 flex items-center justify-center ">
             <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
               <div className="flex justify-between mb-4">
@@ -239,36 +262,6 @@ export default function DadosDashEstd() {
             </div>
           </div>
         )}
-        <div className="text-right">
-          <button
-            onClick={OpenOpcoes}
-            className="text-[#268cff] text-[16px] font-medium flex items-center gap-2 mb-4 ml-auto transition-all duration-500"
-          >
-            <Settings size={22} /> EDITAR PERFIL
-          </button>
-          {opcoes && (
-            <div className="border fixed ml-auto bg-black w-64 h-64 flex justify-end items-end transition-all duration-500 "></div>
-          )}
-
-          <div className="bg-white p-8 rounded-xl border  min-w-[250px] flex items-center gap-4">
-            <div>
-              <CheckCircle size={48} className="text-green-600" />
-            </div>
-            <div className="flex flex-col">
-              <h3 className="text-base font-bold text-gray-800 mb-1">
-                Situação Financeira
-              </h3>
-              <p className="text-green-600 text-sm font-medium">
-                Financeiramente está estável
-              </p>
-              <p className="text-xs text-gray-400">Sem pagamentos em atraso</p>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <hr className="mb-8 border-gray-200" />
-
       {/* Status Cards */}
       <div className="grid grid-cols-3  gap-6 mb-8">
         <div>

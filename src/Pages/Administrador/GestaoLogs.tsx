@@ -1,21 +1,18 @@
 import {
-  AlertOctagon,
   Bell,
   ChevronDown,
   CircleUser,
   Clock,
-  CreditCard,
   FileText,
   InfoIcon,
   KeyIcon,
   LayoutDashboard,
   Menu,
-  MessageSquare,
-  Receipt,
   School,
   ScrollText,
   Settings,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -105,7 +102,7 @@ export default function GestaoLogs() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (
@@ -167,20 +164,6 @@ export default function GestaoLogs() {
                 <SidebarItem
                   icon={Users}
                   label="Gestão de Usuarios"
-                  active={false}
-                />
-              </Link>
-              <Link to="/GestaoPropinasAdmin">
-                <SidebarItem
-                  icon={CreditCard}
-                  label="Gestão de Propinas"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={Receipt}
-                  label="Gestão de Pagamentos"
                   active={false}
                 />
               </Link>

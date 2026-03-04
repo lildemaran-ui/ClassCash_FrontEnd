@@ -17,13 +17,15 @@ import {
   PencilIcon,
   CircleUser,
   Trash2,
+  type LucideIcon,
+  LogOut,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import ChartGestaoEstud2 from "@/Componentes/Charts/ChartGestaoEstud2";
-import ChartGestaoEstud from "@/Componentes/Charts/ChartGestaoEstud";
+import ChartGestaoEstud2 from "@/components/Charts/ChartGestaoEstud2";
+import ChartGestaoEstud from "@/components/Charts/ChartGestaoEstud";
 
 export default function GestaoAlunos() {
   const [dadosAlunos, setDadosAlunos] = useState([
@@ -108,7 +110,7 @@ export default function GestaoAlunos() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (
@@ -217,6 +219,17 @@ export default function GestaoAlunos() {
               />
             </Link>
           </nav>
+          <button className="hover:bg-blue-400 px-4 rounded-sm  border border-white/10 bg-blue-500/50  transition-all duration-700 p-3 group">
+                      <div className="flex justify-between  items-center ">
+                        <span className="text-sm font-medium text-white group-hover:text-blue-700">
+                          Terminar sessão
+                        </span>
+                        <LogOut
+                          size={22}
+                          className="text-white font-medium group-hover:text-blue-700"
+                        />
+                      </div>
+                    </button>
         </aside>
       )}
 

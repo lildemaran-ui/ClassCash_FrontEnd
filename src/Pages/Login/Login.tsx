@@ -3,7 +3,7 @@ import Logo55 from "../../assets/Logo5.5.png";
 import { Link } from "react-router-dom";
 import FrasesRotativasLogin from "../../Hooks/FrasesRotativasLogin";
 import { useState } from "react";
-import { EyeIcon, EyeOff } from "lucide-react";
+import { EyeIcon, EyeOff} from "lucide-react";
 
 export default function Login() {
   const [emailDigitado, setEmail] = useState<string>("");
@@ -11,32 +11,42 @@ export default function Login() {
   const [mostrarSenha, setMostrar] = useState<boolean>(false);
 
   const handleLogin = (event: React.FormEvent) => {
-    event.preventDefault();
+  event.preventDefault();
+interface Usuario {
+  email: string;
+  senha: string;
+  nome: string;
+  tipo: 'estudante' | 'encarregado'; // A chave para a lógica
+}
+  const rawData = localStorage.getItem("UserExistente");
+  const users: Usuario[] = JSON.parse(rawData || "[]");
 
-    const rawData = localStorage.getItem("UserExistente");
-    const users = JSON.parse(rawData || "[]");
+  const usuarioLogado = users.find(
+    (u) =>
+      u.email === emailDigitado.trim().toLowerCase() &&
+      u.senha === senhaDigitado.trim(),
+  );
 
-    // O find vai buscar exatamente o usuário que possui aquele e-mail E aquela senha
-    const usuarioLogado = users.find(
-      (u: any) =>
-        u.email === emailDigitado.trim().toLowerCase() &&
-        u.senha === senhaDigitado.trim(),
-    );
+  if (usuarioLogado) {
+    // Salva o usuário ativo
+    localStorage.setItem("UsuarioAtivo", JSON.stringify(usuarioLogado));
 
-    if (usuarioLogado) {
-      // Salva quem está logado no momento para usar nas outras telas
-      localStorage.setItem("UsuarioAtivo", JSON.stringify(usuarioLogado));
+    // Lógica de Redirecionamento baseada no TIPO
+    if (usuarioLogado.tipo === "estudante") {
       window.location.href = "/DashboardEstud";
-    } else {
-      alert("E-mail ou senha incorretos.");
-    }
-  };
+    } else if (usuarioLogado.tipo === "encarregado") {
+      window.location.href = "/Encarregado"; // Ou a rota que você desejar
+    } 
+    
+  } else {
+    alert("E-mail ou senha incorretos.");
+  }
+};
   return (
     /*Tela de login*/
 
     <div className="flex h-screen ">
       <div
-      
         className=" bg-cover bg-center w-1/2 flex flex-col justify-between p-8  "
         style={{ backgroundImage: `url(${Fundo})` }}
       >

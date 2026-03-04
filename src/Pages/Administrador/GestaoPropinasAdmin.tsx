@@ -20,6 +20,7 @@ import {
   ScrollText,
   InfoIcon,
   School,
+  type LucideIcon,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
 import { useState } from "react";
@@ -101,7 +102,7 @@ export default function GestaoPropinasAdmin() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (

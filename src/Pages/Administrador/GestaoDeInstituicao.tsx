@@ -29,6 +29,7 @@ import {
   Mail,
   ChevronDown,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import React from "react";
 import Logo5 from "../../assets/Logo5.5.png";
@@ -52,7 +53,7 @@ export default function GestaoDeInstituicao() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (
@@ -79,8 +80,8 @@ export default function GestaoDeInstituicao() {
 
   const AddInstitutionModal: React.FC<{
     onClose: () => void;
-    formData: any;
-    onchange: (e: any) => void;
+    formData: LucideIcon;
+    onchange: (e: LucideIcon) => void;
   }> = ({ onClose, formData, onchange }) => {
     // Estado para a aba de Administrador
     const [createAdmin, setCreateAdmin] = React.useState(false);
@@ -608,7 +609,7 @@ export default function GestaoDeInstituicao() {
               <SidebarItem
                 icon={LayoutDashboard}
                 label="Painel Geral"
-                active={false}
+                active={window.location.pathname === "/Administradores"}
               />
             </Link>
 
@@ -617,14 +618,14 @@ export default function GestaoDeInstituicao() {
                 <SidebarItem
                   icon={School}
                   label="Gestão de Instituições"
-                  active={true}
+                  active={window.location.pathname === "/GestaoDeInstituicao"}
                 />
               </Link>
               <Link to="/GestaoDeUsuarios">
                 <SidebarItem
                   icon={Users}
                   label="Gestão de Usuarios"
-                  active={false}
+                  active={window.location.pathname === "/GestaoDeUsuarios"}
                 />
               </Link>
 
@@ -654,7 +655,7 @@ export default function GestaoDeInstituicao() {
                 <SidebarItem
                   icon={ScrollText}
                   label="Logs de Atividades"
-                  active={false}
+                  active={window.location.pathname === "/GestaoLogs"}
                 />
               </Link>
               <Link to="">
@@ -668,7 +669,7 @@ export default function GestaoDeInstituicao() {
                 <SidebarItem
                   icon={Settings}
                   label="Configurações"
-                  active={false}
+                  active={window.location.pathname === "/Configuracoes"}
                 />
               </Link>
             </div>

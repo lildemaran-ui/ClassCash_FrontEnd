@@ -25,7 +25,7 @@ const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
     .join("")
     .toUpperCase();
 
-  const commonClasses = `${sizeClasses[size]} rounded-full flex items-center justify-center overflow-hidden shrink-0`;
+  const commonClasses = `${sizeClasses[size]} rounded-full flex items-center border border-[#268cff]/50 justify-center overflow-hidden shrink-0`;
 
   if (src && !hasError) {
     return (

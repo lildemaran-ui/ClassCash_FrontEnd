@@ -17,6 +17,7 @@ import {
   Search,
   Bell,
   CircleUser,
+  type LucideIcon,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
 import DashboardAdmin from "./DashboardAdmin";
@@ -26,7 +27,7 @@ export default function Administaradores() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (

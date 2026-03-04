@@ -1,20 +1,20 @@
 import { Link } from "react-router-dom";
-import logo5 from "../../assets/Logo5.5.png";
+import Logo5 from "../../assets/Logo5.5.png";
 import { useEffect, useState } from "react";
 import {
   Bell,
   LayoutDashboard,
-  LifeBuoy,
   LogOut,
   Menu,
   MessageSquare,
+  Receipt,
   Settings,
-  Wallet,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import Avatar from "@/components/Avatar/Avatar";
 import ConfiguracaoGeral from "@/components/Configuracoes/ConfiguracaoGeral";
-export default function Config() {
+export default function ConfiguracaoEncar() {
   const [Modal, setModal] = useState(false);
 
   function ShowModal() {
@@ -50,23 +50,22 @@ export default function Config() {
   if (!user) {
     return <span>Carregado...</span>;
   }
-  // Sub-componentes auxiliares
-  const NavItem = ({
-    icon,
+  const SidebarItem = ({
+    icon: Icon,
     label,
     active = false,
   }: {
-    icon: React.ReactNode;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 mt-2 rounded-lg cursor-pointer transition-all duration-300 ${
-        active ? "bg-white/10" : "hover:bg-white/5"
+      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
+        active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
       }`}
     >
-      {icon}
-      <span className="text-sm font-medium">{label}</span>
+      <Icon size={22} className="text-white" />
+      <span className="text-white font-medium text-sm">{label}</span>
     </div>
   );
   return (
@@ -74,57 +73,59 @@ export default function Config() {
       {/* Sidebar */}
 
       {menu && (
-        <aside className="w-64 bg-[#268cff] text-white flex flex-col ">
-          <div className="mb-16 pt-4 flex relative justify-between items-center px-4">
-            <Link to="/DashboardEstud">
-              <div className="flex items-center font-semibold">
-                <img
-                  loading="lazy"
-                  src={logo5}
-                  alt="Logo"
-                  className="w-16 h-16"
-                />
-                <span>ClassCash</span>
-              </div>
-            </Link>
-            <button onClick={CloseMenu}>
-              <Menu size={22} />
+        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
+          <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
+            <div className=" flex items-center">
+              <img
+                loading="lazy"
+                src={Logo5}
+                alt="Logo"
+                className="w-16 h-16 "
+              />
+              <p className="text-white font-semibold">ClassCash</p>
+            </div>
+            <button>
+              <Menu size={22} className="text-white" onClick={CloseMenu} />
             </button>
           </div>
-          <nav className="flex-1 px-4 space-y-2  ">
+
+          <nav className="flex-1 flex flex-col gap-1 text-white">
+            <Link to="/Encarregado">
+              <SidebarItem
+                icon={LayoutDashboard}
+                label="Painel Geral"
+                active={window.location.pathname === "/Encarregado"}
+              />
+            </Link>
+            <Link to="/PagamentoEncar">
+              <SidebarItem
+                icon={Receipt}
+                label="Pagamento"
+                active={window.location.pathname === "/PagamentoEncar"}
+              />
+            </Link>
+
             <Link to="/DashboardEstud">
-              <NavItem
-                icon={<LayoutDashboard size={22} />}
-                label="Painel"
+              <SidebarItem
+                icon={Users}
+                label="Painel do seu Educando"
                 active={window.location.pathname === "/DashboardEstud"}
               />
             </Link>
-            <Link to="/Pagamentos" className=" block w-full">
-              <NavItem
-                icon={<Wallet size={22} />}
-                label="Pagamentos"
-                active={window.location.pathname === "/Pagamentos"}
-              />
-            </Link>
-            <Link to="/reclamacoes">
-              <NavItem
-                icon={<MessageSquare size={22} />}
+            <Link to="/ReclamacoesEncar">
+              <SidebarItem
+                icon={MessageSquare}
                 label="Reclamações"
-                active={window.location.pathname === "/reclamacoes"}
+                active={window.location.pathname === "/ReclamacoesEncar"}
               />
             </Link>
-            <Link to="/Config">
-              <NavItem
-                icon={<Settings size={22} />}
-                label="Configurações"
-                active={window.location.pathname === "/Config"}
+            <Link to="/ConfiguracaoEncar">
+              <SidebarItem
+                icon={Settings}
+                label="Definições"
+                active={window.location.pathname === "/ConfiguracaoEncar"}
               />
             </Link>
-            <NavItem
-              icon={<LifeBuoy size={22} />}
-              label="Suporte"
-              active={false}
-            />
           </nav>
           <Link
             to="/Login"

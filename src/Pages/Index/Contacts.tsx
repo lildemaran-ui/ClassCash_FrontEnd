@@ -1,6 +1,6 @@
 import React from "react";
-import Footer from "../../Componentes/Footer/Footer";
-import MenuEstatico from "../../Componentes/Menu/MenuEstatico";
+import Footer from "../../components/Footer/footer";
+import MenuEstatico from "../../components/Menu/MenuEstatico";
 
 const InputField = ({
   label,

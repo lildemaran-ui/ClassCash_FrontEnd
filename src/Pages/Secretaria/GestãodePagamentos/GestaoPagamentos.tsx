@@ -17,10 +17,11 @@ import {
   EyeIcon,
   TrendingDown,
   TrendingUp,
+  type LucideIcon,
 } from "lucide-react";
 import Logo5 from "../../../assets/Logo5.5.png";
 import { useState } from "react";
-import ItemsDoCabeçalho from "@/Componentes/ItemsDoCabeçalho/ItemsDoCabeçalho";
+import ItemsDoCabeçalho from "@/components/ItemsDoCabeçalho/ItemsDoCabeçalho";
 
 export default function GestaoPagamentos() {
   const [ordemCrescente, setOrdemCrescente] = useState(true);
@@ -103,7 +104,7 @@ export default function GestaoPagamentos() {
     label,
     active = false,
   }: {
-    icon: any;
+    icon: LucideIcon;
     label: string;
     active?: boolean;
   }) => (

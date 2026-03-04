@@ -8,74 +8,28 @@ import {
   LifeBuoy,
   Menu,
   Bell,
+  LogOut,
+  X,
 } from "lucide-react";
 import Logo5 from "../../assets/Logo5.5.png";
-import Avatar from "@/Componentes/Avatar/Avatar";
+import Avatar from "@/components/Avatar/Avatar";
+import PagamentoGeral from "@/components/Pagamento/PagamentoGeral";
 
 export default function Pagamentos() {
-  const [showModal, setShowModal] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
+  const [Modal, setModal] = useState(false);
+
+  function ShowModal() {
+    setModal(true);
+  }
+
+  function CloseModal() {
+    setModal(false);
+  }
   const [user, setUser] = useState<any>(null);
   const [menu, setMenu] = useState(() => {
     const saved = localStorage.getItem("menu_aberto");
     return saved === "true";
   });
-
-  const [pagamento, setPagamento] = useState({
-    metodo: "",
-    servico: "Propina",
-    mesInicial: "Janeiro",
-    mesFinal: "Janeiro",
-    plataforma: "PayPay",
-    comprovativo: null,
-  });
-
-  const mesesDoAno = [
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro",
-  ];
-
-  const PRECOS_SERVICOS: { [key: string]: number } = {
-    Propina: 15000,
-    Justificativo: 2000,
-    Transferência: 5000,
-    Certificado: 2000,
-    CartãodeEstudante: 1000,
-    Uniforme: 12000,
-  };
-
-  // --- FUNÇÕES DE LÓGICA ---
-
-  // UNIFICADA: Apenas uma função handleChange
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value } = event.target;
-    setPagamento((prev) => ({ ...prev, [name]: value }));
-
-    if (name === "metodo" && value === "Dinheiro Físico") {
-      setShowModal(true);
-    }
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setImage(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
 
   const OpenMenu = () => {
     setMenu(true);
@@ -95,17 +49,6 @@ export default function Pagamentos() {
     }
   }, []);
 
-  // --- CÁLCULOS ---
-  const precoBase = PRECOS_SERVICOS[pagamento.servico] || 0;
-  const indexInicio = mesesDoAno.indexOf(pagamento.mesInicial);
-  const indexFim = mesesDoAno.indexOf(pagamento.mesFinal);
-  const quantidadeMeses =
-    indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
-  const valorTotal = precoBase * quantidadeMeses;
-
-  const formularioValido =
-    pagamento.metodo !== "" && image !== null && indexFim >= indexInicio;
-
   if (!user) return <span>Carregado...</span>;
 
   const NavItem = ({
@@ -118,7 +61,9 @@ export default function Pagamentos() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 mt-3 rounded-lg cursor-pointer transition-all duration-500 ${active ? "bg-white/10" : "hover:bg-white/5"}`}
+      className={`flex items-center gap-3 p-3 mt-2 rounded-lg cursor-pointer transition-all duration-300 ${
+        active ? "bg-white/10" : "hover:bg-white/5"
+      }`}
     >
       {icon}
       <span className="text-sm font-medium">{label}</span>
@@ -126,10 +71,10 @@ export default function Pagamentos() {
   );
 
   return (
-    <div className="flex min-h-screen bg-gray-50 font-sans transition-all duration-500">
+    <div className="flex overflow-hidden custom_scroll h-screen bg-gray-50 font-sans transition-all duration-500">
       {/* Sidebar */}
       {menu && (
-        <aside className="w-64 bg-[#268cff] text-white flex-col block">
+        <aside className="w-64 bg-[#268cff] text-white flex-col flex">
           <div className="mb-16 pt-4 flex relative justify-between items-center px-4">
             <Link
               to="/DashboardEstud"
@@ -147,297 +92,215 @@ export default function Pagamentos() {
               <Menu size={22} />
             </button>
           </div>
-          <nav className="flex-1 px-4 space-y-2">
+          <nav className="flex-1 px-4 space-y-2  ">
             <Link to="/DashboardEstud">
               <NavItem
                 icon={<LayoutDashboard size={22} />}
                 label="Painel"
-                active={false}
+                active={window.location.pathname === "/DashboardEstud"}
               />
             </Link>
-            <Link to="/Pagamentos">
+            <Link to="/Pagamentos" className=" block w-full">
               <NavItem
                 icon={<Wallet size={22} />}
                 label="Pagamentos"
-                active={true}
+                active={window.location.pathname === "/Pagamentos"}
               />
             </Link>
             <Link to="/reclamacoes">
               <NavItem
                 icon={<MessageSquare size={22} />}
                 label="Reclamações"
-                active={false}
+                active={window.location.pathname === "/reclamacoes"}
               />
             </Link>
             <Link to="/Config">
               <NavItem
                 icon={<Settings size={22} />}
                 label="Configurações"
-                active={false}
+                active={window.location.pathname === "/Config"}
               />
             </Link>
-            <NavItem icon={<LifeBuoy size={22} />} label="Suporte" />
+            <NavItem
+              icon={<LifeBuoy size={22} />}
+              label="Suporte"
+              active={false}
+            />
           </nav>
+          <Link
+            to="/Login"
+            className="hover:bg-blue-400 px-4 rounded-sm  border border-white/10 bg-blue-500/50  transition-all duration-700 p-3 group"
+          >
+            <div className="flex justify-between  items-center ">
+              <span className="text-sm font-medium text-white group-hover:text-blue-700">
+                Terminar sessão
+              </span>
+              <LogOut
+                size={22}
+                className="text-white font-medium group-hover:text-blue-700"
+              />
+            </div>
+          </Link>
         </aside>
       )}
-
-      {/* Conteúdo principal */}
-      <div className="flex-1 p-4">
-        {!menu && (
-          <button onClick={OpenMenu}>
-            <Menu size={22} className="text-[#268cff]" />
-          </button>
-        )}
-
-        <header className="flex justify-end items-center mb-5">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Bell size={22} className="text-[#268cff]" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></div>
+      {/* Modal de edição de perfil */}
+      {Modal && (
+        <div className="  bg-translucido2 fixed inset-0 z-50 flex items-center justify-center ">
+          <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
+            <div className="flex justify-between mb-4">
+              <div>
+                <h1 className="text-xl font-bold ">Editar Perfil</h1>
+                <p className="text-xs text-gray-400">
+                  Edite suas informações a baixo
+                </p>
+              </div>
+              <div>
+                <button onClick={CloseModal} className="text-[#268cff]">
+                  <X size={22} />
+                </button>
+              </div>
             </div>
-            <Avatar name={user.nome} src={user.foto} size="md" />
-          </div>
-        </header>
-        <div className="px-4 md:px-20 py-10 max-w-7xl mx-auto">
-          <div className="px-4 md:px-20 py-10 max-w-7xl mx-auto">
-            {/* GRID PRINCIPAL: Envolve tudo para permitir que as colunas fiquem lado a lado desde o topo */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-              {/* COLUNA ESQUERDA: Código, Método e Dados */}
-              <div className="flex flex-col gap-8">
-                {/* Bloco do Código */}
+            <form className="space-y-4">
+              <div className="w-48 h-48 rounded-full flex justify-center items-center mx-auto overflow-hidden border border-gray-400 shadow-sm group  ">
+                {user.foto ? (
+                  <img
+                    loading="lazy"
+                    src={user.foto}
+                    alt={user.nome}
+                    className="w-full h-full object-cover"
+                    // Caso a URL exista mas a imagem falhe ao carregar (erro 404),
+                    // você pode opcionalmente adicionar um onError aqui.
+                  />
+                ) : (
+                  // Fallback: Iniciais do nome
+                  <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-[#268cff] text-white text-6xl font-bold">
+                    {(user.nome || "User")
+                      .trim()
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()}
+                  </div>
+                )}
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {" "}
+                  Nome Completo
+                </label>
+                <input
+                  type="text"
+                  className="w-full border-2 rounded-lg h-10 text-base px-4 outline-none focus:border-[#268cff]"
+                  value={user.nome || ""}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  {" "}
+                  Email
+                </label>
+                <input
+                  type="email"
+                  className="w-full border-2 rounded-lg h-10 text-base px-4 outline-none focus:border-[#268cff]"
+                  value={user?.email || ""}
+                />
+              </div>
+              <div className="flex justify-between gap-3">
+                <div className="w-24">
+                  <label className="block text-sm mb-1">Classe</label>
+                  <select
+                    required
+                    value={user?.classe || ""}
+                    className="w-full border-2 rounded-lg h-10 text-base px-4 outline-none focus:border-[#268cff]"
+                  >
+                    <option value="" disabled>
+                      Grau
+                    </option>
+                    <option value="7ª">7ª</option>
+                    <option value="8ª">8ª</option>
+                    <option value="9ª">9ª</option>
+                    <option value="10ª">10ª</option>
+                    <option value="11ª">11ª</option>
+                    <option value="12ª">12ª</option>
+                  </select>
+                </div>
                 <div>
-                  <label className="block mb-1 font-medium text-gray-500">
-                    Código
+                  <label className=" text-sm font-medium text-gray-700 mb-1">
+                    {" "}
+                    Nº de Processo
                   </label>
                   <input
                     type="text"
-                    value="DVS-2025-KS"
-                    readOnly
-                    className="w-32 border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono"
+                    className="w-full border-2 rounded-lg h-10 text-base px-4 outline-none focus:border-[#268cff]"
+                    value={user?.processo || ""}
                   />
                 </div>
-
-                {/* Bloco do Método de Pagamento */}
-                <div className="p-4 border border-gray-100 rounded-xl bg-white shadow-sm max-w-md">
-                  <label className="block mb-3 font-bold text-gray-700">
-                    Como será feito o pagamento?
-                  </label>
-                  <div className="flex flex-col gap-3">
-                    {["De forma digital", "No banco", "Dinheiro Físico"].map(
-                      (m) => (
-                        <label
-                          key={m}
-                          className="flex items-center gap-2 cursor-pointer group"
-                        >
-                          <input
-                            type="radio"
-                            name="metodo"
-                            value={m}
-                            checked={pagamento.metodo === m}
-                            onChange={handleChange}
-                            className="w-4 h-4 accent-[#268cff]"
-                          />
-                          <span
-                            className={`transition-colors ${pagamento.metodo === m ? "font-semibold text-[#268cff]" : "text-gray-600 group-hover:text-blue-400"}`}
-                          >
-                            {m}
-                          </span>
-                        </label>
-                      ),
-                    )}
-                  </div>
-                </div>
-
-                {/* Dados do Serviço (Apenas se for Digital ou Banco) */}
-                {(pagamento.metodo === "De forma digital" ||
-                  pagamento.metodo === "No banco") && (
-                  <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-4">
-                    <h3 className="font-bold text-gray-800 border-b pb-2">
-                      Dados do Serviço
-                    </h3>
-
-                    <div>
-                      <label className="block mb-2 font-medium text-gray-700">
-                        Serviço:
-                      </label>
-                      <select
-                        name="servico"
-                        value={pagamento.servico}
-                        onChange={handleChange}
-                        className="w-full border rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-100 outline-none transition-all"
-                      >
-                        {Object.keys(PRECOS_SERVICOS).map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* Lógica Condicional da Esquerda */}
-                    {pagamento.metodo === "De forma digital" ? (
-                      <div className="animate-in fade-in">
-                        <label className="font-medium block mb-2 text-gray-700">
-                          Plataforma a ser usada:
-                        </label>
-                        <select
-                          name="plataforma"
-                          value={pagamento.plataforma}
-                          onChange={handleChange}
-                          className="p-3 border rounded-lg w-full bg-white"
-                        >
-                          <option value="Multicaxa Express">
-                            Multicaixa Express
-                          </option>
-                          <option value="Unitel Money">Unitel Money</option>
-                          <option value="PayPay">Pay Pay</option>
-                        </select>
-                        <label className="font-medium block mb-2 text-gray-700">
-                          Meses a pagar:
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <div className="flex-1">
-                            <p className="text-[10px] font-bold text-gray-400">
-                              De:
-                            </p>
-                            <select
-                              name="mesInicial"
-                              value={pagamento.mesInicial}
-                              onChange={handleChange}
-                              className="w-full border rounded-lg px-3 py-2 bg-white"
-                            >
-                              {mesesDoAno.map((m) => (
-                                <option key={m}>{m}</option>
-                              ))}
-                            </select>
-                          </div>
-                          <span className="mt-5 text-gray-400 font-bold">
-                            à
-                          </span>
-                          <div className="flex-1">
-                            <p className="text-[10px] font-bold text-gray-400">
-                              Até:
-                            </p>
-                            <select
-                              name="mesFinal"
-                              value={pagamento.mesFinal}
-                              onChange={handleChange}
-                              className="w-full border rounded-lg px-3 py-2 bg-white"
-                            >
-                              {mesesDoAno.map((m) => (
-                                <option key={m}>{m}</option>
-                              ))}
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div></div>
-                    )}
-                  </div>
-                )}
               </div>
-
-              {/* COLUNA DIREITA: Finalização (Agora alinhada ao topo com o Código) */}
-              <div className="flex flex-col gap-6">
-                {(pagamento.metodo === "De forma digital" ||
-                  pagamento.metodo === "No banco") && (
-                  <div className="flex flex-col gap-6 animate-in fade-in">
-                    <h3 className="font-bold text-gray-800 border-b pb-2">
-                      Finalização
-                    </h3>
-
-                    {/* Período de Pagamento (Digital) */}
-                    {pagamento.metodo === "De forma digital" && <div></div>}
-
-                    {/* Resumo de Valores */}
-                    <div className="bg-blue-50 p-5 rounded-xl border border-blue-100 shadow-sm">
-                      <label className="block text-sm text-blue-600 font-semibold tracking-wider">
-                        Total a pagar
-                      </label>
-                      <div className="text-3xl font-black text-blue-700">
-                        KZ {valorTotal.toLocaleString("pt-PT")},00
-                      </div>
-                      <p className="text-xs text-blue-400 mt-1 italic">
-                        {quantidadeMeses} mês(es) selecionado(s)
-                      </p>
-                    </div>
-
-                    {/* Comprovativo */}
-                    <div>
-                      <label className="block mb-2 font-medium text-gray-700">
-                        Anexar Comprovativo:
-                      </label>
-                      <div className="relative group w-full h-44 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white overflow-hidden transition-all hover:border-blue-400">
-                        {image ? (
-                          <img
-                            loading="lazy"
-                            src={image}
-                            className="w-full h-full object-cover"
-                            alt="Preview"
-                          />
-                        ) : (
-                          <div className="text-center p-4">
-                            <Wallet
-                              className="mx-auto text-gray-300 mb-2"
-                              size={32}
-                            />
-                            <span className="text-gray-400 text-sm block">
-                              Clique abaixo para carregar o ficheiro
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <input
-                        type="file"
-                        onChange={handleImageChange}
-                        className="mt-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full"
-                      />
-                    </div>
-
+              <div className="text-right">
+                <div
+                  className="flex justify-end gap-2
+                  mt-20"
+                >
+                  <div className="">
                     <button
-                      onClick={() => alert("Pagamento enviado com sucesso!")}
-                      disabled={!formularioValido}
-                      className={`py-4 rounded-xl font-bold text-lg transition-all transform active:scale-95 shadow-lg ${
-                        formularioValido
-                          ? "bg-[#268cff] text-white hover:bg-blue-600"
-                          : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none"
-                      }`}
+                      type="button"
+                      className="bg-white text-[#268cff] px-4 py-2 rounded-md border border-[#268cff] hover:bg-gray-100/50 transition-colors duration-500"
+                      onClick={CloseModal}
                     >
-                      Enviar Pagamento
+                      Cancelar
                     </button>
                   </div>
-                )}
-              </div>
-            </div>
-
-            {/* MODAL DE DINHEIRO FÍSICO (RESTAURADO) */}
-            {showModal && (
-              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-                <div className="bg-white rounded-2xl p-8 max-w-md w-full text-center shadow-2xl">
-                  <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Wallet size={32} />
+                  <div>
+                    <button
+                      type="button"
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-500"
+                      onClick={CloseModal}
+                    >
+                      Concluído
+                    </button>
                   </div>
-                  <h1 className="text-xl font-bold mb-2">
-                    Pagamento Presencial
-                  </h1>
-                  <p className="text-gray-600 mb-6">
-                    Por favor, dirija-se à Secretaria da Instituição para
-                    efetuar o pagamento em numerário.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setShowModal(false);
-                      setPagamento((p) => ({ ...p, metodo: "" }));
-                    }}
-                    className="w-full bg-[#268cff] text-white py-3 rounded-lg font-bold"
-                  >
-                    Entendido
-                  </button>
                 </div>
               </div>
-            )}
+            </form>
           </div>
+        </div>
+      )}
+      {/* Conteúdo principal */}
+      <div className="flex-1 overflow-auto">
+        <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 ">
+          {!menu && (
+            <button>
+              <Menu
+                className="text-[#268cff] flex items-start"
+                size={22}
+                onClick={OpenMenu}
+              ></Menu>
+            </button>
+          )}
+          <h1 className="text-xl font-bold text-[#268cff]">Pagamentos </h1>
+
+          {/* Header */}
+          <header className="flex justify-between ">
+            <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={ShowModal}
+                className="text-[#268cff] text-[16px] font-medium flex  gap-2 ml-auto transition-all duration-500"
+              >
+                <Settings size={24} />
+              </button>
+
+              {/* Ícones de Notificação e Perfil */}
+              <div className="relative cursor-pointer">
+                <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+                <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
+              </div>
+              <Avatar name={user.nome} src={user.foto} size="md" />
+            </div>
+          </header>
+        </div>
+        <div className="">
+          <PagamentoGeral />
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import {
   Settings,
   LifeBuoy,
   Menu,
+  LogOut,
 } from "lucide-react";
 import logo5 from "../../../assets/Logo5.5.png";
 import { Link } from "react-router-dom";
@@ -99,6 +100,18 @@ export default function DashboardEstud() {
               active={false}
             />
           </nav>
+          <Link to="/Login" className="hover:bg-blue-400 px-4 rounded-sm  border border-white/10 bg-blue-500/50  transition-all duration-700 p-3 group">
+              <div className="flex justify-between  items-center ">
+                <span className="text-sm font-medium text-white group-hover:text-blue-700">
+                  Terminar sessão
+                </span>
+                <LogOut
+                  size={22}
+                  className="text-white font-medium group-hover:text-blue-700"
+                />
+              </div>
+
+          </Link>
         </aside>
       )}
 

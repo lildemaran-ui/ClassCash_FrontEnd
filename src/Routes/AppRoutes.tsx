@@ -12,8 +12,8 @@ import Secretaria from "@/Pages/Secretaria/Secretaria";
 import GestaoAlunos from "@/Pages/Secretaria/GestãodeAlunos/GestaoAlunos";
 import GestaoPropinas from "@/Pages/Secretaria/GestãodePropinas/GestaoPropinas";
 import GestaoPagamentos from "@/Pages/Secretaria/GestãodePagamentos/GestaoPagamentos";
-import Reclamacoes from "@/Pages/Estudante/reclamacoes";
-import ConfigurationScreen from "@/Pages/Estudante/Config";
+
+import ConfigurationScreen from "@/components/Configuracoes/ConfiguracaoGeral";
 import GestaodeEncarregados from "@/Pages/Secretaria/GestaodeEncarregados/GestaodeEncarregados";
 import GestaodeServiços from "@/Pages/Secretaria/GestãodeServiços/GestaodeServiços";
 import ModulodeMulta from "@/Pages/Secretaria/MódulodeMultas/ModulodeMulta";
@@ -29,6 +29,11 @@ import Administaradores from "@/Pages/Administrador/Administradores";
 import GestaoLogs from "@/Pages/Administrador/GestaoLogs";
 import GestaoPropinasAdmin from "@/Pages/Administrador/GestaoPropinasAdmin";
 import Configuracoes from "@/Pages/Administrador/Configuracoes";
+import Reclamacoes from "@/Pages/Estudante/Reclamacoes";
+import ReclamacoesEncar from "@/Pages/Encarregado/ReclamacoesEncar";
+import PagamentoEncar from "@/Pages/Encarregado/PagamentoEncar";
+import ConfiguracaoGeral from "@/components/Configuracoes/ConfiguracaoGeral";
+import Config from "@/Pages/Estudante/Config";
 
 
 
@@ -47,7 +52,7 @@ export default function AppRoutes() {
       <Route path="/Instituições" element={<Instituicoes/>}></Route>
       <Route path="/FAQ's" element={<FAQScreen/>}></Route>
       <Route path="/reclamacoes" element={<Reclamacoes/>}></Route>
-      <Route path="/Config" element={<ConfigurationScreen/>}></Route>
+      <Route path="/Config" element={<Config/>}></Route>
       <Route path="/DashboardEstud" element={<DashboardEstud/>}></Route>
       <Route path="/GestaoAlunos" element={<GestaoAlunos/>}></Route>
       <Route path="/Secretaria" element={<Secretaria/>}></Route>
@@ -67,6 +72,8 @@ export default function AppRoutes() {
       <Route path="/GestaoLogs" element={<GestaoLogs/>}></Route>
       <Route path="/GestaoPropinasAdmin" element={<GestaoPropinasAdmin/>}></Route>
       <Route path="/Configuracoes" element={<Configuracoes/>}></Route>
+      <Route path="/ReclamacoesEncar" element={<ReclamacoesEncar/>}></Route>
+      <Route path="/PagamentoEncar" element={<PagamentoEncar/>}></Route>
     </Routes>
 
 

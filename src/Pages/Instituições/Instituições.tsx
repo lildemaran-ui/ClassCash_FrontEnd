@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { X, Search } from "lucide-react";
-import Footer from "../../Componentes/Footer/Footer";
-import MenuEstatico from "../../Componentes/Menu/MenuEstatico";
+import Footer from "../../components/Footer/footer";
+import MenuEstatico from "../../components/Menu/MenuEstatico";
 
 export default function Instituicoes() {
   const [showInput, setShowInput] = useState(false);

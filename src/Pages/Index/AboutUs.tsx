@@ -1,6 +1,6 @@
 import React from "react";
-import Footer from "../../Componentes/Footer/Footer";
-import MenuEstatico from "../../Componentes/Menu/MenuEstatico";
+import Footer from "../../components/Footer/footer";
+import MenuEstatico from "../../components/Menu/MenuEstatico";
 import img1 from "../../assets/about_img.png";
 // Componente para os cards de Missão, Visão, Valores e Posicionamento
 const InfoCard = ({

@@ -1,33 +1,12 @@
-import {
-  Bell,
-
-  Menu,
-  
-} from "lucide-react";
 import { useEffect, useState } from "react";
-import React from "react";
 
 import Avatar from "@/components/Avatar/Avatar";
+import { Header } from "@/components/Header/header";
 import ReclamacaoGeral from "@/components/Reclamacao/ReclamacaoGeral";
-import MenuEncar from "@/components/Menu/MenuEncar";
+import { LayoutEncarregado } from "../layout/index2";
 
 export default function ReclamacoesEncar() {
-  const [menu, setMenu] = useState(() => {
-    const saved = localStorage.getItem("menu_aberto");
-    return saved === "true";
-  });
-
-  function OpenMenu() {
-    setMenu(true);
-    localStorage.setItem("menu_aberto", "true");
-  }
-  function CloseMenu() {
-    setMenu(false);
-    localStorage.setItem("menu_aberto", "false");
-  }
-  
-
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
 
@@ -41,29 +20,18 @@ export default function ReclamacoesEncar() {
     return <span>Carregado...</span>;
   }
   return (
-    <div className="flex overflow-hidden h-screen bg-white font-sans transition-all duration-500">
-     
-    <MenuEncar/>
-    
-      {/* Main Content */}
-      <main className="flex-1 p-8 custom_scroll transition-all duration-500">
-        {!menu && (
-          <button onClick={OpenMenu}>
-            <Menu size={22} className="text-[#268cff]" />
-          </button>
-        )}
-        {/* Header Superior */}
-        <header className="flex justify-end items-center mb-8">
-          <div className="flex items-center gap-4">
-            <div className="relative">
-              <Bell size={22} className="text-[#268cff]" />
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#f0f5fa]"></div>
-            </div>
-            <Avatar name={user.nome} src={user.foto} size="md" />
+    <LayoutEncarregado>
+      <div className="flex-1 w-full h-full mx-auto ">
+        <div className="flex-1 overflow-auto">
+          <Header
+            titulo="Reclamações"
+            usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+          />
+          <div className="">
+            <ReclamacaoGeral />
           </div>
-        </header>
-        <ReclamacaoGeral />
-      </main>
-    </div>
+        </div>
+      </div>
+    </LayoutEncarregado>
   );
 }

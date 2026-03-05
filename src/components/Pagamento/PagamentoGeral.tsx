@@ -8,7 +8,7 @@ import {
 export default function PagamentoGeral() {
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
 
   const [pagamento, setPagamento] = useState({
@@ -93,7 +93,7 @@ export default function PagamentoGeral() {
  
 
   return (
-    <div className="flex min-h-screen bg-gray-50 font-sans transition-all duration-500">
+    <div className="flex bg-gray-50 font-sans transition-all duration-500">
       {/* Conteúdo principal */}
       <div className="flex-1 p-4">
         <div className="px-4 md:px-20 py-10 max-w-7xl mx-auto">

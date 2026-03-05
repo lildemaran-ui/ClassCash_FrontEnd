@@ -28,8 +28,8 @@ export default function MenuEncar() {
     active?: boolean;
   }) => (
     <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
-        active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
+     className={`flex items-center gap-3 p-3 mt-2 rounded-lg cursor-pointer transition-all duration-300   ${
+        active ? "bg-white/10" : "hover:bg-white/5"
       }`}
     >
       <Icon size={22} className="text-white" />
@@ -37,11 +37,11 @@ export default function MenuEncar() {
     </div>
   );
   return (
-    <div>
-         {menu && (
-        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
-          <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
-            <div className=" flex items-center">
+    <div  className="flex w-[18%] h-full">
+         {menu ? (
+        <aside className="flex flex-col w-full  bg-[#268cff] text-white top-0 sticky">
+          <div className="mb-16 pt-4 flex relative justify-between items-center px-4">
+            <div className=" flex items-center font-semibold">
               <img
                 loading="lazy"
                 src={logo5}
@@ -55,7 +55,7 @@ export default function MenuEncar() {
             </button>
           </div>
 
-          <nav className="flex-1 flex flex-col gap-1 text-white">
+          <nav className="flex-1 px-4 space-y-2 ">
                         <Link to="/Encarregado">
               <SidebarItem
                 icon={LayoutDashboard}
@@ -88,7 +88,7 @@ export default function MenuEncar() {
             <Link to="/ConfiguracaoEncar">
               <SidebarItem
                 icon={Settings}
-                label="Definições"
+                label="Configurações"
                 active={window.location.pathname === "/ConfiguracaoEncar"}
               />
             </Link>
@@ -108,6 +108,8 @@ export default function MenuEncar() {
             </div>
           </Link>
         </aside>
+      ):(
+        <Menu size={22} className="text-[#268cff] m-8" onClick={OpenMenu} />
       )}
     </div>
   )}

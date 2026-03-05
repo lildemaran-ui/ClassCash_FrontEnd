@@ -1,7 +1,5 @@
 import { Eye, EyeOff } from "lucide-react";
 
-
-
 // Interface para os dados das reclamações
 interface ReclamacaoProps {
   titulo: string;
@@ -48,7 +46,6 @@ const ReclamacaoCard = ({
 );
 
 export default function ReclamacaoGeral() {
-  
   const listaReclamacoes = [
     {
       titulo: "Pagamento feito por meio do Multicaixa Express",
@@ -75,14 +72,10 @@ export default function ReclamacaoGeral() {
       isPublica: false,
     },
   ];
- 
+
   return (
     <div className="flex min-h-screen bg-white font-sans transition-all duration-500">
-
-      
-      <main className="flex-1  custom_scroll transition-all duration-500">
-       
-
+      <main className="flex-1 w-full h-full mx-auto">
         {/* Instruções */}
         <div className="max-w-4xl mx-auto text-center mb-10">
           <p className="text-gray-400 font-medium text-[13px] leading-relaxed">
@@ -134,4 +127,3 @@ export default function ReclamacaoGeral() {
     </div>
   );
 }
-

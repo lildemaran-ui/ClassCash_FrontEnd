@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import { Layout } from "../layout";
 export default function Config() {
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
 
-    if (dadosDoLogin) {
+    if (dadosDoLogin && dadosDoLogin !== "undefined") {
       setUser(JSON.parse(dadosDoLogin));
     } else {
       window.location.href = "/Login";

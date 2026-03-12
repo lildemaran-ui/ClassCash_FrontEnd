@@ -44,10 +44,9 @@ export function ChartAdmin() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex gap-96">
-          <CardTitle>Faturamento Mensal</CardTitle>
-        <CardTitle>Mês</CardTitle>
-        <CardTitle>Faturamento Mensal</CardTitle>
+        <div className="flex">
+          <CardTitle>Resumo gráfico</CardTitle>
+       
         </div>
         <CardDescription>Alunos que se cadastram mensalmente</CardDescription>
       </CardHeader>
@@ -58,7 +57,7 @@ export function ChartAdmin() {
             <XAxis
               dataKey="month"
               tickLine={false}
-              tickMargin={10}
+              tickMargin={7}
               axisLine={false}
               tickFormatter={(value) => value.slice(0, 3)}
             />
@@ -66,7 +65,7 @@ export function ChartAdmin() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="Estudantes" fill="var(--color-Estudantes)" radius={8} />
+            <Bar dataKey="Estudantes" fill="var(--color-Estudantes)" radius={5} />
           </BarChart>
         </ChartContainer>
       </CardContent>

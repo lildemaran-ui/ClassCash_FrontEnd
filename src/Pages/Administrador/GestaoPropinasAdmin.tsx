@@ -212,14 +212,6 @@ export default function GestaoPropinasAdmin() {
 
               <Link to="">
                 <SidebarItem
-                  icon={Settings}
-                  label="Gestão de Serviços"
-                  active={false}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
                   icon={FileText}
                   label="Gestão de Relatórios"
                   active={false}

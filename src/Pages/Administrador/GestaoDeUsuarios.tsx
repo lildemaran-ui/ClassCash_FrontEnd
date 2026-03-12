@@ -1,46 +1,16 @@
 import {
   Bell,
   CircleUser,
-  FileText,
-  InfoIcon,
-  KeyIcon,
-  LayoutDashboard,
   Menu,
   Minus,
   MoreVertical,
   Plus,
-  School,
-  ScrollText,
-  Settings,
-  Users,
-  type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Logo5 from "../../assets/Logo5.5.png";
 
+import MenuAdmin from "@/components/Menu/MenuAdmin";
 import { Button } from "@/components/ui/button";
 import { colorsSit } from "@/lib/utils";
-
-// Componente SidebarItem atualizado com as novas medidas
-const SidebarItem = ({
-  icon: Icon,
-  label,
-  active = false,
-}: {
-  icon: LucideIcon;
-  label: string;
-  active?: boolean;
-}) => (
-  <div
-    className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500  ${
-      active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
-    }`}
-  >
-    <Icon size={22} className="text-white" />
-    <span className="text-white font-medium text-sm">{label}</span>
-  </div>
-);
 
 export default function GestaoDeUsuarios() {
   const [menu, setMenu] = useState(true);
@@ -103,94 +73,7 @@ export default function GestaoDeUsuarios() {
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
       {/* SIDEBAR - Largura aumentada para w-80 (320px) ou w-96 (384px) dependendo da sua preferência. Usei w-80. */}
-      {menu && (
-        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
-          <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
-            <div className=" flex items-center">
-              <img
-                loading="lazy"
-                src={Logo5}
-                alt="Logo"
-                className="w-16 h-16 "
-              />
-              <p className="text-white font-semibold">ClassCash</p>
-            </div>
-            <button>
-              <Menu size={22} className="text-white" onClick={CloseMenu} />
-            </button>
-          </div>
-          <nav className="flex-1 flex flex-col gap-1 transition-all duration-500 text-white max-h-screen custom_scroll">
-            <Link to="/Administradores">
-              <SidebarItem
-                icon={LayoutDashboard}
-                label="Painel Geral"
-                active={false}
-              />
-            </Link>
-
-            <div className="flex flex-col gap-1 text-white">
-              <Link to="/GestaoDeInstituicao">
-                <SidebarItem
-                  icon={School}
-                  label="Gestão de Instituições"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Usuarios"
-                  active={true}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
-                  icon={Settings}
-                  label="Gestão de Serviços"
-                  active={false}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
-                  icon={FileText}
-                  label="Gestão de Relatórios"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={KeyIcon}
-                  label="Permissões e Acessos"
-                  active={false}
-                />
-              </Link>
-              <Link to="/GestaoLogs">
-                <SidebarItem
-                  icon={ScrollText}
-                  label="Logs de Atividades"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={InfoIcon}
-                  label="Suporte e Ajuda"
-                  active={false}
-                />
-              </Link>
-              <Link to="/Configuracoes">
-                <SidebarItem
-                  icon={Settings}
-                  label="Configurações"
-                  active={false}
-                />
-              </Link>
-            </div>
-          </nav>
-        </aside>
-      )}
+      <MenuAdmin />
 
       {/* ÁREA PRINCIPAL */}
       <div className="flex-1 flex flex-col ">

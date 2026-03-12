@@ -1,23 +1,14 @@
-import {
-  Receipt,
-  Users,
-  LayoutDashboard,
-  Menu,
-  MessageSquare,
-  type LucideIcon,
-  Settings,
-  CheckCircle,
-  Download,
-  X,
-  Pen,
-  LogOut,
-} from "lucide-react";
-import Logo5 from "../../assets/Logo5.5.png";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import ChartEstud from "@/components/Charts/ChartEstud";
 import MenuEncar from "@/components/Menu/MenuEncar";
 import { ProfileEditModal } from "@/components/profile_edit_modal";
+import {
+  CheckCircle,
+  Download,
+  Menu,
+  Pen,
+  type LucideIcon
+} from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Encarregado() {
   const [Modal, setModal] = useState(false);
@@ -48,7 +39,7 @@ export default function Encarregado() {
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
 
-    if (dadosDoLogin) {
+    if (dadosDoLogin && dadosDoLogin !== "undefined") {
       setUser(JSON.parse(dadosDoLogin));
     } else {
       window.location.href = "/Login";
@@ -58,24 +49,6 @@ export default function Encarregado() {
     return <span>Carregado...</span>;
   }
 
-  const SidebarItem = ({
-    icon: Icon,
-    label,
-    active = false,
-  }: {
-    icon: LucideIcon;
-    label: string;
-    active?: boolean;
-  }) => (
-    <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
-        active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
-      }`}
-    >
-      <Icon size={22} className="text-white" />
-      <span className="text-white font-medium text-sm">{label}</span>
-    </div>
-  );
 
   return (
     <div className="flex overflow-hidden h-screen bg-white font-sans transition-all duration-500">

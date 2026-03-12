@@ -9,7 +9,7 @@ export default function Pagamentos() {
 
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin) {
+    if (dadosDoLogin && dadosDoLogin !== "undefined") {
       setUser(JSON.parse(dadosDoLogin));
     } else {
       window.location.href = "/Login";

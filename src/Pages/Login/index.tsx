@@ -1,48 +1,58 @@
+
 import { EyeIcon, EyeOff } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import api from "../../Services/api.ts";
 export function TelaLogin() {
       const [emailDigitado, setEmail] = useState<string>("");
   const [senhaDigitado, setSenha] = useState<string>("");
   const [mostrarSenha, setMostrar] = useState<boolean>(false);
 
-  const handleLogin = (event: React.FormEvent) => {
+  const navigate = useNavigate( ); // Hook para redirecionar sem recarregar a página
+
+  // Mudando para async para poder usar o await na API
+  const handleLogin = async (event: React.BaseSyntheticEvent) => {
   event.preventDefault();
-interface Usuario {
-  email: string;
-  senha: string;
-  nome: string;
-  tipo: 'estudante' | 'encarregado'; // A chave para a lógica
-}
-  const rawData = localStorage.getItem("UserExistente");
-  const users: Usuario[] = JSON.parse(rawData || "[]");
 
-  const usuarioLogado = users.find(
-    (u) =>
-      u.email === emailDigitado.trim().toLowerCase() &&
-      u.senha === senhaDigitado.trim(),
-  );
+  try {
+      // Fazendo a requisição para o backend real
+      const answer = await api.post('/login', {
+        email: emailDigitado.trim().toLowerCase(),
+        senha: senhaDigitado.trim()
+      });
 
-  if (usuarioLogado) {
-    // Salva o usuário ativo
-    localStorage.setItem("UsuarioAtivo", JSON.stringify(usuarioLogado));
+      //  O backend responde com os dados do utilizador e o token
+      const { token, usuario } = answer.data;
 
-    // Lógica de Redirecionamento baseada no TIPO
-    if (usuarioLogado.tipo === "estudante") {
-      window.location.href = "/DashboardEstud";
-    } else if (usuarioLogado.tipo === "encarregado") {
-      window.location.href = "/Encarregado"; // Ou a rota que você desejar
-    } 
-    
-  } else {
-    alert("E-mail ou senha incorretos.");
-  }
-};
+      //  Guardamos as informações importantes
+      localStorage.setItem("@Projeto:token", token);
+      localStorage.setItem("UsuarioAtivo", JSON.stringify(usuario));
+
+      
+
+      // Lógica de Redirecionamento baseada no TIPO vindo do banco de dados
+      if (usuario.perfil === "Estudante") {
+        navigate("/DashboardEstud");
+      } else if (usuario.perfil === "Encarregado") {
+        navigate("/Encarregado");
+      }
+
+    } catch (erro: unknown) {
+      const e = erro as any; 
+      // Tratamento de erro (se a senha estiver errada ou o servidor desligado)
+      if (e.response) {
+        // O servidor respondeu com um erro (ex: 401 Unauthorized)
+        alert(e.response?.data.mensagem || "E-mail ou senha incorretos.");
+      } else {
+        // Erro de rede (servidor desligado)
+        alert("Não foi possível conectar ao servidor. Verifica se o backend está ligado!");
+      }
+    }
+  };
   return (
     <div id="login" className="">
         <div className="">
-          <div className="mx-auto items-center flex flex-col w-full justify-center space-y-6 roudend-md bg-white p-8 border rounded-lg sm:w-[390px] text-black">
+          <div className="mx-auto items-center flex flex-col w-full justify-center space-y-6 roudend-md bg-white p-8 border border-gray-200 rounded-lg sm:w-[390px] text-black">
             <div className="space-y-1">
               <p className="flex-1 text-center text-[#268cff]">
                 {" "}

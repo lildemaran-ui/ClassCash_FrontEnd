@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import gif from "../../assets/Plain credit card-amico.svg"
 import {
 
   Wallet,
@@ -70,7 +70,7 @@ export default function PagamentoGeral() {
  
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin) {
+    if (dadosDoLogin && dadosDoLogin !== "undefined") {
       setUser(JSON.parse(dadosDoLogin));
     } else {
       window.location.href = "/Login";
@@ -93,7 +93,9 @@ export default function PagamentoGeral() {
  
 
   return (
-    <div className="flex bg-gray-50 font-sans transition-all duration-500">
+    <div className="flex " >
+      
+     <div className="flex bg-gray-50 h-full font-sans transition-all duration-500 lg:w-1/2">
       {/* Conteúdo principal */}
       <div className="flex-1 p-4">
         <div className="px-4 md:px-20 py-10 max-w-7xl mx-auto">
@@ -340,6 +342,8 @@ export default function PagamentoGeral() {
           </div>
         </div>
       </div>
+      </div>
+      <img src={gif} alt="" className="flex w-1/2 h-54 border-l border-gray-200" />
     </div>
   );
 }

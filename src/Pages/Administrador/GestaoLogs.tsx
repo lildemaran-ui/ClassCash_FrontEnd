@@ -1,23 +1,28 @@
-import {
-  Bell,
-  ChevronDown,
-  CircleUser,
-  Clock,
-  FileText,
-  InfoIcon,
-  KeyIcon,
-  LayoutDashboard,
-  Menu,
-  School,
-  ScrollText,
-  Settings,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import Logo5 from "../../assets/Logo5.5.png";
+import Avatar from "@/components/Avatar/Avatar";
+import { Header } from "@/components/Header/header";
+import MenuSecret from "@/components/Menu/MenuAdmin";
+import { ChevronDown, Clock } from "lucide-react";
+import { useEffect, useState } from "react";
 export default function GestaoLogs() {
+  const [menu, setMenu] = useState(true);
+  function OpenMenu() {
+    setMenu(true);
+  }
+
+  /*   const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
+
+    if (dadosDoLogin && dadosDoLogin !== "undefined") {
+      setUser(JSON.parse(dadosDoLogin));
+    } else {
+      window.location.href = "/Login";
+    }
+  }, []);
+  if (!user) {
+    return <span>Carregado...</span>;
+  } */
+
   // Função auxiliar para determinar a cor do tag de nível de log
   const getLevelColor = (level: LogEntry["level"]) => {
     switch (level) {
@@ -96,160 +101,23 @@ export default function GestaoLogs() {
     },
   ];
 
-  // Componente SidebarItem atualizado com as novas medidas
-  const SidebarItem = ({
-    icon: Icon,
-    label,
-    active = false,
-  }: {
-    icon: LucideIcon;
-    label: string;
-    active?: boolean;
-  }) => (
-    <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500  ${
-        active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
-      }`}
-    >
-      <Icon size={22} className="text-white" />
-      <span className="text-white font-medium text-sm">{label}</span>
-    </div>
-  );
-
-  const [menu, setMenu] = useState(true);
-  function OpenMenu() {
-    setMenu(true);
-  }
-  function CloseMenu() {
-    setMenu(false);
-  }
-
   // --- CONTEÚDO DA PÁGINA: LOGS DO SISTEMA ---
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
-      {menu && (
-        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
-          <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
-            <div className=" flex items-center">
-              <img
-                loading="lazy"
-                src={Logo5}
-                alt="Logo"
-                className="w-16 h-16 "
-              />
-              <p className="text-white font-semibold">ClassCash</p>
-            </div>
-            <button>
-              <Menu size={22} className="text-white" onClick={CloseMenu} />
-            </button>
-          </div>
-          <nav className="flex-1 flex flex-col gap-1 transition-all duration-500 text-white max-h-screen custom_scroll">
-            <Link to="/Administradores">
-              <SidebarItem
-                icon={LayoutDashboard}
-                label="Painel Geral"
-                active={false}
-              />
-            </Link>
-
-            <div className="flex flex-col gap-1 text-white">
-              <Link to="/GestaoDeInstituicao">
-                <SidebarItem
-                  icon={School}
-                  label="Gestão de Instituições"
-                  active={false}
-                />
-              </Link>
-              <Link to="/GestaoDeUsuarios">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Usuarios"
-                  active={false}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
-                  icon={Settings}
-                  label="Gestão de Serviços"
-                  active={false}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
-                  icon={FileText}
-                  label="Gestão de Relatórios"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={KeyIcon}
-                  label="Permissões e Acessos"
-                  active={false}
-                />
-              </Link>
-              <Link to="/GestaoLogs">
-                <SidebarItem
-                  icon={ScrollText}
-                  label="Logs de Atividades"
-                  active={true}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={InfoIcon}
-                  label="Suporte e Ajuda"
-                  active={false}
-                />
-              </Link>
-              <Link to="/Configuracoes">
-                <SidebarItem
-                  icon={Settings}
-                  label="Configurações"
-                  active={false}
-                />
-              </Link>
-            </div>
-          </nav>
-        </aside>
-      )}
+      <MenuSecret />
       <main className="p-6  flex flex-1 flex-col">
-        <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
-          <div className="flex items-center gap-6">
-            {!menu && (
-              <button
-                onClick={OpenMenu}
-                className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
-              >
-                <Menu size={22} />
-              </button>
-            )}
-            <h1 className="text-xl font-bold  text-[#268cff]">
-              Gestão de Logs
-            </h1>
-          </div>
-          {/* Header (Topo) */}
-          <header className="  ">
-            <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
-            <div className="flex items-center space-x-4">
-              {/* Ícones de Notificação e Perfil */}
-              <div className="relative cursor-pointer">
-                <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
-                <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
-              </div>
-              <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
-            </div>
-          </header>
+        <div className="mb-5">
+          {/* <Header
+            titulo="Gestão de Logs"
+            usuario={<Avatar name={user.nome} src={user.foto} size="md"/>}
+          /> */}
         </div>
-
         {/* Filtros Simples (Data e Nível) */}
         <div className="flex space-x-4 mb-6">
           <div className="relative">
             <label className="sr-only">Filtrar por Nível</label>
             <select
-              className="appearance-none block w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-[#268cff] focus:border-[#268cff]"
               defaultValue="Todos os Níveis"
             >
               <option>Todos os Níveis</option>
@@ -263,22 +131,22 @@ export default function GestaoLogs() {
             <label className="sr-only">Filtrar por Data</label>
             <input
               type="date"
-              className="block w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-3 text-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+              className="block w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-3 text-sm focus:outline-none focus:ring-[#268cff] focus:border-[#268cff] text-gray-700"
             />
           </div>
         </div>
 
         {/* Tabela de Logs */}
         <div className="overflow-x-auto border border-gray-200 rounded-xl">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 text-center">
+            <thead className="bg-[#268cff]/70 ">
               <tr>
                 {["Data/Hora", "Nível", "Utilizador", "Ação", "Detalhes"].map(
                   (header) => (
                     <th
                       key={header}
                       scope="col"
-                      className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      className="px-6 py-3 text-center text-sm font-bold text-white  tracking-widest cursor-default"
                     >
                       {header}
                     </th>

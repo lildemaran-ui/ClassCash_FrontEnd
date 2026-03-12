@@ -1,16 +1,17 @@
 import { Link } from "react-router-dom";
 import { TelaLogin } from ".";
-import Fundo from "../../assets/fundoLogin.jpg";
+import Fundo from "../../assets/Reset password-rafiki.svg";
 import Logo55 from "../../assets/Logo5.5.png";
 import FrasesRotativasLogin from "../../Hooks/FrasesRotativasLogin";
 
 export default function Login() {
+
   return (
     /*Tela de login*/
 
     <div className="flex h-screen ">
       <div
-        className=" bg-cover bg-center w-1/2 flex flex-col justify-between p-8  "
+        className=" bg-cover bg-center w-1/2 flex flex-col justify-between p-8  border-r border-gray-200"
         style={{ backgroundImage: `url(${Fundo})` }}
       >
         <Link to="/PaginaInicial">

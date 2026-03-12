@@ -37,7 +37,7 @@ export default function MenuEncar() {
     </div>
   );
   return (
-    <div  className="flex w-[18%] h-full">
+    <div  className="flex w-[15%] h-full">
          {menu ? (
         <aside className="flex flex-col w-full  bg-[#268cff] text-white top-0 sticky">
           <div className="mb-16 pt-4 flex relative justify-between items-center px-4">

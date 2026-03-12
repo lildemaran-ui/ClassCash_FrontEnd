@@ -1,15 +1,32 @@
 import ChartEstud from "@/components/Charts/ChartEstud";
 import { ProfileEditModal } from "@/components/profile_edit_modal";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import {
   CheckCircle,
-  Coins,
-  CreditCard,
   Download,
-  Settings,
-  Shirt
+  Pen
 } from "lucide-react";
+import { useRef } from "react";
+
 import { useEffect, useState } from "react";
 export default function DadosDashEstd() {
+   const pdfRef = useRef<HTMLDivElement>(null);
+
+  const gerarPDF = async () => {
+    const elemento = pdfRef.current;
+    if (!elemento) return;
+
+    const canvas = await html2canvas(elemento, { scale: 2 });
+    const imagem = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const largura = pdf.internal.pageSize.getWidth();
+    const altura = (canvas.height * largura) / canvas.width;
+
+    pdf.addImage(imagem, "PNG", 0, 0, largura, altura);
+    pdf.save("relatorio.pdf");
+  };
   const [Modal, setModal] = useState(false);
 
   function ShowModal() {
@@ -19,27 +36,8 @@ export default function DadosDashEstd() {
   function CloseModal() {
     setModal(false);
   }
-  const StatusCard = ({
-    icon,
-    title,
-    progress,
-  }: {
-    icon: React.ReactNode;
-    title: string;
-    progress: number;
-  }) => (
-    <div className="bg-white p-6 rounded-2xl  border flex flex-col items-center">
-      <div className="mb-4">{icon}</div>
-      <h4 className="font-bold text-gray-800 mb-4">{title}</h4>
-      <div className="w-full bg-gray-100 h-2 rounded-full mb-2">
-        <div
-          className="bg-[#268cff] h-full rounded-full"
-          style={{ width: `${progress}%` }}
-        ></div>
-      </div>
-      <span className="text-xs font-bold text-gray-500">Pago</span>
-    </div>
-  );
+ 
+      
   const SummaryRow = ({ label, value }: { label: string; value: string }) => (
     <div className="flex justify-between text-sm">
       <span className="text-gray-500 font-medium">{label}</span>
@@ -51,7 +49,7 @@ export default function DadosDashEstd() {
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
 
-    if (dadosDoLogin) {
+    if (dadosDoLogin && dadosDoLogin !== "undefined") {
       setUser(JSON.parse(dadosDoLogin));
     } else {
       window.location.href = "/Login";
@@ -63,7 +61,8 @@ export default function DadosDashEstd() {
 
   return (
     <div className="flex flex-col w-full">
-      <header className="flex justify-between items-start mb-8 transition-all duration-500">
+      <div ref={pdfRef} >
+        <header className="flex justify-between items-start mb-8 transition-all duration-500">
         <div className="flex items-center gap-6">
           <div className="w-56 h-56 rounded-full overflow-hidden border-4 border-white shadow-sm flex items-center justify-center bg-gray-100">
             {user.foto ? (
@@ -106,11 +105,11 @@ export default function DadosDashEstd() {
         </div>
 
         <div className="text-right">
-          <button
+         <button
             onClick={ShowModal}
             className="text-[#268cff] text-[16px] font-medium flex items-center gap-2 mb-4 ml-auto transition-all duration-500"
           >
-            <Settings size={24} />
+            <Pen size={18} /> EDITAR PERFIL
           </button>
 
           <div className="bg-white p-8 rounded-xl border  min-w-[250px] flex items-center gap-4">
@@ -132,25 +131,7 @@ export default function DadosDashEstd() {
 
       <hr className="mb-8 border-gray-200" />
       {/* Status Cards */}
-      <div className="grid grid-cols-3  gap-6 mb-8">
-        <div>
-          <StatusCard
-            icon={<CreditCard className="text-gray-600" />}
-            title="Cartão Escolar"
-            progress={60}
-          />
-        </div>
-        <StatusCard
-          icon={<Shirt className="text-gray-600" />}
-          title="Uniformes"
-          progress={85}
-        />
-        <StatusCard
-          icon={<Coins className="text-gray-600" />}
-          title="Propinas"
-          progress={100}
-        />
-      </div>
+    
 
       {/* Financial Summary & Charts */}
       <div className="grid grid-cols-2 gap-8 mb-8">
@@ -200,14 +181,17 @@ export default function DadosDashEstd() {
         </table>
       </div>
 
-      <div className="mt-6 flex justify-end">
-        <button className="bg-[#268cff] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-all duration-500">
-          <Download size={18} /> Gerar PDF
-        </button>
-      </div>
-
       {/* Modal de edição de perfil */}
       <ProfileEditModal isOpen={Modal} onClose={CloseModal} user={user} />
+      </div>
+      <div className="mt-6 flex justify-end">
+        <button 
+          onClick={() => gerarPDF()}
+          className="bg-[#268cff] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-all duration-500">
+          <Download size={18} /> Gerar PDF
+          
+        </button>
+      </div>
     </div>
   );
 }

@@ -1,38 +1,35 @@
-import { Link } from "react-router-dom";
 import {
-  CreditCard,
-  Receipt,
-  Settings,
-  MessageSquare,
-  AlertOctagon,
-  FileText,
-  ScrollText,
-  KeyIcon,
-  School,
-  InfoIcon,
-  Search,
-  Bell,
-  CircleUser,
-  Menu,
-  Users,
-  LayoutDashboard,
-  Plus,
-  Minus,
-  Building2,
-  UploadCloud,
-  ArrowUp,
   ArrowDown,
-  CheckCircle,
-  XCircle,
+  ArrowUp,
+  Bell,
+  Building2,
   Calendar,
-  Phone,
-  Mail,
+  CheckCircle,
   ChevronDown,
+  CircleUser,
+  FileText,
+  InfoIcon,
+  KeyIcon,
+  LayoutDashboard,
+  Mail,
+  Menu,
+  Minus,
+  Phone,
+  Plus,
+  School,
+  ScrollText,
+  Search,
+  Settings,
+  UploadCloud,
+  Users,
   X,
+  XCircle,
   type LucideIcon,
 } from "lucide-react";
 import React from "react";
+import { Link } from "react-router-dom";
 import Logo5 from "../../assets/Logo5.5.png";
+import MenuAdmin from "@/components/Menu/MenuAdmin";
 export default function GestaoDeInstituicao() {
   const [expandedInstitutionId, setExpandedInstitutionId] = React.useState<
     number | null
@@ -317,7 +314,6 @@ export default function GestaoDeInstituicao() {
                   <div>
                     <label
                       htmlFor="adminName"
-                      De
                       className="block text-sm font-medium text-gray-700"
                     >
                       Nome
@@ -587,95 +583,7 @@ export default function GestaoDeInstituicao() {
   return (
     <div className="flex  bg-gray-50 font-sans ">
       {/* Sidebar */}
-
-      {menu && (
-        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
-          <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
-            <div className=" flex items-center">
-              <img
-                loading="lazy"
-                src={Logo5}
-                alt="Logo"
-                className="w-16 h-16 "
-              />
-              <p className="text-white font-semibold">ClassCash</p>
-            </div>
-            <button>
-              <Menu size={22} className="text-white" onClick={CloseMenu} />
-            </button>
-          </div>
-          <nav className="flex-1 flex flex-col gap-1 transition-all duration-500 text-white max-h-screen custom_scroll">
-            <Link to="/Administradores">
-              <SidebarItem
-                icon={LayoutDashboard}
-                label="Painel Geral"
-                active={window.location.pathname === "/Administradores"}
-              />
-            </Link>
-
-            <div className="flex flex-col gap-1 text-white">
-              <Link to="">
-                <SidebarItem
-                  icon={School}
-                  label="Gestão de Instituições"
-                  active={window.location.pathname === "/GestaoDeInstituicao"}
-                />
-              </Link>
-              <Link to="/GestaoDeUsuarios">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Usuarios"
-                  active={window.location.pathname === "/GestaoDeUsuarios"}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
-                  icon={Settings}
-                  label="Gestão de Serviços"
-                  active={false}
-                />
-              </Link>
-
-              <Link to="">
-                <SidebarItem
-                  icon={FileText}
-                  label="Gestão de Relatórios"
-                  active={false}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={KeyIcon}
-                  label="Permissões e Acessos"
-                  active={false}
-                />
-              </Link>
-              <Link to="/GestaoLogs">
-                <SidebarItem
-                  icon={ScrollText}
-                  label="Logs de Atividades"
-                  active={window.location.pathname === "/GestaoLogs"}
-                />
-              </Link>
-              <Link to="">
-                <SidebarItem
-                  icon={InfoIcon}
-                  label="Suporte e Ajuda"
-                  active={false}
-                />
-              </Link>
-              <Link to="/Configuracoes">
-                <SidebarItem
-                  icon={Settings}
-                  label="Configurações"
-                  active={window.location.pathname === "/Configuracoes"}
-                />
-              </Link>
-            </div>
-          </nav>
-        </aside>
-      )}
+      <MenuAdmin />
       {/* Conteúdo Principal */}
       <div className="flex flex-col flex-1 custom_scroll">
         <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">

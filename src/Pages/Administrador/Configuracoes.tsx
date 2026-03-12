@@ -2,31 +2,27 @@
 
 import {
   AlertCircle,
+  Bell,
   BellRing,
   ChevronDown,
-  Lock,
-  User,
-  Bell,
-  Menu,
-  LayoutDashboard,
-  Users,
-  Settings,
-  CreditCard,
-  Receipt,
-  MessageSquare,
-  AlertOctagon,
-  FileText,
-  KeyIcon,
-  ScrollText,
-  InfoIcon,
-  School,
   CircleUser,
-  type LucideIcon,
+  FileText,
+  InfoIcon,
+  KeyIcon,
+  LayoutDashboard,
+  Lock,
+  Menu,
+  School,
+  ScrollText,
+  Settings,
+  User,
+  Users,
+  type LucideIcon
 } from "lucide-react";
-import { useState } from "react";
-import React from "react";
-import Logo5 from "../../assets/Logo5.5.png";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Logo5 from "../../assets/Logo5.5.png";
+import MenuAdmin from "@/components/Menu/MenuAdmin";
 
 export default function Configuracoes() {
   const [menu, setMenu] = useState(true);
@@ -329,98 +325,8 @@ export default function Configuracoes() {
 
   return (
     <main className="">
-      <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
-        {menu && (
-          <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
-            <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
-              <div className=" flex items-center">
-                <img
-                  loading="lazy"
-                  src={Logo5}
-                  alt="Logo"
-                  className="w-16 h-16 "
-                />
-                <p className="text-white font-semibold">ClassCash</p>
-              </div>
-              <button>
-                <Menu size={22} className="text-white" onClick={CloseMenu} />
-              </button>
-            </div>
-            <nav className="flex-1 flex flex-col gap-1 transition-all duration-500 text-white max-h-screen custom_scroll">
-              <Link to="/Administradores">
-                <SidebarItem
-                  icon={LayoutDashboard}
-                  label="Painel Geral"
-                  active={window.location.pathname === "/Administradores"}
-                />
-              </Link>
-
-              <div className="flex flex-col gap-1 text-white">
-                
-               
-                <Link to="/GestaoDeInstituicao">
-                  <SidebarItem
-                    icon={School}
-                    label="Gestão de Instituições"
-                    active={window.location.pathname === "/GestaoDeInstituicao"}
-                  />
-                </Link>
-                <Link to="">
-                  <SidebarItem
-                    icon={Users}
-                    label="Gestão de Usuarios"
-                    active={false}
-                  />
-                </Link>
-              
-
-                <Link to="">
-                  <SidebarItem
-                    icon={Settings}
-                    label="Gestão de Serviços"
-                    active={false}
-                  />
-                </Link>
-                
-                <Link to="">
-                  <SidebarItem
-                    icon={FileText}
-                    label="Gestão de Relatórios"
-                    active={false}
-                  />
-                </Link>
-                <Link to="">
-                  <SidebarItem
-                    icon={KeyIcon}
-                    label="Permissões e Acessos"
-                    active={false}
-                  />
-                </Link>
-                <Link to="/GestaoLogs">
-                  <SidebarItem
-                    icon={ScrollText}
-                    label="Logs de Atividades"
-                    active={window.location.pathname === "/GestaoLogs"}
-                  />
-                </Link>
-                <Link to="">
-                  <SidebarItem
-                    icon={InfoIcon}
-                    label="Suporte e Ajuda"
-                    active={false}
-                  />
-                </Link>
-                <Link to="/Configuracoes">
-                  <SidebarItem
-                    icon={Settings}
-                    label="Configurações"
-                    active={window.location.pathname === "/Configuracoes"}
-                  />
-                </Link>
-              </div>
-            </nav>
-          </aside>
-        )}
+      <div className="flex h-screen font-sans overflow-hidden">
+       <MenuAdmin/>
         <div className="flex flex-1 flex-col ">
           <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
             <div className="flex items-center gap-6">
@@ -449,7 +355,7 @@ export default function Configuracoes() {
               </div>
             </header>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-lg flex flex-col lg:flex-row min-h-[70vh] m-8">
+          <div className="bg-blue-50 p-6 rounded-xl shadow-lg flex flex-col lg:flex-row min-h-[70vh] m-8">
             {/* Menu Lateral de Configurações */}
             <aside className="w-full lg:w-64 border-b lg:border-r lg:border-b-0 border-gray-200 lg:pr-6 pb-4 lg:pb-0 mb-4 lg:mb-0 flex lg:block space-x-2 lg:space-x-0 lg:space-y-2 overflow-x-auto">
               {settingItems.map((item) => (

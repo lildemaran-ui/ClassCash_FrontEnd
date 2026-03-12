@@ -27,11 +27,11 @@ import Administaradores from "@/Pages/Administrador/Administradores";
 import GestaoLogs from "@/Pages/Administrador/GestaoLogs";
 import GestaoPropinasAdmin from "@/Pages/Administrador/GestaoPropinasAdmin";
 import Configuracoes from "@/Pages/Administrador/Configuracoes";
-import Reclamacoes from "@/Pages/Estudante/Reclamacoes";
 import ReclamacoesEncar from "@/Pages/Encarregado/ReclamacoesEncar";
 import PagamentoEncar from "@/Pages/Encarregado/PagamentoEncar";
 import Config from "@/Pages/Estudante/Config";
 import ConfiguracaoEncar from "@/Pages/Encarregado/ConfiguracaoEncar";
+import Reclamacoes from "@/Pages/Estudante/reclamacoes";
 
 
 

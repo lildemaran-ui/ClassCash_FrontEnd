@@ -1,10 +1,10 @@
 import Nav from "../../components/Menu/Menu";
 import Objetivo from "../../Pages/Index/Objetivos";
-import fundo from "../../assets/fundo1.jpg";
+import fundo from "../../assets/imgFundoPI.jpeg";
 import Footer from "../../components/Footer/footer";
-import ilustr from "../../assets/ilstr1.jpg";
-import ilustr2 from "../../assets/ilstr2.jpg";
-import ilustr3 from "../../assets/ilstr3.jpg";
+import ilustr from "../../assets/Corpo1PI.jpeg";
+import ilustr2 from "../../assets/Corpo2PI.jpeg";
+import ilustr3 from "../../assets/Corpo3PI.jpeg";
 import Cards from "../../Pages/Index/Cards";
 import FrasesRotativas from "../../Hooks/FrasesRotativas";
 import appacounts from "../../assets/appcounts.png";
@@ -12,11 +12,11 @@ import { Link } from "react-router-dom";
 
 export default function PaginaInicial() {
   return (
-    <div className="flex flex-col w-full overflow-x-hidden">
+    <div className="flex flex-col w-full overflow-x-hidden  ">
       <Nav />
 
       {/* Hero */}
-      <div className="relative w-full h-screen overflow-hidden">
+      <div className="relative w-full h-screen overflow-hidden ">
         <img
           loading="lazy"
           src={fundo}

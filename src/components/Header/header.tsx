@@ -1,5 +1,4 @@
 import { Bell, Settings } from "lucide-react";
-import Avatar from "../Avatar/Avatar";
 import { useEffect, useState } from "react";
 import { ProfileEditModal } from "../profile_edit_modal";
 

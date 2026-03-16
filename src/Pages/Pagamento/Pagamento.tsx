@@ -16,19 +16,17 @@ export default function Pagamentos() {
     }
   }, []);
 
-  if (!user) {
-    return null; // Ou um componente de carregamento, se preferir
-  }
+  if (!user) return null;
 
   return (
     <Layout>
-      <div className="flex-1 w-full h-full mx-auto ">
-        <div className="flex-1 overflow-auto">
+      <div className="flex flex-col w-full min-h-screen">
+        <div className="flex flex-col flex-1 overflow-auto">
           <Header
             titulo="Pagamento"
             usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
           />
-          <div className="">
+          <div className="flex-1 p-4 sm:p-6">
             <PagamentoGeral />
           </div>
         </div>

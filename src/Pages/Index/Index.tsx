@@ -9,6 +9,7 @@ import Cards from "../../Pages/Index/Cards";
 import FrasesRotativas from "../../Hooks/FrasesRotativas";
 import appacounts from "../../assets/appcounts.png";
 import { Link } from "react-router-dom";
+import AppsIlustr from "./AppsIlustr";
 
 export default function PaginaInicial() {
   return (
@@ -141,14 +142,7 @@ export default function PaginaInicial() {
           ou também pode fazer por meio do PayPal e o PayPay.
         </p>
 
-        <div className="flex justify-center mb-12">
-          <img
-            loading="lazy"
-            src={appacounts}
-            alt=""
-            className="w-48 sm:w-64 object-contain"
-          />
-        </div>
+       <AppsIlustr/>
 
         <button className="bg-[#268CFF] text-white text-base sm:text-xl px-6 py-2 sm:py-3 rounded-xl drop-shadow-lg hover:bg-[#1675e2] transition-all duration-700 mb-20">
           Fazer pagamentos

@@ -7,7 +7,6 @@ import ilustr2 from "../../assets/Corpo2PI.jpeg";
 import ilustr3 from "../../assets/Corpo3PI.jpeg";
 import Cards from "../../Pages/Index/Cards";
 import FrasesRotativas from "../../Hooks/FrasesRotativas";
-import appacounts from "../../assets/appcounts.png";
 import { Link } from "react-router-dom";
 import AppsIlustr from "./AppsIlustr";
 

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ArrowLeft, ChevronDown, ChevronUp, Menu } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { useState } from "react";
 import Footer from "../../components/Footer/footer";
 import MenuEstatico from "../../components/Menu/MenuEstatico";
 
@@ -14,12 +14,12 @@ const AccordionItem = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-b border-gray-200 mb-2">
+    <div className="border-b border-gray-300 mb-2">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center py-5 text-left transition-colors hover:text-brandBlue"
       >
-        <span className="font-bold text-blue-900 text-sm">{question}</span>
+        <span className="font-bold text-gray-800/90 text-sm">{question}</span>
         {isOpen ? (
           <ChevronUp className="text-brandBlue" size={22} />
         ) : (
@@ -27,7 +27,7 @@ const AccordionItem = ({
         )}
       </button>
       {isOpen && (
-        <div className="pb-6 text-xs text-gray-600 leading-relaxed animate-fadeIn">
+        <div className="pb-6 text-sm text-gray-600 leading-relaxed animate-fadeIn">
           {answer ||
             "Informação detalhada sobre este tópico será exibida aqui conforme a necessidade da instituição."}
         </div>
@@ -38,7 +38,7 @@ const AccordionItem = ({
 
 export default function FAQScreen() {
   return (
-    <div className="min-h-screen bg-[#f0f5fa] font-sans flex flex-col">
+    <div className="min-h-screen font-sans flex flex-col">
       {/* Navbar Superior Padrão */}
       <MenuEstatico></MenuEstatico>
 
@@ -67,7 +67,7 @@ export default function FAQScreen() {
           <p className="text-gray-800 font-bold text-sm mb-4">
             Necessito de esclarecimentos adicionais?
           </p>
-          <button className="bg-[#268cff] text-white px-8 py-2 rounded-full text-xs font-bold hover:bg-blue-600 transition-all shadow-md">
+          <button className="bg-[#268cff] text-white px-8 py-2 rounded-lg text-sm animate-bounce font-bold hover:bg-blue-600 transition-all shadow-md">
             Entrar em contacto
           </button>
         </div>

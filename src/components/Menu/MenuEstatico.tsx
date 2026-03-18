@@ -12,22 +12,22 @@ export default function MenuEstatico() {
   }
 
   return (
-    <header className=" fixed w-full scrooll-smooth transparent-bg z-50 antialiased">
+    <header className=" fixed top-0 w-full scrooll-smooth transparent-bg z-50 antialiased">
       <div>
-        <nav className="flex h-16 sm:h-20 items-center justify-between  menu-translucido px-6">
+        <nav className="flex h-16 sm:h-20 items-center justify-between  menu-translucido px-4 sm:px-6 lg:px-10">
           <div className="text-[#268CFF] flex items-center font-semibold text-xl sm:text-3xl">
             <img
               loading="lazy"
               src={logo55}
               alt="Sosoft Logo"
-              className="h-16 sm:h-24 object-contain transition-all drop-shadow-md duration-700"
+              className="h-14 sm:h-20 lg:h-24 object-contain transition-all drop-shadow-md duration-700"
             />
 
             <div>
-              <p className="cursor-default text-white ">ClassCash</p>
+              <p className="cursor-default text-white drop-shadow-md ">ClassCash</p>
             </div>
           </div>
-          <div className="hidden md:items-center md:flex gap-4 text-white font-semibold text-base sm:text-lg ">
+          <div className="hidden lg:flex lg:items-center lg:gap-4 gap-3 text-white font-semibold text-sm sm:text-base ">
             <Link
               to="/PaginaInicial"
               className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md "
@@ -70,42 +70,70 @@ export default function MenuEstatico() {
               </button>
             </Link>
           </div>
-          {/* Botão de menu mobile */}
-          <button className="md:hidden " onClick={OpenMenu}>
-            <Menu size={22} className="text-[#268CFF]" />
+          {/* Botão de menu  */}
+          <button className="lg:hidden p-1 " onClick={OpenMenu}>
+            <Menu size={24} className="text-white" />
           </button>
         </nav>
       </div>
-      {/* Menu  mobile */}
+       {/* Overlay */}
+      {menuOpen && (
+        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={CloseMenu} />
+      )}
+
+      {/* Drawer melhorado */}
       <div
-        className={` md:hidden fixed flex  flex-col items-start   px-6 bg-[#268CFF]  w-40 justify-start  right-0 top-0 h-screen shadow-lg z-50 ${
-          menuOpen
-            ? "translate-x-0 opacity-100 font-semibold text-white"
-            : "translate-x-full opacity-0"
-        } `}
+        className={`lg:hidden fixed top-0 right-0 h-screen z-50 w-72 sm:w-80
+          bg-[#268CFF] flex flex-col
+          transition-transform duration-300 ease-in-out
+          ${menuOpen ? "translate-x-0" : "translate-x-full"}
+        `}
       >
-        <div className="flex absolute right-4  top-4 ">
-          <X className="text-white " onClick={CloseMenu}></X>
+        {/* Header do drawer */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
+          <div className="flex items-center gap-2">
+            <img loading="lazy" src={logo55} alt="Logo" className="h-10" />
+            <span className="text-white font-bold text-lg">ClassCash</span>
+          </div>
+          <button
+            onClick={CloseMenu}
+            className="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
+          >
+            <X size={24} className="text-white" />
+          </button>
         </div>
-        <Link to="" className="mb-2 ">
-          Início
-        </Link>
-        <Link to="/AboutUs" className="mb-2 ">
-          Sobre Nós
-        </Link>
-        <Link to="/Contacts" onClick={CloseMenu} className="mb-2 ">
-          Contacto
-        </Link>
-        <Link to="/Instituições" onClick={CloseMenu} className="mb-2 ">
-          Instituições
-        </Link>
-        <Link to="/FAQ's" onClick={CloseMenu} className="mb-2 ">
-          FAQ's
-        </Link>
-        <Link to="" onClick={CloseMenu} className="mb-2 ">
-          Funcinalidades
-        </Link>
+
+        {/* Links */}
+        <nav className="flex flex-col flex-1 px-4 py-6 gap-1 overflow-y-auto">
+          {[
+            { to: "/PaginaInicial", label: "Início" },
+            { to: "/AboutUs", label: "Sobre Nós" },
+            { to: "/Contacts", label: "Contacto" },
+            { to: "/Instituições", label: "Instituições" },
+            { to: "/FAQ's", label: "FAQ's" },
+            { to: "", label: "Funcionalidades" },
+          ].map(({ to, label }) => (
+            <Link
+              key={label}
+              to={to}
+              onClick={CloseMenu}
+              className="text-white font-medium text-base px-4 py-3 rounded-lg hover:bg-white/10 transition-colors duration-200"
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
+
+        {/* Botão entrar no fundo */}
+        <div className="px-6 py-6 border-t border-white/20">
+          <Link to="/Login" onClick={CloseMenu}>
+            <button className="w-full py-3 rounded-lg border-2 border-white text-white font-semibold text-base hover:bg-white hover:text-[#268CFF] transition-colors duration-300">
+              Entrar
+            </button>
+          </Link>
+        </div>
       </div>
+      
     </header>
   );
 }

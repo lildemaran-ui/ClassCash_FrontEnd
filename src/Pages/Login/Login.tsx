@@ -8,7 +8,7 @@ export default function Login() {
     <div className="flex flex-col md:flex-row min-h-screen">
 
       {/* Lado Esquerdo — escondido em mobile */}
-      <div className="hidden md:flex bg-blue-50 w-1/2 flex-col border-r border-gray-200">
+      <div className="hidden lg:flex bg-blue-50 lg:w-1/2 flex-col border-r border-gray-200">
         <Link to="/PaginaInicial">
           <div className="flex items-center p-4">
             <img loading="lazy" src={Logo55} className="h-12 md:h-16" alt="Logo" />
@@ -21,15 +21,11 @@ export default function Login() {
       </div>
 
       {/* Lado Direito — Login */}
-      <div id="login" className="flex flex-col items-center justify-center bg-white w-full md:w-1/2 min-h-screen px-4 py-10">
+      <div id="login" className="flex flex-col items-center justify-center bg-white w-full lg:w-1/2 min-h-screen px-4 ">
         
-        {/* Logo visível apenas em mobile */}
-        <Link to="/PaginaInicial" className="flex md:hidden items-center gap-2 mb-8">
-          <img loading="lazy" src={Logo55} className="h-12" alt="Logo" />
-          <p className="font-bold text-[#268cff] text-lg">ClassCash</p>
-        </Link>
+       
 
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md ">
           <TelaLogin />
         </div>
       </div>

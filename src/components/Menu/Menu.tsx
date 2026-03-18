@@ -54,7 +54,7 @@ export default function Nav() {
             </Link>
           </div>
 
-          {/* Botão hambúrguer */}
+          {/* Botão menu */}
           <button className="lg:hidden p-1" onClick={OpenMenu}>
             <Menu size={28} className={CorMenu} />
           </button>
@@ -84,7 +84,7 @@ export default function Nav() {
             onClick={CloseMenu}
             className="p-2 rounded-lg hover:bg-white/10 transition-colors duration-200"
           >
-            <X size={22} className="text-white" />
+            <X size={24} className="text-white" />
           </button>
         </div>
 

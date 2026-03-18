@@ -1,3 +1,4 @@
+import MenuAdmin from "@/components/Menu/MenuAdmin";
 import {
   ArrowDown,
   ArrowUp,
@@ -7,29 +8,18 @@ import {
   CheckCircle,
   ChevronDown,
   CircleUser,
-  FileText,
-  InfoIcon,
-  KeyIcon,
-  LayoutDashboard,
   Mail,
   Menu,
   Minus,
   Phone,
   Plus,
-  School,
-  ScrollText,
   Search,
-  Settings,
   UploadCloud,
-  Users,
   X,
   XCircle,
-  type LucideIcon,
+  type LucideIcon
 } from "lucide-react";
 import React from "react";
-import { Link } from "react-router-dom";
-import Logo5 from "../../assets/Logo5.5.png";
-import MenuAdmin from "@/components/Menu/MenuAdmin";
 export default function GestaoDeInstituicao() {
   const [expandedInstitutionId, setExpandedInstitutionId] = React.useState<
     number | null
@@ -586,7 +576,7 @@ export default function GestaoDeInstituicao() {
       <MenuAdmin />
       {/* Conteúdo Principal */}
       <div className="flex flex-col flex-1 custom_scroll">
-        <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
+        <div className="flex items-center justify-between z-50 top-0  p-6  sticky h-22 mb-5 bg-translucido">
           <div className="flex items-center gap-6">
             {!menu && (
               <button

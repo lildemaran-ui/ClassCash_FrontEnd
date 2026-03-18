@@ -12,10 +12,11 @@ export function TelaCadastro() {
   const [contacto, setContacto] = useState<string>("");
   const [idInstituicao, setInstituicao] = useState<number|string>("");
   const [proc, setProc] = useState<string>("");
-  const [classe, setClasse] = useState<string>("");
+  const [idClasse, setClasse] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
   const [nomeEstudante, setNomeEstudante] = useState<string>("");
   const [relacao, setRelacao] = useState<string>("");
+  const [msg, setMsg] = useState<{texto: string, tipo: "sucesso" | "erro"} | null>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -49,24 +50,31 @@ export function TelaCadastro() {
   const DadosCadastro = async (event: React.BaseSyntheticEvent) => {
     event.preventDefault();
 
-    // Criar o objeto com TODOS os campos necessários
-    const novoUsuario = {
+    const rota = perfil === "Estudante" ? "http://localhost:5000/api/cadastroEstudante" : "http://localhost:5000/api/cadastroEncarregado";   
+    
+    
+  // Criar o objeto com TODOS os campos necessários
+    const novoUsuario = perfil === "Estudante" ? {
       nome: nome.trim(),
       email: email.trim().toLowerCase(),
       senha: senha.trim(),
       numProcesso: proc.trim(),
-      idInstituicao: 3,
-      perfil,
+      idInstituicao,
       numTel: contacto,
-      foto: image, // Salva a string base64 da foto
-      classe: perfil === "Estudante" ? classe : "N/A",
-      nomeEstudante: perfil === "Encarregado" ? nomeEstudante : null,
-      relacao: perfil === "Encarregado" ? relacao : null,
+      idClasse}: {
+       nome: nome.trim(),
+      email: email.trim().toLowerCase(),
+      senha: senha.trim(),
+      numProcesso: proc.trim(),
+      idInstituicao,
+      numTel: contacto,     
+      nomeEducando: nomeEstudante.trim(),
+      /* relacao, */
     };
 
     try {
       const resposta = await fetch(
-        "http://localhost:5000/api/cadastro",
+       rota,
         {
           method: "POST",
           headers: {
@@ -84,17 +92,18 @@ export function TelaCadastro() {
       if (data.token) {
         localStorage.setItem("Token", data.token); 
       }
-      alert("Cadastro realizado com sucesso!");
+      setMsg({ texto: "Cadastro realizado com sucesso!", tipo: "sucesso" });
+      setTimeout(() => {
         window.location.href="/Login"
-
+      },3000);
     } catch (error) {
       console.error("Erro no Servidor", error);
-      alert("Servidor indisponível. Tente novamente mais tarde.");
-      
+      setMsg({ texto: "Erro ao cadastrar usuário.", tipo: "erro" });
     }
   };
 
   return (
+  
     <div>
       <div>
         <div className="mx-auto border border-gray-150 rounded-lg flex flex-col w-full justify-center space-y-6 bg-white p-8 shadow-sm sm:w-[390px]">
@@ -139,14 +148,14 @@ export function TelaCadastro() {
                     />
                   </div>
                   <div className="w-24">
-                    <label className="block text-sm mb-1">Nº Proc.</label>
+                    <label className="block text-sm mb-1">Código </label>
                     <input
-                      required
+                      required = {perfil === "Estudante"}
                       value={proc}
                       onChange={(e) =>
                         setProc(e.target.value.replace(/\D/g, ""))
                       }
-                      maxLength={5}
+                      maxLength={6}
                       type="text"
                       className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                     />
@@ -178,18 +187,18 @@ export function TelaCadastro() {
                     <div className="w-24">
                       <label className="block text-sm mb-1">Classe</label>
                       <select
-                        required
-                        value={classe}
+                        
+                        value={idClasse}
                         onChange={(e) => setClasse(e.target.value)}
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                       >
                         <option value="" disabled>
                           Grau
                         </option>
-                        <option value="7ª">7ª</option>
-                        <option value="8ª">8ª</option>
-                        <option value="9ª">9ª</option>
-                        <option value="10ª">10ª</option>
+                        <option value="7">7ª</option>
+                        <option value="8">8ª</option>
+                        <option value="9">9ª</option>
+                        <option value="10">10ª</option>
                         <option value="11ª">11ª</option>
                         <option value="12ª">12ª</option>
                       </select>
@@ -250,21 +259,11 @@ export function TelaCadastro() {
                 {/* Campos do Encarregado */}
                 {perfil === "Encarregado" && (
                   <>
-                    <div className="flex flex-col">
-                      <label className="text-sm mb-1">Nome do Educando</label>
-                      <input
-                        required
-                        value={nomeEstudante}
-                        onChange={(e) =>
-                          setNomeEstudante(e.target.value.replace(/[0-9]/g, ""))
-                        }
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
-                      />
-                    </div>
+                   
                     <div className="flex flex-col">
                       <label className="text-sm mb-1">Relação Parental</label>
                       <input
-                        required
+                        
                         value={relacao}
                         onChange={(e) =>
                           setRelacao(e.target.value.replace(/[0-9]/g, ""))
@@ -316,6 +315,12 @@ export function TelaCadastro() {
           </div>
         </div>
       </div>
+        {msg && (
+      <div className={`${msg?.tipo === "sucesso" ? "bg-green-100 border border-green-400  text-green-700 px-4 py-3 rounded relative" : "bg-red-100 border border-red-400  text-red-700 px-4 py-3 rounded relative"} `} role="alert">
+        <strong className="font-bold">{msg?.tipo === "sucesso" ? "Sucesso!" : "Erro!"} </strong>
+        <span className="block sm:inline">{msg?.texto}</span>
+      </div>
+    )}
     </div>
   );
 }

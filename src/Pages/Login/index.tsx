@@ -1,13 +1,13 @@
+import axios from "axios";
 import { EyeIcon, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import api from "../../Services/api.ts";
-import axios from "axios";
 export function TelaLogin() {
   const [emailDigitado, setEmail] = useState<string>("");
   const [senhaDigitado, setSenha] = useState<string>("");
   const [mostrarSenha, setMostrar] = useState<boolean>(false);
-  const [msg, setMsg] = useState<{texto: string, tipo: "sucesso" | "erro"} | null>(null);
   const navigate = useNavigate();
 
   const handleLogin = async (event: React.BaseSyntheticEvent) => {
@@ -27,23 +27,19 @@ export function TelaLogin() {
       }
     } catch (erro: unknown) {
       if (axios.isAxiosError(erro) && erro.response) {
-        setMsg({
-          texto: erro.response?.data.mensagem || "E-mail ou senha incorretos.",
-          tipo: "erro",
-        });
+        toast.error("E-mail ou senha incorretos." 
+        );
       } else {
-        setMsg({
-          texto: "Não foi possível conectar ao servidor.",
-          tipo: "erro",
-        });
+        toast.error("Não foi possível conectar ao servidor." );
       }
     }
   };
 
   return (
-    <div
+<div>
+      <div
       id="login"
-      className="min-h-screen flex items-center justify-center px-4 py-10 "
+      className="min-h-screen flex items-center justify-center px-4  "
     >
       <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg p-6 sm:p-8 space-y-6">
         {/* Cabeçalho */}
@@ -122,12 +118,12 @@ export function TelaLogin() {
           </p>
         </div>
       </div>
-       {msg && (
-      <div className={`${msg?.tipo === "sucesso" ? "bg-green-100 border border-green-400  text-green-700 px-4 py-3 rounded relative" : "bg-red-100 border border-red-400  text-red-700 px-4 py-3 rounded relative"} `} role="alert">
-        <strong className="font-bold">{msg?.tipo === "sucesso" ? "Sucesso!" : "Erro!"} </strong>
-        <span className="block sm:inline">{msg?.texto}</span>
-      </div>
-    )}
+      
     </div>
+    <div className="flex justify-end ">
+  
+  
+</div>
+</div>
   );
 }

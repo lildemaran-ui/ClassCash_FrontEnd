@@ -19,7 +19,7 @@ import GestaodeReclamacoes from "@/Pages/Secretaria/GestãodeReclamações/Gesta
 import Relatorio from "@/Pages/Secretaria/Relatorio/Relatorio";
 import Configuracao from "@/Pages/Secretaria/Configuracao/Configuracao";
 import Encarregado from "@/Pages/Encarregado/Encarregado";
-import GestaoDeInstituicao from "@/Pages/Administrador/GestaoDeInstituicao";
+import GestaoDeInstituicao from "@/Pages/Administrador/GestaoInstituicaoAdmin/GestaoDeInstituicao";
 import GestaoEstudantes from "@/Pages/Administrador/GestaoEstudantes";
 import GestaoDeUsuarios from "@/Pages/Administrador/GestaoDeUsuarios";
 import DashboardAdmin from "@/Pages/Administrador/DashboardAdmin";
@@ -32,7 +32,6 @@ import PagamentoEncar from "@/Pages/Encarregado/PagamentoEncar";
 import Config from "@/Pages/Estudante/Config";
 import ConfiguracaoEncar from "@/Pages/Encarregado/ConfiguracaoEncar";
 import Reclamacoes from "@/Pages/Estudante/reclamacoes";
-
 
 
 

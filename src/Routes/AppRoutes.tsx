@@ -1,37 +1,40 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Cadastro from "../Pages/Cadastros/Cadastro";
-import Login from "../Pages/Login/Login";
-import PaginaInicial from "../Pages/Index/Index";
-import Pagamento from "../Pages/Pagamento/Pagamento";
-import SobreNos from "../Pages/Index/AboutUs";
-import Contactos from "../Pages/Index/Contacts";
-import Instituicoes from "../Pages/Instituições/Instituições";
-import FAQScreen from "../Pages/Index/FAQ's";
-import DashboardEstud from "../Pages/Estudante/Dashboard/DashboardEstud";
-import Secretaria from "@/Pages/Secretaria/Secretaria";
-import GestaoAlunos from "@/Pages/Secretaria/GestãodeAlunos/GestaoAlunos";
-import GestaoPropinas from "@/Pages/Secretaria/GestãodePropinas/GestaoPropinas";
-import GestaoPagamentos from "@/Pages/Secretaria/GestãodePagamentos/GestaoPagamentos";
-import GestaodeEncarregados from "@/Pages/Secretaria/GestaodeEncarregados/GestaodeEncarregados";
-import GestaodeServiços from "@/Pages/Secretaria/GestãodeServiços/GestaodeServiços";
-import ModulodeMulta from "@/Pages/Secretaria/MódulodeMultas/ModulodeMulta";
-import GestaodeReclamacoes from "@/Pages/Secretaria/GestãodeReclamações/GestaodeReclamacoes";
-import Relatorio from "@/Pages/Secretaria/Relatorio/Relatorio";
-import Configuracao from "@/Pages/Secretaria/Configuracao/Configuracao";
-import Encarregado from "@/Pages/Encarregado/Encarregado";
-import GestaoDeInstituicao from "@/Pages/Administrador/GestaoInstituicaoAdmin/GestaoDeInstituicao";
-import GestaoEstudantes from "@/Pages/Administrador/GestaoEstudantes";
-import GestaoDeUsuarios from "@/Pages/Administrador/GestaoDeUsuarios";
-import DashboardAdmin from "@/Pages/Administrador/DashboardAdmin";
 import Administaradores from "@/Pages/Administrador/Administradores";
+import Configuracoes from "@/Pages/Administrador/Configuracoes";
+import DashboardAdmin from "@/Pages/Administrador/DashboardAdmin";
+import GestaoDeUsuarios from "@/Pages/Administrador/GestaoDeUsuarios";
+import GestaoEstudantes from "@/Pages/Administrador/GestaoEstudantes";
+import GestaoDeInstituicao from "@/Pages/Administrador/GestaoInstituicaoAdmin/GestaoDeInstituicao";
 import GestaoLogs from "@/Pages/Administrador/GestaoLogs";
 import GestaoPropinasAdmin from "@/Pages/Administrador/GestaoPropinasAdmin";
-import Configuracoes from "@/Pages/Administrador/Configuracoes";
-import ReclamacoesEncar from "@/Pages/Encarregado/ReclamacoesEncar";
-import PagamentoEncar from "@/Pages/Encarregado/PagamentoEncar";
-import Config from "@/Pages/Estudante/Config";
 import ConfiguracaoEncar from "@/Pages/Encarregado/ConfiguracaoEncar";
+import Encarregado from "@/Pages/Encarregado/Encarregado";
+import PagamentoEncar from "@/Pages/Encarregado/PagamentoEncar";
+import ReclamacoesEncar from "@/Pages/Encarregado/ReclamacoesEncar";
+import Config from "@/Pages/Estudante/Config";
 import Reclamacoes from "@/Pages/Estudante/reclamacoes";
+import Configuracao from "@/Pages/Secretaria/Configuracao/Configuracao";
+import GestaodeEncarregados from "@/Pages/Secretaria/GestaodeEncarregados/GestaodeEncarregados";
+import GestaoAlunos from "@/Pages/Secretaria/GestãodeAlunos/GestaoAlunos";
+import GestaoPagamentos from "@/Pages/Secretaria/GestãodePagamentos/GestaoPagamentos";
+import GestaoPropinas from "@/Pages/Secretaria/GestãodePropinas/GestaoPropinas";
+import GestaodeReclamacoes from "@/Pages/Secretaria/GestãodeReclamações/GestaodeReclamacoes";
+import GestaodeServiços from "@/Pages/Secretaria/GestãodeServiços/GestaodeServiços";
+import ModulodeMulta from "@/Pages/Secretaria/MódulodeMultas/ModulodeMulta";
+import Relatorio from "@/Pages/Secretaria/Relatorio/Relatorio";
+import Secretaria from "@/Pages/Secretaria/Secretaria";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Cadastro from "../Pages/Cadastros/Cadastro";
+import DashboardEstud from "../Pages/Estudante/Dashboard/DashboardEstud";
+import SobreNos from "../Pages/Index/AboutUs";
+import Contactos from "../Pages/Index/Contacts";
+import FAQScreen from "../Pages/Index/FAQ's";
+import PaginaInicial from "../Pages/Index/Index";
+import Instituicoes from "../Pages/Instituições/Instituições";
+import Login from "../Pages/Login/Login";
+import Pagamento from "../Pages/Pagamento/Pagamento";
+import GestaoDeRelatorios from "@/Pages/Administrador/GestaoDeRelatorio";
+import PermissoesAcessos from "@/Pages/Administrador/PermissoesAcessos";
+import SuporteAjuda from "@/Pages/Administrador/SuporteAjuda";
 
 
 
@@ -72,6 +75,9 @@ export default function AppRoutes() {
       <Route path="/ConfiguracaoEncar" element={<ConfiguracaoEncar/>}></Route>
       <Route path="/ReclamacoesEncar" element={<ReclamacoesEncar/>}></Route>
       <Route path="/PagamentoEncar" element={<PagamentoEncar/>}></Route>
+      <Route path="/PermissoesAcessos" element={<PermissoesAcessos/>}></Route>
+      <Route path="/SuporteAjuda" element={<SuporteAjuda/>}></Route>
+      <Route path="/GestaoDeRelatorio" element={<GestaoDeRelatorios/>}></Route>
     </Routes>
 
 

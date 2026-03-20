@@ -1,6 +1,16 @@
 // src/components/Cadastro/TelaCadastro.tsx
 
-import { EyeIcon, EyeOff, X, Building2, ArrowRight, AlertCircle, LucideAlertTriangle } from "lucide-react";
+import {
+  EyeIcon,
+  EyeOff,
+  X,
+  Building2,
+  ArrowRight,
+  AlertCircle,
+  LucideAlertTriangle,
+  ImagePlus,
+  ImagePlusIcon,
+} from "lucide-react";
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -16,14 +26,16 @@ interface RouterState {
 }
 
 // ─── Modal de Aviso ───────────────────────────────────────────────────────────
-function InstitutionCheckModal({ onGoCheck, onClose }: {
+function InstitutionCheckModal({
+  onGoCheck,
+  onClose,
+}: {
   onGoCheck: () => void;
   onClose: () => void;
 }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-
         {/* Topo colorido */}
         <div className="bg-gradient-to-br from-[#268cff] to-[#1a6fd4] p-6 pb-8 relative">
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto">
@@ -51,30 +63,32 @@ function InstitutionCheckModal({ onGoCheck, onClose }: {
                   Antes de criar a sua conta
                 </p>
                 <p className="text-xs text-gray-500 leading-relaxed">
-                  Para se cadastrar, a sua instituição de ensino precisa de estar
-                  registada na nossa plataforma.
+                  Para se cadastrar, a sua instituição de ensino precisa de
+                  estar registada na nossa plataforma.
                 </p>
               </div>
             </div>
           </div>
 
           <p className="text-xs text-gray-500 text-center mb-5 leading-relaxed">
-            Clique em <strong className="text-gray-700">"Verificar Instituição"</strong> para
-            consultar a lista de instituições parceiras. Após encontrar a sua, clique
-            em <strong className="text-gray-700">"Cadastrar‑se"</strong> e será redirecionado
-            de volta aqui automaticamente.
+            Clique em{" "}
+            <strong className="text-gray-700">"Verificar Instituição"</strong>{" "}
+            para consultar a lista de instituições parceiras. Após encontrar a
+            sua, clique em{" "}
+            <strong className="text-gray-700">"Cadastrar‑se"</strong> e será
+            redirecionado de volta aqui automaticamente.
           </p>
 
           {/* Botões */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-center">
               <button
-              onClick={onGoCheck}
-              className="w-full flex items-center justify-center gap-2 bg-[#268cff] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-blue-600 active:scale-95 transition-all duration-700 shadow-md shadow-blue-200"
-            >
-              Verificar Instituição
-              <ArrowRight className=" h-5" />
-            </button>
+                onClick={onGoCheck}
+                className="w-full flex items-center justify-center gap-2 bg-[#268cff] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-blue-600 active:scale-95 transition-all duration-700 shadow-md shadow-blue-200"
+              >
+                Verificar Instituição
+                <ArrowRight className=" h-5" />
+              </button>
             </div>
             <button
               onClick={onClose}
@@ -91,32 +105,38 @@ function InstitutionCheckModal({ onGoCheck, onClose }: {
 
 // ─── Formulário de Cadastro ───────────────────────────────────────────────────
 export function TelaCadastro() {
-  const location  = useLocation();
-  const navigate  = useNavigate();
-  const routerState   = location.state as RouterState | null;
-  const preSelected   = routerState?.preSelectedInstitution ?? null;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const routerState = location.state as RouterState | null;
+  const preSelected = routerState?.preSelectedInstitution ?? null;
   const fromInstitutions = routerState?.fromInstitutions ?? false;
 
   // Mostra o modal se o utilizador NÃO veio da página de instituições
   // e NÃO tem instituição pré-seleccionada
   const [showModal, setShowModal] = useState(
-    !fromInstitutions && preSelected === null
+    !fromInstitutions && preSelected === null,
   );
 
-  const [mostrarSenha, setMostrar]        = useState<boolean>(false);
-  const [image, setImage]                 = useState<string | null>(null);
-  const [perfil, setPerfil]               = useState<string>("");
-  const [nome, setNome]                   = useState<string>("");
-  const [email, setEmail]                 = useState<string>("");
-  const [contacto, setContacto]           = useState<string>("");
-  const [idInstituicao, setInstituicao]   = useState<number | string>(preSelected?.id ?? "");
-  const [proc, setProc]                   = useState<string>("");
-  const [idclasse, setClasse]             = useState<number | string>("");
-  const [senha, setSenha]                 = useState<string>("");
+  const [mostrarSenha, setMostrar] = useState<boolean>(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [perfil, setPerfil] = useState<string>("");
+  const [nome, setNome] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [contacto, setContacto] = useState<string>("");
+  const [idInstituicao, setInstituicao] = useState<number | string>(
+    preSelected?.id ?? "",
+  );
+  const [proc, setProc] = useState<string>("");
+  const [idclasse, setClasse] = useState<number | string>("");
+  const [senha, setSenha] = useState<string>("");
   const [nomeEstudante, setNomeEstudante] = useState<string>("");
-  const [relacao, setRelacao]             = useState<string>("");
-  const [instituicoes, setInstituicoes]   = useState<{ idInstituicao: number; nome: string }[]>([]);
-  const [classes, setClasses]             = useState<{ idclasse: number; nivel: number }[]>([]);
+  const [relacao, setRelacao] = useState<string>("");
+  const [instituicoes, setInstituicoes] = useState<
+    { idInstituicao: number; nome: string }[]
+  >([]);
+  const [classes, setClasses] = useState<{ idclasse: number; nivel: number }[]>(
+    [],
+  );
 
   // Carregar instituições da API
   useEffect(() => {
@@ -130,7 +150,7 @@ export function TelaCadastro() {
         }
       })
       .catch((err) => console.error("Erro ao carregar instituições", err));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Carregar classes quando a instituição muda
@@ -156,22 +176,48 @@ export function TelaCadastro() {
 
   const MudarPerfil = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setPerfil(event.target.value);
-    setNome(""); setProc(""); setClasse(""); setEmail("");
-    setContacto(""); setSenha(""); setNomeEstudante("");
-    setRelacao(""); setImage(null); setClasses([]);
+    setNome("");
+    setProc("");
+    setClasse("");
+    setEmail("");
+    setContacto("");
+    setSenha("");
+    setNomeEstudante("");
+    setRelacao("");
+    setImage(null);
+    setClasses([]);
     if (!preSelected) setInstituicao("");
   };
 
   const DadosCadastro = async (event: React.BaseSyntheticEvent) => {
     event.preventDefault();
 
-    const rota = perfil === "Estudante"
-      ? "http://localhost:5000/api/cadastroEstudante"
-      : "http://localhost:5000/api/cadastroEncarregado";
+    const rota =
+      perfil === "Estudante"
+        ? "http://localhost:5000/api/cadastroEstudante"
+        : "http://localhost:5000/api/cadastroEncarregado";
 
-    const novoUsuario = perfil === "Estudante"
-      ? { nome: nome.trim(), email: email.trim().toLowerCase(), senha: senha.trim(), numProcesso: proc.trim(), idInstituicao, numTel: contacto, idclasse }
-      : { nome: nome.trim(), email: email.trim().toLowerCase(), senha: senha.trim(), numProcesso: proc.trim(), idInstituicao, numTel: contacto, nomeEducando: nomeEstudante.trim(), grauParentesco: relacao.trim() };
+    const novoUsuario =
+      perfil === "Estudante"
+        ? {
+            nome: nome.trim(),
+            email: email.trim().toLowerCase(),
+            senha: senha.trim(),
+            numProcesso: proc.trim(),
+            idInstituicao,
+            numTel: contacto,
+            idclasse,
+          }
+        : {
+            nome: nome.trim(),
+            email: email.trim().toLowerCase(),
+            senha: senha.trim(),
+            numProcesso: proc.trim(),
+            idInstituicao,
+            numTel: contacto,
+            nomeEducando: nomeEstudante.trim(),
+            grauParentesco: relacao.trim(),
+          };
 
     try {
       const resposta = await fetch(rota, {
@@ -179,11 +225,17 @@ export function TelaCadastro() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(novoUsuario),
       });
-      const data = await resposta.json() as { token?: string; error?: string };
-      if (!resposta.ok) throw new Error(data.error ?? "Erro ao cadastrar usuário");
+      const data = (await resposta.json()) as {
+        token?: string;
+        error?: string;
+      };
+      if (!resposta.ok)
+        throw new Error(data.error ?? "Erro ao cadastrar usuário");
       if (data.token) localStorage.setItem("Token", data.token);
       toast.success("Cadastro realizado com sucesso!");
-      setTimeout(() => { window.location.href = "/Login"; }, 3000);
+      setTimeout(() => {
+        window.location.href = "/Login";
+      }, 3000);
     } catch (error) {
       console.error("Erro no Servidor", error);
       toast.error("Erro ao cadastrar usuário.");
@@ -223,7 +275,9 @@ export function TelaCadastro() {
                 <p className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">
                   Instituição seleccionada
                 </p>
-                <p className="text-xs font-semibold text-gray-800 truncate">{preSelected.nome}</p>
+                <p className="text-xs font-semibold text-gray-800 truncate">
+                  {preSelected.nome}
+                </p>
               </div>
             </div>
           )}
@@ -231,10 +285,18 @@ export function TelaCadastro() {
           <form className="flex flex-col gap-4 w-80" onSubmit={DadosCadastro}>
             {/* Perfil */}
             <div className="flex flex-col">
-              <label className="text-sm mb-1 font-medium">Perfil de Usuário</label>
-              <select value={perfil} onChange={MudarPerfil}
-                className="border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#1e88e5]" required>
-                <option value="" disabled>Selecione o seu perfil</option>
+              <label className="text-sm mb-1 font-medium">
+                Perfil de Usuário
+              </label>
+              <select
+                value={perfil}
+                onChange={MudarPerfil}
+                className="border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#1e88e5]"
+                required
+              >
+                <option value="" disabled>
+                  Selecione o seu perfil
+                </option>
                 <option value="Estudante">Estudante</option>
                 <option value="Encarregado">Encarregado</option>
               </select>
@@ -246,18 +308,30 @@ export function TelaCadastro() {
                 <div className="flex gap-3">
                   <div className="flex-1">
                     <label className="block text-sm mb-1">Nome Completo</label>
-                    <input required value={nome} type="text"
-                      onChange={(e) => setNome(e.target.value.replace(/[0-9]/g, ""))}
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]" />
+                    <input
+                      required
+                      value={nome}
+                      type="text"
+                      onChange={(e) =>
+                        setNome(e.target.value.replace(/[0-9]/g, ""))
+                      }
+                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                    />
                   </div>
-                 {perfil === "Encarregado" && (
-                  <div className="w-24">
-                    <label className="block text-sm mb-1">Código</label>
-                    <input value={proc} type="text" maxLength={6}
-                      onChange={(e) => setProc(e.target.value.replace(/\D/g, ""))}
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]" />
-                  </div>
-                 )}
+                  {perfil === "Encarregado" && (
+                    <div className="w-24">
+                      <label className="block text-sm mb-1">Código</label>
+                      <input
+                        value={proc}
+                        type="text"
+                        maxLength={6}
+                        onChange={(e) =>
+                          setProc(e.target.value.replace(/\D/g, ""))
+                        }
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 {/* Instituição + Classe */}
@@ -266,17 +340,30 @@ export function TelaCadastro() {
                     <label className="block text-sm mb-1">Instituição</label>
                     {preSelected ? (
                       <div className="relative">
-                        <input type="text" readOnly value={preSelected.nome}
-                          className="w-full border-2 border-blue-300 bg-blue-50 rounded-lg h-10 text-xs px-4 outline-none text-blue-800 font-medium cursor-default" />
+                        <input
+                          type="text"
+                          readOnly
+                          value={preSelected.nome}
+                          className="w-full border-2 border-blue-300 bg-blue-50 rounded-lg h-10 text-xs px-4 outline-none text-blue-800 font-medium cursor-default"
+                        />
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-green-500" />
                       </div>
                     ) : (
-                      <select required value={idInstituicao}
-                        onChange={(e) => setInstituicao(parseInt(e.target.value))}
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]">
-                        <option value="" disabled>Selecione</option>
+                      <select
+                        required
+                        value={idInstituicao}
+                        onChange={(e) =>
+                          setInstituicao(parseInt(e.target.value))
+                        }
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                      >
+                        <option value="" disabled>
+                          Selecione
+                        </option>
                         {instituicoes.map((i) => (
-                          <option key={i.idInstituicao} value={i.idInstituicao}>{i.nome}</option>
+                          <option key={i.idInstituicao} value={i.idInstituicao}>
+                            {i.nome}
+                          </option>
                         ))}
                       </select>
                     )}
@@ -284,14 +371,21 @@ export function TelaCadastro() {
                   {perfil === "Estudante" && (
                     <div className="w-24">
                       <label className="block text-sm mb-1">Classe</label>
-                      <select required value={idclasse}
+                      <select
+                        required
+                        value={idclasse}
                         onChange={(e) => setClasse(parseInt(e.target.value))}
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]">
-                        <option value="" disabled>Grau</option>
-                        <option value="" >Grau</option>
-                        
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                      >
+                        <option value="" disabled>
+                          Grau
+                        </option>
+                        <option value="">Grau</option>
+
                         {classes.map((c) => (
-                          <option key={c.idclasse} value={c.idclasse}>{c.nivel}ª</option>
+                          <option key={c.idclasse} value={c.idclasse}>
+                            {c.nivel}ª
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -302,15 +396,25 @@ export function TelaCadastro() {
                 <div className="flex gap-3">
                   <div className="flex-1">
                     <label className="block text-sm mb-1">Email</label>
-                    <input required value={email} type="email"
+                    <input
+                      required
+                      value={email}
+                      type="email"
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]" />
+                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                    />
                   </div>
                   <div className="flex-1">
                     <label className="block text-sm mb-1">Contacto</label>
-                    <input value={contacto} type="tel" maxLength={9}
-                      onChange={(e) => setContacto(e.target.value.replace(/\D/g, ""))}
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]" />
+                    <input
+                      value={contacto}
+                      type="tel"
+                      maxLength={9}
+                      onChange={(e) =>
+                        setContacto(e.target.value.replace(/\D/g, ""))
+                      }
+                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                    />
                   </div>
                 </div>
 
@@ -318,14 +422,22 @@ export function TelaCadastro() {
                 <div className="flex flex-col">
                   <label className="text-sm mb-1">Palavra-Passe</label>
                   <div className="relative">
-                    <input required value={senha} type={mostrarSenha ? "text" : "password"}
+                    <input
+                      required
+                      value={senha}
+                      type={mostrarSenha ? "text" : "password"}
                       onChange={(e) => setSenha(e.target.value)}
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]" />
-                    <div className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                      onClick={() => setMostrar(!mostrarSenha)}>
-                      {mostrarSenha
-                        ? <EyeIcon size={22} className="text-[#268cffb2]" />
-                        : <EyeOff  size={22} className="text-[#268cffb2]" />}
+                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                    />
+                    <div
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                      onClick={() => setMostrar(!mostrarSenha)}
+                    >
+                      {mostrarSenha ? (
+                        <EyeIcon size={22} className="text-[#268cffb2]" />
+                      ) : (
+                        <EyeOff size={22} className="text-[#268cffb2]" />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -334,25 +446,55 @@ export function TelaCadastro() {
                 {perfil === "Encarregado" && (
                   <div className="flex flex-col">
                     <label className="text-sm mb-1">Relação Parental</label>
-                    <input value={relacao}
-                      onChange={(e) => setRelacao(e.target.value.replace(/[0-9]/g, ""))}
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]" />
+                    <input
+                      value={relacao}
+                      onChange={(e) =>
+                        setRelacao(e.target.value.replace(/[0-9]/g, ""))
+                      }
+                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                    />
                   </div>
                 )}
 
                 {/* Foto */}
-                <div className="flex items-center gap-4 py-2 border-t mt-2">
-                  <div className="w-16 h-16 rounded-full border-2 border-dashed flex items-center justify-center overflow-hidden bg-gray-50">
-                    {image
-                      ? <img loading="lazy" src={image} className="w-full h-full object-cover" alt="foto" />
-                      : <span className="text-[10px]">Foto</span>}
-                  </div>
-                  <input type="file" accept="image/*" onChange={handleImageChange}
-                    className="text-[10px] file:bg-blue-50 file:px-3 file:py-2 file:border-none file:rounded-xl file:text-blue-700 file:font-medium" />
+                {/* Foto */}
+                <div className="py-2 border-t mt-2">
+                  <label className="block text-sm mb-1 ">
+                    Foto de Perfil
+                  </label>
+                  <label
+                    htmlFor="fotoInput"
+                    className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-[#268cff] transition-colors cursor-pointer overflow-hidden"
+                  >
+                    {image ? (
+                      <img
+                        loading="lazy"
+                        src={image}
+                        alt="preview"
+                        className="h-20 object-contain rounded-lg"
+                      />
+                    ) : (
+                      <>
+                        <ImagePlus className="w-7 h-7 text-gray-400 mb-1" />
+                        <p className="text-xs text-gray-500">
+                          Arraste ou clique para carregar
+                        </p>
+                      </>
+                    )}
+                  </label>
+                  <input
+                    id="fotoInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
                 </div>
 
-                <button type="submit"
-                  className="bg-[#1e88e5] h-10 w-full rounded-lg text-white font-medium hover:bg-blue-500 transition-colors">
+                <button
+                  type="submit"
+                  className="bg-[#1e88e5] h-10 w-full rounded-lg text-white font-medium hover:bg-blue-500 transition-colors"
+                >
                   Cadastrar
                 </button>
               </div>
@@ -362,12 +504,12 @@ export function TelaCadastro() {
           <div className="text-center">
             <p className="text-xs">
               Já tem uma conta?{" "}
-              <Link to="/Login" className="text-[#1e88e5] hover:underline">Faça o Login</Link>
+              <Link to="/Login" className="text-[#1e88e5] hover:underline">
+                Faça o Login
+              </Link>
             </p>
           </div>
         </div>
-
-       
       </div>
     </>
   );

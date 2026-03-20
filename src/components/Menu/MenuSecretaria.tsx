@@ -1,11 +1,11 @@
 import {
   AlertOctagon, CreditCard, FileText, LayoutDashboard,
-  Menu, MessageSquare, Receipt, Settings, Users, X,
-  type LucideIcon
+  LogOut, Menu, MessageSquare, Receipt, Settings, Users, X,
+  type LucideIcon,
 } from "lucide-react";
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Logo5 from "../../assets/Logo5.5.png";
+import { useState, useEffect } from "react";
 
 export default function MenuSecretaria() {
   const [menu, setMenu] = useState<boolean>(() => {
@@ -53,7 +53,7 @@ export default function MenuSecretaria() {
     label: string;
     active?: boolean;
   }) => (
-    <div className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
+    <div className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-300 ${
       active ? "bg-white/20" : "hover:bg-white/10"
     }`}>
       <Icon size={22} className="text-white shrink-0" />
@@ -111,18 +111,15 @@ export default function MenuSecretaria() {
             <img loading="lazy" src={Logo5} alt="Logo" className="w-14 h-14" />
             <p className="text-white font-semibold">ClassCash</p>
           </div>
-          <button
-            onClick={CloseMenu}
-            className="p-1 rounded hover:bg-white/10 transition"
-          >
+          <button onClick={CloseMenu} className="p-1 rounded hover:bg-white/10 transition">
             {isMobile ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
-        {/* Nav — scroll quando há muitos itens */}
-        <nav className="flex-1 min-h-0 overflow-y-auto flex flex-col gap-1 px-3">
+        {/* Nav */}
+        <nav className="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 px-3">
           {links.map(({ to, icon, label }) => (
-            <Link key={to} to={to}>
+            <Link key={label} to={to}>
               <SidebarItem
                 icon={icon}
                 label={label}
@@ -141,7 +138,7 @@ export default function MenuSecretaria() {
             <span className="text-sm font-medium text-white group-hover:text-blue-700">
               Terminar sessão
             </span>
-            <Menu size={22} className="text-white group-hover:text-blue-700" />
+            <LogOut size={22} className="text-white group-hover:text-blue-700" />
           </Link>
         </div>
       </aside>

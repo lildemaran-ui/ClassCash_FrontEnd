@@ -58,7 +58,7 @@ const CardKpi = ({ title, value, subtext, trend }: {
 
 export default function Secretaria() {
   return (
-    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden">
+    <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuSecretaria />
 
       <main className="flex-1 overflow-y-auto min-w-0">

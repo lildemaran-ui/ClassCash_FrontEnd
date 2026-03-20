@@ -116,7 +116,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       if (form.numTelRepresentante.trim())
         fd.append("numTelRepresentante", form.numTelRepresentante.trim());
 
-      const res = await fetch(`${API_BASE}/cadastro-instituicao`, {
+      const res = await fetch("http://localhost:5000/api", {
         method: "POST",
         // NÃO definir Content-Type — o browser define automaticamente com boundary
         body: fd,
@@ -238,8 +238,8 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
               {/* Contacto */}
               <div>
                 <label htmlFor="contacto" className="block text-sm font-medium text-gray-700">Contacto</label>
-                <input id="contacto" type="tel" placeholder="+244 9XX XXX XXX"
-                  value={form.contacto} onChange={handleChange}
+                <input id="contacto" type="tel" placeholder="+244 9XX XXX XXX" maxLength={9}
+                  value={form.contacto} onChange={(e) => setForm((p) => ({ ...p, contacto: e.target.value.replace(/\D/g, "") }))}
                   className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none mt-1" />
               </div>
             </div>
@@ -258,8 +258,8 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
               {/* NIF */}
               <div>
                 <label htmlFor="nif" className="block text-sm font-medium text-gray-700">NIF</label>
-                <input id="nif" type="text" placeholder="0000000000"
-                  value={form.nif} onChange={handleChange}
+                <input id="nif" type="text" placeholder="0000000000" maxLength={14}
+                  value={form.nif} onChange={(handleChange)}
                   className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none mt-1" />
               </div>
 
@@ -269,7 +269,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                   IBAN <span className="text-red-500">*</span>
                 </label>
                 <input id="iban" type="text" placeholder="AO06 XXXX XXXX XXXX XXXX XXXX"
-                  value={form.iban} onChange={handleChange}
+                  value={form.iban} onChange={(handleChange)} maxLength={30}
                   className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none mt-1" />
               </div>
 

@@ -1,4 +1,14 @@
-import { LayoutDashboard, LogOut, Menu, MessageSquare, Receipt, Settings, Users, X, type LucideIcon } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Receipt,
+  Settings,
+  Users,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import logo5 from "../../assets/Logo5.5.png";
 import { useState, useEffect } from "react";
@@ -13,7 +23,7 @@ export default function MenuEncar() {
   });
 
   const [isMobile, setIsMobile] = useState<boolean>(
-    typeof window !== "undefined" ? window.innerWidth < 1024 : false
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
   );
 
   useEffect(() => {
@@ -49,9 +59,11 @@ export default function MenuEncar() {
     label: string;
     active?: boolean;
   }) => (
-    <div className={`flex items-center gap-3 p-3 mt-2 rounded-lg cursor-pointer transition-all duration-300 ${
-      active ? "bg-white/10" : "hover:bg-white/5"
-    }`}>
+    <div
+      className={`flex items-center gap-3 p-3 mt-2 rounded-lg cursor-pointer transition-all duration-300 ${
+        active ? "bg-white/10" : "hover:bg-white/5"
+      }`}
+    >
       <Icon size={22} className="text-white" />
       <span className="text-white font-medium text-sm">{label}</span>
     </div>
@@ -79,14 +91,15 @@ export default function MenuEncar() {
         className={`
           bg-[#268cff] text-white
           transition-all duration-300 ease-in-out
-          ${!menu
-            ? "hidden"
-            : isMobile
-              ? "flex flex-col fixed top-0 left-0 h-screen w-72 z-50"
-              : "flex flex-col sticky top-0 h-screen w-[220px] shrink-0"
+          ${
+            !menu
+              ? "hidden"
+              : isMobile
+                ? "flex flex-col fixed top-0 left-0 h-screen w-72 z-50"
+                : "flex flex-col sticky top-0 h-screen w-[220px] shrink-0"
           }
         `}
-        style={{ height: '100dvh' }}
+        style={{ height: "100dvh" }}
       >
         {/* Header */}
         <div className="mb-10 pt-4 flex justify-between items-center px-4 shrink-0">
@@ -103,21 +116,42 @@ export default function MenuEncar() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 px-4 space-y-1 overflow-y-auto min-h-0">
+        <nav className="flex-1 flex flex-col gap-1 transition-all duration-500 text-white max-h-screen custom_scroll">
           <Link to="/Encarregado">
-            <SidebarItem icon={LayoutDashboard} label="Painel Geral" active={window.location.pathname === "/Encarregado"} />
+            <SidebarItem
+              icon={LayoutDashboard}
+              label="Painel Geral"
+              active={window.location.pathname === "/Encarregado"}
+            />
           </Link>
           <Link to="/PagamentoEncar">
-            <SidebarItem icon={Receipt} label="Pagamento" active={window.location.pathname === "/PagamentoEncar"} />
+            <SidebarItem
+              icon={Receipt}
+              label="Pagamento"
+              active={window.location.pathname === "/PagamentoEncar"}
+            />
           </Link>
-          <Link to="/DashboardEstud">
-            <SidebarItem icon={Users} label="Painel do seu Educando" active={window.location.pathname === "/DashboardEstud"} />
+
+          <Link to="/DashboardEstud" state={{ fromEncarregado: true }}>
+            <SidebarItem
+              icon={Users}
+              label="Painel do seu Educando"
+              active={window.location.pathname === "/DashboardEstud"}
+            />
           </Link>
           <Link to="/ReclamacoesEncar">
-            <SidebarItem icon={MessageSquare} label="Reclamações" active={window.location.pathname === "/ReclamacoesEncar"} />
+            <SidebarItem
+              icon={MessageSquare}
+              label="Reclamações"
+              active={window.location.pathname === "/ReclamacoesEncar"}
+            />
           </Link>
           <Link to="/ConfiguracaoEncar">
-            <SidebarItem icon={Settings} label="Configurações" active={window.location.pathname === "/ConfiguracaoEncar"} />
+            <SidebarItem
+              icon={Settings}
+              label="Configurações"
+              active={window.location.pathname === "/ConfiguracaoEncar"}
+            />
           </Link>
         </nav>
 
@@ -131,7 +165,10 @@ export default function MenuEncar() {
               <span className="text-sm font-medium text-white group-hover:text-blue-700">
                 Terminar sessão
               </span>
-              <LogOut size={22} className="text-white font-medium group-hover:text-blue-700" />
+              <LogOut
+                size={22}
+                className="text-white font-medium group-hover:text-blue-700"
+              />
             </div>
           </Link>
         </div>

@@ -75,18 +75,18 @@ export default function MenuAdmin() {
               </Link>
 
 
-              <Link to="">
+              <Link to="/GestaoDeRelatorio">
                 <SidebarItem
                   icon={FileText}
                   label="Gestão de Relatórios"
-                  active={window.location.pathname === "/GestaoDeRelatorios"}
+                  active={window.location.pathname === "/GestaoDeRelatorio"}
                 />
               </Link>
-              <Link to="">
+              <Link to="/PermissoesAcessos">
                 <SidebarItem
                   icon={KeyIcon}
                   label="Permissões e Acessos"
-                  active={window.location.pathname === "/PermissoesEAcessos"}
+                  active={window.location.pathname === "/PermissoesAcessos"}
                 />
               </Link>
               <Link to="/GestaoLogs">
@@ -96,11 +96,11 @@ export default function MenuAdmin() {
                   active={window.location.pathname === "/GestaoLogs"}
                 />
               </Link>
-              <Link to="">
+              <Link to="/SuporteAjuda">
                 <SidebarItem
                   icon={InfoIcon}
                   label="Suporte e Ajuda"
-                  active={false}
+                  active={window.location.pathname === "/SuporteAjuda"}
                 />
               </Link>
               <Link to="/Configuracoes">

@@ -1,28 +1,18 @@
 import ChartGestaoMulta from "@/components/Charts/ChartGestaoMulta";
 import ChartGestaoMulta2 from "@/components/Charts/ChartGestaoMulta2";
 import ItemsDoCabeçalho from "@/components/ItemsDoCabeçalho/ItemsDoCabeçalho";
+import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 import {
-  AlertOctagon,
   CheckCircle,
-  CreditCard,
   DollarSign,
   Download,
   EyeIcon,
-  FileText,
-  LayoutDashboard,
   Menu,
-  MessageSquare,
   Plus,
-  Receipt,
-  Settings,
   Trash2,
-  TrendingUp,
-  Users,
-  type LucideIcon,
+  TrendingUp
 } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import Logo5 from "../../../assets/Logo5.5.png";
 export default function ModulodeMulta() {
   const devedores = [
     {
@@ -54,24 +44,7 @@ export default function ModulodeMulta() {
         return "text-black";
     }
   };
-  const SidebarItem = ({
-    icon: Icon,
-    label,
-    active = false,
-  }: {
-    icon: LucideIcon;
-    label: string;
-    active?: boolean;
-  }) => (
-    <div
-      className={`flex items-center gap-3 p-3 rounded-lg  ml-3 cursor-pointer transition-colors duration-500 ${
-        active ? "bg-white/20 w-56  " : "hover:bg-white/10 w-56"
-      }`}
-    >
-      <Icon size={22} className="text-white" />
-      <span className="text-white font-medium text-sm">{label}</span>
-    </div>
-  );
+
   const [menu, setMenu] = useState(true);
   function OpenMenu() {
     setMenu(true);
@@ -82,101 +55,8 @@ export default function ModulodeMulta() {
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
-
-      {menu && (
-        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
-          <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
-            <div className=" flex items-center">
-              <img
-                loading="lazy"
-                src={Logo5}
-                alt="Logo"
-                className="w-16 h-16 "
-              />
-              <p className="text-white font-semibold">ClassCash</p>
-            </div>
-            <button>
-              <Menu size={22} className="text-white" onClick={CloseMenu} />
-            </button>
-          </div>
-
-          <nav className="flex-1 flex flex-col gap-1 text-white">
-            <Link to="/Secretaria">
-              <SidebarItem
-                icon={LayoutDashboard}
-                label="Painel Geral"
-                active={false}
-              />
-            </Link>
-
-            <Link to="/GestaoAlunos">
-              <SidebarItem
-                icon={Users}
-                label="Gestão de Estudantes"
-                active={false}
-              />
-            </Link>
-
-            <Link to="/GestaodeEncarregados">
-              <SidebarItem
-                icon={Users}
-                label="Gestão de Encarregados"
-                active={false}
-              />
-            </Link>
-            <Link to="/GestaoPropinas">
-              <SidebarItem
-                icon={CreditCard}
-                label="Gestão de Propinas"
-                active={false}
-              />
-            </Link>
-            <Link to="/GestaoPagamentos">
-              <SidebarItem
-                icon={Receipt}
-                label="Gestão de Pagamentos"
-                active={false}
-              />
-            </Link>
-
-            <Link to="/GestaodeServiços">
-              <SidebarItem
-                icon={Settings}
-                label="Gestão de Serviços"
-                active={false}
-              />
-            </Link>
-            <Link to="/GestaodeReclamacoes">
-              <SidebarItem
-                icon={MessageSquare}
-                label="Gestão de Reclamações"
-                active={false}
-              />
-            </Link>
-            <Link to="/ModulodeMulta">
-              <SidebarItem
-                icon={AlertOctagon}
-                label="Gestão de Multas"
-                active={true}
-              />
-            </Link>
-            <Link to="/Relatorio">
-              <SidebarItem
-                icon={FileText}
-                label="Centro de Relatório"
-                active={false}
-              />
-            </Link>
-            <Link to="/Configuracao">
-              <SidebarItem
-                icon={Settings}
-                label="Configurações"
-                active={false}
-              />
-            </Link>
-          </nav>
-        </aside>
-      )}
+<MenuSecretaria/>
+     
       {/* Main Content */}
       <main className="flex-1 p-8 bg-gray-50 custom_scroll">
         {/* Header */}

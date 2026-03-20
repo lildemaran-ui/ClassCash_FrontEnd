@@ -13,6 +13,7 @@ import AppsIlustr from "./AppsIlustr";
 export default function PaginaInicial() {
   return (
     <div className="flex flex-col w-full overflow-x-hidden  ">
+      
       <Nav />
 
       {/* Hero */}

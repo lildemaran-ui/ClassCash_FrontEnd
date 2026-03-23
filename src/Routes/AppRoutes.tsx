@@ -35,6 +35,7 @@ import Pagamento from "../Pages/Pagamento/Pagamento";
 import GestaoDeRelatorios from "@/Pages/Administrador/GestaoDeRelatorio";
 import PermissoesAcessos from "@/Pages/Administrador/PermissoesAcessos";
 import SuporteAjuda from "@/Pages/Administrador/SuporteAjuda";
+import SolicitacoesCadastro from "@/Pages/Secretaria/Solicitacoes/SolicitacoesCadastro";
 
 
 
@@ -78,6 +79,7 @@ export default function AppRoutes() {
       <Route path="/PermissoesAcessos" element={<PermissoesAcessos/>}></Route>
       <Route path="/SuporteAjuda" element={<SuporteAjuda/>}></Route>
       <Route path="/GestaoDeRelatorio" element={<GestaoDeRelatorios/>}></Route>
+      <Route path="/SolicitacoesCadastro" element={<SolicitacoesCadastro/>}></Route>
     </Routes>
 
 

@@ -65,6 +65,7 @@ export default function MenuSecretaria() {
     { to: "/Secretaria", icon: LayoutDashboard, label: "Painel Geral" },
     { to: "/GestaoAlunos", icon: Users, label: "Gestão de Estudantes" },
     { to: "/GestaodeEncarregados", icon: Users, label: "Gestão de Encarregados" },
+    { to: "/SolicitacoesCadastro", icon: Users, label: "Solicitações de Cadastro" },
     { to: "/GestaoPropinas", icon: CreditCard, label: "Gestão de Propinas" },
     { to: "/GestaoPagamentos", icon: Receipt, label: "Gestão de Pagamentos" },
     { to: "/GestaodeServiços", icon: Settings, label: "Gestão de Serviços" },

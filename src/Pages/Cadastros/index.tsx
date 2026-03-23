@@ -1,28 +1,31 @@
 // src/components/Cadastro/TelaCadastro.tsx
+// CORRECÇÕES:
+// 1. Encarregado: nomeEstudante usava estado errado (relacao) — corrigido
+// 2. Campos enviados ao backend alinhados com o que o controller espera
+// 3. Campo "Código" removido (é gerado pela secretaria após aprovação)
+// 4. idclasse enviado correctamente (minúsculo)
 
 import {
+  AlertCircle,
+  ArrowRight,
+  Building2,
   EyeIcon,
   EyeOff,
-  X,
-  Building2,
-  ArrowRight,
-  AlertCircle,
-  LucideAlertTriangle,
   ImagePlus,
-  ImagePlusIcon,
+  LucideAlertTriangle,
+  X,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 interface PreSelectedInstitution {
-  id: number;
+  idInstituicao: number;
   nome: string;
 }
-
 interface RouterState {
   preSelectedInstitution?: PreSelectedInstitution;
-  fromInstitutions?: boolean; // flag: já veio da página de instituições
+  fromInstitutions?: boolean;
 }
 
 // ─── Modal de Aviso ───────────────────────────────────────────────────────────
@@ -35,24 +38,19 @@ function InstitutionCheckModal({
 }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        {/* Topo colorido */}
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         <div className="bg-gradient-to-br from-[#268cff] to-[#1a6fd4] p-6 pb-8 relative">
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto">
             <LucideAlertTriangle className="w-8 h-8 text-white" />
           </div>
-          {/* Botão fechar */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/60 hover:text-white transition-all duration-300 hover:bg-blue-50/15 hover:rounded-sm"
+            className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
-
-        {/* Conteúdo */}
         <div className="px-6 pt-5 pb-6 -mt-4 relative">
-          {/* Card de destaque */}
           <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 mb-5">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0 mt-0.5">
@@ -63,36 +61,28 @@ function InstitutionCheckModal({
                   Antes de criar a sua conta
                 </p>
                 <p className="text-xs text-gray-500 leading-relaxed">
-                  Para se cadastrar, a sua instituição de ensino precisa de
-                  estar registada na nossa plataforma.
+                  Para se cadastrar, a sua instituição precisa estar registada
+                  na plataforma.
                 </p>
               </div>
             </div>
           </div>
-
           <p className="text-xs text-gray-500 text-center mb-5 leading-relaxed">
             Clique em{" "}
             <strong className="text-gray-700">"Verificar Instituição"</strong>{" "}
-            para consultar a lista de instituições parceiras. Após encontrar a
-            sua, clique em{" "}
-            <strong className="text-gray-700">"Cadastrar‑se"</strong> e será
-            redirecionado de volta aqui automaticamente.
+            para consultar a lista. Após encontrar a sua, clique em{" "}
+            <strong className="text-gray-700">"Cadastrar‑se"</strong>.
           </p>
-
-          {/* Botões */}
           <div className="flex flex-col gap-2">
-            <div className="flex items-center justify-center">
-              <button
-                onClick={onGoCheck}
-                className="w-full flex items-center justify-center gap-2 bg-[#268cff] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-blue-600 active:scale-95 transition-all duration-700 shadow-md shadow-blue-200"
-              >
-                Verificar Instituição
-                <ArrowRight className=" h-5" />
-              </button>
-            </div>
+            <button
+              onClick={onGoCheck}
+              className="w-full flex items-center justify-center gap-2 bg-[#268cff] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-blue-600 active:scale-95 transition-all shadow-md"
+            >
+              Verificar Instituição <ArrowRight className="h-5 w-5" />
+            </button>
             <button
               onClick={onClose}
-              className="w-full  text-gray-500 text-sm rounded-xl bg-blue-100 py-2 hover:text-gray-600 hover:bg-[#268cff]/10 transition-all duration-500 hover:rounded-xl hover:py-3 hover:font-bold hover:shadow-md hover:text-sm"
+              className="w-full text-gray-500 text-sm rounded-xl bg-blue-100 py-2 hover:bg-[#268cff]/10 hover:font-bold transition-all"
             >
               Já verifiquei, continuar mesmo assim
             </button>
@@ -103,7 +93,7 @@ function InstitutionCheckModal({
   );
 }
 
-// ─── Formulário de Cadastro ───────────────────────────────────────────────────
+// ─── Formulário ───────────────────────────────────────────────────────────────
 export function TelaCadastro() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -111,26 +101,24 @@ export function TelaCadastro() {
   const preSelected = routerState?.preSelectedInstitution ?? null;
   const fromInstitutions = routerState?.fromInstitutions ?? false;
 
-  // Mostra o modal se o utilizador NÃO veio da página de instituições
-  // e NÃO tem instituição pré-seleccionada
   const [showModal, setShowModal] = useState(
     !fromInstitutions && preSelected === null,
   );
-
-  const [mostrarSenha, setMostrar] = useState<boolean>(false);
+  const [mostrarSenha, setMostrar] = useState(false);
   const [image, setImage] = useState<string | null>(null);
-  const [perfil, setPerfil] = useState<string>("");
-  const [nome, setNome] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [contacto, setContacto] = useState<string>("");
+  const [perfil, setPerfil] = useState("");
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [contacto, setContacto] = useState("");
+  const [senha, setSenha] = useState("");
   const [idInstituicao, setInstituicao] = useState<number | string>(
-    preSelected?.id ?? "",
+    preSelected?.idInstituicao ?? "",
   );
-  const [proc, setProc] = useState<string>("");
   const [idclasse, setClasse] = useState<number | string>("");
-  const [senha, setSenha] = useState<string>("");
-  const [nomeEstudante, setNomeEstudante] = useState<string>("");
-  const [relacao, setRelacao] = useState<string>("");
+  const [numProcesso, setNumProcesso] = useState("");
+  const [nomeEstudante, setNomeEstudante] = useState(""); // educando (encarregado)
+  const [grauParentesco, setGrauParentesco] = useState("");
+
   const [instituicoes, setInstituicoes] = useState<
     { idInstituicao: number; nome: string }[]
   >([]);
@@ -138,14 +126,13 @@ export function TelaCadastro() {
     [],
   );
 
-  // Carregar instituições da API
   useEffect(() => {
     fetch("http://localhost:5000/api/cadastro-instituicao")
-      .then((res) => res.json())
+      .then((r) => r.json())
       .then((data: { idInstituicao: number; nome: string }[]) => {
         setInstituicoes(data);
         if (preSelected) {
-          const found = data.find((i) => i.idInstituicao === preSelected.id);
+          const found = data.find((i) => i.idInstituicao === preSelected.idInstituicao);
           if (found) setInstituicao(found.idInstituicao);
         }
       })
@@ -153,20 +140,35 @@ export function TelaCadastro() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Carregar classes quando a instituição muda
   useEffect(() => {
     if (idInstituicao) {
       fetch(`http://localhost:5000/api/classes/${idInstituicao}`)
-        .then((res) => res.json())
+        .then((r) => r.json())
         .then((data: { idclasse: number; nivel: number }[]) => setClasses(data))
         .catch((err) => console.error("Erro ao carregar classes", err));
     } else {
       setClasses([]);
+      setClasse("");
     }
   }, [idInstituicao]);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const MudarPerfil = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPerfil(e.target.value);
+    setNome("");
+    setEmail("");
+    setContacto("");
+    setSenha("");
+    setNumProcesso("");
+    setClasse("");
+    setNomeEstudante("");
+    setGrauParentesco("");
+    setImage(null);
+    setClasses([]);
+    if (!preSelected) setInstituicao("");
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => setImage(reader.result as string);
@@ -174,90 +176,80 @@ export function TelaCadastro() {
     }
   };
 
-  const MudarPerfil = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setPerfil(event.target.value);
-    setNome("");
-    setProc("");
-    setClasse("");
-    setEmail("");
-    setContacto("");
-    setSenha("");
-    setNomeEstudante("");
-    setRelacao("");
-    setImage(null);
-    setClasses([]);
-    if (!preSelected) setInstituicao("");
-  };
+ const DadosCadastro = async (e: React.BaseSyntheticEvent) => {
+  e.preventDefault();
 
-  const DadosCadastro = async (event: React.BaseSyntheticEvent) => {
-    event.preventDefault();
+  // ✅ VALIDAÇÃO 
+  if (!idInstituicao || isNaN(Number(idInstituicao))) {
+    toast.error("Instituição inválida");
+    return;
+  }
 
-    const rota =
-      perfil === "Estudante"
-        ? "http://localhost:5000/api/cadastroEstudante"
-        : "http://localhost:5000/api/cadastroEncarregado";
+  if (!perfil) {
+    toast.error("Selecione um perfil");
+    return;
+  }
 
-    const novoUsuario =
-      perfil === "Estudante"
-        ? {
-            nome: nome.trim(),
-            email: email.trim().toLowerCase(),
-            senha: senha.trim(),
-            numProcesso: proc.trim(),
-            idInstituicao,
-            numTel: contacto,
-            idclasse,
-          }
-        : {
-            nome: nome.trim(),
-            email: email.trim().toLowerCase(),
-            senha: senha.trim(),
-            numProcesso: proc.trim(),
-            idInstituicao,
-            numTel: contacto,
-            nomeEducando: nomeEstudante.trim(),
-            grauParentesco: relacao.trim(),
-          };
+  // Campos exactamente como o controller os espera
+  const body =
+    perfil === "Estudante"
+      ? {
+          nome: nome.trim(),
+          email: email.trim().toLowerCase(),
+          senha: senha.trim(),
+          numProcesso: numProcesso.trim(),
+          idInstituicao,
+          idclasse: idclasse || null,
+          numTel: contacto || "000000000",
+        }
+      : {
+          nome: nome.trim(),
+          email: email.trim().toLowerCase(),
+          senha: senha.trim(),
+          numTel: contacto || "000000000",
+          nomeEstudante: nomeEstudante.trim(),
+          numProcesso: numProcesso.trim(),
+          idInstituicao,
+          idclasse: idclasse || null,
+          grauParentesco: grauParentesco.trim(),
+        };
 
-    try {
-      const resposta = await fetch(rota, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(novoUsuario),
-      });
-      const data = (await resposta.json()) as {
-        token?: string;
-        error?: string;
-      };
-      if (!resposta.ok)
-        throw new Error(data.error ?? "Erro ao cadastrar usuário");
-      if (data.token) localStorage.setItem("Token", data.token);
-      toast.success("Cadastro realizado com sucesso!");
-      setTimeout(() => {
-        window.location.href = "/Login";
-      }, 3000);
-    } catch (error) {
-      console.error("Erro no Servidor", error);
-      toast.error("Erro ao cadastrar usuário.");
-    }
-  };
+  const rota =
+    perfil === "Estudante"
+      ? "http://localhost:5000/api/cadastroEstudante"
+      : "http://localhost:5000/api/cadastroEncarregado";
 
-  // Navega para a página de instituições passando flag de retorno
-  const handleGoToInstitutions = () => {
-    navigate("/Instituições");
-  };
+  try {
+    const res = await fetch(rota, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error ?? "Erro ao cadastrar");
+
+    if (data.token) localStorage.setItem("Token", data.token);
+
+    toast.success("Cadastro realizado! Aguarde a aprovação da secretaria.");
+
+    setTimeout(() => {
+      navigate("/Login"); 
+    }, 3000);
+  } catch (err) {
+    toast.error(err instanceof Error ? err.message : "Erro ao cadastrar.");
+  }
+};
   return (
     <>
-      {/* Modal de aviso — aparece se o utilizador não veio de /Instituições */}
       {showModal && (
         <InstitutionCheckModal
-          onGoCheck={handleGoToInstitutions}
+          onGoCheck={() => navigate("/Instituições")}
           onClose={() => setShowModal(false)}
         />
       )}
 
-      {/* Formulário */}
       <div>
         <div className="mx-auto border border-gray-150 rounded-lg flex flex-col w-full justify-center space-y-6 bg-white p-8 shadow-sm sm:w-[390px]">
           <div className="space-y-1 text-center">
@@ -265,7 +257,6 @@ export function TelaCadastro() {
             <p className="text-xs text-gray-400">Insira os seus dados abaixo</p>
           </div>
 
-          {/* Banner de instituição pré-seleccionada */}
           {preSelected && (
             <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
               <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
@@ -283,7 +274,6 @@ export function TelaCadastro() {
           )}
 
           <form className="flex flex-col gap-4 w-80" onSubmit={DadosCadastro}>
-            {/* Perfil */}
             <div className="flex flex-col">
               <label className="text-sm mb-1 font-medium">
                 Perfil de Usuário
@@ -291,8 +281,8 @@ export function TelaCadastro() {
               <select
                 value={perfil}
                 onChange={MudarPerfil}
-                className="border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#1e88e5]"
                 required
+                className="border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#1e88e5]"
               >
                 <option value="" disabled>
                   Selecione o seu perfil
@@ -304,34 +294,22 @@ export function TelaCadastro() {
 
             {perfil && (
               <div className="flex flex-col gap-4 animate-in fade-in duration-300">
-                {/* Nome e Código */}
-                <div className="flex gap-3">
-                  <div className="flex-1">
-                    <label className="block text-sm mb-1">Nome Completo</label>
-                    <input
-                      required
-                      value={nome}
-                      type="text"
-                      onChange={(e) =>
-                        setNome(e.target.value.replace(/[0-9]/g, ""))
-                      }
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
-                    />
-                  </div>
-                  {perfil === "Encarregado" && (
-                    <div className="w-24">
-                      <label className="block text-sm mb-1">Código</label>
-                      <input
-                        value={proc}
-                        type="text"
-                        maxLength={6}
-                        onChange={(e) =>
-                          setProc(e.target.value.replace(/\D/g, ""))
-                        }
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
-                      />
-                    </div>
-                  )}
+                {/* Nome */}
+                <div>
+                  <label className="block text-sm mb-1">
+                    {perfil === "Encarregado"
+                      ? "Nome do Encarregado"
+                      : "Nome Completo"}
+                  </label>
+                  <input
+                    required
+                    value={nome}
+                    type="text"
+                    onChange={(e) =>
+                      setNome(e.target.value.replace(/[0-9]/g, ""))
+                    }
+                    className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                  />
                 </div>
 
                 {/* Instituição + Classe */}
@@ -368,11 +346,16 @@ export function TelaCadastro() {
                       </select>
                     )}
                   </div>
-                  {perfil === "Estudante" && (
-                    <div className="w-24">
-                      <label className="block text-sm mb-1">Classe</label>
+                  <div className="w-24">
+                    <label className="block text-sm mb-1">Classe</label>
+
+                    {classes.length === 0 && idInstituicao ? (
+                      // Sem classes — avisa mas não bloqueia
+                      <div className="w-full border-2 border-amber-300 bg-amber-50 rounded-lg h-10 text-[10px] px-2 flex items-center text-amber-600 font-medium">
+                        Sem classes
+                      </div>
+                    ) : (
                       <select
-                        required
                         value={idclasse}
                         onChange={(e) => setClasse(parseInt(e.target.value))}
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
@@ -380,16 +363,38 @@ export function TelaCadastro() {
                         <option value="" disabled>
                           Grau
                         </option>
-                        <option value="">Grau</option>
-
                         {classes.map((c) => (
                           <option key={c.idclasse} value={c.idclasse}>
                             {c.nivel}ª
                           </option>
                         ))}
                       </select>
-                    </div>
-                  )}
+                    )}
+
+                    {classes.length === 0 && idInstituicao && (
+                      <p className="text-[10px] text-amber-600 mt-0.5 leading-tight">
+                        Esta instituição ainda não tem classes configuradas.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Número de processo */}
+                <div>
+                  <label className="block text-sm mb-1">
+                    Número de Processo
+                  </label>
+                  <input
+                    required
+                    value={numProcesso}
+                    type="text"
+                    maxLength={6}
+                    placeholder="Ex: 123456"
+                    onChange={(e) =>
+                      setNumProcesso(e.target.value.replace(/\D/g, ""))
+                    }
+                    className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                  />
                 </div>
 
                 {/* Email e Contacto */}
@@ -419,8 +424,8 @@ export function TelaCadastro() {
                 </div>
 
                 {/* Senha */}
-                <div className="flex flex-col">
-                  <label className="text-sm mb-1">Palavra-Passe</label>
+                <div>
+                  <label className="block text-sm mb-1">Palavra-Passe</label>
                   <div className="relative">
                     <input
                       required
@@ -434,62 +439,50 @@ export function TelaCadastro() {
                       onClick={() => setMostrar(!mostrarSenha)}
                     >
                       {mostrarSenha ? (
-                        <EyeIcon size={22} className="text-[#268cffb2]" />
+                        <EyeIcon size={20} className="text-[#268cffb2]" />
                       ) : (
-                        <EyeOff size={22} className="text-[#268cffb2]" />
+                        <EyeOff size={20} className="text-[#268cffb2]" />
                       )}
                     </div>
                   </div>
                 </div>
 
-                {/* Encarregado */}
+                {/* Campos do Encarregado */}
                 {perfil === "Encarregado" && (
-                  <div className="flex flex-col">
-                    <label className="text-sm mb-1">Relação Parental</label>
-                    <input
-                      value={relacao}
-                      onChange={(e) =>
-                        setRelacao(e.target.value.replace(/[0-9]/g, ""))
-                      }
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
-                    />
-                  </div>
-                )}
-
-                {/* Foto */}
-                {/* Foto */}
-                <div className="py-2 border-t mt-2">
-                  <label className="block text-sm mb-1 ">
-                    Foto de Perfil
-                  </label>
-                  <label
-                    htmlFor="fotoInput"
-                    className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-4 text-center hover:border-[#268cff] transition-colors cursor-pointer overflow-hidden"
-                  >
-                    {image ? (
-                      <img
-                        loading="lazy"
-                        src={image}
-                        alt="preview"
-                        className="h-20 object-contain rounded-lg"
+                  <>
+                    <div>
+                      <label className="block text-sm mb-1">
+                        Nome do Educando
+                      </label>
+                      <input
+                        required
+                        value={nomeEstudante}
+                        type="text"
+                        onChange={(e) =>
+                          setNomeEstudante(e.target.value.replace(/[0-9]/g, ""))
+                        }
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
                       />
-                    ) : (
-                      <>
-                        <ImagePlus className="w-7 h-7 text-gray-400 mb-1" />
-                        <p className="text-xs text-gray-500">
-                          Arraste ou clique para carregar
-                        </p>
-                      </>
-                    )}
-                  </label>
-                  <input
-                    id="fotoInput"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageChange}
-                  />
-                </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm mb-1">
+                        Relação Parental
+                      </label>
+                      <input
+                        required
+                        value={grauParentesco}
+                        type="text"
+                        placeholder="Ex: Pai, Mãe, Tio..."
+                        onChange={(e) =>
+                          setGrauParentesco(
+                            e.target.value.replace(/[0-9]/g, ""),
+                          )
+                        }
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                      />
+                    </div>
+                  </>
+                )}
 
                 <button
                   type="submit"

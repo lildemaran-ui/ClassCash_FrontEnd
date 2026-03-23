@@ -65,16 +65,6 @@ export default function MenuAdmin() {
                   active={window.location.pathname === "/GestaoDeInstituicao"}
                 />
               </Link>
-              <Link to="/GestaoDeUsuarios">
-                <SidebarItem
-                  icon={Users}
-                  label="Gestão de Usuarios"
-                  active={window.location.pathname === "/GestaoDeUsuarios"
-                  }
-                />
-              </Link>
-
-
               <Link to="/GestaoDeRelatorio">
                 <SidebarItem
                   icon={FileText}

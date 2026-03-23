@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { TelaLogin } from ".";
 import Fundo from "../../assets/Computer login-bro.svg";
 import Logo55 from "../../assets/Logo5.png";
+import TelaLogin from ".";
 
 export default function Login() {
   return (
@@ -26,7 +26,7 @@ export default function Login() {
        
 
         <div className="w-full max-w-md ">
-          <TelaLogin />
+          <TelaLogin/>
         </div>
       </div>
 

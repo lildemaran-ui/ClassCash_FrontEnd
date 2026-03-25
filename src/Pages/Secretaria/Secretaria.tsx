@@ -1,5 +1,9 @@
+import Avatar from "@/components/Avatar/Avatar";
+import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
-import { Bell, CircleUser, Download, TrendingDown, TrendingUp } from "lucide-react";
+
+import { Download, TrendingDown, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const MonthlyBarChartSimulation: React.FC = () => {
@@ -57,6 +61,18 @@ const CardKpi = ({ title, value, subtext, trend }: {
 );
 
 export default function Secretaria() {
+  const [user, setUser] = useState<User | null>(null);
+  
+    useEffect(() => {
+      const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
+      if (dadosDoLogin && dadosDoLogin !== "undefined") {
+        setUser(JSON.parse(dadosDoLogin));
+      } else {
+        window.location.href = "/Login";
+      }
+    }, []);
+  
+    if (!user) return null;
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuSecretaria />
@@ -64,18 +80,10 @@ export default function Secretaria() {
       <main className="flex-1 overflow-y-auto min-w-0">
 
         {/* Header sticky */}
-        <div className="flex items-center justify-between sticky top-0 z-10 px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-white/80 backdrop-blur-sm border-b border-gray-100">
-          <h1 className="text-base sm:text-xl font-bold text-[#268cff] pl-10 lg:pl-0 truncate">
-            Painel Geral
-          </h1>
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="relative cursor-pointer">
-              <Bell size={20} className="text-[#268cff]" />
-              <span className="absolute -top-1 -right-1 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white" />
-            </div>
-            <CircleUser size={28} className="text-[#268cff] hover:text-blue-600" />
-          </div>
-        </div>
+         <Header
+            titulo="Painel Geral"
+            usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+          />
 
         <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
 

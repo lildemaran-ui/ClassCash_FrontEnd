@@ -10,4 +10,7 @@ type User = {
   processo: number;
   relacao: string;
   senha: string;
+  codigoPlataforma: string;
+  ibanInstituicao: string;
+  idusuario: number;
 };

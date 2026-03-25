@@ -100,10 +100,10 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
 
     try {
       const fd = new FormData();
-      fd.append("nome",              form.nome.trim());
-      fd.append("email",             form.email.trim());
-      fd.append("iban",              form.iban.trim());
-      fd.append("idTipoInstituicao", String(form.idTipoInstituicao));
+      fd.append("nome",form.nome.trim());
+      fd.append("email",form.email.trim());
+      fd.append("iban", form.iban.trim());
+      fd.append("idcategoria", String(form.idTipoInstituicao));
       if (form.localizacao.trim()) fd.append("localizacao", form.localizacao.trim());
       if (form.contacto.trim())    fd.append("contacto",    form.contacto.trim());
       if (form.nif.trim())         fd.append("nif",         form.nif.trim());
@@ -333,7 +333,9 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                 <div>
                   <label htmlFor="numTelRepresentante" className="block text-xs font-medium text-gray-700">Contacto</label>
                   <input id="numTelRepresentante" type="tel" placeholder="9XX XXX XXX"
-                    value={form.numTelRepresentante} onChange={handleChange} disabled={!createAdmin}
+                    value={form.numTelRepresentante} 
+                    maxLength={9}
+                    onChange={handleChange} disabled={!createAdmin}
                     className="w-full border border-gray-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-blue-500 outline-none mt-1 bg-white" />
                 </div>
 

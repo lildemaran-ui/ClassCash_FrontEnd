@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import img1 from "../../assets/Plain credit card-amico.svg";
-import { Wallet } from "lucide-react";
+import { ImagePlus, Wallet } from "lucide-react";
+import { toast } from "sonner";
 
 export default function PagamentoGeral() {
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
-
+  const [imageFile, setImageFile] = useState<File | null>(null); 
+  
   const [pagamento, setPagamento] = useState({
     metodo: "",
     servico: "Propina",
@@ -41,9 +43,78 @@ export default function PagamentoGeral() {
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setImageFile(file); // Armazena o arquivo real para envio posterior
       const reader = new FileReader();
       reader.onloadend = () => setImage(reader.result as string);
       reader.readAsDataURL(file);
+    } else {
+      setImage(null);
+      setImageFile(null);
+    }
+  };
+
+  const handleSubmit = async () => {
+  if (!formularioValido || !user) return;
+
+  try {
+    const formData = new FormData();
+    // Mapear serviço para ID
+      const servicoMap: { [key: string]: string } = {
+        "Propina": "1",
+        "Justificativo": "2",
+        "Transferência": "3",
+        "Certificado": "4",
+        "CartãodeEstudante": "5",
+        "Uniforme": "6"
+      };
+      
+    // Dados para o Controller
+    formData.append("usuarioId", String(user.idusuario));
+    formData.append("servicoId", servicoMap[pagamento.servico] || "1");
+    formData.append("meses", String(quantidadeMeses));
+    formData.append("tipoPagamentoId", pagamento.metodo === "De forma digital" ? "1" : "2");
+   
+    
+    // Usar o arquivo real selecionado para o comprovativo
+     if (imageFile) {
+        formData.append("comprovativo", imageFile);
+      } else {
+        alert("Por favor, selecione um comprovativo");
+        return;
+      }
+
+    const response = await fetch("http://localhost:5000/api/pagamento", {
+      method: "POST",
+      body: formData, // FormData define automaticamente o Content-Type como multipart/form-data
+    });
+
+     if (response.ok) {
+        const dados = await response.json();
+        alert(`✅ Pagamento criado com sucesso!\nCódigo: ${dados.codigo}\nIBAN: ${dados.iban}\nValor: KZ ${dados.valor}`);
+        
+        // Limpar formulário
+        setImage(null);
+        setImageFile(null);
+        setPagamento({
+          metodo: "",
+          servico: "Propina",
+          mesInicial: "Janeiro",
+          mesFinal: "Janeiro",
+          plataforma: "PayPay",
+          comprovativo: null,
+        });
+        
+        // Limpar o input file
+        const fileInput = document.getElementById('fotoInput') as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+        
+      } else {
+        const erro = await response.json();
+        toast.error(` Erro: ${erro.error}`);
+      }
+    } catch (error) {
+      console.error("Erro na conexão:", error);
+      toast.error(" Não foi possível conectar ao servidor.");
     }
   };
 
@@ -62,7 +133,7 @@ export default function PagamentoGeral() {
   const quantidadeMeses = indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
   const valorTotal = precoBase * quantidadeMeses;
 
-  const formularioValido = pagamento.metodo !== "" && image !== null && indexFim >= indexInicio;
+  const formularioValido = pagamento.metodo !== "" && imageFile !== null && indexFim >= indexInicio;
 
   if (!user) return <span>Carregado...</span>;
 
@@ -81,10 +152,10 @@ export default function PagamentoGeral() {
 
                 {/* Código */}
                 <div>
-                  <label className="block mb-1 font-medium text-gray-500">Código</label>
+                  <label className="block mb-1 font-bold text-gray-700">Código</label>
                   <input
                     type="text"
-                    value="DVS-2025-KS"
+                    value={user?.codigoPlataforma ?? "Sem Código "}
                     readOnly
                     className="w-32 border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono"
                   />
@@ -210,37 +281,54 @@ export default function PagamentoGeral() {
                       </p>
                     </div>
 
+                    {/* Iban */}
+                     <div>
+                  <label className="font-medium block mb-2 text-gray-700">Iban da Instituição</label>
+                  <input
+                    type="text"
+                    value={user?.ibanInstituicao ?? "Sem IBAN"}
+                    readOnly
+                    className="w-32 border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono"
+                  />
+                </div>
+
                     {/* Comprovativo */}
-                    <div>
-                      <label className="block mb-2 font-medium text-gray-700">
-                        Anexar Comprovativo:
-                      </label>
-                      <div className="relative w-full h-40 md:h-44 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-white overflow-hidden hover:border-blue-400 transition-all">
-                        {image ? (
-                          <img
-                            loading="lazy"
-                            src={image}
-                            className="w-full h-full object-cover"
-                            alt="Preview"
-                          />
-                        ) : (
-                          <div className="text-center p-4">
-                            <Wallet className="mx-auto text-gray-300 mb-2" size={32} />
-                            <span className="text-gray-400 text-sm block">
-                              Clique abaixo para carregar o ficheiro
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <input
-                        type="file"
-                        onChange={handleImageChange}
-                        className="mt-3 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer w-full"
+                 {/* Foto */}
+                <div className="">
+                  <label className="font-medium block mb-2 text-gray-700">
+                    Comprovativo
+                  </label>
+                  <label
+                    htmlFor="fotoInput"
+                    className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-14 text-center hover:border-[#268cff] transition-colors cursor-pointer overflow-hidden"
+                  >
+                    {image ? (
+                      <img
+                        loading="lazy"
+                        src={image}
+                        alt="preview"
+                        className="h-20 object-contain rounded-lg"
                       />
-                    </div>
+                    ) : (
+                      <>
+                        <ImagePlus className="w-8 h-8 text-gray-400 mb-1" />
+                        <p className="text-xs text-gray-500">
+                          Arraste ou clique para carregar
+                        </p>
+                      </>
+                    )}
+                  </label>
+                  <input
+                    id="fotoInput"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                </div>
 
                     <button
-                      onClick={() => alert("Pagamento enviado com sucesso!")}
+                      onClick={handleSubmit}
                       disabled={!formularioValido}
                       className={`py-4 rounded-xl font-bold text-base md:text-lg transition-all transform active:scale-95 shadow-lg ${
                         formularioValido

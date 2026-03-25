@@ -363,19 +363,8 @@ export default function ConteudoIndex() {
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
             <div className="w-full md:w-1/2 img-frame">
               <img loading="lazy" src={ilustr} alt="" className="w-full rounded-3xl object-cover" style={{ maxHeight: "480px" }} />
-              {/* Badge flutuante */}
-              <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-4 flex items-center gap-3 z-10">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(38,140,255,0.1)" }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#268cff" strokeWidth="2">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-400">Instituições</p>
-                  <p className="font-bold text-gray-900">+20 parceiros</p>
-                </div>
-              </div>
+              
+             
             </div>
             <div className="w-full md:w-1/2">
               <div className="badge mb-4">Abrangência Nacional</div>
@@ -441,16 +430,7 @@ export default function ConteudoIndex() {
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16">
             <div className="w-full md:w-1/2 img-frame">
               <img loading="lazy" src={ilustr3} alt="" className="w-full rounded-3xl object-cover" style={{ maxHeight: "480px" }} />
-              {/* Badge flutuante */}
-              <div className="absolute -top-6 -left-6 bg-white rounded-2xl shadow-xl p-4 z-10">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">🔐</span>
-                  <div>
-                    <p className="text-xs text-gray-400">Encriptação</p>
-                    <p className="font-bold text-gray-900 text-sm">SSL 256-bit</p>
-                  </div>
-                </div>
-              </div>
+             
             </div>
             <div className="w-full md:w-1/2">
               <div className="badge mb-4">Confiança Total</div>

@@ -14,7 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import Logo5 from "../../../assets/Logo5.5.png";
+import logo555 from "../../../assets/logo555.png";
 import { useState } from "react";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 export default function Relatorio() {
@@ -45,13 +45,13 @@ export default function Relatorio() {
   }
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
-    <MenuSecretaria/>
+      <MenuSecretaria />
       {/* Main Content */}
       <main className="flex-1 p-8 bg-gray-50 custom_scroll">
         {/* Header com Seleção de Período */}
         <div className="flex justify-between items-end mb-10">
           <div>
-            <h1 className="text-xl font-bold text-[#268cff]">
+            <h1 className="text-xl font-bold text-[#184d8a]">
               Centro de Relatórios
             </h1>
             <p className="text-gray-400 text-sm">
@@ -70,7 +70,7 @@ export default function Relatorio() {
                 <option>1º Trimestre</option>
               </select>
             </div>
-            <button className="bg-[#268cff] text-white p-2.5 rounded-lg hover:bg-[#1a76db] transition-all">
+            <button className="bg-[#184d8a] text-white p-2.5 rounded-lg hover:bg-[#1a76db] transition-all">
               <RefreshCcw size={18} />
             </button>
           </div>
@@ -80,7 +80,7 @@ export default function Relatorio() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           <div className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-md transition-all group cursor-pointer">
             <div className="flex justify-between items-center mb-4">
-              <div className="p-3 bg-blue-50 text-[#268cff] rounded-xl group-hover:bg-[#268cff] group-hover:text-white transition-all">
+              <div className="p-3 bg-blue-50 text-[#184d8a] rounded-xl group-hover:bg-[#184d8a] group-hover:text-white transition-all">
                 <FileText size={22} />
               </div>
               <Download
@@ -142,7 +142,7 @@ export default function Relatorio() {
             {/* Aqui entraria sua lib de gráficos como Recharts ou Chart.js */}
             <div className="h-64 w-full bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200 flex items-center justify-center relative overflow-hidden">
               {/* Representação visual do gráfico de linha */}
-              <div className="absolute inset-x-0 bottom-0 h-32 bg-[#268cff]/5"></div>
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-[#184d8a]/5"></div>
               <p className="text-gray-400 text-sm font-medium">
                 Gráfico de Linha: Receita Mensal
               </p>

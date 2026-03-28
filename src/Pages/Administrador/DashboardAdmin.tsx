@@ -48,7 +48,7 @@ export default function DashboardAdmin() {
               style={{ width: `${100 / months.length}%` }}
             >
               <div
-                className="w-12 bg-[#268CFF] hover:bg-blue-600 transition-all duration-500 rounded-t-md"
+                className="w-12 bg-[#184d8a] hover:bg-blue-600 transition-all duration-500 rounded-t-md"
                 style={{ height: `${value}%` }}
                 title={`${months[index]}: ${value} cadastros`}
               />
@@ -75,15 +75,15 @@ export default function DashboardAdmin() {
   const VerticalBarChartSimulation: React.FC = () => {
     // Dados simulados (rótulo, valor percentual, cor)
     const data = [
-      { label: "Total de Instituições", value: 75, color: "bg-[#268cff]" },
-      { label: "Total de Estudantes", value: 50, color: "bg-[#268cff]" },
-      { label: "Total de Encarregados", value: 30, color: "bg-[#268cff]" },
+      { label: "Total de Instituições", value: 75, color: "bg-[#184d8a]" },
+      { label: "Total de Estudantes", value: 50, color: "bg-[#184d8a]" },
+      { label: "Total de Encarregados", value: 30, color: "bg-[#184d8a]" },
       {
         label: "Total de Serviços",
         value: 90,
-        color: "bg-[#268cff]",
+        color: "bg-[#184d8a]",
       },
-      { label: "Total de Receita", value: 60, color: "bg-[#268cff]" },
+      { label: "Total de Receita", value: 60, color: "bg-[#184d8a]" },
     ];
 
     return (
@@ -204,7 +204,7 @@ export default function DashboardAdmin() {
               <Bell className="w-6 h-6 mr-2  " />
               Alerta das Instituições
             </div>
-            <button className="bg-[#268cff] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-700 shadow-md">
+            <button className="bg-[#184d8a] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-700 shadow-md">
               Ver Alertas
             </button>
           </div>

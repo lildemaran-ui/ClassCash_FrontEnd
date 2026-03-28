@@ -43,7 +43,7 @@ body {
   animation: slide 90s linear infinite;
 }
 .gradient-text {
-  background: linear-gradient(90deg, #ffff, #268cff);
+  background: linear-gradient(90deg, #ffff, #184d8a);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -76,7 +76,7 @@ Keywords: cog, edit, gear, preferences
   top: 4.17%;
   bottom: 4.17%;
 
-  border: 5px solid #268cff;
+  border: 5px solid #184d8a;
 
   /* Rectangle 340 */
 
@@ -89,7 +89,7 @@ Keywords: cog, edit, gear, preferences
   top: 330px;
 
   background: #fbfbfb;
-  border: 1px solid #268cff;
+  border: 1px solid #184d8a;
   box-shadow: 0px 1px 1px #dbdbdb;
   border-radius: 50px;
 
@@ -111,7 +111,7 @@ Keywords: cog, edit, gear, preferences
   top: 12.5%;
   bottom: 12.5%;
 
-  border: 1px solid #268cff;
+  border: 1px solid #184d8a;
 
   /* Procurar por um serviço... */
 
@@ -159,7 +159,7 @@ Keywords: alarm, notification, sound
   top: 8.33%;
   bottom: 8.35%;
 
-  border: 5px solid #268cff;
+  border: 5px solid #184d8a;
 
   /* Ellipse 10 */
 
@@ -261,7 +261,7 @@ Keywords: alarm, notification, sound
   top: 0%;
   bottom: 0%;
 
-  background: #268cff;
+  background: #184d8a;
   /* Drop Shadow/600 */
   box-shadow: 0px 16px 32px -8px rgba(12, 12, 13, 0.4);
   border-radius: 0px;
@@ -442,7 +442,7 @@ Keywords: cog, edit, gear, preferences
   left: 0px;
   top: 0px;
 
-  background: #268cff;
+  background: #184d8a;
 
   /* Frame 97 */
 
@@ -508,7 +508,7 @@ Keywords: cog, edit, gear, preferences
   align-items: center;
   text-align: center;
 
-  color: #268cff;
+  color: #184d8a;
 
   /* Frame 110 */
 
@@ -863,7 +863,7 @@ Keywords: cog, edit, gear, preferences
   left: 6402px;
   top: 1130px;
 
-  background: #268cff;
+  background: #184d8a;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;
 
@@ -877,7 +877,7 @@ Keywords: cog, edit, gear, preferences
   left: 7585px;
   top: 1130px;
 
-  border: 5px solid #268cff;
+  border: 5px solid #184d8a;
   filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
   border-radius: 20px;
 
@@ -917,7 +917,7 @@ Keywords: cog, edit, gear, preferences
   display: flex;
   align-items: center;
 
-  color: #268cff;
+  color: #184d8a;
 
   /* Frame 111 */
 
@@ -978,7 +978,7 @@ Keywords: cog, edit, gear, preferences
   left: 3561px;
   top: 1691px;
 
-  background: #268cff;
+  background: #184d8a;
   border-radius: 100px 100px 0px 0px;
 
   /* Perfil */
@@ -1002,9 +1002,9 @@ Keywords: cog, edit, gear, preferences
   color: #ffffff;
 }
 .menu-translucido {
-  background-color: #268bffdc;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: rgba(24, 77, 138, 0.86);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .bg-translucido {
   background-color: #ffffff5c;
@@ -1129,4 +1129,231 @@ button:active {
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+}
+
+/* layout da página inicial */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+:root {
+  --azul: #184d8a;
+  --azul-escuro: #0a2540;
+  --dourado: #f0a500;
+  --branco: #ffffff;
+  --cinza: #f7f9fc;
+  --font-principal: "Poppins", sans-serif;
+}
+.font-display,
+.font-body,
+.font-poppins {
+  font-family: "poppins", sans-serif !important;
+  -webkit-font-smoothing: antialiased; /* Deixa a fonte mais "fina" e elegante no Mac/iOS */
+}
+
+/* Dica: Para títulos impactantes no Dashboard, use pesos 700 ou 800 */
+.dashboard-title {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em; /* Um leve ajuste no espaçamento deixa ela mais moderna */
+}
+
+/* Staggered reveal */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.reveal {
+  animation: fadeUp 0.8s ease forwards;
+  opacity: 0;
+}
+.delay-1 {
+  animation-delay: 0.15s;
+}
+.delay-2 {
+  animation-delay: 0.3s;
+}
+.delay-3 {
+  animation-delay: 0.45s;
+}
+.delay-4 {
+  animation-delay: 0.6s;
+}
+
+/* Linha dourada decorativa */
+.gold-line::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  background: var(--dourado);
+  margin-top: 12px;
+  border-radius: 9999px;
+}
+
+/* Botão primário */
+.btn-primary {
+  background: var(--azul);
+  color: white;
+  padding: 14px 36px;
+  border-radius: 12px;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(38, 140, 255, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary:hover {
+  background: #1a7ae8;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(38, 140, 255, 0.45);
+}
+
+/* Botão secundário */
+.btn-outline {
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  padding: 13px 32px;
+  border-radius: 12px;
+  font-family: "DM Sans", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.08);
+}
+.btn-outline:hover {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Card de stat */
+.stat-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 20px 28px;
+  text-align: center;
+}
+
+/* Feature card */
+.feature-card {
+  background: white;
+  border-radius: 20px;
+  padding: 32px;
+  transition: all 0.3s ease;
+  border: 1px solid #eef2f7;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--azul), var(--dourado));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(10, 37, 64, 0.1);
+}
+.feature-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Secção banded */
+.section-dark {
+  background: var(--azul-escuro);
+  position: relative;
+  overflow: hidden;
+}
+.section-dark::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -120px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(38, 140, 255, 0.18) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Número grande decorativo */
+.step-number {
+  font-family: "Playfair Display", serif;
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(38, 140, 255, 0.08);
+  line-height: 1;
+  position: absolute;
+  top: -10px;
+  left: -10px;
+}
+
+/* Imagem com moldura */
+.img-frame {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+}
+.img-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  border: 2px solid rgba(38, 140, 255, 0.2);
+  pointer-events: none;
+}
+.img-frame img {
+  transition: transform 0.6s ease;
+}
+.img-frame:hover img {
+  transform: scale(1.04);
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(38, 140, 255, 0.1);
+  color: var(--azul);
+  border: 1px solid rgba(38, 140, 255, 0.2);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: "DM Sans", sans-serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Testemunho */
+.testimonial {
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  border: 1px solid #eef2f7;
+  box-shadow: 0 4px 24px rgba(10, 37, 64, 0.06);
+  transition: transform 0.3s ease;
+}
+.testimonial:hover {
+  transform: translateY(-4px);
 }

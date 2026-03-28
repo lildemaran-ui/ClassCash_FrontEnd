@@ -117,7 +117,7 @@ export default function GestaoLogs() {
           <div className="relative">
             <label className="sr-only">Filtrar por Nível</label>
             <select
-              className="appearance-none block w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-[#268cff] focus:border-[#268cff]"
+              className="appearance-none block w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm focus:outline-none focus:ring-[#184d8a] focus:border-[#184d8a]"
               defaultValue="Todos os Níveis"
             >
               <option>Todos os Níveis</option>
@@ -131,7 +131,7 @@ export default function GestaoLogs() {
             <label className="sr-only">Filtrar por Data</label>
             <input
               type="date"
-              className="block w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-3 text-sm focus:outline-none focus:ring-[#268cff] focus:border-[#268cff] text-gray-700"
+              className="block w-full bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-3 text-sm focus:outline-none focus:ring-[#184d8a] focus:border-[#184d8a] text-gray-700"
             />
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function GestaoLogs() {
         {/* Tabela de Logs */}
         <div className="overflow-x-auto border border-gray-200 rounded-xl">
           <table className="min-w-full divide-y divide-gray-200 text-center">
-            <thead className="bg-[#268cff]/70 ">
+            <thead className="bg-[#184d8a]/70 ">
               <tr>
                 {["Data/Hora", "Nível", "Utilizador", "Ação", "Detalhes"].map(
                   (header) => (

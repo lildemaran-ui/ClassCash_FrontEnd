@@ -15,7 +15,7 @@ export default function ItemsDoCabeçalho() {
       </div>
       <div className="flex items-center gap-4 ml-4">
         <div className="relative">
-          <Bell className="text-[#268cff] cursor-pointer" />
+          <Bell className="text-[#184d8a] cursor-pointer" />
           <div className="absolute bg-red-500 w-3 h-3 flex -top-1 -right-1 rounded-full border border-white"></div>
         </div>
         <div className="w-10 h-10 rounded-full bg-gray-200 border overflow-hidden">

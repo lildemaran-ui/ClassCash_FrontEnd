@@ -4,25 +4,24 @@ export default function Objetivo() {
   return (
     <div className="w-full px-4 sm:px-6 lg:px-10 mt-10 animate-fade-in">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center">
-        
         {[
           {
-            icon: <CreditCard size={48} className="text-[#268CFF]" />,
+            icon: <CreditCard size={48} className="text-[#184d8a]" />,
             title: "Pagamentos Digitais",
             desc: "Multicaixa Express, PayPay, PayPal",
           },
           {
-            icon: <Check size={48} className="text-[#268CFF]" />,
+            icon: <Check size={48} className="text-[#184d8a]" />,
             title: "Facilidade",
             desc: "Pague propinas e serviços escolares em segundos, sem tarifas nem burocracia.",
           },
           {
-            icon: <Eye size={48} className="text-[#268CFF]" />,
+            icon: <Eye size={48} className="text-[#184d8a]" />,
             title: "Transparência",
             desc: "Acompanhe as suas transferências, gere relatórios em PDF.",
           },
           {
-            icon: <Lock size={48} className="text-[#268CFF]" />,
+            icon: <Lock size={48} className="text-[#184d8a]" />,
             title: "Segurança",
             desc: "Todos os dados serão protegidos e as transações, validadas pela instituição.",
           },
@@ -41,7 +40,6 @@ export default function Objetivo() {
             <p className="text-sm text-gray-500">{desc}</p>
           </div>
         ))}
-
       </div>
     </div>
   );

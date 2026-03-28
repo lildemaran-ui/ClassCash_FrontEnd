@@ -83,25 +83,25 @@ export default function GestaoDeUsuarios() {
             {!menu && (
               <button
                 onClick={OpenMenu}
-                className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
+                className="text-[#184d8a] hover:bg-blue-50 p-2 rounded-lg transition-colors"
               >
                 <Menu size={22} />
               </button>
             )}
-            <h1 className="text-xl font-bold  text-[#268cff]">
+            <h1 className="text-xl font-bold  text-[#184d8a]">
               Gestão de Usuários
             </h1>
           </div>
           {/* Header (Topo) */}
           <header className=" ">
-            <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
+            <h1 className="text-xl font-bold text-[#184d8a]">{}</h1>
             <div className="flex items-center space-x-4">
               {/* Ícones de Notificação e Perfil */}
               <div className="relative cursor-pointer">
-                <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+                <Bell className="text-[#184d8a] group-hover:scale-110 transition-transform " />
                 <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
               </div>
-              <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
+              <CircleUser className="w-8 h-8 text-[#184d8a] hover:text-blue-600" />
             </div>
           </header>
         </div>
@@ -117,7 +117,7 @@ export default function GestaoDeUsuarios() {
                     <label className="block text-sm text-gray-500 mb-1">
                       {filtro}
                     </label>
-                    <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#268cff] cursor-pointer">
+                    <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#184d8a] cursor-pointer">
                       <option>Sem filtro</option>
                     </select>
                   </div>
@@ -128,7 +128,7 @@ export default function GestaoDeUsuarios() {
 
           <div className=" p-6 rounded-xl shadow-sm ">
             <div className="flex justify-end space-x-3 mb-6">
-              <Button className="flex items-center bg-[#268cff] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-700 shadow-md ">
+              <Button className="flex items-center bg-[#184d8a] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors duration-700 shadow-md ">
                 <Plus className="w-4 h-4 mr-2 " />
                 Adicionar
               </Button>
@@ -141,7 +141,7 @@ export default function GestaoDeUsuarios() {
             <div className="overflow-x-auto rounded-xl border border-gray-100">
               <table className="w-full text-center border-collapse cursor-default ">
                 <thead>
-                  <tr className="bg-[#268cff]/70  text-base  font-black tracking-widest border-b border-gray-100">
+                  <tr className="bg-[#184d8a]/70  text-base  font-black tracking-widest border-b border-gray-100">
                     {[
                       "Nome",
                       "Email",
@@ -164,7 +164,7 @@ export default function GestaoDeUsuarios() {
                   {mockAdministrators.map((admin) => (
                     <tr
                       key={admin.id}
-                      className="hover:bg-[#268cff]/5 transition-colors"
+                      className="hover:bg-[#184d8a]/5 transition-colors"
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-base font-semibold text-gray-600">
                         {admin.name}

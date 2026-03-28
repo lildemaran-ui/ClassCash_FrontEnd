@@ -37,9 +37,9 @@ const ReclamacaoCard = ({
     </div>
     <div className="absolute right-6 bottom-6 text-gray-400">
       {isPublica ? (
-        <Eye size={22} className="text-[#268cffb2]" />
+        <Eye size={22} className="text-[#184d8ab2]" />
       ) : (
-        <EyeOff size={22} className="text-[#268cffb2]" />
+        <EyeOff size={22} className="text-[#184d8ab2]" />
       )}
     </div>
   </div>
@@ -118,7 +118,7 @@ export default function ReclamacaoGeral() {
                 />
               </div>
             </div>
-            <button className="absolute bottom-6 right-6 bg-[#268cff] text-white px-8 py-2 rounded-full text-xs font-bold hover:bg-blue-500 transition-all duration-500 shadow-md">
+            <button className="absolute bottom-6 right-6 bg-[#184d8a] text-white px-8 py-2 rounded-full text-xs font-bold hover:bg-blue-500 transition-all duration-500 shadow-md">
               Enviar
             </button>
           </div>

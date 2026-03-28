@@ -20,7 +20,7 @@ import {
   TrendingUp,
   type LucideIcon,
 } from "lucide-react";
-import Logo5 from "../../../assets/Logo5.5.png";
+import logo555 from "../../../assets/logo555.png";
 import { useState } from "react";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 
@@ -154,7 +154,7 @@ export default function GestaoPropinas() {
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
 
-        <MenuSecretaria />
+      <MenuSecretaria />
       {/* Main Content */}
       <main className="flex-1 p-8 custom_scroll">
         {/* Header com Título e Search */}
@@ -163,12 +163,12 @@ export default function GestaoPropinas() {
             {!menu && (
               <button
                 onClick={OpenMenu}
-                className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
+                className="text-[#184d8a] hover:bg-blue-50 p-2 rounded-lg transition-colors"
               >
                 <Menu size={22} />
               </button>
             )}
-            <h1 className="text-xl font-bold text-[#268cff]">
+            <h1 className="text-xl font-bold text-[#184d8a]">
               Gestão de Propinas
             </h1>
           </div>
@@ -182,16 +182,16 @@ export default function GestaoPropinas() {
               <input
                 type="search"
                 placeholder="Procurar por um código..."
-                className="w-80 pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#268cff]/20 outline-none transition-all"
+                className="w-80 pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#184d8a]/20 outline-none transition-all"
               />
             </div>
 
             <div className="flex items-center gap-4">
               <div className="relative cursor-pointer group">
-                <Bell className="text-[#268cff] group-hover:scale-110 transition-transform" />
+                <Bell className="text-[#184d8a] group-hover:scale-110 transition-transform" />
                 <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
               </div>
-              <div className="w-10 h-10 rounded-full border-2 border-[#268cff]/20 p-0.5">
+              <div className="w-10 h-10 rounded-full border-2 border-[#184d8a]/20 p-0.5">
                 <img
                   loading="lazy"
                   src="https://via.placeholder.com/40"
@@ -209,7 +209,7 @@ export default function GestaoPropinas() {
             {["Mês", "Classe", "Estado"].map((filtro) => (
               <div key={filtro} className="flex flex-col gap-1">
                 <label className="text-sm  text-gray-500 ml-1">{filtro}</label>
-                <select className="bg-white border rounded-lg px-4 py-2 text-sm text-gray-400 outline-none focus:border-[#268cff] min-w-[140px] cursor-pointer">
+                <select className="bg-white border rounded-lg px-4 py-2 text-sm text-gray-400 outline-none focus:border-[#184d8a] min-w-[140px] cursor-pointer">
                   <option>Sem filtro</option>
                 </select>
               </div>
@@ -248,10 +248,10 @@ export default function GestaoPropinas() {
 
           <table className="w-full border-collapse cursor-default">
             <thead>
-              <tr className="bg-[#268cff]/70 text-white text-[14px]   font-black  border-b border-gray-200">
+              <tr className="bg-[#184d8a]/70 text-white text-[14px]   font-black  border-b border-gray-200">
                 <th className="px-4 py-4">Código</th>
                 <th
-                  className="px-4 py-4 cursor-pointer hover:text-[#268cff] transition-colors"
+                  className="px-4 py-4 cursor-pointer hover:text-[#184d8a] transition-colors"
                   onClick={() => handleSort("nome")}
                 >
                   <div className="flex items-center justify-center gap-1 cursor-pointer">
@@ -276,7 +276,7 @@ export default function GestaoPropinas() {
               {dadosAlunos.map((aluno, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-[#268cff]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#268cff]"
+                  className="hover:bg-[#184d8a]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#184d8a]"
                 >
                   <td className="px-4 py-4 text-sm  text-gray-500">
                     {aluno.codigo}
@@ -309,7 +309,7 @@ export default function GestaoPropinas() {
                   <td className="px-4 py-4  ">
                     <div className="group w-max relative flex items-center mx-auto cursor-pointer">
                       <div className="flex ">
-                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                        <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-500 shadow-sm">
                           <EyeIcon size={18} />
                         </div>
                         <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">

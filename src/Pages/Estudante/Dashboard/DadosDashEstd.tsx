@@ -41,167 +41,198 @@ export default function DadosDashEstd() {
 
   if (!user) return <span>Carregado...</span>;
 
-  const SummaryRow = ({ label, value }: { label: string; value: string }) => (
-    <div className="flex justify-between text-sm gap-4">
-      <span className="text-gray-500 font-medium">{label}</span>
-      <span className="text-gray-800 font-bold whitespace-nowrap">{value}</span>
+  // ... (mantenha os imports e lógica de estado iguais)
+
+  const SummaryRow = ({
+    label,
+    value,
+    isLast,
+  }: {
+    label: string;
+    value: string;
+    isLast?: boolean;
+  }) => (
+    <div
+      className={`flex justify-between items-center py-3 ${!isLast ? "border-b border-gray-50" : ""}`}
+    >
+      <span className="text-gray-400 font-medium text-sm">{label}</span>
+      <span className="text-gray-800 font-bold text-base">{value}</span>
     </div>
   );
 
   return (
-    <div className="flex flex-col w-full px-4 sm:px-6 lg:px-0">
-      {/* Botão Voltar — só aparece se veio do painel do encarregado */}
-      {/* Só aparece quando vem do painel do encarregado */}
+    <div className="flex flex-col w-full px-4 sm:px-6 lg:px-8 py-4 bg-[#f8fafc] min-h-screen">
+      {/* Botão Voltar Estruturado */}
       {fromEncarregado && (
-        <div className="flex items-center gap-3 mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-sm font-medium text-[#268cff] hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors"
-          >
-            <ArrowLeft size={16} />
-            Voltar ao Painel
-          </button>
-        </div>
+        <button
+          onClick={() => navigate(-1)}
+          className="group flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-[#184d8a] mb-6 transition-all"
+        >
+          <ArrowLeft
+            size={18}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
+          Voltar ao Painel
+        </button>
       )}
-      <div ref={pdfRef}>
-        {/* Header */}
-        <header className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6 mb-8 transition-all duration-500">
-          {/* Avatar + Info */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6">
-            <div className="w-28 h-28 sm:w-40 sm:h-40 lg:w-56 lg:h-56 rounded-full overflow-hidden border-4 border-white shadow-sm flex items-center justify-center bg-gray-100 shrink-0">
-              {user.foto ? (
-                <img
-                  loading="lazy"
-                  src={user.foto}
-                  alt={user.nome}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-[#268cff] text-white text-4xl sm:text-5xl lg:text-6xl font-bold">
-                  {(user.nome || "User")
-                    .trim()
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .toUpperCase()}
-                </div>
-              )}
+
+      <div ref={pdfRef} className="space-y-8">
+        {/* Header Modernizado */}
+        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="relative group">
+              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-white transition-transform group-hover:scale-[1.02]">
+                {user.foto ? (
+                  <img
+                    src={user.foto}
+                    alt={user.nome}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white text-4xl font-black">
+                    {user.nome?.substring(0, 2).toUpperCase()}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setModal(true)}
+                className="absolute -bottom-2 -right-2 bg-white p-2 rounded-xl shadow-lg text-[#184d8a] hover:bg-blue-50 transition-colors border border-gray-100"
+              >
+                <Pen size={16} />
+              </button>
             </div>
 
-            <div className="space-y-1 text-center sm:text-left">
-              <p className="text-lg font-bold">{user.nome}</p>
-              <p className="text-sm text-gray-600">
-                <strong>Email:</strong> {user.email}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Nº de processo:</strong> {user.processo}
-              </p>
-              {user.perfil === "Estudante" && (
-                <p className="text-sm text-gray-600">
-                  <strong>Classe:</strong> {user.classe}
+            <div className="text-center sm:text-left">
+              <span className="bg-blue-100 text-[#184d8a] text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md">
+                {user.perfil}
+              </span>
+              <h1 className="text-3xl font-black text-gray-800 mt-2 tracking-tight">
+                {user.nome}
+              </h1>
+              <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
+                <p>
+                  <strong>ID:</strong> {user.processo}
                 </p>
-              )}
-            </div>
-          </div>
-
-          {/* Editar + Situação Financeira */}
-          <div className="flex flex-col items-center sm:items-end gap-4 w-full sm:w-auto">
-            <button
-              onClick={() => setModal(true)}
-              className="text-[#268cff] text-[16px] font-medium flex items-center gap-2 transition-all duration-500"
-            >
-              <Pen size={18} /> EDITAR PERFIL
-            </button>
-
-            <div className="bg-white p-5 rounded-xl border w-full sm:min-w-[250px] flex items-center gap-4">
-              <CheckCircle size={40} className="text-green-600 shrink-0" />
-              <div className="flex flex-col">
-                <h3 className="text-base font-bold text-gray-800 mb-1">
-                  Situação Financeira
-                </h3>
-                <p className="text-green-600 text-sm font-medium">
-                  Financeiramente está estável
-                </p>
-                <p className="text-xs text-gray-400">
-                  Sem pagamentos em atraso
+                <p>
+                  <strong>Turma:</strong> {user.classe}
                 </p>
               </div>
             </div>
           </div>
+
+          {/* Card de Situação Rápida */}
+          <div className="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-2xl border border-emerald-100 flex items-center gap-4 shadow-sm min-w-[280px]">
+            <div className="bg-emerald-500 p-2 rounded-xl text-white">
+              <CheckCircle size={24} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-emerald-900">
+                Situação Financeira
+              </h3>
+              <p className="text-emerald-600 text-xs font-semibold">
+                Conta Regularizada
+              </p>
+            </div>
+          </div>
         </header>
 
-        <hr className="mb-8 border-gray-200" />
-
-        {/* Resumo + Gráfico */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl border">
-            <h3 className="font-bold mb-6 text-gray-800">Resumo Financeiro:</h3>
-            <div className="space-y-4">
-              <SummaryRow label="Último pagamento:" value="09/11/2025" />
-              <SummaryRow label="Próximo vencimento:" value="09/12/2025" />
-              <SummaryRow label="Total pago no mês:" value="Kz 55.300,00" />
-              <SummaryRow label="Total pago no ano:" value="Kz 313.000,00" />
+        {/* Grid de Conteúdo */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Card Financeiro */}
+          <div className="lg:col-span-1 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h3 className="text-lg font-bold mb-6 text-gray-800 flex items-center gap-2">
+              <span className="w-2 h-6 bg-[#184d8a] rounded-full"></span>
+              Resumo Financeiro
+            </h3>
+            <div className="flex flex-col">
+              <SummaryRow label="Último pagamento" value="09/11/2025" />
+              <SummaryRow label="Próximo vencimento" value="09/12/2025" />
+              <SummaryRow label="Total pago (Mês)" value="Kz 55.300,00" />
+              <SummaryRow
+                label="Total acumulado"
+                value="Kz 313.000,00"
+                isLast
+              />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border p-4">
-            <ChartEstud />
+          {/* Gráfico com mais espaço */}
+          <div className="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="font-bold text-gray-800">
+                Evolução de Pagamentos
+              </h3>
+              <select className="text-xs bg-gray-50 border-none rounded-lg font-semibold text-gray-500">
+                <option>2026</option>
+              </select>
+            </div>
+            <div className="h-[250px] w-full">
+              <ChartEstud />
+            </div>
           </div>
         </div>
 
-        {/* Tabela de Histórico */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 mb-10">
-          <div className="p-4 border-b border-gray-100 flex justify-between items-center">
-            <h3 className="font-bold text-gray-800 text-sm sm:text-base">
-              Histórico de pagamentos referente ao período selecionado
-            </h3>
+        {/* Tabela "Glassmorphism" Style */}
+        <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
+          <div className="px-8 py-6 bg-gray-50/50 border-b border-gray-100">
+            <h3 className="font-bold text-gray-800">Histórico de Transações</h3>
           </div>
-
-          {/* Scroll horizontal em telas pequenas */}
-          <div className="overflow-x-auto custom_scroll ">
-            <table className="w-full text-left min-w-[500px]">
-              <thead className="bg-[#268cff] text-white text-sm">
-                <tr>
-                  <th className="p-4 font-medium">Data</th>
-                  <th className="p-4 font-medium">Serviço</th>
-                  <th className="p-4 font-medium">Valor</th>
-                  <th className="p-4 font-medium">Multas</th>
-                  <th className="p-4 font-medium">Status</th>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-gray-400 text-xs uppercase tracking-widest">
+                  <th className="px-8 py-4 font-semibold">Data</th>
+                  <th className="px-8 py-4 font-semibold">Serviço</th>
+                  <th className="px-8 py-4 font-semibold">Valor Total</th>
+                  <th className="px-8 py-4 font-semibold text-center">
+                    Status
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
-                {[1, 2, 3, 4].map((i) => (
-                  <tr key={i} className="text-sm text-gray-600">
-                    <td className="p-4">09/11/2025</td>
-                    <td className="p-4">Propina</td>
-                    <td className="p-4 font-medium text-gray-900">
+              <tbody className="divide-y divide-gray-50">
+                {[1, 2, 3].map((i) => (
+                  <tr
+                    key={i}
+                    className="hover:bg-blue-50/30 transition-colors group"
+                  >
+                    <td className="px-8 py-5 text-sm font-medium text-gray-600">
+                      09 Nov, 2025
+                    </td>
+                    <td className="px-8 py-5 text-sm font-bold text-gray-800">
+                      Propina Mensal
+                    </td>
+                    <td className="px-8 py-5 text-sm font-black text-gray-900">
                       Kz 31.300,00
                     </td>
-                    <td className="p-4 text-gray-400">Kz 0,00</td>
-                    <td className="p-4 text-green-500 font-medium">Em dia</td>
+                    <td className="px-8 py-5 text-center">
+                      <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold">
+                        PAGO
+                      </span>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-
-        <ProfileEditModal
-          isOpen={Modal}
-          onClose={() => setModal(false)}
-          user={user}
-        />
       </div>
 
-      {/* Botão PDF */}
-      <div className="mt-6 flex justify-center sm:justify-end">
+      {/* Ações Inferiores */}
+      <div className="mt-8 flex justify-end">
         <button
           onClick={gerarPDF}
-          className="bg-[#268cff] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-all duration-500 w-full sm:w-auto justify-center"
+          className="bg-gray-900 text-white px-8 py-3 rounded-2xl flex items-center gap-3 hover:bg-[#184d8a] transition-all shadow-lg hover:shadow-blue-200 active:scale-95"
         >
-          <Download size={18} /> Gerar PDF
+          <Download size={20} />
+          <span className="font-bold">Exportar Relatório</span>
         </button>
       </div>
+
+      <ProfileEditModal
+        isOpen={Modal}
+        onClose={() => setModal(false)}
+        user={user}
+      />
     </div>
   );
 }

@@ -16,7 +16,7 @@ import {
   Trash2,
   type LucideIcon,
 } from "lucide-react";
-import Logo5 from "../../../assets/Logo5.5.png";
+import logo555 from "../../../assets/logo555.png";
 import { useState } from "react";
 import ItemsDoCabeçalho from "@/components/ItemsDoCabeçalho/ItemsDoCabeçalho";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
@@ -94,17 +94,17 @@ export default function GestaodeServiços() {
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll ">
       {/* Sidebar */}
-      <MenuSecretaria/>
+      <MenuSecretaria />
       {/* Main Content */}
       <main className="flex-1 p-8 custom_scroll">
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-4">
             {!menu && (
-              <button onClick={OpenMenu} className="text-[#268cff]">
+              <button onClick={OpenMenu} className="text-[#184d8a]">
                 <Menu size={22} />
               </button>
             )}
-            <h1 className="text-xl font-bold text-[#268cff]">
+            <h1 className="text-xl font-bold text-[#184d8a]">
               Gestão de Serviços
             </h1>
           </div>
@@ -118,11 +118,11 @@ export default function GestaodeServiços() {
               <label className="block text-sm text-gray-500 mb-1 ">
                 Filtrar por Mês
               </label>
-              <select className="bg-white border  rounded-lg px-4 py-2 text-sm text-gray-400 outline-none cursor-pointer hover:border-[#268cff]">
+              <select className="bg-white border  rounded-lg px-4 py-2 text-sm text-gray-400 outline-none cursor-pointer hover:border-[#184d8a]">
                 <option>Sem filtro</option>
               </select>
             </div>
-            <button className="flex items-center gap-2 bg-[#268cff] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
+            <button className="flex items-center gap-2 bg-[#184d8a] text-white px-6 py-2 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95">
               <Plus size={22} /> Adicionar
             </button>
           </div>
@@ -138,9 +138,9 @@ export default function GestaodeServiços() {
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
             <table className="w-full text-center border-collapse cursor-default">
               <thead>
-                <tr className="bg-[#268cff]/70 text-white text-[14px] font-black  border-b border-gray-200 text-center">
+                <tr className="bg-[#184d8a]/70 text-white text-[14px] font-black  border-b border-gray-200 text-center">
                   <th
-                    className="px-6 py-4 cursor-pointer hover:text-[#268cff]"
+                    className="px-6 py-4 cursor-pointer hover:text-[#184d8a]"
                     onClick={() => handleSort("servico")}
                   >
                     <div className="flex items-center justify-center gap-1 cursor-pointer">
@@ -162,7 +162,7 @@ export default function GestaodeServiços() {
                 {dadosAlunos.map((aluno, index) => (
                   <tr
                     key={index}
-                    className="hover:bg-[#268cff]/5 transition-colors"
+                    className="hover:bg-[#184d8a]/5 transition-colors"
                   >
                     <td className="px-6 py-4 text-sm font-semibold text-gray-700">
                       {aluno.servico}
@@ -179,7 +179,7 @@ export default function GestaodeServiços() {
                     <td className="px-6 py-4">
                       <div className="flex gap-3 justify-center mx-auto cursor-pointer">
                         <div className="group relative w-max  ">
-                          <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                          <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-500 shadow-sm">
                             <Pen size={18} />
                           </div>
                           <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
@@ -187,7 +187,7 @@ export default function GestaodeServiços() {
                           </span>
                         </div>
                         <div className=" group relative w-max ">
-                          <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                          <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-500 shadow-sm">
                             <Trash2 size={18} />
                           </div>
                           <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">

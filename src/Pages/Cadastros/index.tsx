@@ -39,7 +39,7 @@ function InstitutionCheckModal({
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div className="bg-gradient-to-br from-[#268cff] to-[#1a6fd4] p-6 pb-8 relative">
+        <div className="bg-gradient-to-br from-[#184d8a] to-[#1a6fd4] p-6 pb-8 relative">
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto">
             <LucideAlertTriangle className="w-8 h-8 text-white" />
           </div>
@@ -76,13 +76,13 @@ function InstitutionCheckModal({
           <div className="flex flex-col gap-2">
             <button
               onClick={onGoCheck}
-              className="w-full flex items-center justify-center gap-2 bg-[#268cff] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-blue-600 active:scale-95 transition-all shadow-md"
+              className="w-full flex items-center justify-center gap-2 bg-[#184d8a] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-blue-600 active:scale-95 transition-all shadow-md"
             >
               Verificar Instituição <ArrowRight className="h-5 w-5" />
             </button>
             <button
               onClick={onClose}
-              className="w-full text-gray-500 text-sm rounded-xl bg-blue-100 py-2 hover:bg-[#268cff]/10 hover:font-bold transition-all"
+              className="w-full text-gray-500 text-sm rounded-xl bg-blue-100 py-2 hover:bg-[#184d8a]/10 hover:font-bold transition-all"
             >
               Já verifiquei, continuar mesmo assim
             </button>
@@ -132,7 +132,9 @@ export function TelaCadastro() {
       .then((data: { idInstituicao: number; nome: string }[]) => {
         setInstituicoes(data);
         if (preSelected) {
-          const found = data.find((i) => i.idInstituicao === preSelected.idInstituicao);
+          const found = data.find(
+            (i) => i.idInstituicao === preSelected.idInstituicao,
+          );
           if (found) setInstituicao(found.idInstituicao);
         }
       })
@@ -176,71 +178,71 @@ export function TelaCadastro() {
     }
   };
 
- const DadosCadastro = async (e: React.BaseSyntheticEvent) => {
-  e.preventDefault();
+  const DadosCadastro = async (e: React.BaseSyntheticEvent) => {
+    e.preventDefault();
 
-  // ✅ VALIDAÇÃO 
-  if (!idInstituicao || isNaN(Number(idInstituicao))) {
-    toast.error("Instituição inválida");
-    return;
-  }
+    // ✅ VALIDAÇÃO
+    if (!idInstituicao || isNaN(Number(idInstituicao))) {
+      toast.error("Instituição inválida");
+      return;
+    }
 
-  if (!perfil) {
-    toast.error("Selecione um perfil");
-    return;
-  }
+    if (!perfil) {
+      toast.error("Selecione um perfil");
+      return;
+    }
 
-  // Campos exactamente como o controller os espera
-  const body =
-    perfil === "Estudante"
-      ? {
-          nome: nome.trim(),
-          email: email.trim().toLowerCase(),
-          senha: senha.trim(),
-          numProcesso: numProcesso.trim(),
-          idInstituicao,
-          idclasse: idclasse || null,
-          numTel: contacto || "000000000",
-        }
-      : {
-          nome: nome.trim(),
-          email: email.trim().toLowerCase(),
-          senha: senha.trim(),
-          numTel: contacto || "000000000",
-          nomeEstudante: nomeEstudante.trim(),
-          numProcesso: numProcesso.trim(),
-          idInstituicao,
-          idclasse: idclasse || null,
-          grauParentesco: grauParentesco.trim(),
-        };
+    // Campos exactamente como o controller os espera
+    const body =
+      perfil === "Estudante"
+        ? {
+            nome: nome.trim(),
+            email: email.trim().toLowerCase(),
+            senha: senha.trim(),
+            numProcesso: numProcesso.trim(),
+            idInstituicao,
+            idclasse: idclasse || null,
+            numTel: contacto || "000000000",
+          }
+        : {
+            nome: nome.trim(),
+            email: email.trim().toLowerCase(),
+            senha: senha.trim(),
+            numTel: contacto || "000000000",
+            nomeEstudante: nomeEstudante.trim(),
+            numProcesso: numProcesso.trim(),
+            idInstituicao,
+            idclasse: idclasse || null,
+            grauParentesco: grauParentesco.trim(),
+          };
 
-  const rota =
-    perfil === "Estudante"
-      ? "http://localhost:5000/api/cadastroEstudante"
-      : "http://localhost:5000/api/cadastroEncarregado";
+    const rota =
+      perfil === "Estudante"
+        ? "http://localhost:5000/api/cadastroEstudante"
+        : "http://localhost:5000/api/cadastroEncarregado";
 
-  try {
-    const res = await fetch(rota, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    try {
+      const res = await fetch(rota, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) throw new Error(data.error ?? "Erro ao cadastrar");
+      if (!res.ok) throw new Error(data.error ?? "Erro ao cadastrar");
 
-    if (data.token) localStorage.setItem("Token", data.token);
+      if (data.token) localStorage.setItem("Token", data.token);
 
-    toast.success("Cadastro realizado! Aguarde a aprovação da secretaria.");
+      toast.success("Cadastro realizado! Aguarde a aprovação da secretaria.");
 
-    setTimeout(() => {
-      navigate("/Login"); 
-    }, 3000);
-  } catch (err) {
-    toast.error(err instanceof Error ? err.message : "Erro ao cadastrar.");
-  }
-};
+      setTimeout(() => {
+        navigate("/Login");
+      }, 3000);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao cadastrar.");
+    }
+  };
   return (
     <>
       {showModal && (
@@ -253,14 +255,14 @@ export function TelaCadastro() {
       <div>
         <div className="mx-auto border border-gray-150 rounded-lg flex flex-col w-full justify-center space-y-6 bg-white p-8 shadow-sm sm:w-[390px]">
           <div className="space-y-1 text-center">
-            <p className="text-[#268cff] font-bold">Crie a sua Conta</p>
+            <p className="text-[#184d8a] font-bold">Crie a sua Conta</p>
             <p className="text-xs text-gray-400">Insira os seus dados abaixo</p>
           </div>
 
           {preSelected && (
             <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-xl px-4 py-3">
               <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
-                <Building2 className="w-4 h-4 text-[#268cff]" />
+                <Building2 className="w-4 h-4 text-[#184d8a]" />
               </div>
               <div className="min-w-0">
                 <p className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">
@@ -308,7 +310,7 @@ export function TelaCadastro() {
                     onChange={(e) =>
                       setNome(e.target.value.replace(/[0-9]/g, ""))
                     }
-                    className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                    className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                   />
                 </div>
 
@@ -333,7 +335,7 @@ export function TelaCadastro() {
                         onChange={(e) =>
                           setInstituicao(parseInt(e.target.value))
                         }
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                       >
                         <option value="" disabled>
                           Selecione
@@ -358,7 +360,7 @@ export function TelaCadastro() {
                       <select
                         value={idclasse}
                         onChange={(e) => setClasse(parseInt(e.target.value))}
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                       >
                         <option value="" disabled>
                           Grau
@@ -393,7 +395,7 @@ export function TelaCadastro() {
                     onChange={(e) =>
                       setNumProcesso(e.target.value.replace(/\D/g, ""))
                     }
-                    className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                    className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                   />
                 </div>
 
@@ -406,7 +408,7 @@ export function TelaCadastro() {
                       value={email}
                       type="email"
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                     />
                   </div>
                   <div className="flex-1">
@@ -418,7 +420,7 @@ export function TelaCadastro() {
                       onChange={(e) =>
                         setContacto(e.target.value.replace(/\D/g, ""))
                       }
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                     />
                   </div>
                 </div>
@@ -432,16 +434,16 @@ export function TelaCadastro() {
                       value={senha}
                       type={mostrarSenha ? "text" : "password"}
                       onChange={(e) => setSenha(e.target.value)}
-                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                      className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                     />
                     <div
                       className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                       onClick={() => setMostrar(!mostrarSenha)}
                     >
                       {mostrarSenha ? (
-                        <EyeIcon size={20} className="text-[#268cffb2]" />
+                        <EyeIcon size={20} className="text-[#184d8ab2]" />
                       ) : (
-                        <EyeOff size={20} className="text-[#268cffb2]" />
+                        <EyeOff size={20} className="text-[#184d8ab2]" />
                       )}
                     </div>
                   </div>
@@ -461,7 +463,7 @@ export function TelaCadastro() {
                         onChange={(e) =>
                           setNomeEstudante(e.target.value.replace(/[0-9]/g, ""))
                         }
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                       />
                     </div>
                     <div>
@@ -478,7 +480,7 @@ export function TelaCadastro() {
                             e.target.value.replace(/[0-9]/g, ""),
                           )
                         }
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#268cff]"
+                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                       />
                     </div>
                   </>

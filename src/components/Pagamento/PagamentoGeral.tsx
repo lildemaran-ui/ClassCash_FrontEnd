@@ -7,8 +7,8 @@ export default function PagamentoGeral() {
   const [showModal, setShowModal] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null); 
-  
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
   const [pagamento, setPagamento] = useState({
     metodo: "",
     servico: "Propina",
@@ -19,8 +19,18 @@ export default function PagamentoGeral() {
   });
 
   const mesesDoAno = [
-    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro",
   ];
 
   const PRECOS_SERVICOS: { [key: string]: number } = {
@@ -32,7 +42,9 @@ export default function PagamentoGeral() {
     Uniforme: 12000,
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = event.target;
     setPagamento((prev) => ({ ...prev, [name]: value }));
     if (name === "metodo" && value === "Dinheiro Físico") {
@@ -54,44 +66,48 @@ export default function PagamentoGeral() {
   };
 
   const handleSubmit = async () => {
-  if (!formularioValido || !user) return;
+    if (!formularioValido || !user) return;
 
-  try {
-    const formData = new FormData();
-    // Mapear serviço para ID
+    try {
+      const formData = new FormData();
+      // Mapear serviço para ID
       const servicoMap: { [key: string]: string } = {
-        "Propina": "1",
-        "Justificativo": "2",
-        "Transferência": "3",
-        "Certificado": "4",
-        "CartãodeEstudante": "5",
-        "Uniforme": "6"
+        Propina: "1",
+        Justificativo: "2",
+        Transferência: "3",
+        Certificado: "4",
+        CartãodeEstudante: "5",
+        Uniforme: "6",
       };
-      
-    // Dados para o Controller
-    formData.append("usuarioId", String(user.idusuario));
-    formData.append("servicoId", servicoMap[pagamento.servico] || "1");
-    formData.append("meses", String(quantidadeMeses));
-    formData.append("tipoPagamentoId", pagamento.metodo === "De forma digital" ? "1" : "2");
-   
-    
-    // Usar o arquivo real selecionado para o comprovativo
-     if (imageFile) {
+
+      // Dados para o Controller
+      formData.append("usuarioId", String(user.idusuario));
+      formData.append("servicoId", servicoMap[pagamento.servico] || "1");
+      formData.append("meses", String(quantidadeMeses));
+      formData.append(
+        "tipoPagamentoId",
+        pagamento.metodo === "De forma digital" ? "1" : "2",
+      );
+
+      // Usar o arquivo real selecionado para o comprovativo
+      if (imageFile) {
         formData.append("comprovativo", imageFile);
       } else {
         alert("Por favor, selecione um comprovativo");
         return;
       }
 
-    const response = await fetch("http://localhost:5000/api/pagamento", {
-      method: "POST",
-      body: formData, // FormData define automaticamente o Content-Type como multipart/form-data
-    });
+      const response = await fetch("http://localhost:5000/api/pagamento", {
+        method: "POST",
+        body: formData, // FormData define automaticamente o Content-Type como multipart/form-data
+      });
 
-     if (response.ok) {
+      if (response.ok) {
         const dados = await response.json();
-        alert(`✅ Pagamento criado com sucesso!\nCódigo: ${dados.codigo}\nIBAN: ${dados.iban}\nValor: KZ ${dados.valor}`);
-        
+        alert(
+          `✅ Pagamento criado com sucesso!\nCódigo: ${dados.codigo}\nIBAN: ${dados.iban}\nValor: KZ ${dados.valor}`,
+        );
+
         // Limpar formulário
         setImage(null);
         setImageFile(null);
@@ -103,11 +119,12 @@ export default function PagamentoGeral() {
           plataforma: "PayPay",
           comprovativo: null,
         });
-        
+
         // Limpar o input file
-        const fileInput = document.getElementById('fotoInput') as HTMLInputElement;
-        if (fileInput) fileInput.value = '';
-        
+        const fileInput = document.getElementById(
+          "fotoInput",
+        ) as HTMLInputElement;
+        if (fileInput) fileInput.value = "";
       } else {
         const erro = await response.json();
         toast.error(` Erro: ${erro.error}`);
@@ -130,29 +147,29 @@ export default function PagamentoGeral() {
   const precoBase = PRECOS_SERVICOS[pagamento.servico] || 0;
   const indexInicio = mesesDoAno.indexOf(pagamento.mesInicial);
   const indexFim = mesesDoAno.indexOf(pagamento.mesFinal);
-  const quantidadeMeses = indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
+  const quantidadeMeses =
+    indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
   const valorTotal = precoBase * quantidadeMeses;
 
-  const formularioValido = pagamento.metodo !== "" && imageFile !== null && indexFim >= indexInicio;
+  const formularioValido =
+    pagamento.metodo !== "" && imageFile !== null && indexFim >= indexInicio;
 
   if (!user) return <span>Carregado...</span>;
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
-
       {/* Formulário */}
       <div className="flex bg-gray-50 w-full lg:w-1/2 font-sans">
         <div className="flex-1 p-4 md:p-8">
           <div className="max-w-2xl mx-auto py-8">
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-
               {/* COLUNA ESQUERDA */}
               <div className="flex flex-col gap-6">
-
                 {/* Código */}
                 <div>
-                  <label className="block mb-1 font-bold text-gray-700">Código</label>
+                  <label className="block mb-1 font-bold text-gray-700">
+                    Código
+                  </label>
                   <input
                     type="text"
                     value={user?.codigoPlataforma ?? "Sem Código "}
@@ -167,35 +184,47 @@ export default function PagamentoGeral() {
                     Como será feito o pagamento?
                   </label>
                   <div className="flex flex-col gap-3">
-                    {["De forma digital", "No banco", "Dinheiro Físico"].map((m) => (
-                      <label key={m} className="flex items-center gap-2 cursor-pointer group">
-                        <input
-                          type="radio"
-                          name="metodo"
-                          value={m}
-                          checked={pagamento.metodo === m}
-                          onChange={handleChange}
-                          className="w-4 h-4 accent-[#268cff]"
-                        />
-                        <span className={`transition-colors text-sm md:text-base ${
-                          pagamento.metodo === m
-                            ? "font-semibold text-[#268cff]"
-                            : "text-gray-600 group-hover:text-blue-400"
-                        }`}>
-                          {m}
-                        </span>
-                      </label>
-                    ))}
+                    {["De forma digital", "No banco", "Dinheiro Físico"].map(
+                      (m) => (
+                        <label
+                          key={m}
+                          className="flex items-center gap-2 cursor-pointer group"
+                        >
+                          <input
+                            type="radio"
+                            name="metodo"
+                            value={m}
+                            checked={pagamento.metodo === m}
+                            onChange={handleChange}
+                            className="w-4 h-4 accent-[#184d8a]"
+                          />
+                          <span
+                            className={`transition-colors text-sm md:text-base ${
+                              pagamento.metodo === m
+                                ? "font-semibold text-[#184d8a]"
+                                : "text-gray-600 group-hover:text-blue-400"
+                            }`}
+                          >
+                            {m}
+                          </span>
+                        </label>
+                      ),
+                    )}
                   </div>
                 </div>
 
                 {/* Dados do Serviço */}
-                {(pagamento.metodo === "De forma digital" || pagamento.metodo === "No banco") && (
+                {(pagamento.metodo === "De forma digital" ||
+                  pagamento.metodo === "No banco") && (
                   <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-4">
-                    <h3 className="font-bold text-gray-800 border-b pb-2">Dados do Serviço</h3>
+                    <h3 className="font-bold text-gray-800 border-b pb-2">
+                      Dados do Serviço
+                    </h3>
 
                     <div>
-                      <label className="block mb-2 font-medium text-gray-700">Serviço:</label>
+                      <label className="block mb-2 font-medium text-gray-700">
+                        Serviço:
+                      </label>
                       <select
                         name="servico"
                         value={pagamento.servico}
@@ -203,7 +232,9 @@ export default function PagamentoGeral() {
                         className="w-full border rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-100 outline-none text-sm md:text-base"
                       >
                         {Object.keys(PRECOS_SERVICOS).map((s) => (
-                          <option key={s} value={s}>{s}</option>
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -220,7 +251,9 @@ export default function PagamentoGeral() {
                             onChange={handleChange}
                             className="p-3 border rounded-lg w-full bg-white text-sm md:text-base"
                           >
-                            <option value="Multicaxa Express">Multicaixa Express</option>
+                            <option value="Multicaxa Express">
+                              Multicaixa Express
+                            </option>
                             <option value="Unitel Money">Unitel Money</option>
                             <option value="PayPay">Pay Pay</option>
                           </select>
@@ -232,26 +265,36 @@ export default function PagamentoGeral() {
                           </label>
                           <div className="flex items-center gap-3">
                             <div className="flex-1">
-                              <p className="text-[10px] font-bold text-gray-400">De:</p>
+                              <p className="text-[10px] font-bold text-gray-400">
+                                De:
+                              </p>
                               <select
                                 name="mesInicial"
                                 value={pagamento.mesInicial}
                                 onChange={handleChange}
                                 className="w-full border rounded-lg px-2 py-2 bg-white text-sm"
                               >
-                                {mesesDoAno.map((m) => <option key={m}>{m}</option>)}
+                                {mesesDoAno.map((m) => (
+                                  <option key={m}>{m}</option>
+                                ))}
                               </select>
                             </div>
-                            <span className="mt-5 text-gray-400 font-bold">à</span>
+                            <span className="mt-5 text-gray-400 font-bold">
+                              à
+                            </span>
                             <div className="flex-1">
-                              <p className="text-[10px] font-bold text-gray-400">Até:</p>
+                              <p className="text-[10px] font-bold text-gray-400">
+                                Até:
+                              </p>
                               <select
                                 name="mesFinal"
                                 value={pagamento.mesFinal}
                                 onChange={handleChange}
                                 className="w-full border rounded-lg px-2 py-2 bg-white text-sm"
                               >
-                                {mesesDoAno.map((m) => <option key={m}>{m}</option>)}
+                                {mesesDoAno.map((m) => (
+                                  <option key={m}>{m}</option>
+                                ))}
                               </select>
                             </div>
                           </div>
@@ -264,9 +307,12 @@ export default function PagamentoGeral() {
 
               {/* COLUNA DIREITA */}
               <div className="flex flex-col gap-6">
-                {(pagamento.metodo === "De forma digital" || pagamento.metodo === "No banco") && (
+                {(pagamento.metodo === "De forma digital" ||
+                  pagamento.metodo === "No banco") && (
                   <div className="flex flex-col gap-6 animate-in fade-in">
-                    <h3 className="font-bold text-gray-800 border-b pb-2">Finalização</h3>
+                    <h3 className="font-bold text-gray-800 border-b pb-2">
+                      Finalização
+                    </h3>
 
                     {/* Resumo de Valores */}
                     <div className="bg-blue-50 p-5 rounded-xl border border-blue-100 shadow-sm">
@@ -282,57 +328,59 @@ export default function PagamentoGeral() {
                     </div>
 
                     {/* Iban */}
-                     <div>
-                  <label className="font-medium block mb-2 text-gray-700">Iban da Instituição</label>
-                  <input
-                    type="text"
-                    value={user?.ibanInstituicao ?? "Sem IBAN"}
-                    readOnly
-                    className="w-32 border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono"
-                  />
-                </div>
+                    <div>
+                      <label className="font-medium block mb-2 text-gray-700">
+                        Iban da Instituição
+                      </label>
+                      <input
+                        type="text"
+                        value={user?.ibanInstituicao ?? "Sem IBAN"}
+                        readOnly
+                        className="w-32 border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono"
+                      />
+                    </div>
 
                     {/* Comprovativo */}
-                 {/* Foto */}
-                <div className="">
-                  <label className="font-medium block mb-2 text-gray-700">
-                    Comprovativo
-                  </label>
-                  <label
-                    htmlFor="fotoInput"
-                    className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-14 text-center hover:border-[#268cff] transition-colors cursor-pointer overflow-hidden"
-                  >
-                    {image ? (
-                      <img
-                        loading="lazy"
-                        src={image}
-                        alt="preview"
-                        className="h-20 object-contain rounded-lg"
+                    {/* Foto */}
+                    <div className="">
+                      <label className="font-medium block mb-2 text-gray-700">
+                        Comprovativo
+                      </label>
+                      <label
+                        htmlFor="fotoInput"
+                        className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-14 text-center hover:border-[#184d8a] transition-colors cursor-pointer overflow-hidden"
+                      >
+                        {image ? (
+                          <img
+                            loading="lazy"
+                            src={image}
+                            alt="preview"
+                            className="h-20 object-contain rounded-lg"
+                          />
+                        ) : (
+                          <>
+                            <ImagePlus className="w-8 h-8 text-gray-400 mb-1" />
+                            <p className="text-xs text-gray-500">
+                              Arraste ou clique para carregar
+                            </p>
+                          </>
+                        )}
+                      </label>
+                      <input
+                        id="fotoInput"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageChange}
                       />
-                    ) : (
-                      <>
-                        <ImagePlus className="w-8 h-8 text-gray-400 mb-1" />
-                        <p className="text-xs text-gray-500">
-                          Arraste ou clique para carregar
-                        </p>
-                      </>
-                    )}
-                  </label>
-                  <input
-                    id="fotoInput"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageChange}
-                  />
-                </div>
+                    </div>
 
                     <button
                       onClick={handleSubmit}
                       disabled={!formularioValido}
                       className={`py-4 rounded-xl font-bold text-base md:text-lg transition-all transform active:scale-95 shadow-lg ${
                         formularioValido
-                          ? "bg-[#268cff] text-white hover:bg-blue-600"
+                          ? "bg-[#184d8a] text-white hover:bg-blue-600"
                           : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none"
                       }`}
                     >
@@ -360,14 +408,15 @@ export default function PagamentoGeral() {
             </div>
             <h1 className="text-xl font-bold mb-2">Pagamento Presencial</h1>
             <p className="text-gray-600 mb-6 text-sm md:text-base">
-              Por favor, dirija-se à Secretaria da Instituição para efetuar o pagamento em numerário.
+              Por favor, dirija-se à Secretaria da Instituição para efetuar o
+              pagamento em numerário.
             </p>
             <button
               onClick={() => {
                 setShowModal(false);
                 setPagamento((p) => ({ ...p, metodo: "" }));
               }}
-              className="w-full bg-[#268cff] text-white py-3 rounded-lg font-bold"
+              className="w-full bg-[#184d8a] text-white py-3 rounded-lg font-bold"
             >
               Entendido
             </button>

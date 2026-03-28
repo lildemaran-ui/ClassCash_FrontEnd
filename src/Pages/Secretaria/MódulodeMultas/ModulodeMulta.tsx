@@ -10,7 +10,7 @@ import {
   Menu,
   Plus,
   Trash2,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
 export default function ModulodeMulta() {
@@ -55,8 +55,8 @@ export default function ModulodeMulta() {
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
-<MenuSecretaria/>
-     
+      <MenuSecretaria />
+
       {/* Main Content */}
       <main className="flex-1 p-8 bg-gray-50 custom_scroll">
         {/* Header */}
@@ -66,14 +66,14 @@ export default function ModulodeMulta() {
             {!menu && (
               <button>
                 <Menu
-                  className="text-[#268cff] flex items-start"
+                  className="text-[#184d8a] flex items-start"
                   size={22}
                   onClick={OpenMenu}
                 />
               </button>
             )}
             <div className="block">
-              <h1 className="text-xl font-bold text-[#268cff]">
+              <h1 className="text-xl font-bold text-[#184d8a]">
                 Gestão de Multas
               </h1>
               <p className="text-gray-400 text-sm ">
@@ -91,13 +91,13 @@ export default function ModulodeMulta() {
                 <label className="block text-sm text-gray-500 mb-1">
                   {filtro}
                 </label>
-                <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#268cff] cursor-pointer">
+                <select className="bg-white border  rounded-lg px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#184d8a] cursor-pointer">
                   <option>Sem filtro</option>
                 </select>
               </div>
             ))}
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-[#268cff] text-white rounded-md text-base font-semibold hover:bg-blue-500 hover:text-white transition-all duration-500 cursor-pointer">
+          <button className="flex items-center gap-2 px-4 py-2 bg-[#184d8a] text-white rounded-md text-base font-semibold hover:bg-blue-500 hover:text-white transition-all duration-500 cursor-pointer">
             Gerar PDF <Download />
           </button>
         </div>
@@ -186,7 +186,7 @@ export default function ModulodeMulta() {
               </select>
             </div>
             <div className="flex gap-3">
-              <button className="bg-[#268cff] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-500 shadow-sm transition-all duration-500 flex items-center gap-2">
+              <button className="bg-[#184d8a] text-white px-6 py-2.5 rounded-xl font-bold hover:bg-blue-500 shadow-sm transition-all duration-500 flex items-center gap-2">
                 <Plus size={22} /> Aplicar Multa
               </button>
             </div>
@@ -194,7 +194,7 @@ export default function ModulodeMulta() {
 
           <table className="w-full text-center border-collapse cursor-default">
             <thead>
-              <tr className="bg-[#268cff]/70 text-white text-[14px]   font-black  border-b border-gray-200">
+              <tr className="bg-[#184d8a]/70 text-white text-[14px]   font-black  border-b border-gray-200">
                 <th className="px-6 py-4">Estudante</th>
                 <th className="px-6 py-4">Motivo</th>
                 <th className="px-6 py-4">Valor Original</th>
@@ -208,7 +208,7 @@ export default function ModulodeMulta() {
               {devedores.map((devedores, index) => (
                 <tr
                   key={index}
-                  className="hover:bg-[#268cff]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#268cff]"
+                  className="hover:bg-[#184d8a]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#184d8a]"
                 >
                   <td className="px-4 py-4 text-sm  ">
                     <div className="flex flex-col items-center justify-center">
@@ -249,7 +249,7 @@ export default function ModulodeMulta() {
                   <td className="px-4 py-4">
                     <div className="flex gap-3 justify-center mx-auto cursor-pointer">
                       <div className="group relative w-max  ">
-                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                        <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-500 shadow-sm">
                           <EyeIcon size={18} />
                         </div>
                         <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
@@ -257,7 +257,7 @@ export default function ModulodeMulta() {
                         </span>
                       </div>
                       <div className=" group relative w-max ">
-                        <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                        <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-500 shadow-sm">
                           <Trash2 size={18} />
                         </div>
                         <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">

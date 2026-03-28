@@ -1,4 +1,4 @@
-import { PieChart } from '@mui/x-charts/PieChart';
+import { PieChart } from "@mui/x-charts/PieChart";
 
 export default function ChartGestaoMulta() {
   return (
@@ -6,9 +6,8 @@ export default function ChartGestaoMulta() {
       series={[
         {
           data: [
-            { id: 0, value: 10, label: 'Multa Pendente', color: 'orange' },
-            { id: 1, value: 15, label: 'Multa Paga', color: '#268cff' },
-           
+            { id: 0, value: 10, label: "Multa Pendente", color: "orange" },
+            { id: 1, value: 15, label: "Multa Paga", color: "#184d8a" },
           ],
         },
       ]}

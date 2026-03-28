@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
-import logo from "../../assets/Logo5.5.png";
+import logo from "../../assets/logo5.5.png";
 
 export default function Footer() {
   return (
     <div>
-      <footer className="bg-[#268CFF] text-white w-full">
+      <footer className="bg-[#184d8a] text-white w-full">
         <div className="max-w-7xl mx-auto py-10 px-6 sm:px-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 lg:gap-20">
-          
           {/* Logo — ocupa as 2 colunas no mobile */}
           <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <div className="flex border-b items-center">
@@ -21,22 +20,34 @@ export default function Footer() {
             </h3>
             <ol className="space-y-2">
               <Link to="/PaginaInicial">
-                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Início</li>
+                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                  Início
+                </li>
               </Link>
               <Link to="/AboutUs">
-                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Sobre nós</li>
+                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                  Sobre nós
+                </li>
               </Link>
               <Link to="/Contacts">
-                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Contacto</li>
+                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                  Contacto
+                </li>
               </Link>
               <Link to="/Instituições">
-                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Instituições</li>
+                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                  Instituições
+                </li>
               </Link>
               <Link to="/FAQ's">
-                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">FAQ's</li>
+                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                  FAQ's
+                </li>
               </Link>
               <Link to="/Funcionalidades">
-                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Funcionalidades</li>
+                <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                  Funcionalidades
+                </li>
               </Link>
             </ol>
           </div>
@@ -46,9 +57,15 @@ export default function Footer() {
               Métodos de pagamento
             </h3>
             <ol className="space-y-2">
-              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Multicaixa Express</li>
-              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Unitel Money</li>
-              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">PayPay</li>
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                Multicaixa Express
+              </li>
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                Unitel Money
+              </li>
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                PayPay
+              </li>
             </ol>
           </div>
 
@@ -57,9 +74,15 @@ export default function Footer() {
               Contacto
             </h3>
             <ol className="space-y-2">
-              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Tel.: (da instituição)</li>
-              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Email: (da instituição)</li>
-              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">Localização: (da instituição)</li>
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                Tel.: +244 923 456 789
+              </li>
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                Email: classcash@gmail.com
+              </li>
+              <li className="text-xs sm:text-base transition-colors duration-500 cursor-pointer hover:font-bold">
+                Localização: -----
+              </li>
             </ol>
           </div>
         </div>

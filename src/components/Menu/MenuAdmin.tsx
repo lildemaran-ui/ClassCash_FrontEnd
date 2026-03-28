@@ -1,9 +1,21 @@
-import { FileText, InfoIcon, KeyIcon, LayoutDashboard, LogOut, Menu, School, ScrollText, Settings, Users, type LucideIcon } from "lucide-react";
+import {
+  FileText,
+  InfoIcon,
+  KeyIcon,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  School,
+  ScrollText,
+  Settings,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Logo5 from "../../assets/Logo5.5.png";
+import logo555 from "../../assets/Logo5.5.png";
 export default function MenuAdmin() {
-      // Componente SidebarItem atualizado com as novas medidas
+  // Componente SidebarItem atualizado com as novas medidas
   const SidebarItem = ({
     icon: Icon,
     label,
@@ -30,15 +42,15 @@ export default function MenuAdmin() {
   function OpenMenu() {
     setMenu(true);
   }
-    return(
-        <div>
-             {menu ? (
-        <aside className="w-64 bg-[#268cff] flex flex-col sticky top-0 h-screen">
+  return (
+    <div>
+      {menu ? (
+        <aside className="w-64 bg-[#184d8a] flex flex-col sticky top-0 h-screen">
           <div className="px-4 pt-4 mb-10 flex items-center gap-2 relative justify-between">
             <div className=" flex items-center">
               <img
                 loading="lazy"
-                src={Logo5}
+                src={logo555}
                 alt="Logo"
                 className="w-16 h-16 "
               />
@@ -117,7 +129,9 @@ export default function MenuAdmin() {
             </div>
           </Link>
         </aside>
-      ): ( <Menu size={22}className="text-[#268cff]" onClick={OpenMenu}/>)}
-        </div>
-    )
+      ) : (
+        <Menu size={22} className="text-[#184d8a]" onClick={OpenMenu} />
+      )}
+    </div>
+  );
 }

@@ -1,54 +1,94 @@
 import React, { useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import Logo5 from "../../assets/Logo5.png";
-import Logo55 from "../../assets/Logo5.5.png";
+import logo5555 from "../../assets/Logo5.5.png";
+import logo555 from "../../assets/logo555.png";
 import { Link } from "react-router-dom";
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
-  function OpenMenu() { setMenuOpen(true); }
-  function CloseMenu() { setMenuOpen(false); }
+  function OpenMenu() {
+    setMenuOpen(true);
+  }
+  function CloseMenu() {
+    setMenuOpen(false);
+  }
 
   const [scrolled, setscrolled] = useState(false);
   const handleScroll = () => {
     const offset = window.scrollY;
-    if (offset > 50) { setscrolled(true); } else { setscrolled(false); }
+    if (offset > 50) {
+      setscrolled(true);
+    } else {
+      setscrolled(false);
+    }
   };
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    return () => { window.removeEventListener("scroll", handleScroll); };
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const navbarClasses = `fixed top-0 w-full z-50 transition-colors duration-700 ${scrolled ? "menu-translucido" : "transparent-bg "}`;
-  const textClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? "text-white hover:text-[#268CFF]" : "text-[#268CFF] hover:text-white"}`;
-  const CorMenu = scrolled ? "text-white" : "text-[#268CFF]";
-  const borderClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? "border-white drop-shadow-md px-3 py-2 rounded-lg border-2 font-medium text-white" : "border-[#268CFF] hover:border-white px-3 py-2 rounded-lg border-2 font-medium text-white"}`;
+  
+  const CorMenu = scrolled ? "text-white" : "text-[#184d8a]";
+  const borderClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? "border-white drop-shadow-md px-3 py-2 rounded-lg border-2 font-medium text-white" : "border-[#184d8a] hover:border-white px-3 py-2 rounded-lg border-2 font-medium text-white"}`;
 
   return (
     <header className="fixed top-0 w-full transparent-bg z-50 antialiased">
       <div className={navbarClasses}>
         <nav className="flex h-16 sm:h-20 items-center justify-between px-4 sm:px-6 lg:px-10">
-          <div className="text-[#268CFF] flex items-center font-semibold text-xl sm:text-3xl">
+          <div className="text-[#1564be] flex items-center font-semibold text-xl sm:text-3xl">
             <img
               loading="lazy"
-              src={scrolled ? Logo55 : Logo5}
+              src={logo5555}
               alt="Sosoft Logo"
               className="h-14 sm:h-20 lg:h-24 object-contain transition-all drop-shadow-md duration-700"
             />
-            <div className={textClasses}>
+            <div className="text-white">
               <p className="cursor-default drop-shadow-md">ClassCash</p>
             </div>
           </div>
 
           {/* Links desktop */}
           <div className="hidden lg:flex lg:items-center gap-3 lg:gap-4 text-white font-semibold text-sm lg:text-base">
-            <Link to="/PaginaInicial" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md">Início</Link>
-            <Link to="/AboutUs" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md">Sobre Nós</Link>
-            <Link to="/Contacts" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md">Contacto</Link>
-            <Link to="/Instituições" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md">Instituições</Link>
-            <Link to="/FAQ's" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md">FAQ's</Link>
-            <Link to="" className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#268CFF] drop-shadow-md">Funcionalidades</Link>
+            <Link
+              to="/PaginaInicial"
+              className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#184d8a] drop-shadow-md"
+            >
+              Início
+            </Link>
+            <Link
+              to="/AboutUs"
+              className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#184d8a] drop-shadow-md"
+            >
+              Sobre Nós
+            </Link>
+            <Link
+              to="/Contacts"
+              className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#184d8a] drop-shadow-md"
+            >
+              Contacto
+            </Link>
+            <Link
+              to="/Instituições"
+              className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#184d8a] drop-shadow-md"
+            >
+              Instituições
+            </Link>
+            <Link
+              to="/FAQ's"
+              className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#184d8a] drop-shadow-md"
+            >
+              FAQ's
+            </Link>
+            <Link
+              to=""
+              className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#184d8a] drop-shadow-md"
+            >
+              Funcionalidades
+            </Link>
             <Link to="/Login">
               <button className={borderClasses}>Entrar</button>
             </Link>
@@ -63,13 +103,16 @@ export default function Nav() {
 
       {/* Overlay */}
       {menuOpen && (
-        <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={CloseMenu} />
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={CloseMenu}
+        />
       )}
 
       {/* Drawer melhorado */}
       <div
         className={`lg:hidden fixed top-0 right-0 h-screen z-50 w-72 sm:w-80
-          bg-[#268CFF] flex flex-col
+          bg-[#184d8a] flex flex-col
           transition-transform duration-300 ease-in-out
           ${menuOpen ? "translate-x-0" : "translate-x-full"}
         `}
@@ -77,7 +120,7 @@ export default function Nav() {
         {/* Header do drawer */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/20">
           <div className="flex items-center gap-2">
-            <img loading="lazy" src={Logo55} alt="Logo" className="h-10" />
+            <img loading="lazy" src={logo5555} alt="Logo" className="h-10" />
             <span className="text-white font-bold text-lg">ClassCash</span>
           </div>
           <button
@@ -112,7 +155,7 @@ export default function Nav() {
         {/* Botão entrar no fundo */}
         <div className="px-6 py-6 border-t border-white/20">
           <Link to="/Login" onClick={CloseMenu}>
-            <button className="w-full py-3 rounded-lg border-2 border-white text-white font-semibold text-base hover:bg-white hover:text-[#268CFF] transition-colors duration-300">
+            <button className="w-full py-3 rounded-lg border-2 border-white text-white font-semibold text-base hover:bg-white hover:text-[#184d8a] transition-colors duration-300">
               Entrar
             </button>
           </Link>

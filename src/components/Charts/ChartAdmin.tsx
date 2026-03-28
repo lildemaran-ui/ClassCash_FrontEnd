@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
   Card,
@@ -8,20 +8,20 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "@/components/ui/chart"
+} from "@/components/ui/chart";
 
-export const description = "A bar chart"
+export const description = "A bar chart";
 
 const chartData = [
   { month: "Janeiro", Estudantes: 86 },
   { month: "Feveiro", Estudantes: 30 },
-  { month: "Março", Estudantes : 37 },
+  { month: "Março", Estudantes: 37 },
   { month: "Abril", Estudantes: 73 },
   { month: "Maio", Estudantes: 9 },
   { month: "Junho", Estudantes: 14 },
@@ -31,14 +31,14 @@ const chartData = [
   { month: "Outubro", Estudantes: 24 },
   { month: "Novembro", Estudantes: 2 },
   { month: "Dezembro", Estudantes: 0 },
-]
+];
 
 const chartConfig = {
   Estudantes: {
     label: "Estudantes",
-    color: "#268cff",
+    color: "#184d8a",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 export function ChartAdmin() {
   return (
@@ -46,12 +46,14 @@ export function ChartAdmin() {
       <CardHeader>
         <div className="flex">
           <CardTitle>Resumo gráfico</CardTitle>
-       
         </div>
         <CardDescription>Alunos que se cadastram mensalmente</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig} className="aspect-[9/4] w-full max-h-[350px]">
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-[9/4] w-full max-h-[350px]"
+        >
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
@@ -65,11 +67,14 @@ export function ChartAdmin() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="Estudantes" fill="var(--color-Estudantes)" radius={5} />
+            <Bar
+              dataKey="Estudantes"
+              fill="var(--color-Estudantes)"
+              radius={5}
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>
-      
     </Card>
-  )
+  );
 }

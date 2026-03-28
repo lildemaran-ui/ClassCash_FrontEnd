@@ -25,7 +25,7 @@ const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
     .join("")
     .toUpperCase();
 
-  const commonClasses = `${sizeClasses[size]} rounded-full flex items-center border border-[#268cff]/50 justify-center overflow-hidden shrink-0`;
+  const commonClasses = `${sizeClasses[size]} rounded-full flex items-center border border-[#184d8a]/50 justify-center overflow-hidden shrink-0`;
 
   if (src && !hasError) {
     return (
@@ -41,7 +41,7 @@ const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
 
   return (
     <div
-      className={`${commonClasses} bg-gradient-to-br from-blue-400 to-[#268cff] text-white font-medium shadow-inner`}
+      className={`${commonClasses} bg-gradient-to-br from-blue-400 to-[#184d8a] text-white font-medium shadow-inner`}
     >
       {initials}
     </div>

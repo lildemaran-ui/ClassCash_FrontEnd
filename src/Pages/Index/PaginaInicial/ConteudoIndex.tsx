@@ -12,200 +12,13 @@ import fundo   from "../../../assets/imgFundoPI.jpeg";
 import AppsIlustr from "../AppsIlustr";
 import Cards      from "../Cards";
 import Objetivo   from "../Objetivos";
+import { BarChart, LockIcon, Smartphone, Zap, type Lock } from "lucide-react";
 
 export default function ConteudoIndex() {
   return (
     <>
-      {/* ── Google Fonts ── */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-        :root {
-          --azul:    #268cff;
-          --azul-escuro: #0a2540;
-          --dourado: #f0a500;
-          --branco:  #ffffff;
-          --cinza:   #f7f9fc;
-        }
-
-        .font-display { font-family: 'Playfair Display', serif; }
-        .font-body    { font-family: 'DM Sans', sans-serif; }
-
-        /* Staggered reveal */
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(40px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        .reveal       { animation: fadeUp 0.8s ease forwards; opacity: 0; }
-        .delay-1      { animation-delay: 0.15s; }
-        .delay-2      { animation-delay: 0.30s; }
-        .delay-3      { animation-delay: 0.45s; }
-        .delay-4      { animation-delay: 0.60s; }
-
-        /* Linha dourada decorativa */
-        .gold-line::after {
-          content: '';
-          display: block;
-          width: 64px;
-          height: 3px;
-          background: var(--dourado);
-          margin-top: 12px;
-          border-radius: 9999px;
-        }
-
-        /* Botão primário */
-        .btn-primary {
-          background: var(--azul);
-          color: white;
-          padding: 14px 36px;
-          border-radius: 12px;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 600;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-          box-shadow: 0 8px 24px rgba(38,140,255,0.35);
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-        }
-        .btn-primary:hover {
-          background: #1a7ae8;
-          transform: translateY(-2px);
-          box-shadow: 0 12px 32px rgba(38,140,255,0.45);
-        }
-
-        /* Botão secundário */
-        .btn-outline {
-          border: 2px solid rgba(255,255,255,0.5);
-          color: white;
-          padding: 13px 32px;
-          border-radius: 12px;
-          font-family: 'DM Sans', sans-serif;
-          font-weight: 500;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-          backdrop-filter: blur(8px);
-          background: rgba(255,255,255,0.08);
-        }
-        .btn-outline:hover {
-          border-color: white;
-          background: rgba(255,255,255,0.15);
-        }
-
-        /* Card de stat */
-        .stat-card {
-          background: rgba(255,255,255,0.08);
-          border: 1px solid rgba(255,255,255,0.15);
-          backdrop-filter: blur(12px);
-          border-radius: 16px;
-          padding: 20px 28px;
-          text-align: center;
-        }
-
-        /* Feature card */
-        .feature-card {
-          background: white;
-          border-radius: 20px;
-          padding: 32px;
-          transition: all 0.3s ease;
-          border: 1px solid #eef2f7;
-          position: relative;
-          overflow: hidden;
-        }
-        .feature-card::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, var(--azul), var(--dourado));
-          transform: scaleX(0);
-          transform-origin: left;
-          transition: transform 0.4s ease;
-        }
-        .feature-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 48px rgba(10,37,64,0.10);
-        }
-        .feature-card:hover::before { transform: scaleX(1); }
-
-        /* Secção banded */
-        .section-dark {
-          background: var(--azul-escuro);
-          position: relative;
-          overflow: hidden;
-        }
-        .section-dark::before {
-          content: '';
-          position: absolute;
-          top: -120px; right: -120px;
-          width: 400px; height: 400px;
-          background: radial-gradient(circle, rgba(38,140,255,0.18) 0%, transparent 70%);
-          pointer-events: none;
-        }
-
-        /* Número grande decorativo */
-        .step-number {
-          font-family: 'Playfair Display', serif;
-          font-size: 5rem;
-          font-weight: 900;
-          color: rgba(38,140,255,0.08);
-          line-height: 1;
-          position: absolute;
-          top: -10px;
-          left: -10px;
-        }
-
-        /* Imagem com moldura */
-        .img-frame {
-          position: relative;
-          border-radius: 24px;
-          overflow: hidden;
-        }
-        .img-frame::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: 24px;
-          border: 2px solid rgba(38,140,255,0.2);
-          pointer-events: none;
-        }
-        .img-frame img {
-          transition: transform 0.6s ease;
-        }
-        .img-frame:hover img {
-          transform: scale(1.04);
-        }
-
-        /* Badge */
-        .badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          background: rgba(38,140,255,0.1);
-          color: var(--azul);
-          border: 1px solid rgba(38,140,255,0.2);
-          border-radius: 999px;
-          padding: 6px 14px;
-          font-size: 0.75rem;
-          font-weight: 600;
-          font-family: 'DM Sans', sans-serif;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-        }
-
-        /* Testemunho */
-        .testimonial {
-          background: white;
-          border-radius: 20px;
-          padding: 28px;
-          border: 1px solid #eef2f7;
-          box-shadow: 0 4px 24px rgba(10,37,64,0.06);
-          transition: transform 0.3s ease;
-        }
-        .testimonial:hover { transform: translateY(-4px); }
-      `}</style>
-
-      <div className="font-body" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+      <div className="font-poppins">
 
         {/* ══════════════════════════════════════════
             HERO
@@ -226,13 +39,13 @@ export default function ConteudoIndex() {
           {/* Conteúdo */}
           <div className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 py-32">
             <div className="max-w-3xl">
-              <div className="badge reveal mb-6">
+              <div className="badge reveal mb-6 " >
                 <span className="w-2 h-2 rounded-full bg-[#268cff] animate-pulse inline-block" />
                 Plataforma de Gestão Escolar Angolana
               </div>
 
               <h1 className="font-display reveal delay-1 text-white mb-6"
-                style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", lineHeight: 1.1, fontFamily: "'Playfair Display', serif" }}>
+                style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", lineHeight: 1.1}}>
                 Pagamentos <br />
                 <span style={{ color: "var(--dourado)" }}>
                   <FrasesRotativas />
@@ -405,12 +218,12 @@ export default function ConteudoIndex() {
               {/* Mini features */}
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { icon: "🔒", text: "Pagamentos seguros" },
-                  { icon: "⚡", text: "Processamento rápido" },
-                  { icon: "📊", text: "Relatórios detalhados" },
-                  { icon: "📱", text: "Acesso em qualquer lugar" },
+                  { icon: <LockIcon className="text-[#268cff]"/>, text: "Pagamentos seguros" },
+                  { icon: <Zap className="text-[#268cff]"/>, text: "Processamento rápido" },
+                  { icon: <BarChart className="text-[#268cff]"/>, text: "Relatórios detalhados" },
+                  { icon: <Smartphone className="text-[#268cff]"/>, text: "Acesso em qualquer lugar" },
                 ].map(f => (
-                  <div key={f.text} className="flex items-center gap-3 bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+                  <div key={f.text} className="flex items-center gap-3 bg-white rounded-xl p-3 shadow-sm border border-gray-300">
                     <span className="text-xl">{f.icon}</span>
                     <span className="text-sm font-medium text-gray-700">{f.text}</span>
                   </div>
@@ -556,7 +369,6 @@ export default function ConteudoIndex() {
                 style={{ background: "var(--azul)", filter: "blur(40px)", transform: "translate(-30%, 30%)" }} />
 
               <div className="relative z-10">
-                <span className="text-4xl mb-6 block">🎓</span>
                 <h2 className="font-display text-white mb-4"
                   style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontFamily: "'Playfair Display', serif" }}>
                   Pronto para transformar

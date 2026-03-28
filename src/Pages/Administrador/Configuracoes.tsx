@@ -17,11 +17,11 @@ import {
   Settings,
   User,
   Users,
-  type LucideIcon
+  type LucideIcon,
 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Logo5 from "../../assets/Logo5.5.png";
+import logo555 from "../../assets/logo555.png";
 import MenuAdmin from "@/components/Menu/MenuAdmin";
 
 export default function Configuracoes() {
@@ -326,32 +326,32 @@ export default function Configuracoes() {
   return (
     <main className="">
       <div className="flex h-screen font-sans overflow-hidden">
-       <MenuAdmin/>
+        <MenuAdmin />
         <div className="flex flex-1 flex-col ">
           <div className="flex items-center justify-between z-50 top-0  p-6 sticky h-22 mb-5 bg-translucido">
             <div className="flex items-center gap-6">
               {!menu && (
                 <button
                   onClick={OpenMenu}
-                  className="text-[#268cff] hover:bg-blue-50 p-2 rounded-lg transition-colors"
+                  className="text-[#184d8a] hover:bg-blue-50 p-2 rounded-lg transition-colors"
                 >
                   <Menu size={22} />
                 </button>
               )}
-              <h1 className="text-xl font-bold  text-[#268cff]">
+              <h1 className="text-xl font-bold  text-[#184d8a]">
                 Gestão de Usuários
               </h1>
             </div>
             {/* Header (Topo) */}
             <header className=" ">
-              <h1 className="text-xl font-bold text-[#268cff]">{}</h1>
+              <h1 className="text-xl font-bold text-[#184d8a]">{}</h1>
               <div className="flex items-center space-x-4">
                 {/* Ícones de Notificação e Perfil */}
                 <div className="relative cursor-pointer">
-                  <Bell className="text-[#268cff] group-hover:scale-110 transition-transform " />
+                  <Bell className="text-[#184d8a] group-hover:scale-110 transition-transform " />
                   <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white"></span>
                 </div>
-                <CircleUser className="w-8 h-8 text-[#268cff] hover:text-blue-600" />
+                <CircleUser className="w-8 h-8 text-[#184d8a] hover:text-blue-600" />
               </div>
             </header>
           </div>

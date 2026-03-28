@@ -12,12 +12,14 @@ const InfoCard = ({
   content?: string;
   list?: string[];
 }) => (
-  <div className="group border border-[#268cff] hover:border-none hover:bg-gradient-to-b from-[#054781e4] to-[#107bd8] p-6 rounded-2xl text-center flex flex-col items-center h-full hover:shadow-xl hover:text-white transition-all duration-500">
-    <h3 className="text-xl sm:text-2xl font-semibold group-hover:text-white text-[#268cff] mb-6">
+  <div className="group border border-[#184d8a] hover:border-none hover:bg-gradient-to-b from-[#054781e4] to-[#107bd8] p-6 rounded-2xl text-center flex flex-col items-center h-full hover:shadow-xl hover:text-white transition-all duration-500">
+    <h3 className="text-xl sm:text-2xl font-semibold group-hover:text-white text-[#184d8a] mb-6">
       {title}
     </h3>
     {content && (
-      <p className="text-sm sm:text-base leading-relaxed opacity-90">{content}</p>
+      <p className="text-sm sm:text-base leading-relaxed opacity-90">
+        {content}
+      </p>
     )}
     {list && (
       <ul className="text-sm sm:text-base space-y-3 text-left w-full px-4">
@@ -41,7 +43,7 @@ export default function SobreNos() {
       <div className="pt-6 mt-20 sm:mt-28 lg:mt-32 px-4 sm:px-6 lg:px-0">
         <div className="overflow-hidden flex shadow-sm max-w-7xl ml-auto">
           <div className="w-4 bg-[#00f2ff] shrink-0"></div>
-          <div className="flex-1 bg-gradient-to-r from-[#1a5fb4] to-[#268cff] py-8 sm:py-12 text-center text-white">
+          <div className="flex-1 bg-gradient-to-r from-[#1a5fb4] to-[#184d8a] py-8 sm:py-12 text-center text-white">
             <h1 className="text-xl sm:text-2xl font-semibold">SOBRE NÓS</h1>
             <p className="text-[10px] opacity-80 uppercase tracking-widest mt-1">
               Conheça a nossa história
@@ -51,7 +53,6 @@ export default function SobreNos() {
       </div>
 
       <main className="flex-1 max-w-6xl mx-auto w-full py-10 sm:py-16 px-4 sm:px-6">
-
         {/* Introdução */}
         <section className="flex flex-col md:flex-row gap-8 sm:gap-12 items-center mb-16 sm:mb-24">
           <div className="flex-1 w-full">
@@ -63,7 +64,7 @@ export default function SobreNos() {
             />
           </div>
           <div className="flex-1 space-y-4">
-            <h1 className="text-[#268cff] font-bold text-xl sm:text-2xl underline decoration-2 underline-offset-8 mb-4 sm:mb-6">
+            <h1 className="text-[#184d8a] font-bold text-xl sm:text-2xl underline decoration-2 underline-offset-8 mb-4 sm:mb-6">
               ClassCash
             </h1>
             <p className="text-blue-900 font-bold text-lg sm:text-2xl">
@@ -128,18 +129,24 @@ export default function SobreNos() {
       </main>
 
       {/* Banner de Estatísticas */}
-      <section className="bg-gradient-to-r from-[#1a5fb4] to-[#268cff] overflow-hidden flex shadow-sm mx-4 sm:mx-6 lg:mx-0 lg:max-w-7xl mb-16 sm:mb-28 rounded-xl lg:rounded-none">
+      <section className="bg-gradient-to-r from-[#1a5fb4] to-[#184d8a] overflow-hidden flex shadow-sm mx-4 sm:mx-6 lg:mx-0 lg:max-w-7xl mb-16 sm:mb-28 rounded-xl lg:rounded-none">
         <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 py-10 sm:py-12 px-6 text-white">
           <div className="text-center">
-            <p className="text-sm sm:text-lg opacity-90 mb-2">Alunos cadastrados</p>
+            <p className="text-sm sm:text-lg opacity-90 mb-2">
+              Alunos cadastrados
+            </p>
             <p className="text-xl sm:text-2xl font-bold">+100</p>
           </div>
           <div className="text-center">
-            <p className="text-sm sm:text-lg opacity-90 mb-2">Instituições registradas</p>
+            <p className="text-sm sm:text-lg opacity-90 mb-2">
+              Instituições registradas
+            </p>
             <p className="text-xl sm:text-2xl font-bold">+50</p>
           </div>
           <div className="text-center">
-            <p className="text-sm sm:text-lg opacity-90 mb-2">Pagamentos efetuados</p>
+            <p className="text-sm sm:text-lg opacity-90 mb-2">
+              Pagamentos efetuados
+            </p>
             <p className="text-xl sm:text-2xl font-bold">+20</p>
           </div>
         </div>

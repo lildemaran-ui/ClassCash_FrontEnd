@@ -14,7 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import Logo5 from "../../../assets/Logo5.5.png";
+import logo555 from "../../../assets/logo555.png";
 import { useState } from "react";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 export default function GestaodeReclamacoes() {
@@ -46,7 +46,7 @@ export default function GestaodeReclamacoes() {
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       {/* Sidebar */}
-    <MenuSecretaria/> 
+      <MenuSecretaria />
       {/* Main Content */}
       <main className="flex-1 p-8 custom_scroll bg-gray-50">
         {/* Header e Ação rápida */}
@@ -55,13 +55,13 @@ export default function GestaodeReclamacoes() {
             {!menu && (
               <button>
                 <Menu
-                  className="text-[#268cff] flex items-start"
+                  className="text-[#184d8a] flex items-start"
                   size={22}
                   onClick={OpenMenu}
                 ></Menu>
               </button>
             )}
-            <h1 className="text-xl font-bold text-[#268cff]">
+            <h1 className="text-xl font-bold text-[#184d8a]">
               Gestão de Reclamações
             </h1>
             <p className="text-gray-400 text-sm ">
@@ -70,7 +70,7 @@ export default function GestaodeReclamacoes() {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 bg-[#268cff]  text-white hover:bg-blue-500   px-4 py-2 rounded-xl font-bold transition-all duration-500">
+            <button className="flex items-center gap-2 bg-[#184d8a]  text-white hover:bg-blue-500   px-4 py-2 rounded-xl font-bold transition-all duration-500">
               <Download size={18} /> Exportar Relatório
             </button>
           </div>
@@ -112,7 +112,7 @@ export default function GestaodeReclamacoes() {
           ].map((cat) => (
             <button
               key={cat}
-              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-500 hover:border-[#268cff] hover:text-[#268cff] transition-all"
+              className="px-4 py-2 bg-white border border-gray-200 rounded-full text-sm font-medium text-gray-500 hover:border-[#184d8a] hover:text-[#184d8a] transition-all"
             >
               {cat}
             </button>
@@ -123,7 +123,7 @@ export default function GestaodeReclamacoes() {
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#268cff]/70 text-white text-[14px]   font-black  border-b border-gray-100 text-center">
+              <tr className="bg-[#184d8a]/70 text-white text-[14px]   font-black  border-b border-gray-100 text-center">
                 <th className="px-6 py-4">Data</th>
                 <th className="px-6 py-4">Encarregado/Aluno</th>
                 <th className="px-6 py-4">Assunto</th>
@@ -162,7 +162,7 @@ export default function GestaodeReclamacoes() {
                 <td className="px-6 py-4">
                   <div className="flex gap-3 justify-center mx-auto cursor-pointer">
                     <div className="group relative w-max  ">
-                      <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                      <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-500 shadow-sm">
                         <MessageSquare size={18} />
                       </div>
                       <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">
@@ -170,7 +170,7 @@ export default function GestaodeReclamacoes() {
                       </span>
                     </div>
                     <div className=" group relative w-max ">
-                      <div className="p-2 bg-[#268cff]/10 text-[#268cff] rounded-lg hover:bg-[#268cff] hover:text-white transition-all duration-500 shadow-sm">
+                      <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-500 shadow-sm">
                         <Trash2 size={18} />
                       </div>
                       <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border  text-xs px-2 py-2 opacity-0 group-hover:opacity-100  transition-all duration-500">

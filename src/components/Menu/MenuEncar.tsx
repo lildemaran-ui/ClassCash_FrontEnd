@@ -10,7 +10,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo5 from "../../assets/Logo5.5.png";
+import logo555 from "../../assets/logo5.5.png";
 import { useState, useEffect } from "react";
 
 export default function MenuEncar() {
@@ -80,7 +80,7 @@ export default function MenuEncar() {
       {!menu && (
         <button
           onClick={OpenMenu}
-          className="fixed top-4 left-4 z-[60] p-2 rounded-lg bg-[#268cff] text-white shadow-lg"
+          className="fixed top-4 left-4 z-[60] p-2 rounded-lg bg-[#184d8a] text-white shadow-lg"
         >
           <Menu size={22} />
         </button>
@@ -89,7 +89,7 @@ export default function MenuEncar() {
       {/* Sidebar */}
       <aside
         className={`
-          bg-[#268cff] text-white
+          bg-[#184d8a] text-white
           transition-all duration-300 ease-in-out
           ${
             !menu
@@ -104,7 +104,12 @@ export default function MenuEncar() {
         {/* Header */}
         <div className="mb-10 pt-4 flex justify-between items-center px-4 shrink-0">
           <div className="flex items-center font-semibold">
-            <img loading="lazy" src={logo5} alt="Logo" className="w-14 h-14" />
+            <img
+              loading="lazy"
+              src={logo555}
+              alt="Logo"
+              className="w-14 h-14"
+            />
             <p className="text-white font-semibold">ClassCash</p>
           </div>
           <button

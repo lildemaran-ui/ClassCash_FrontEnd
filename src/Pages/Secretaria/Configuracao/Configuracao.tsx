@@ -5,7 +5,7 @@ import {
   Lock,
   Settings,
   Users,
-  type LucideIcon
+  type LucideIcon,
 } from "lucide-react";
 import { useState } from "react";
 export default function Configuracao() {
@@ -43,7 +43,7 @@ export default function Configuracao() {
       <main className="flex-1 p-8 bg-gray-50 custom_scroll">
         <div className="max-w-4xl mx-auto">
           <header className="mb-10">
-            <h1 className="text-xl font-bold text-[#268cff]">Configurações</h1>
+            <h1 className="text-xl font-bold text-[#184d8a]">Configurações</h1>
             <p className="text-gray-400 text-sm">
               Gerencie as preferências da instituição e controle de acessos.
             </p>
@@ -79,7 +79,7 @@ export default function Configuracao() {
                   key={item.id}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
                     item.id === "pagamentos"
-                      ? "bg-[#268cff] text-white shadow-md"
+                      ? "bg-[#184d8a] text-white shadow-md"
                       : "text-gray-400 hover:bg-gray-100 hover:text-gray-600"
                   }`}
                 >
@@ -110,7 +110,7 @@ export default function Configuracao() {
                     <input
                       type="number"
                       placeholder="Ex: 10"
-                      className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#268cff]/20 focus:border-[#268cff] transition-all"
+                      className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#184d8a]/20 focus:border-[#184d8a] transition-all"
                     />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -120,7 +120,7 @@ export default function Configuracao() {
                     <input
                       type="number"
                       placeholder="Ex: 5"
-                      className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#268cff]/20 focus:border-[#268cff] transition-all"
+                      className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#184d8a]/20 focus:border-[#184d8a] transition-all"
                     />
                   </div>
                 </div>
@@ -135,7 +135,7 @@ export default function Configuracao() {
                       Os juros serão calculados sobre o valor acumulado.
                     </p>
                   </div>
-                  <div className="w-12 h-6 bg-[#268cff] rounded-full relative cursor-pointer">
+                  <div className="w-12 h-6 bg-[#184d8a] rounded-full relative cursor-pointer">
                     <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
                   </div>
                 </div>
@@ -145,7 +145,7 @@ export default function Configuracao() {
                   <label className="text-xs font-black text-gray-500   ml-1">
                     Moeda Padrão
                   </label>
-                  <select className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#268cff]/20">
+                  <select className="bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#184d8a]/20">
                     <option>Kwanza (KZ)</option>
                     <option>Dólar (USD)</option>
                     <option>Euro (EUR)</option>
@@ -156,7 +156,7 @@ export default function Configuracao() {
                   <button className="px-6 py-2.5 rounded-xl font-bold text-gray-400 hover:text-gray-600 transition-all">
                     Cancelar
                   </button>
-                  <button className="bg-[#268cff] text-white px-10 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] shadow-lg shadow-blue-200 transition-all">
+                  <button className="bg-[#184d8a] text-white px-10 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] shadow-lg shadow-blue-200 transition-all">
                     Salvar Alterações
                   </button>
                 </div>

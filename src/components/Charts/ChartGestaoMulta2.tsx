@@ -31,7 +31,7 @@ export default function ChartGestaoMulta2() {
             dataKey: "seoul",
             label: "Pagamentos com multas (%)",
             valueFormatter: percentFormatter,
-            color: "#268cff",
+            color: "#184d8a",
           },
         ]}
         height={400}

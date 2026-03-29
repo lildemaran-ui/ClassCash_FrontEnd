@@ -2,10 +2,9 @@ import ChartEstud from "@/components/Charts/ChartEstud";
 import { ProfileEditModal } from "@/components/profile_edit_modal";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { CheckCircle, Download, Pen } from "lucide-react";
-import { useRef, useEffect, useState } from "react";
+import { ArrowLeft, CheckCircle, Download, Pen } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 export default function DadosDashEstd() {
   // No topo do componente:
   const navigate = useNavigate();
@@ -75,13 +74,14 @@ export default function DadosDashEstd() {
           Voltar ao Painel
         </button>
       )}
-
+      
       <div ref={pdfRef} className="space-y-8">
         {/* Header Modernizado */}
+        
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative group">
-              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-3xl overflow-hidden border-4 border-white shadow-xl bg-white transition-transform group-hover:scale-[1.02]">
+              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white transition-transform group-hover:scale-[1.02]">
                 {user.foto ? (
                   <img
                     src={user.foto}
@@ -89,14 +89,14 @@ export default function DadosDashEstd() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="flex items-center justify-center w-full h-full bg-gradient-to-tr from-blue-600 to-blue-400 text-white text-4xl font-black">
+                  <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-[#184d8a] text-white shadow-inner text-4xl font-black">
                     {user.nome?.substring(0, 2).toUpperCase()}
                   </div>
                 )}
               </div>
               <button
                 onClick={() => setModal(true)}
-                className="absolute -bottom-2 -right-2 bg-white p-2 rounded-xl shadow-lg text-[#184d8a] hover:bg-blue-50 transition-colors border border-gray-100"
+                className="absolute -bottom-0.5 -right-0.5 bg-white p-2 rounded-xl shadow-lg text-[#184d8a] hover:bg-blue-50 transition-colors border border-gray-100"
               >
                 <Pen size={16} />
               </button>
@@ -112,9 +112,9 @@ export default function DadosDashEstd() {
               <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
                 <p>
                   <strong>ID:</strong> {user.processo}
-                </p>
+                </p> 
                 <p>
-                  <strong>Turma:</strong> {user.classe}
+                  <strong>Classe:</strong> {user.classe}
                 </p>
               </div>
             </div>
@@ -167,7 +167,7 @@ export default function DadosDashEstd() {
               </select>
             </div>
             <div className="h-[250px] w-full">
-              <ChartEstud />
+              <ChartEstud/>
             </div>
           </div>
         </div>
@@ -179,8 +179,8 @@ export default function DadosDashEstd() {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
-              <thead>
-                <tr className="text-gray-400 text-xs uppercase tracking-widest">
+              <thead className="bg-[#184d8a]/80">
+                <tr className="text-white text-xs uppercase tracking-widest">
                   <th className="px-8 py-4 font-semibold">Data</th>
                   <th className="px-8 py-4 font-semibold">Serviço</th>
                   <th className="px-8 py-4 font-semibold">Valor Total</th>
@@ -198,10 +198,10 @@ export default function DadosDashEstd() {
                     <td className="px-8 py-5 text-sm font-medium text-gray-600">
                       09 Nov, 2025
                     </td>
-                    <td className="px-8 py-5 text-sm font-bold text-gray-800">
+                    <td className="px-8 py-5 text-sm font-semibold text-gray-800">
                       Propina Mensal
                     </td>
-                    <td className="px-8 py-5 text-sm font-black text-gray-900">
+                    <td className="px-8 py-5 text-sm font-semibold text-gray-900">
                       Kz 31.300,00
                     </td>
                     <td className="px-8 py-5 text-center">
@@ -221,7 +221,7 @@ export default function DadosDashEstd() {
       <div className="mt-8 flex justify-end">
         <button
           onClick={gerarPDF}
-          className="bg-gray-900 text-white px-8 py-3 rounded-2xl flex items-center gap-3 hover:bg-[#184d8a] transition-all shadow-lg hover:shadow-blue-200 active:scale-95"
+          className="bg-[#184d8a] text-white px-8 py-3 rounded-2xl flex items-center gap-3 hover:bg-[#184d8a]/80 transition-all shadow-lg hover:shadow-blue-200 active:scale-95"
         >
           <Download size={20} />
           <span className="font-bold">Exportar Relatório</span>

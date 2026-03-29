@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import {
   ArrowDown,
   ArrowUp,
@@ -7,101 +6,246 @@ import {
   EyeIcon,
   Plus,
   Search,
+  X,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 import { colorsSit } from "@/lib/utils";
+import { toast } from "sonner";
+
+const API = "http://localhost:5000/api";
+
+interface Encarregado {
+  idencarregado: number;
+  encarregado: string;
+  contacto: string;
+  nomedoeducando: string;
+  parentesco: string;
+  estado: string;
+}
+
+interface FormData {
+  nomeEncarregado: string;
+  emailEncarregado: string;
+  numTelEncarregado: string;
+  senhaEncarregado: string;
+  nomeEducando: string;
+  numProcesso: string;
+  idClasse: string;
+  grauParentesco: string;
+}
+
+const FORM_INICIAL: FormData = {
+  nomeEncarregado: "",
+  emailEncarregado: "",
+  numTelEncarregado: "",
+  senhaEncarregado: "",
+  nomeEducando: "",
+  numProcesso: "",
+  idClasse: "",
+  grauParentesco: "",
+};
+
+function ModalCadastro({
+  onClose,
+  onSucesso,
+}: {
+  onClose: () => void;
+  onSucesso: () => void;
+}) {
+  const [form, setForm] = useState<FormData>(FORM_INICIAL);
+  const [loading, setLoading] = useState(false);
+
+  const handle = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const submeter = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("Token");
+      const res = await fetch(`${API}/GestaoEncarregados`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...form,
+          idClasse: form.idClasse ? parseInt(form.idClasse) : null,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Erro ao cadastrar");
+      toast.success("Encarregado e educando cadastrados com sucesso!");
+      onSucesso();
+      onClose();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao cadastrar");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 className="text-base font-bold text-[#184d8a]">Cadastrar Encarregado</h2>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
+            <X size={18} className="text-gray-500" />
+          </button>
+        </div>
+
+        <form onSubmit={submeter} className="p-6 flex flex-col gap-4">
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Dados do Encarregado</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2">
+              <label className="block text-xs mb-1 text-gray-600">Nome</label>
+              <input required name="nomeEncarregado" value={form.nomeEncarregado} onChange={handle}
+                className="w-full border-2 rounded-lg h-9 text-xs px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600">Email</label>
+              <input required type="email" name="emailEncarregado" value={form.emailEncarregado} onChange={handle}
+                className="w-full border-2 rounded-lg h-9 text-xs px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600">Contacto</label>
+              <input required name="numTelEncarregado" value={form.numTelEncarregado} maxLength={9}
+                onChange={(e) => setForm((f) => ({ ...f, numTelEncarregado: e.target.value.replace(/\D/g, "") }))}
+                className="w-full border-2 rounded-lg h-9 text-xs px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600">Palavra-Passe</label>
+              <input required type="password" name="senhaEncarregado" value={form.senhaEncarregado} onChange={handle}
+                className="w-full border-2 rounded-lg h-9 text-xs px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600">Grau Parentesco</label>
+              <input required name="grauParentesco" placeholder="Ex: Pai, Mãe..." value={form.grauParentesco}
+                onChange={(e) => setForm((f) => ({ ...f, grauParentesco: e.target.value.replace(/[0-9]/g, "") }))}
+                className="w-full border-2 rounded-lg h-9 text-xs px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+          </div>
+
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-2">Dados do Educando</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2">
+              <label className="block text-xs mb-1 text-gray-600">Nome do Educando</label>
+              <input required name="nomeEducando" value={form.nomeEducando} onChange={handle}
+                className="w-full border-2 rounded-lg h-9 text-xs px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600">Nº Processo</label>
+              <input required name="numProcesso" value={form.numProcesso} maxLength={6} placeholder="Ex: 123456"
+                onChange={(e) => setForm((f) => ({ ...f, numProcesso: e.target.value.replace(/\D/g, "") }))}
+                className="w-full border-2 rounded-lg h-9 text-xs px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600">Classe (opcional)</label>
+              <input name="idClasse" value={form.idClasse} placeholder="ID da classe"
+                onChange={(e) => setForm((f) => ({ ...f, idClasse: e.target.value.replace(/\D/g, "") }))}
+                className="w-full border-2 rounded-lg h-9 text-xs px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+          </div>
+
+          <div className="flex gap-3 mt-2">
+            <button type="button" onClick={onClose}
+              className="flex-1 h-10 rounded-xl border-2 border-gray-200 text-sm text-gray-500 hover:bg-gray-50 transition-colors">
+              Cancelar
+            </button>
+            <button type="submit" disabled={loading}
+              className="flex-1 h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-blue-600 transition-colors disabled:opacity-60">
+              {loading ? "A cadastrar..." : "Cadastrar"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 export default function GestaodeEncarregados() {
   const [ordemCrescente, setOrdemCrescente] = useState(true);
-  const [dadosAlunos, setDadosAlunos] = useState([
-    {
-      nome: "Valente de Sousa",
-      nomedoeducando: "Dário Valente de Sousa",
-      parentesco: "Pai",
-      Contacto: "924576878",
-      Estado: "Ativo",
-    },
-    {
-      nome: "Eduarda João",
-      nomedoeducando: "Eduarda Paula João",
-      parentesco: "Mãe",
-      Contacto: "924576878",
-      Estado: "Ativo",
-    },
-    {
-      nome: "Luana Ngola",
-      nomedoeducando: "Luana da Silva Ngola",
-      parentesco: "Mãe",
-      Contacto: "924576878",
-      Estado: "Inativo",
-    },
-    {
-      nome: "Felisberto Costa",
-      nomedoeducando: "Felisberto Manuel Costa",
-      parentesco: "Pai",
-      Contacto: "924576878",
-      Estado: "Ativo",
-    },
-  ]);
+  const [encarregados, setEncarregados] = useState<Encarregado[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [pesquisa, setPesquisa] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-  const handleSort = (chave: "nome") => {
-    const dadosOrdenados = [...dadosAlunos].sort((a, b) =>
+  const carregarEncarregados = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("Token");
+      const res = await fetch(`${API}/GestaoEncarregados`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Erro ao carregar encarregados");
+      const data = await res.json();
+      setEncarregados(data);
+    } catch {
+      toast.error("Erro ao carregar encarregados");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { carregarEncarregados(); }, []);
+
+  const handleSort = () => {
+    const ordenados = [...encarregados].sort((a, b) =>
       ordemCrescente
-        ? a[chave].localeCompare(b[chave])
-        : b[chave].localeCompare(a[chave]),
+        ? a.encarregado.localeCompare(b.encarregado)
+        : b.encarregado.localeCompare(a.encarregado)
     );
-    setDadosAlunos(dadosOrdenados);
+    setEncarregados(ordenados);
     setOrdemCrescente(!ordemCrescente);
   };
+
+  const filtrados = encarregados.filter(
+    (e) =>
+      e.encarregado.toLowerCase().includes(pesquisa.toLowerCase()) ||
+      e.nomedoeducando.toLowerCase().includes(pesquisa.toLowerCase())
+  );
 
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuSecretaria />
 
+      {showModal && (
+        <ModalCadastro onClose={() => setShowModal(false)} onSucesso={carregarEncarregados} />
+      )}
+
       <main className="flex-1 overflow-y-auto min-w-0">
-        {/* Header sticky */}
         <div className="flex items-center justify-between sticky top-0 z-10 px-4 sm:px-6 py-3 sm:py-4 bg-white/80 backdrop-blur-sm border-b border-gray-100">
           <h1 className="text-base sm:text-xl font-bold text-[#184d8a] pl-10 lg:pl-0 truncate">
             Gestão de Encarregados
           </h1>
           <div className="flex items-center gap-3 sm:gap-4">
-            {/* Pesquisa — oculta no mobile */}
             <div className="relative hidden md:block">
               <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Pesquisar..."
-                className="pl-9 pr-4 py-2 w-48 lg:w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#184d8a]/20 outline-none text-sm transition-all"
-              />
+              <input type="text" placeholder="Pesquisar..." value={pesquisa}
+                onChange={(e) => setPesquisa(e.target.value)}
+                className="pl-9 pr-4 py-2 w-48 lg:w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#184d8a]/20 outline-none text-sm transition-all" />
             </div>
             <div className="relative cursor-pointer">
               <Bell size={20} className="text-[#184d8a]" />
               <span className="absolute -top-1 -right-1 bg-red-500 w-2.5 h-2.5 rounded-full border-2 border-white" />
             </div>
-            <CircleUser
-              size={26}
-              className="text-[#184d8a] hover:text-blue-600"
-            />
+            <CircleUser size={26} className="text-[#184d8a] hover:text-blue-600" />
           </div>
         </div>
 
         <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          {/* Tabela */}
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-8">
-            {/* Cabeçalho tabela */}
             <div className="p-4 sm:p-6 border-b border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
-                <h3 className="text-base sm:text-lg font-bold text-gray-700">
-                  Lista de Encarregados
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-400">
-                  Gerencie os dados de contacto e alunos associados
-                </p>
+                <h3 className="text-base sm:text-lg font-bold text-gray-700">Lista de Encarregados</h3>
+                <p className="text-xs sm:text-sm text-gray-400">Gerencie os dados de contacto e alunos associados</p>
               </div>
-              <button className="flex items-center justify-center gap-2 bg-[#184d8a] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95 w-full sm:w-auto">
-                <Plus size={20} />
-                <span>Cadastrar</span>
+              <button onClick={() => setShowModal(true)}
+                className="flex items-center justify-center gap-2 bg-[#184d8a] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95 w-full sm:w-auto">
+                <Plus size={20} /><span>Cadastrar</span>
               </button>
             </div>
 
@@ -109,17 +253,10 @@ export default function GestaodeEncarregados() {
               <table className="w-full border-collapse min-w-[600px]">
                 <thead>
                   <tr className="bg-[#184d8a]/70 text-white text-sm font-bold border-b border-gray-200 text-center">
-                    <th
-                      className="px-4 py-3 cursor-pointer"
-                      onClick={() => handleSort("nome")}
-                    >
+                    <th className="px-4 py-3 cursor-pointer" onClick={handleSort}>
                       <div className="flex items-center justify-center gap-1">
                         Encarregado{" "}
-                        {ordemCrescente ? (
-                          <ArrowDown size={13} />
-                        ) : (
-                          <ArrowUp size={13} />
-                        )}
+                        {ordemCrescente ? <ArrowDown size={13} /> : <ArrowUp size={13} />}
                       </div>
                     </th>
                     <th className="px-4 py-3">Educando (Aluno)</th>
@@ -130,42 +267,37 @@ export default function GestaodeEncarregados() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {dadosAlunos.map((aluno, index) => (
-                    <tr
-                      key={index}
-                      className="hover:bg-[#184d8a]/5 transition-colors text-center"
-                    >
-                      <td className="px-4 py-3 text-xs sm:text-sm font-medium text-gray-500">
-                        {aluno.nome}
-                      </td>
-                      <td className="px-4 py-3 text-xs sm:text-sm text-gray-600">
-                        {aluno.nomedoeducando}
-                      </td>
-                      <td className="px-4 py-3 text-xs sm:text-sm text-gray-600">
-                        {aluno.parentesco}
-                      </td>
-                      <td className="px-4 py-3 text-xs sm:text-sm font-medium text-gray-500">
-                        {aluno.Contacto}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-bold border inline-block min-w-[70px] ${colorsSit(aluno.Estado)}`}
-                        >
-                          {aluno.Estado}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="group relative w-max mx-auto">
-                          <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer">
-                            <EyeIcon size={16} />
-                          </div>
-                          <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
-                            Visualizar
+                  {loading ? (
+                    <tr><td colSpan={6} className="py-12 text-center text-sm text-gray-400">A carregar...</td></tr>
+                  ) : filtrados.length === 0 ? (
+                    <tr><td colSpan={6} className="py-12 text-center text-sm text-gray-400">
+                      {pesquisa ? "Nenhum resultado encontrado" : "Nenhum encarregado cadastrado"}
+                    </td></tr>
+                  ) : (
+                    filtrados.map((enc) => (
+                      <tr key={enc.idencarregado} className="hover:bg-[#184d8a]/5 transition-colors text-center">
+                        <td className="px-4 py-3 text-xs sm:text-sm font-medium text-gray-500">{enc.encarregado}</td>
+                        <td className="px-4 py-3 text-xs sm:text-sm text-gray-600">{enc.nomedoeducando}</td>
+                        <td className="px-4 py-3 text-xs sm:text-sm text-gray-600">{enc.parentesco}</td>
+                        <td className="px-4 py-3 text-xs sm:text-sm font-medium text-gray-500">{enc.contacto}</td>
+                        <td className="px-4 py-3">
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold border inline-block min-w-[70px] ${colorsSit(enc.estado)}`}>
+                            {enc.estado}
                           </span>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="group relative w-max mx-auto">
+                            <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer">
+                              <EyeIcon size={16} />
+                            </div>
+                            <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
+                              Visualizar
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

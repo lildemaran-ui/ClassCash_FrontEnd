@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function Encarregado() {
   const [Modal, setModal] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");

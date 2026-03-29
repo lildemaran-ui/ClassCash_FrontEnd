@@ -17,14 +17,15 @@ const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
     lg: "w-20 h-20 text-xl",
   };
 
-  const initials = name
-    .trim()
-    .split(" ")
-    .filter((_, i, arr) => i === 0 || i === arr.length - 1)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
-
+ // Dentro de Avatar.tsx
+const initials = (name ?? "") // Se name for null/undefined, vira ""
+  .trim()
+  .split(" ")
+  .filter(word => word.length > 0) // Evita erros com espaços duplos
+  .filter((_, i, arr) => i === 0 || i === arr.length - 1)
+  .map((n) => n ? n[0] : "") // Garante que a letra existe
+  .join("")
+  .toUpperCase();
   const commonClasses = `${sizeClasses[size]} rounded-full flex items-center border border-[#184d8a]/50 justify-center overflow-hidden shrink-0`;
 
   if (src && !hasError) {

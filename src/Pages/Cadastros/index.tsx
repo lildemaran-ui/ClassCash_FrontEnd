@@ -1,9 +1,4 @@
 // src/components/Cadastro/TelaCadastro.tsx
-// CORRECÇÕES:
-// 1. Encarregado: nomeEstudante usava estado errado (relacao) — corrigido
-// 2. Campos enviados ao backend alinhados com o que o controller espera
-// 3. Campo "Código" removido (é gerado pela secretaria após aprovação)
-// 4. idclasse enviado correctamente (minúsculo)
 
 import {
   AlertCircle,
@@ -11,7 +6,6 @@ import {
   Building2,
   EyeIcon,
   EyeOff,
-  ImagePlus,
   LucideAlertTriangle,
   X,
 } from "lucide-react";
@@ -19,13 +13,22 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+// ─── Tipos ────────────────────────────────────────────────────────────────────
 interface PreSelectedInstitution {
-  idInstituicao: number;
+  idinstituicao: number; // FIX: minúsculo — igual ao que a BD retorna
   nome: string;
 }
 interface RouterState {
   preSelectedInstitution?: PreSelectedInstitution;
   fromInstitutions?: boolean;
+}
+interface Instituicao {
+  idinstituicao: number; // FIX: minúsculo — igual ao que a BD retorna
+  nome: string;
+}
+interface Classe {
+  idclasse: number;
+  nivel: number;
 }
 
 // ─── Modal de Aviso ───────────────────────────────────────────────────────────
@@ -102,56 +105,61 @@ export function TelaCadastro() {
   const fromInstitutions = routerState?.fromInstitutions ?? false;
 
   const [showModal, setShowModal] = useState(
-    !fromInstitutions && preSelected === null,
+    !fromInstitutions && preSelected === null
   );
   const [mostrarSenha, setMostrar] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
   const [perfil, setPerfil] = useState("");
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [contacto, setContacto] = useState("");
   const [senha, setSenha] = useState("");
-  const [idInstituicao, setInstituicao] = useState<number | string>(
-    preSelected?.idInstituicao ?? "",
+  // FIX: idInstituicao começa com o id pré-seleccionado (usando campo correcto da BD)
+  const [idInstituicao, setInstituicao] = useState<number | "">(
+    preSelected?.idinstituicao ?? ""
   );
-  const [idclasse, setClasse] = useState<number | string>("");
+  const [idclasse, setClasse] = useState<number | "">("");
   const [numProcesso, setNumProcesso] = useState("");
-  const [nomeEstudante, setNomeEstudante] = useState(""); // educando (encarregado)
+  const [nomeEstudante, setNomeEstudante] = useState("");
   const [grauParentesco, setGrauParentesco] = useState("");
 
-  const [instituicoes, setInstituicoes] = useState<
-    { idInstituicao: number; nome: string }[]
-  >([]);
-  const [classes, setClasses] = useState<{ idclasse: number; nivel: number }[]>(
-    [],
-  );
+  const [instituicoes, setInstituicoes] = useState<Instituicao[]>([]);
+  const [classes, setClasses] = useState<Classe[]>([]);
+  const [loadingClasses, setLoadingClasses] = useState(false);
 
+  // Carregar instituições
   useEffect(() => {
     fetch("http://localhost:5000/api/cadastro-instituicao")
       .then((r) => r.json())
-      .then((data: { idInstituicao: number; nome: string }[]) => {
+      .then((data: Instituicao[]) => {
         setInstituicoes(data);
+        // FIX: usa idinstituicao (minúsculo) para encontrar a pré-seleccionada
         if (preSelected) {
           const found = data.find(
-            (i) => i.idInstituicao === preSelected.idInstituicao,
+            (i) => i.idinstituicao === preSelected.idinstituicao
           );
-          if (found) setInstituicao(found.idInstituicao);
+          if (found) setInstituicao(found.idinstituicao);
         }
       })
-      .catch((err) => console.error("Erro ao carregar instituições", err));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      .catch(() => toast.error("Erro ao carregar instituições"));
   }, []);
 
+  // Carregar classes quando instituição muda
   useEffect(() => {
-    if (idInstituicao) {
-      fetch(`http://localhost:5000/api/classes/${idInstituicao}`)
-        .then((r) => r.json())
-        .then((data: { idclasse: number; nivel: number }[]) => setClasses(data))
-        .catch((err) => console.error("Erro ao carregar classes", err));
-    } else {
+    if (!idInstituicao) {
       setClasses([]);
       setClasse("");
+      return;
     }
+    setLoadingClasses(true);
+    // FIX: rota correta — agora existe no backend
+    fetch(`http://localhost:5000/api/classes/${idInstituicao}`)
+      .then((r) => r.json())
+      .then((data: Classe[]) => {
+        setClasses(data);
+        setClasse("");
+      })
+      .catch(() => toast.error("Erro ao carregar classes"))
+      .finally(() => setLoadingClasses(false));
   }, [idInstituicao]);
 
   const MudarPerfil = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -164,35 +172,22 @@ export function TelaCadastro() {
     setClasse("");
     setNomeEstudante("");
     setGrauParentesco("");
-    setImage(null);
-    setClasses([]);
     if (!preSelected) setInstituicao("");
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setImage(reader.result as string);
-      reader.readAsDataURL(file);
-    }
   };
 
   const DadosCadastro = async (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
 
-    // ✅ VALIDAÇÃO
-    if (!idInstituicao || isNaN(Number(idInstituicao))) {
-      toast.error("Instituição inválida");
+    if (!idInstituicao) {
+      toast.error("Selecione uma instituição");
       return;
     }
-
     if (!perfil) {
       toast.error("Selecione um perfil");
       return;
     }
 
-    // Campos exactamente como o controller os espera
+    // FIX: body alinhado exactamente com o que cada controller espera
     const body =
       perfil === "Estudante"
         ? {
@@ -232,17 +227,13 @@ export function TelaCadastro() {
 
       if (!res.ok) throw new Error(data.error ?? "Erro ao cadastrar");
 
-      if (data.token) localStorage.setItem("Token", data.token);
-
       toast.success("Cadastro realizado! Aguarde a aprovação da secretaria.");
-
-      setTimeout(() => {
-        navigate("/Login");
-      }, 3000);
+      setTimeout(() => navigate("/Login"), 3000);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao cadastrar.");
     }
   };
+
   return (
     <>
       {showModal && (
@@ -276,6 +267,7 @@ export function TelaCadastro() {
           )}
 
           <form className="flex flex-col gap-4 w-80" onSubmit={DadosCadastro}>
+            {/* Perfil */}
             <div className="flex flex-col">
               <label className="text-sm mb-1 font-medium">
                 Perfil de Usuário
@@ -332,6 +324,7 @@ export function TelaCadastro() {
                       <select
                         required
                         value={idInstituicao}
+                        // FIX: usa idinstituicao (minúsculo)
                         onChange={(e) =>
                           setInstituicao(parseInt(e.target.value))
                         }
@@ -341,18 +334,22 @@ export function TelaCadastro() {
                           Selecione
                         </option>
                         {instituicoes.map((i) => (
-                          <option key={i.idInstituicao} value={i.idInstituicao}>
+                          // FIX: usa idinstituicao (minúsculo)
+                          <option key={i.idinstituicao} value={i.idinstituicao}>
                             {i.nome}
                           </option>
                         ))}
                       </select>
                     )}
                   </div>
+
                   <div className="w-24">
                     <label className="block text-sm mb-1">Classe</label>
-
-                    {classes.length === 0 && idInstituicao ? (
-                      // Sem classes — avisa mas não bloqueia
+                    {loadingClasses ? (
+                      <div className="w-full border-2 border-gray-200 rounded-lg h-10 text-[10px] px-2 flex items-center text-gray-400">
+                        A carregar...
+                      </div>
+                    ) : classes.length === 0 && idInstituicao ? (
                       <div className="w-full border-2 border-amber-300 bg-amber-50 rounded-lg h-10 text-[10px] px-2 flex items-center text-amber-600 font-medium">
                         Sem classes
                       </div>
@@ -362,21 +359,13 @@ export function TelaCadastro() {
                         onChange={(e) => setClasse(parseInt(e.target.value))}
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                       >
-                        <option value="" disabled>
-                          Grau
-                        </option>
+                        <option value="">Grau</option>
                         {classes.map((c) => (
                           <option key={c.idclasse} value={c.idclasse}>
                             {c.nivel}ª
                           </option>
                         ))}
                       </select>
-                    )}
-
-                    {classes.length === 0 && idInstituicao && (
-                      <p className="text-[10px] text-amber-600 mt-0.5 leading-tight">
-                        Esta instituição ainda não tem classes configuradas.
-                      </p>
                     )}
                   </div>
                 </div>
@@ -399,7 +388,7 @@ export function TelaCadastro() {
                   />
                 </div>
 
-                {/* Email e Contacto */}
+                {/* Email + Contacto */}
                 <div className="flex gap-3">
                   <div className="flex-1">
                     <label className="block text-sm mb-1">Email</label>
@@ -449,7 +438,7 @@ export function TelaCadastro() {
                   </div>
                 </div>
 
-                {/* Campos do Encarregado */}
+                {/* Campos exclusivos do Encarregado */}
                 {perfil === "Encarregado" && (
                   <>
                     <div>
@@ -461,7 +450,9 @@ export function TelaCadastro() {
                         value={nomeEstudante}
                         type="text"
                         onChange={(e) =>
-                          setNomeEstudante(e.target.value.replace(/[0-9]/g, ""))
+                          setNomeEstudante(
+                            e.target.value.replace(/[0-9]/g, "")
+                          )
                         }
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                       />
@@ -477,7 +468,7 @@ export function TelaCadastro() {
                         placeholder="Ex: Pai, Mãe, Tio..."
                         onChange={(e) =>
                           setGrauParentesco(
-                            e.target.value.replace(/[0-9]/g, ""),
+                            e.target.value.replace(/[0-9]/g, "")
                           )
                         }
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"

@@ -114,9 +114,10 @@ export default function Instituicoes() {
     navigate("/Cadastro", {
       state: {
         preSelectedInstitution: {
-          id: inst.id,
+          idinstituicao: inst.id,
           nome: inst.name,
         },
+        fromInstitutions:true
       },
     });
   };

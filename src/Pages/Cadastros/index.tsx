@@ -1,6 +1,13 @@
 // src/components/Cadastro/TelaCadastro.tsx
 
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   AlertCircle,
   ArrowRight,
   Building2,
@@ -39,6 +46,15 @@ function InstitutionCheckModal({
   onGoCheck: () => void;
   onClose: () => void;
 }) {
+/*   useEffect(() => {
+    // Trava o scroll
+    document.body.style.overflow = "hidden";
+    
+    // Cleanup: Destrava o scroll quando a modal for desmontada
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []); */
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
@@ -48,7 +64,7 @@ function InstitutionCheckModal({
           </div>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+            className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors hover:scale-110  hover:bg-[#184d8a]/20 p-1 rounded-3xl  "
           >
             <X className="w-5 h-5" />
           </button>
@@ -79,7 +95,7 @@ function InstitutionCheckModal({
           <div className="flex flex-col gap-2">
             <button
               onClick={onGoCheck}
-              className="w-full flex items-center justify-center gap-2 bg-[#184d8a] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-blue-600 active:scale-95 transition-all shadow-md"
+              className="w-full flex items-center justify-center gap-2 bg-[#184d8a] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-[#184d8a]/80 active:scale-95 transition-all shadow-md"
             >
               Verificar Instituição <ArrowRight className="h-5 w-5" />
             </button>
@@ -105,7 +121,7 @@ export function TelaCadastro() {
   const fromInstitutions = routerState?.fromInstitutions ?? false;
 
   const [showModal, setShowModal] = useState(
-    !fromInstitutions && preSelected === null
+    !fromInstitutions && preSelected === null,
   );
   const [mostrarSenha, setMostrar] = useState(false);
   const [perfil, setPerfil] = useState("");
@@ -115,7 +131,7 @@ export function TelaCadastro() {
   const [senha, setSenha] = useState("");
   // FIX: idInstituicao começa com o id pré-seleccionado (usando campo correcto da BD)
   const [idInstituicao, setInstituicao] = useState<number | "">(
-    preSelected?.idinstituicao ?? ""
+    preSelected?.idinstituicao ?? "",
   );
   const [idclasse, setClasse] = useState<number | "">("");
   const [numProcesso, setNumProcesso] = useState("");
@@ -135,7 +151,7 @@ export function TelaCadastro() {
         // FIX: usa idinstituicao (minúsculo) para encontrar a pré-seleccionada
         if (preSelected) {
           const found = data.find(
-            (i) => i.idinstituicao === preSelected.idinstituicao
+            (i) => i.idinstituicao === preSelected.idinstituicao,
           );
           if (found) setInstituicao(found.idinstituicao);
         }
@@ -162,8 +178,8 @@ export function TelaCadastro() {
       .finally(() => setLoadingClasses(false));
   }, [idInstituicao]);
 
-  const MudarPerfil = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setPerfil(e.target.value);
+  const MudarPerfil = (value: string) => {
+    setPerfil(value);
     setNome("");
     setEmail("");
     setContacto("");
@@ -272,18 +288,15 @@ export function TelaCadastro() {
               <label className="text-sm mb-1 font-medium">
                 Perfil de Usuário
               </label>
-              <select
-                value={perfil}
-                onChange={MudarPerfil}
-                required
-                className="border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#1e88e5]"
-              >
-                <option value="" disabled>
-                  Selecione o seu perfil
-                </option>
-                <option value="Estudante">Estudante</option>
-                <option value="Encarregado">Encarregado</option>
-              </select>
+              <Select value={perfil} onValueChange={MudarPerfil}>
+                <SelectTrigger className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]/80">
+                  <SelectValue placeholder="Selecione o seu perfil" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Estudante">Estudante</SelectItem>
+                  <SelectItem value="Encarregado">Encarregado</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {perfil && (
@@ -292,7 +305,7 @@ export function TelaCadastro() {
                 <div>
                   <label className="block text-sm mb-1">
                     {perfil === "Encarregado"
-                      ? "Nome do Encarregado"
+                      ? "Nome Completo"
                       : "Nome Completo"}
                   </label>
                   <input
@@ -302,7 +315,7 @@ export function TelaCadastro() {
                     onChange={(e) =>
                       setNome(e.target.value.replace(/[0-9]/g, ""))
                     }
-                    className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
+                    className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]/80"
                   />
                 </div>
 
@@ -316,30 +329,31 @@ export function TelaCadastro() {
                           type="text"
                           readOnly
                           value={preSelected.nome}
-                          className="w-full border-2 border-blue-300 bg-blue-50 rounded-lg h-10 text-xs px-4 outline-none text-blue-800 font-medium cursor-default"
+                          className="w-full border-2 border-blue-300 bg-blue-50 rounded-lg h-10 text-xs px-4 outline-none text-[#184d8a] font-medium cursor-default"
                         />
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-green-500" />
                       </div>
                     ) : (
-                      <select
-                        required
-                        value={idInstituicao}
-                        // FIX: usa idinstituicao (minúsculo)
-                        onChange={(e) =>
-                          setInstituicao(parseInt(e.target.value))
+                      <Select
+                        value={idInstituicao.toString()}
+                        onValueChange={(value) =>
+                          setInstituicao(parseInt(value))
                         }
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                       >
-                        <option value="" disabled>
-                          Selecione
-                        </option>
-                        {instituicoes.map((i) => (
-                          // FIX: usa idinstituicao (minúsculo)
-                          <option key={i.idinstituicao} value={i.idinstituicao}>
-                            {i.nome}
-                          </option>
-                        ))}
-                      </select>
+                        <SelectTrigger className="w-full border-2 rounded-lg h-10 text-xs px-4 focus:outline-none focus:border-[#184d8a]/80">
+                          <SelectValue placeholder="Selecione a instituição" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {instituicoes.map((i) => (
+                            <SelectItem
+                              key={i.idinstituicao}
+                              value={i.idinstituicao.toString()}
+                            >
+                              {i.nome}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     )}
                   </div>
 
@@ -354,18 +368,25 @@ export function TelaCadastro() {
                         Sem classes
                       </div>
                     ) : (
-                      <select
+                      <Select
                         value={idclasse}
-                        onChange={(e) => setClasse(parseInt(e.target.value))}
-                        className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
+                        onValueChange={(value) => setClasse(parseInt(value))}
                       >
-                        <option value="">Grau</option>
-                        {classes.map((c) => (
-                          <option key={c.idclasse} value={c.idclasse}>
+                        <SelectTrigger className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]/80">
+                          <SelectValue placeholder="Classe" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          
+                          {classes.map((c) => (
+                            <SelectItem
+                              key={c.idclasse}
+                              value={c.idclasse.toString()}
+                            >
                             {c.nivel}ª
-                          </option>
+                          </SelectItem>
                         ))}
-                      </select>
+                        </SelectContent>
+                      </Select>
                     )}
                   </div>
                 </div>
@@ -450,9 +471,7 @@ export function TelaCadastro() {
                         value={nomeEstudante}
                         type="text"
                         onChange={(e) =>
-                          setNomeEstudante(
-                            e.target.value.replace(/[0-9]/g, "")
-                          )
+                          setNomeEstudante(e.target.value.replace(/[0-9]/g, ""))
                         }
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
                       />
@@ -468,7 +487,7 @@ export function TelaCadastro() {
                         placeholder="Ex: Pai, Mãe, Tio..."
                         onChange={(e) =>
                           setGrauParentesco(
-                            e.target.value.replace(/[0-9]/g, "")
+                            e.target.value.replace(/[0-9]/g, ""),
                           )
                         }
                         className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]"
@@ -479,7 +498,7 @@ export function TelaCadastro() {
 
                 <button
                   type="submit"
-                  className="bg-[#1e88e5] h-10 w-full rounded-lg text-white font-medium hover:bg-blue-500 transition-colors"
+                  className="bg-[#184d8a] h-10 w-full rounded-lg text-white font-medium hover:bg-[#184d8a]/80 transition-colors"
                 >
                   Cadastrar
                 </button>
@@ -490,7 +509,10 @@ export function TelaCadastro() {
           <div className="text-center">
             <p className="text-xs">
               Já tem uma conta?{" "}
-              <Link to="/Login" className="text-[#1e88e5] hover:underline">
+              <Link
+                to="/Login"
+                className="text-[#184d8a] font-medium hover:underline"
+              >
                 Faça o Login
               </Link>
             </p>

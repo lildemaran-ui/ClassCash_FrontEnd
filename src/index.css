@@ -1031,7 +1031,7 @@ button:active {
   -webkit-overflow-scrolling: touch;
 
   scrollbar-width: thin;
-  scrollbar-color: #1e77dccf transparent;
+  scrollbar-color: #184d8ad1 transparent;
 }
 
 .custom_scroll::-webkit-scrollbar {

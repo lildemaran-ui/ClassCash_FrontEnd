@@ -81,9 +81,10 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       fd.append("senhaRepresentante", form.senhaRepresentante.trim() || "provisorio123");
       if (form.numTelRepresentante.trim()) fd.append("numTelRepresentante", form.numTelRepresentante.trim());
 
-      // FIX: URL corrigida — era "/api", agora é a rota correcta do backend
+      const token = localStorage.getItem("Token");
       const res = await fetch(`${API_BASE}/cadastro-instituicao`, {
         method: "POST",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: fd,
       });
 
@@ -94,9 +95,14 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
 
       if (!res.ok) throw new Error(data.error ?? data.detalhe ?? "Erro ao cadastrar instituição");
 
+      // Adicionar uma verificação explícita para o ID da instituição
+      if (!data.instituicao?.idinstituicao) {
+        throw new Error("ID da instituição não retornado pela API após cadastro.");
+      }
+
       const novaInst: Institution = {
-        id: data.instituicao?.idinstituicao ?? Date.now(),
-        idinstituicao: data.instituicao?.idinstituicao ?? Date.now(),
+        id: data.instituicao.idinstituicao, // Agora sabemos que é um número válido
+        idinstituicao: data.instituicao.idinstituicao, // Agora sabemos que é um número válido
         name: form.nome.trim(),
         address: form.localizacao.trim() || "—",
         email: form.email.trim(),
@@ -118,7 +124,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-4"
-      onClick={(e) => e.target === e.currentTarget && !loading && onClose()}>
+      onClick={(e) => e.target === e.currentTarget && !loading}>
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center p-6 border-b sticky top-0 bg-white z-10">
           <h1 className="text-xl font-bold text-gray-800">Adicionar Instituição</h1>

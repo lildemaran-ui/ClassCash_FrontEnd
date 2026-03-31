@@ -1,15 +1,15 @@
 import { Link } from "react-router-dom";
 import img from "../../assets/ImgCadstro.png";
-import logo5555 from "../../assets/logo555.png";
+import logo5555 from "../../assets/logo5.5.png";
 import FrasesRotativasLogin from "../../Hooks/FrasesRotativasLogin";
 import { TelaCadastro } from ".";
 
 export default function Cadastro() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen overflow-hidden">
       {/* Parte visual da esquerda - esconde em mobile */}
       <div
-        className="hidden lg:flex bg-cover bg-center w-1/2 flex-col justify-between p-8"
+        className="hidden lg:flex bg-cover bg-center w-1/2  flex-col justify-between p-8 shrink-0"
         style={{ backgroundImage: `url(${img})` }}
       >
         <Link to="/PaginaInicial">
@@ -29,7 +29,7 @@ export default function Cadastro() {
       </div>
 
       {/* Parte do formulário - ocupa tudo em mobile, metade em desktop */}
-      <div className="flex items-center justify-center bg-white w-full lg:w-1/2">
+      <div className="flex items-center justify-center bg-white w-full lg:w-1/2 overflow-y-auto custom_scroll">
         <div className="m-auto w-full p-4 lg:p-8">
           <TelaCadastro />
         </div>

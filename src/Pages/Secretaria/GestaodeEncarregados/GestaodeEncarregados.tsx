@@ -281,7 +281,7 @@ export default function GestaodeEncarregados() {
                         <td className="px-4 py-3 text-xs sm:text-sm text-gray-600">{enc.parentesco}</td>
                         <td className="px-4 py-3 text-xs sm:text-sm font-medium text-gray-500">{enc.contacto}</td>
                         <td className="px-4 py-3">
-                          <span className={`px-3 py-1 rounded-full text-xs font-bold border inline-block min-w-[70px] ${colorsSit(enc.estado)}`}>
+                          <span className={`px-3 py-1 rounded-full text-xs font-bold text-green-500 bg-green-100 inline-block min-w-[70px] ${colorsSit(enc.estado)}`}>
                             {enc.estado}
                           </span>
                         </td>

@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
-import logo5555 from "../../assets/Logo5.5.png";
-import logo555 from "../../assets/logo555.png";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import logo5555 from "../../assets/Logo5.5.png";
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -39,15 +37,15 @@ export default function Nav() {
     <header className="fixed top-0 w-full transparent-bg z-50 antialiased">
       <div className={navbarClasses}>
         <nav className="flex h-16 sm:h-20 items-center justify-between px-4 sm:px-6 lg:px-10">
-          <div className="text-[#1564be] flex items-center font-semibold text-xl sm:text-3xl">
+          <div className="text-[#1564be] flex items-center font-semibold text-xl sm:text-3xl  ">
             <img
               loading="lazy"
               src={logo5555}
               alt="Sosoft Logo"
-              className="h-14 sm:h-20 lg:h-24 object-contain transition-all drop-shadow-md duration-700"
+              className="h-14 sm:h-20 lg:h-24 object-contain transition-all drop-shadow-md duration-700 cursor-pointer"
             />
-            <div className="text-white">
-              <p className="cursor-default drop-shadow-md">ClassCash</p>
+            <div className="text-white ">
+              <p className="cursor-pointer drop-shadow-md">ClassCash</p>
             </div>
           </div>
 

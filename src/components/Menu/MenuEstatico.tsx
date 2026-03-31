@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { X, Menu } from "lucide-react";
-import logo5555 from "../../assets/logo555.png";
+import logo5555 from "../../assets/logo5.5.png";
 export default function MenuEstatico() {
   const [menuOpen, setMenuOpen] = useState(false);
   function OpenMenu() {
@@ -20,11 +20,11 @@ export default function MenuEstatico() {
               loading="lazy"
               src={logo5555}
               alt="Sosoft Logo"
-              className="h-14 sm:h-20 lg:h-24 object-contain transition-all drop-shadow-md duration-700"
+              className="h-14 sm:h-20 lg:h-24 object-contain transition-all drop-shadow-md duration-700 cursor-pointer"
             />
 
             <div>
-              <p className="cursor-default text-white drop-shadow-md ">
+              <p className="cursor-pointer text-white drop-shadow-md ">
                 ClassCash
               </p>
             </div>

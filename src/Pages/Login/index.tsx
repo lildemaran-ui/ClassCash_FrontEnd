@@ -1,6 +1,3 @@
-// src/Pages/Login/Login.tsx
-// Alterações: detecta status 403 (pendente/recusado) e mostra mensagem adequada
-
 import { EyeIcon, EyeOff, Clock, XCircle } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -42,7 +39,7 @@ export default function TelaLogin() {
           setStatusMsg({
             tipo: "pendente",
             texto:
-              "O seu cadastro ainda está a aguardar aprovação pela secretaria da instituição. Receberá um email quando for aprovado.",
+              "O seu cadastro ainda está a aguardar aprovação pela secretaria da instituição. Por favor aguarde.",
           });
         } else if (msg.toLowerCase().includes("recusado")) {
           setStatusMsg({
@@ -65,18 +62,31 @@ export default function TelaLogin() {
         setLoading(false);
         return;
       }
+      // Sessão terminada com sucesso
+localStorage.removeItem("sessao");
 
       // ── Login bem sucedido ────────────────────────────────────────────────
-      if (data.token) localStorage.setItem("Token", data.token);
-      localStorage.setItem("UsuarioAtivo", JSON.stringify(data));
 
+      const sessao = {
+        token: data.token,
+        usuario : {
+        id: data.usuario?.idusuario,
+        nome: data.usuario?.nome,
+        perfil: data.perfil,
+        instituicao: data.instituicao,
+        idInstituicao: data.idInstituicao,
+        numProcesso: data.numProcesso,
+        }
+      };
+    localStorage.setItem("sessao", JSON.stringify(sessao)); 
       // Redirecionar conforme perfil
       const perfil = data.perfil as string;
       if (perfil === "Estudante") navigate("/DashboardEstud");
       else if (perfil === "Encarregado") navigate("/Encarregado");
-      else if (perfil === "Secretaria") navigate("/Secretaria");
-      else if (perfil === "Instituição" || perfil === "Super Admin")
-        navigate("/DashboardAdmin");
+      else if (perfil === "Secretaria" || perfil === "Instituição")
+        navigate("/Secretaria");
+      else if (perfil === "Administrador" || perfil === "Super Admin")
+        navigate("/Administradores");
       else navigate("/PaginaInicial");
     } catch {
       setStatusMsg({ tipo: "erro", texto: "Erro de ligação ao servidor." });
@@ -142,7 +152,7 @@ export default function TelaLogin() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="o_seu_email@exemplo.ao"
+              placeholder="oseuemail@exemplo.ao"
               className="w-full border-2 border-gray-200 rounded-xl h-10 text-sm px-4 outline-none focus:border-[#184d8a] transition-colors"
             />
           </div>
@@ -177,7 +187,7 @@ export default function TelaLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#184d8a] text-white font-bold h-10 rounded-xl hover:bg-blue-600 transition-colors disabled:opacity-60"
+            className="w-full bg-[#184d8a] text-white font-bold h-10 rounded-xl hover:bg-[#184d8a]/80 transition-colors disabled:opacity-60"
           >
             {loading ? "A entrar..." : "Entrar"}
           </button>

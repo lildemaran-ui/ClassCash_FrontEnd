@@ -3,20 +3,23 @@ import img1 from "../../assets/Plain credit card-amico.svg";
 import { ImagePlus, Wallet } from "lucide-react";
 import { toast } from "sonner";
 
-// FIX: interface User definida — estava em falta
+// ✅ Interface alinhada com o tipo User do teu sistema
 interface User {
   idusuario: number;
   nome: string;
   email: string;
-  numTel?: string;
+  foto?: string;
   perfil?: string;
-  // Campos vindos do login para estudante
-  numProcesso?: string;
-  idInstituicao?: number;
+  processo?: number;
+  classe?: string;
+  contacto?: string;
+  relacao?: string;
+  nomeEstudante?: string;
+  senha?: string;
   instituicao?: string;
-  // codigo_plataforma vem da aprovação — pode não existir ainda
-  codigo_plataforma?: string;
-  // IBAN é buscado dinamicamente na API de pagamento — não vem do login
+  idInstituicao?: number;
+  codigoPlataforma?: string;
+  ibanInstituicao?: string;
 }
 
 const PRECOS_SERVICOS: { [key: string]: number } = {
@@ -29,11 +32,20 @@ const PRECOS_SERVICOS: { [key: string]: number } = {
 };
 
 const mesesDoAno = [
-  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
 ];
 
-// Mapeamento serviço → ID (conforme tabela servico na BD)
 const servicoMap: { [key: string]: string } = {
   Propina: "2",
   Justificativo: "8",
@@ -48,6 +60,7 @@ export default function PagamentoGeral() {
   const [image, setImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [iban, setIban] = useState<string>("A carregar..."); // ✅ dentro do componente
 
   const [pagamento, setPagamento] = useState({
     metodo: "",
@@ -56,8 +69,11 @@ export default function PagamentoGeral() {
     mesFinal: "Janeiro",
     plataforma: "Multicaxa Express",
   });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+const sessao = JSON.parse(localStorage.getItem("sessao") || "{}");
+const token = sessao.token;
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = event.target;
     setPagamento((prev) => ({ ...prev, [name]: value }));
     if (name === "metodo" && value === "Dinheiro Físico") {
@@ -86,7 +102,10 @@ export default function PagamentoGeral() {
       formData.append("usuarioId", String(user.idusuario));
       formData.append("servicoId", servicoMap[pagamento.servico] ?? "2");
       formData.append("meses", String(quantidadeMeses));
-      formData.append("tipoPagamentoId", pagamento.metodo === "De forma digital" ? "1" : "2");
+      formData.append(
+        "tipoPagamentoId",
+        pagamento.metodo === "De forma digital" ? "1" : "2",
+      );
 
       if (imageFile) {
         formData.append("comprovativo", imageFile);
@@ -95,18 +114,31 @@ export default function PagamentoGeral() {
         return;
       }
 
-      const response = await fetch("http://localhost:5000/api/pagamento", {
-        method: "POST",
-        body: formData,
-      });
+     const response = await fetch("http://localhost:5000/api/pagamento", {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+  body: formData,
+});
 
       if (response.ok) {
         const dados = await response.json();
-        toast.success(`Pagamento criado! Código: ${dados.codigo} | Valor: KZ ${dados.valor}`);
+        toast.success(
+          `Pagamento criado! Código: ${dados.codigo} | Valor: KZ ${dados.valor}`,
+        );
         setImage(null);
         setImageFile(null);
-        setPagamento({ metodo: "", servico: "Propina", mesInicial: "Janeiro", mesFinal: "Janeiro", plataforma: "Multicaxa Express" });
-        const fileInput = document.getElementById("fotoInput") as HTMLInputElement;
+        setPagamento({
+          metodo: "",
+          servico: "Propina",
+          mesInicial: "Janeiro",
+          mesFinal: "Janeiro",
+          plataforma: "Multicaxa Express",
+        });
+        const fileInput = document.getElementById(
+          "fotoInput",
+        ) as HTMLInputElement;
         if (fileInput) fileInput.value = "";
       } else {
         const erro = await response.json();
@@ -118,38 +150,100 @@ export default function PagamentoGeral() {
     }
   };
 
+  const [perfil, setPerfil] = useState<"estudante" | "encarregado" | null>(
+    null,
+  );
+  const [nomeEducando, setNomeEducando] = useState<string | null>(null);
+
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin && dadosDoLogin !== "undefined") {
-      try {
-        const parsed = JSON.parse(dadosDoLogin);
-        // FIX: monta o User a partir dos dados reais do login
-        setUser({
-          idusuario: parsed.usuario?.idusuario ?? parsed.idusuario,
-          nome: parsed.usuario?.nome ?? parsed.nome,
-          email: parsed.usuario?.email ?? parsed.email,
-          numTel: parsed.usuario?.numTel,
-          perfil: parsed.perfil,
-          numProcesso: parsed.numProcesso,
-          idInstituicao: parsed.idInstituicao,
-          instituicao: parsed.instituicao,
-          codigo_plataforma: parsed.codigo_plataforma,
-        });
-      } catch {
+    if (!dadosDoLogin || dadosDoLogin === "undefined") {
+      window.location.href = "/Login";
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(dadosDoLogin);
+      const idusuario =
+        parsed.usuario?.idusuario ?? parsed.idusuario ?? parsed.id;
+      const idInstituicao =
+        parsed.idInstituicao ?? parsed.usuario?.idInstituicao;
+      const perfilNome: string = parsed.perfil ?? parsed.usuario?.perfil ?? "";
+      const isEncarregado = perfilNome.toLowerCase().includes("encarregado");
+
+      setPerfil(isEncarregado ? "encarregado" : "estudante");
+
+      if (!idusuario) {
         window.location.href = "/Login";
+        return;
       }
-    } else {
+
+      const userBase: User = {
+        idusuario,
+        nome: parsed.usuario?.nome ?? parsed.nome ?? "",
+        email: parsed.usuario?.email ?? parsed.email ?? "",
+        foto: parsed.usuario?.foto ?? parsed.foto,
+        perfil: perfilNome,
+        idInstituicao,
+        instituicao: parsed.instituicao,
+      };
+
+      const buscarIban = (instId: number) => {
+        fetch(`http://localhost:5000/api/cadastro-instituicao`)
+          .then((r) => r.json())
+          .then((lista: Array<{ idinstituicao: number; iban: string }>) => {
+            const inst = lista.find((i) => i.idinstituicao === instId);
+            setIban(inst?.iban ?? "Não disponível");
+          })
+          .catch(() => setIban("Não disponível"));
+      };
+
+      if (isEncarregado) {
+        // ✅ Encarregado: busca nome do educando + código do encarregado
+        fetch(`http://localhost:5000/api/encarregado/${idusuario}`)
+          .then((r) => r.json())
+          .then((dados) => {
+            setUser({
+              ...userBase,
+              codigoPlataforma: dados.codigo_plataforma ?? undefined,
+              idInstituicao: idInstituicao ?? dados.idinstituicao,
+            });
+            setNomeEducando(dados.nome_educando ?? null);
+            const instId = idInstituicao ?? dados.idinstituicao;
+            if (instId) buscarIban(instId);
+            else setIban("Instituição não associada");
+          })
+          .catch(() => {
+            setUser(userBase);
+            setIban("Não disponível");
+          });
+      } else {
+        // ✅ Estudante: busca o seu próprio código
+        fetch(`http://localhost:5000/api/estudante/${idusuario}`)
+          .then((r) => r.json())
+          .then((dados) => {
+            setUser({
+              ...userBase,
+              codigoPlataforma: dados.codigo_plataforma ?? undefined,
+            });
+          })
+          .catch(() => setUser(userBase));
+
+        if (idInstituicao) buscarIban(idInstituicao);
+        else setIban("Instituição não associada");
+      }
+    } catch {
       window.location.href = "/Login";
     }
   }, []);
-
   const precoBase = PRECOS_SERVICOS[pagamento.servico] || 0;
   const indexInicio = mesesDoAno.indexOf(pagamento.mesInicial);
   const indexFim = mesesDoAno.indexOf(pagamento.mesFinal);
-  const quantidadeMeses = indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
+  const quantidadeMeses =
+    indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
   const valorTotal = precoBase * quantidadeMeses;
-
-  const formularioValido = pagamento.metodo !== "" && imageFile !== null && indexFim >= indexInicio;
+  const formularioValido =
+    pagamento.metodo !== "" && imageFile !== null && indexFim >= indexInicio;
 
   if (!user) return <span>A carregar...</span>;
 
@@ -162,70 +256,145 @@ export default function PagamentoGeral() {
               {/* COLUNA ESQUERDA */}
               <div className="flex flex-col gap-6">
                 <div>
-                  <label className="block mb-1 font-bold text-gray-700">Código</label>
-                  <input type="text"
-                    value={user.codigo_plataforma ?? "Aguardando aprovação"}
+                  <label className="block mb-1 font-bold text-gray-700">
+                    Código
+                  </label>
+                  {/* ✅ usa codigoPlataforma (camelCase) */}
+                  <input
+                    type="text"
+                    value={user.codigoPlataforma ?? "Aguardando aprovação"}
                     readOnly
-                    className="w-full border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono" />
+                    className="w-full border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono"
+                  />
                 </div>
-
+                {/* ✅ Educando — só para encarregado */}
+                {perfil === "encarregado" && (
+                  <div>
+                    <label className="block mb-1 font-bold text-gray-700">
+                      Educando
+                    </label>
+                    <input
+                      type="text"
+                      value={nomeEducando ?? "Não associado"}
+                      readOnly
+                      className="w-full border bg-gray-100 rounded-lg px-3 py-2 text-sm"
+                    />
+                  </div>
+                )}
                 <div className="p-4 border border-gray-100 rounded-xl bg-white shadow-sm">
-                  <label className="block mb-3 font-bold text-gray-700">Como será feito o pagamento?</label>
+                  <label className="block mb-3 font-bold text-gray-700">
+                    Como será feito o pagamento?
+                  </label>
                   <div className="flex flex-col gap-3">
-                    {["De forma digital", "No banco", "Dinheiro Físico"].map((m) => (
-                      <label key={m} className="flex items-center gap-2 cursor-pointer group">
-                        <input type="radio" name="metodo" value={m} checked={pagamento.metodo === m}
-                          onChange={handleChange} className="w-4 h-4 accent-[#184d8a]" />
-                        <span className={`transition-colors text-sm md:text-base ${pagamento.metodo === m ? "font-semibold text-[#184d8a]" : "text-gray-600 group-hover:text-blue-400"}`}>
-                          {m}
-                        </span>
-                      </label>
-                    ))}
+                    {["De forma digital", "No banco", "Dinheiro Físico"].map(
+                      (m) => (
+                        <label
+                          key={m}
+                          className="flex items-center gap-2 cursor-pointer group"
+                        >
+                          <input
+                            type="radio"
+                            name="metodo"
+                            value={m}
+                            checked={pagamento.metodo === m}
+                            onChange={handleChange}
+                            className="w-4 h-4 accent-[#184d8a]"
+                          />
+                          <span
+                            className={`transition-colors text-sm md:text-base ${pagamento.metodo === m ? "font-semibold text-[#184d8a]" : "text-gray-600 group-hover:text-blue-400"}`}
+                          >
+                            {m}
+                          </span>
+                        </label>
+                      ),
+                    )}
                   </div>
                 </div>
 
-                {(pagamento.metodo === "De forma digital" || pagamento.metodo === "No banco") && (
+                {(pagamento.metodo === "De forma digital" ||
+                  pagamento.metodo === "No banco") && (
                   <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-4">
-                    <h3 className="font-bold text-gray-800 border-b pb-2">Dados do Serviço</h3>
+                    <h3 className="font-bold text-gray-800 border-b pb-2">
+                      Dados do Serviço
+                    </h3>
                     <div>
-                      <label className="block mb-2 font-medium text-gray-700">Serviço:</label>
-                      <select name="servico" value={pagamento.servico} onChange={handleChange}
-                        className="w-full border rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-100 outline-none text-sm md:text-base">
-                        {Object.keys(PRECOS_SERVICOS).map((s) => (<option key={s} value={s}>{s}</option>))}
+                      <label className="block mb-2 font-medium text-gray-700">
+                        Serviço:
+                      </label>
+                      <select
+                        name="servico"
+                        value={pagamento.servico}
+                        onChange={handleChange}
+                        className="w-full border rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-100 outline-none text-sm md:text-base"
+                      >
+                        {Object.keys(PRECOS_SERVICOS).map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
                       </select>
                     </div>
-
-                    {pagamento.metodo === "De forma digital" && (
-                      <div className="animate-in fade-in flex flex-col gap-4">
-                        <div>
-                          <label className="font-medium block mb-2 text-gray-700">Plataforma:</label>
-                          <select name="plataforma" value={pagamento.plataforma} onChange={handleChange}
-                            className="p-3 border rounded-lg w-full bg-white text-sm md:text-base">
-                            <option value="Multicaxa Express">Multicaixa Express</option>
-                            <option value="Unitel Money">Unitel Money</option>
-                            <option value="PayPay">Pay Pay</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="font-medium block mb-2 text-gray-700">Meses a pagar:</label>
+                     <div>
+                          <label className="font-medium block mb-2 text-gray-700">
+                            Meses a pagar:
+                          </label>
                           <div className="flex items-center gap-3">
                             <div className="flex-1">
-                              <p className="text-[10px] font-bold text-gray-400">De:</p>
-                              <select name="mesInicial" value={pagamento.mesInicial} onChange={handleChange}
-                                className="w-full border rounded-lg px-2 py-2 bg-white text-sm">
-                                {mesesDoAno.map((m) => (<option key={m}>{m}</option>))}
+                              <p className="text-[10px] font-bold text-gray-400">
+                                De:
+                              </p>
+                              <select
+                                name="mesInicial"
+                                value={pagamento.mesInicial}
+                                onChange={handleChange}
+                                className="w-full border rounded-lg px-2 py-2 bg-white text-sm"
+                              >
+                                {mesesDoAno.map((m) => (
+                                  <option key={m}>{m}</option>
+                                ))}
                               </select>
                             </div>
-                            <span className="mt-5 text-gray-400 font-bold">à</span>
+                            <span className="mt-5 text-gray-400 font-bold">
+                              à
+                            </span>
                             <div className="flex-1">
-                              <p className="text-[10px] font-bold text-gray-400">Até:</p>
-                              <select name="mesFinal" value={pagamento.mesFinal} onChange={handleChange}
-                                className="w-full border rounded-lg px-2 py-2 bg-white text-sm">
-                                {mesesDoAno.map((m) => (<option key={m}>{m}</option>))}
+                              <p className="text-[10px] font-bold text-gray-400">
+                                Até:
+                              </p>
+                              <select
+                                name="mesFinal"
+                                value={pagamento.mesFinal}
+                                onChange={handleChange}
+                                className="w-full border rounded-lg px-2 py-2 bg-white text-sm"
+                              >
+                                {mesesDoAno.map((m) => (
+                                  <option key={m}>{m}</option>
+                                ))}
                               </select>
                             </div>
                           </div>
                         </div>
+
+                    {pagamento.metodo === "De forma digital" && (
+                      <div className="animate-in fade-in flex flex-col gap-4">
+                        <div>
+                          <label className="font-medium block mb-2 text-gray-700">
+                            Plataforma:
+                          </label>
+                          <select
+                            name="plataforma"
+                            value={pagamento.plataforma}
+                            onChange={handleChange}
+                            className="p-3 border rounded-lg w-full bg-white text-sm md:text-base"
+                          >
+                            <option value="Multicaxa Express">
+                              Multicaixa Express
+                            </option>
+                            <option value="Unitel Money">Unitel Money</option>
+                            <option value="PayPay">Pay Pay</option>
+                          </select>
+                        </div>
+                       
                       </div>
                     )}
                   </div>
@@ -234,45 +403,80 @@ export default function PagamentoGeral() {
 
               {/* COLUNA DIREITA */}
               <div className="flex flex-col gap-6">
-                {(pagamento.metodo === "De forma digital" || pagamento.metodo === "No banco") && (
+                {(pagamento.metodo === "De forma digital" ||
+                  pagamento.metodo === "No banco") && (
                   <div className="flex flex-col gap-6 animate-in fade-in">
-                    <h3 className="font-bold text-gray-800 border-b pb-2">Finalização</h3>
+                    <h3 className="font-bold text-gray-800 border-b pb-2">
+                      Finalização
+                    </h3>
 
                     <div className="bg-blue-50 p-5 rounded-xl border border-blue-100 shadow-sm">
-                      <label className="block text-sm text-blue-600 font-semibold tracking-wider">Total a pagar</label>
+                      <label className="block text-sm text-blue-600 font-semibold tracking-wider">
+                        Total a pagar
+                      </label>
                       <div className="text-2xl md:text-3xl font-black text-blue-700">
                         KZ {valorTotal.toLocaleString("pt-PT")},00
                       </div>
-                      <p className="text-xs text-blue-400 mt-1 italic">{quantidadeMeses} mês(es) selecionado(s)</p>
+                      <p className="text-xs text-blue-400 mt-1 italic">
+                        {quantidadeMeses} mês(es) selecionado(s)
+                      </p>
                     </div>
 
                     <div>
-                      <label className="font-medium block mb-2 text-gray-700">IBAN da Instituição</label>
-                      <p className="text-xs text-gray-400 mb-1">Disponível após confirmar o pagamento na API</p>
-                      <input type="text" value="Gerado ao criar o pagamento" readOnly
-                        className="w-full border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono text-gray-500" />
+                      <label className="font-medium block mb-2 text-gray-700">
+                        IBAN da Instituição
+                      </label>
+                      {/* ✅ mostra o IBAN real buscado da BD */}
+                      <input
+                        type="text"
+                        value={iban}
+                        readOnly
+                        className="w-full border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono text-gray-700"
+                      />
                     </div>
 
                     <div>
-                      <label className="font-medium block mb-2 text-gray-700">Comprovativo</label>
-                      <label htmlFor="fotoInput"
-                        className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-14 text-center hover:border-[#184d8a] transition-colors cursor-pointer overflow-hidden">
+                      <label className="font-medium block mb-2 text-gray-700">
+                        Comprovativo
+                      </label>
+                      <label
+                        htmlFor="fotoInput"
+                        className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-14 text-center hover:border-[#184d8a] transition-colors cursor-pointer overflow-hidden"
+                      >
                         {image ? (
-                          <img loading="lazy" src={image} alt="preview" className="h-20 object-contain rounded-lg" />
+                          <img
+                            loading="lazy"
+                            src={image}
+                            alt="preview"
+                            className="h-20 object-contain rounded-lg"
+                          />
                         ) : (
                           <>
                             <ImagePlus className="w-8 h-8 text-gray-400 mb-1" />
-                            <p className="text-xs text-gray-500">Arraste ou clique para carregar</p>
+                            <p className="text-xs text-gray-500">
+                              Arraste ou clique para carregar
+                            </p>
                           </>
                         )}
                       </label>
-                      <input id="fotoInput" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+                      <input
+                        id="fotoInput"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleImageChange}
+                      />
                     </div>
 
-                    <button onClick={handleSubmit} disabled={!formularioValido}
+                    <button
+                      onClick={handleSubmit}
+                      disabled={!formularioValido}
                       className={`py-4 rounded-xl font-bold text-base md:text-lg transition-all transform active:scale-95 shadow-lg ${
-                        formularioValido ? "bg-[#184d8a] text-white hover:bg-blue-600" : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none"
-                      }`}>
+                        formularioValido
+                          ? "bg-[#184d8a] text-white hover:bg-[#184d8a]/80"
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none"
+                      }`}
+                    >
                       Enviar Pagamento
                     </button>
                   </div>
@@ -295,10 +499,16 @@ export default function PagamentoGeral() {
             </div>
             <h1 className="text-xl font-bold mb-2">Pagamento Presencial</h1>
             <p className="text-gray-600 mb-6 text-sm md:text-base">
-              Por favor, dirija-se à Secretaria da Instituição para efetuar o pagamento em numerário.
+              Por favor, dirija-se à Secretaria da Instituição para efetuar o
+              pagamento em numerário.
             </p>
-            <button onClick={() => { setShowModal(false); setPagamento((p) => ({ ...p, metodo: "" })); }}
-              className="w-full bg-[#184d8a] text-white py-3 rounded-lg font-bold">
+            <button
+              onClick={() => {
+                setShowModal(false);
+                setPagamento((p) => ({ ...p, metodo: "" }));
+              }}
+              className="w-full bg-[#184d8a] text-white py-3 rounded-lg font-bold"
+            >
               Entendido
             </button>
           </div>

@@ -1,18 +1,31 @@
+import Avatar from "@/components/Avatar/Avatar";
 import ChartEstud from "@/components/Charts/ChartEstud";
+import { Header } from "@/components/Header/header";
 import { ProfileEditModal } from "@/components/profile_edit_modal";
+import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { ArrowLeft, CheckCircle, Download, Pen } from "lucide-react";
+import { ArrowLeft, Bell, CheckCircle, Download, Pen, Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+
 export default function DadosDashEstd() {
   // No topo do componente:
   const navigate = useNavigate();
   const location = useLocation();
   const fromEncarregado =
     (location.state as { fromEncarregado?: boolean })?.fromEncarregado ?? false;
-
   const pdfRef = useRef<HTMLDivElement>(null);
+
+  const [Modal, setModal] = useState(false);
+  const [user, setUser] = useState<SessaoUsuario | null>(null);
+
+  useEffect(() => {
+    const sessao = exigirSessao();
+    if (sessao) setUser(sessao.usuario);
+  }, []);
+
+  if (!user) return <>A verificar autenticação...</>;
 
   const gerarPDF = async () => {
     const elemento = pdfRef.current;
@@ -25,22 +38,6 @@ export default function DadosDashEstd() {
     pdf.addImage(imagem, "PNG", 0, 0, largura, altura);
     pdf.save("relatorio.pdf");
   };
-
-  const [Modal, setModal] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin && dadosDoLogin !== "undefined") {
-      setUser(JSON.parse(dadosDoLogin));
-    } else {
-      window.location.href = "/Login";
-    }
-  }, []);
-
-  if (!user) return <span>Carregado...</span>;
-
-  // ... (mantenha os imports e lógica de estado iguais)
 
   const SummaryRow = ({
     label,
@@ -58,26 +55,35 @@ export default function DadosDashEstd() {
       <span className="text-gray-800 font-bold text-base">{value}</span>
     </div>
   );
-
+  
   return (
-    <div className="flex flex-col w-full px-4 sm:px-6 lg:px-8 py-4 bg-[#f8fafc] min-h-screen">
-      {/* Botão Voltar Estruturado */}
-      {fromEncarregado && (
+    <div className="flex flex-col w-full px-4 sm:px-6 lg:px-8 bg-[#f8fafc] mb-8 ">
+    
+      <div ref={pdfRef} className="flex-1 overflow-y-auto min-w-0 top-0 space-y-8">
+        <div className="flex items-end justify-end mt-3">
+          <Link to="/Config">
         <button
-          onClick={() => navigate(-1)}
-          className="group flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-[#184d8a] mb-6 transition-all"
+          className="text-[#184d8a] hover:scale-110 transition-all p-1"
         >
-          <ArrowLeft
-            size={18}
-            className="group-hover:-translate-x-1 transition-transform"
+          <Settings size={20} className="sm:hidden" />
+          <Settings size={24} className="hidden sm:block" />
+        </button></Link>
+
+        {/* Sino de notificações */}
+        <div className="relative cursor-pointer group p-1">
+          <Bell
+            size={20}
+            className="text-[#184d8a] group-hover:scale-110 transition-transform sm:hidden"
           />
-          Voltar ao Painel
-        </button>
-      )}
-      
-      <div ref={pdfRef} className="space-y-8">
+          <Bell
+            size={24}
+            className="text-[#184d8a] group-hover:scale-110 transition-transform hidden sm:block"
+          />
+          <span className="absolute -top-0.5 -right-0.5 bg-red-500 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 border-white" />
+        </div>
+        </div>
         {/* Header Modernizado */}
-        
+
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative group">
@@ -109,10 +115,10 @@ export default function DadosDashEstd() {
               <h1 className="text-3xl font-black text-gray-800 mt-2 tracking-tight">
                 {user.nome}
               </h1>
-              <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
+              <div className="flex flex-col justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
                 <p>
-                  <strong>ID:</strong> {user.processo}
-                </p> 
+                  <strong>Código:</strong> 
+                </p>
                 <p>
                   <strong>Classe:</strong> {user.classe}
                 </p>
@@ -135,7 +141,15 @@ export default function DadosDashEstd() {
             </div>
           </div>
         </header>
-
+        <div className="mt-8 flex justify-end">
+          <button
+            onClick={gerarPDF}
+            className="bg-[#184d8a] text-white  px-4 py-2.5 rounded-lg  flex items-center gap-3 hover:bg-[#184d8a]/80 transition-all shadow-lg hover:shadow-blue-200 active:scale-95"
+          >
+            <Download size={20} />
+            <span className="font-bold">Exportar Relatório</span>
+          </button>
+        </div>
         {/* Grid de Conteúdo */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Card Financeiro */}
@@ -144,7 +158,7 @@ export default function DadosDashEstd() {
               <span className="w-2 h-6 bg-[#184d8a] rounded-full"></span>
               Resumo Financeiro
             </h3>
-            <div className="flex flex-col">
+            <div className="flex flex-col ">
               <SummaryRow label="Último pagamento" value="09/11/2025" />
               <SummaryRow label="Próximo vencimento" value="09/12/2025" />
               <SummaryRow label="Total pago (Mês)" value="Kz 55.300,00" />
@@ -159,15 +173,13 @@ export default function DadosDashEstd() {
           {/* Gráfico com mais espaço */}
           <div className="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
             <div className="flex justify-between items-center mb-6">
-              <h3 className="font-bold text-gray-800">
-                Evolução de Pagamentos
+              <h3 className="text-lg font-bold mb-6 text-gray-800 flex items-center gap-2">
+                <span className="w-2 h-6 bg-[#184d8a] rounded-full"></span>
+                Serviços pagos
               </h3>
-              <select className="text-xs bg-gray-50 border-none rounded-lg font-semibold text-gray-500">
-                <option>2026</option>
-              </select>
             </div>
             <div className="h-[250px] w-full">
-              <ChartEstud/>
+              <ChartEstud />
             </div>
           </div>
         </div>
@@ -218,15 +230,6 @@ export default function DadosDashEstd() {
       </div>
 
       {/* Ações Inferiores */}
-      <div className="mt-8 flex justify-end">
-        <button
-          onClick={gerarPDF}
-          className="bg-[#184d8a] text-white px-8 py-3 rounded-2xl flex items-center gap-3 hover:bg-[#184d8a]/80 transition-all shadow-lg hover:shadow-blue-200 active:scale-95"
-        >
-          <Download size={20} />
-          <span className="font-bold">Exportar Relatório</span>
-        </button>
-      </div>
 
       <ProfileEditModal
         isOpen={Modal}

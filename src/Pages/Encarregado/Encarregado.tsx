@@ -1,23 +1,21 @@
+// src/Pages/Encarregado/Encarregado.tsx
 import ChartEstud from "@/components/Charts/ChartEstud";
 import MenuEncar from "@/components/Menu/MenuEncar";
 import { ProfileEditModal } from "@/components/profile_edit_modal";
+import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import { CheckCircle, Download, Pen } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function Encarregado() {
   const [Modal, setModal] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SessaoUsuario | null>(null);
 
   useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin && dadosDoLogin !== "undefined") {
-      setUser(JSON.parse(dadosDoLogin));
-    } else {
-      window.location.href = "/Login";
-    }
+    const sessao = exigirSessao();
+    if (sessao) setUser(sessao.usuario);
   }, []);
 
-  if (!user) return <span>Carregado...</span>;
+  if (!user) return <span>A verificar autenticação...</span>;
 
   const SummaryRow = ({ label, value }: { label: string; value: string }) => (
     <div className="flex justify-between text-sm gap-4">
@@ -31,83 +29,75 @@ export default function Encarregado() {
       <MenuEncar />
 
       <main className="flex-1 overflow-y-auto min-w-0 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-        {/* Botão editar perfil */}
-        <div className="flex justify-end mb-4">
-          <button
-            onClick={() => setModal(true)}
-            className="text-[#184d8a] text-sm sm:text-base font-medium flex items-center gap-2 transition-all duration-500"
-          >
-            <Pen size={16} /> EDITAR PERFIL
-          </button>
-        </div>
-
-        {/* Header perfil */}
-        <header className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-6 mb-8">
-          {/* Avatar + Info */}
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-            <div className="w-28 h-28 sm:w-40 sm:h-40 lg:w-56 lg:h-56 rounded-full overflow-hidden border-4 border-white shadow-sm flex items-center justify-center bg-gray-100 shrink-0">
-              {user.foto ? (
-                <img
-                  loading="lazy"
-                  src={user.foto}
-                  alt={user.nome}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-[#184d8a] text-white text-4xl sm:text-5xl lg:text-6xl font-bold">
-                  {(user.nome || "User")
-                    .trim()
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .toUpperCase()}
-                </div>
-              )}
+        <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+          <div className="flex flex-col sm:flex-row items-center gap-6">
+            <div className="relative group">
+              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white transition-transform group-hover:scale-[1.02]">
+                {user.foto ? (
+                  <img
+                    src={user.foto}
+                    alt={user.nome}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-[#184d8a] text-white shadow-inner text-4xl font-black">
+                    {user.nome?.substring(0, 2).toUpperCase()}
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => setModal(true)}
+                className="absolute -bottom-0.5 -right-0.5 bg-white p-2 rounded-xl shadow-lg text-[#184d8a] hover:bg-blue-50 transition-colors border border-gray-100"
+              >
+                <Pen size={16} />
+              </button>
             </div>
 
-            <div className="space-y-1 text-center sm:text-left">
-              <p className="text-lg font-bold">{user.nome}</p>
-              <p className="text-sm text-gray-600">
-                <strong>Email:</strong> {user.email}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Nome do seu Educando:</strong> {user.nomeEstudante}
-              </p>
-              <p className="text-sm text-gray-600">
-                <strong>Relação Parental:</strong> {user.relacao}
-              </p>
-              {user.perfil === "Estudante" && (
-                <p className="text-sm text-gray-600">
-                  <strong>Classe:</strong> {user.classe}
+            <div className="text-center sm:text-left">
+              <span className="bg-blue-100 text-[#184d8a] text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md">
+                {user.perfil}
+              </span>
+              <h1 className="text-3xl font-black text-gray-800 mt-2 tracking-tight">
+                {user.nome}
+              </h1>
+              <div className="flex flex-col justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
+                <p>
+                  <strong>Grau parentesco:</strong> {user.relacao}
                 </p>
-              )}
+                <p>
+                  <strong>Nome do Educando:</strong> {user.nomeEstudante}
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Situação financeira */}
-          <div className="bg-white p-5 rounded-xl border w-full sm:min-w-[250px] sm:w-auto flex items-center gap-4">
-            <CheckCircle size={40} className="text-green-600 shrink-0" />
-            <div className="flex flex-col">
-              <h3 className="text-sm sm:text-base font-bold text-gray-800 mb-1">
+          {/* Card de Situação Rápida */}
+          <div className="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-2xl border border-emerald-100 flex items-center gap-4 shadow-sm min-w-[280px]">
+            <div className="bg-emerald-500 p-2 rounded-xl text-white">
+              <CheckCircle size={24} />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-emerald-900">
                 Situação Financeira do seu Educando
               </h3>
-              <p className="text-green-600 text-sm font-medium">
-                Financeiramente está estável
+              <p className="text-emerald-600 text-xs font-semibold">
+                Conta Regularizada
               </p>
-              <p className="text-xs text-gray-400">Sem pagamentos em atraso</p>
             </div>
           </div>
         </header>
-
-        <hr className="mb-8 border-gray-200" />
-
+        <div className="mt-8 flex justify-end mb-8">
+          <button className="bg-[#184d8a] text-white px-4 py-2.5 rounded-lg flex items-center gap-3 hover:bg-[#184d8a]/80 transition-all shadow-lg hover:shadow-blue-200 active:scale-95">
+            <Download size={20} />
+            <span className="font-bold">Exportar Relatório</span>
+          </button>
+        </div>
         <ProfileEditModal
           isOpen={Modal}
           onClose={() => setModal(false)}
           user={user}
         />
 
-        {/* Resumo + Gráfico */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="bg-white p-6 rounded-xl border">
             <h3 className="font-bold mb-6 text-gray-800">Resumo Financeiro:</h3>
@@ -123,7 +113,6 @@ export default function Encarregado() {
           </div>
         </div>
 
-        {/* Tabela */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
           <div className="p-4 border-b border-gray-100">
             <h3 className="font-bold text-gray-800 text-sm sm:text-base">
@@ -158,12 +147,7 @@ export default function Encarregado() {
           </div>
         </div>
 
-        {/* Botão PDF */}
-        <div className="mt-6 flex justify-center sm:justify-end">
-          <button className="bg-[#184d8a] text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition-all duration-500 w-full sm:w-auto justify-center">
-            <Download size={18} /> Gerar PDF
-          </button>
-        </div>
+       
       </main>
     </div>
   );

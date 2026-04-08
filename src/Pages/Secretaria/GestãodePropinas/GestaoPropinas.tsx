@@ -1,50 +1,196 @@
-import { ArrowDown, ArrowUp, Bell, EyeIcon, Menu, Search, TrendingDown, TrendingUp } from "lucide-react";
-import { useEffect, useState } from "react";
+// ════════════════════════════════════════════════════════════════
+// FICHEIRO: src/Pages/Secretaria/GestaoPropinas.tsx
+// Melhorias: Modal de detalhes, responsividade, filtros funcionais, design refinado
+// ════════════════════════════════════════════════════════════════
+import Avatar from "@/components/Avatar/Avatar";
+import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
+import { exigirSessao, getToken, type SessaoUsuario } from "@/types/global/sessao";
+import {
+  ArrowDown, ArrowUp, EyeIcon, TrendingDown, TrendingUp,
+  X, Calendar, User, BookOpen, DollarSign, AlertTriangle, CheckCircle, Clock
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const API = "http://localhost:5000/api";
 
 interface PropinaRow {
-  codigo: number;
-  nome_estudante: string;
-  classe: number | null;
-  data: string | null;
-  servico: string;
-  valor: string;
-  multa_estimada: string;
-  status: string;
+  codigo: number; nome_estudante: string; classe: number | null;
+  data: string | null; servico: string; valor: string;
+  multa_estimada: string; status: string;
 }
+interface Cards { total_pagas: string; total_pendentes: string; total_atrasadas: string; }
 
-interface Cards {
-  total_pagas: string;
-  total_pendentes: string;
-  total_atrasadas: string;
-}
-
-const CardKpi = ({ title, value, subtext, trend }: { title: string; value: string; subtext: string; trend?: "up" | "down" }) => (
-  <div className="bg-white p-4 rounded-xl flex flex-col items-center text-center border">
-    <p className="text-gray-400 text-base mb-1">{title}</p>
-    <div className="flex items-center gap-2">
-      <span className="text-xl font-bold text-gray-800">{value}</span>
-      {trend === "up" && <span className="text-green-500"><TrendingUp /></span>}
-      {trend === "down" && <span className="text-red-500"><TrendingDown /></span>}
+/* ── KPI Card ── */
+const CardKpi = ({
+  title, value, subtext, trend, color
+}: {
+  title: string; value: string; subtext: string;
+  trend?: "up" | "down"; color?: "green" | "orange" | "red";
+}) => {
+  const colors = {
+    green: "bg-green-50 border-green-200 text-green-700",
+    orange: "bg-orange-50 border-orange-200 text-orange-700",
+    red: "bg-red-50 border-red-200 text-red-700",
+  };
+  const base = color ? colors[color] : "bg-white border-gray-200 text-gray-700";
+  return (
+    <div className={`p-5 rounded-2xl flex flex-col items-center text-center border ${base} transition-all duration-300 hover:shadow-md`}>
+      <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
+      <div className="flex items-center gap-2">
+        <span className="text-2xl font-bold">{value}</span>
+        {trend === "up" && <TrendingUp size={18} className="text-green-500" />}
+        {trend === "down" && <TrendingDown size={18} className="text-red-500" />}
+      </div>
+      <p className="text-xs text-gray-400 mt-1">{subtext}</p>
     </div>
-    <p className="text-[14px] text-gray-400 mt-1">{subtext}</p>
+  );
+};
+
+/* ── Status Badge ── */
+const StatusBadge = ({ status }: { status: string }) => {
+  const map: Record<string, { bg: string; text: string; icon: React.ReactNode }> = {
+    Paga: { bg: "bg-green-50 border-green-200", text: "text-green-700", icon: <CheckCircle size={12} /> },
+    Pendente: { bg: "bg-orange-50 border-orange-200", text: "text-orange-700", icon: <Clock size={12} /> },
+    Atrasada: { bg: "bg-red-50 border-red-200", text: "text-red-700", icon: <AlertTriangle size={12} /> },
+  };
+  const s = map[status] ?? { bg: "bg-gray-50 border-gray-200", text: "text-gray-600", icon: null };
+  return (
+    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold border ${s.bg} ${s.text}`}>
+      {s.icon} {status}
+    </span>
+  );
+};
+
+/* ── Modal de Detalhes de Propina ── */
+const ModalDetalhes = ({ row, onClose }: { row: PropinaRow; onClose: () => void }) => (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+    onClick={(e) => e.target === e.currentTarget && onClose()}
+  >
+    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+      {/* Header */}
+      <div className="bg-[#184d8a] px-6 py-5 flex justify-between items-start">
+        <div>
+          <h2 className="text-white font-bold text-lg">{row.nome_estudante}</h2>
+          <p className="text-blue-200 text-sm mt-0.5">Propina #{row.codigo}</p>
+        </div>
+        <button
+          onClick={onClose}
+          className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
+        >
+          <X size={18} />
+        </button>
+      </div>
+
+      {/* Status Banner */}
+      <div className={`px-6 py-3 border-b ${
+        row.status === "Paga" ? "bg-green-50" :
+        row.status === "Pendente" ? "bg-orange-50" : "bg-red-50"
+      }`}>
+        <StatusBadge status={row.status} />
+      </div>
+
+      {/* Detalhes */}
+      <div className="px-6 py-5 space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-1">
+              <User size={14} className="text-[#184d8a]" />
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Estudante</span>
+            </div>
+            <p className="font-bold text-gray-700 text-sm">{row.nome_estudante}</p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-1">
+              <BookOpen size={14} className="text-[#184d8a]" />
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Classe</span>
+            </div>
+            <p className="font-bold text-gray-700 text-sm">{row.classe ? `${row.classe}ª Classe` : "—"}</p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-1">
+              <Calendar size={14} className="text-[#184d8a]" />
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Data</span>
+            </div>
+            <p className="font-bold text-gray-700 text-sm">{row.data ?? "—"}</p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <div className="flex items-center gap-2 mb-1">
+              <BookOpen size={14} className="text-[#184d8a]" />
+              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Serviço</span>
+            </div>
+            <p className="font-bold text-gray-700 text-sm">{row.servico}</p>
+          </div>
+        </div>
+
+        {/* Valores */}
+        <div className="bg-[#184d8a]/5 rounded-2xl p-5 space-y-3 border border-[#184d8a]/10">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+              <DollarSign size={15} className="text-[#184d8a]" />
+              <span className="text-sm font-semibold text-gray-600">Valor da Propina</span>
+            </div>
+            <span className="font-bold text-gray-800 text-lg">
+              {Number(row.valor).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })}
+            </span>
+          </div>
+          {Number(row.multa_estimada) > 0 && (
+            <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
+              <div className="flex items-center gap-2">
+                <AlertTriangle size={15} className="text-red-500" />
+                <span className="text-sm font-semibold text-red-500">Multa Estimada</span>
+              </div>
+              <span className="font-bold text-red-600 text-lg">
+                {Number(row.multa_estimada).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })}
+              </span>
+            </div>
+          )}
+          <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
+            <span className="text-sm font-bold text-gray-600">Total</span>
+            <span className="font-bold text-[#184d8a] text-xl">
+              {(Number(row.valor) + Number(row.multa_estimada)).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="px-6 pb-6 flex gap-3">
+        <button
+          onClick={onClose}
+          className="flex-1 py-3 rounded-xl font-bold text-gray-500 border border-gray-200 hover:bg-gray-50 transition-all"
+        >
+          Fechar
+        </button>
+        {row.status !== "Paga" && (
+          <button className="flex-1 py-3 rounded-xl font-bold text-white bg-[#184d8a] hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200">
+            Registar Pagamento
+          </button>
+        )}
+      </div>
+    </div>
   </div>
 );
 
+/* ══════════════════════════════════════════════════════════════ */
 export default function GestaoPropinas() {
   const [tabela, setTabela] = useState<PropinaRow[]>([]);
   const [cards, setCards] = useState<Cards>({ total_pagas: "0", total_pendentes: "0", total_atrasadas: "0" });
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<SessaoUsuario | null>(null);
   const [ordemCrescente, setOrdemCrescente] = useState(true);
+  const [selectedRow, setSelectedRow] = useState<PropinaRow | null>(null);
+  const [filtroStatus, setFiltroStatus] = useState("");
+  const [filtroMes, setFiltroMes] = useState("");
+  const [filtroClasse, setFiltroClasse] = useState("");
 
   useEffect(() => {
     const carregar = async () => {
       setLoading(true);
       try {
-        const token = localStorage.getItem("Token");
+        const token = getToken();
         const res = await fetch(`${API}/gestaoPropinas`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -52,135 +198,203 @@ export default function GestaoPropinas() {
         const data = await res.json();
         setCards(data.cards ?? cards);
         setTabela(data.tabela ?? []);
-      } catch {
-        toast.error("Erro ao carregar propinas");
-      } finally {
-        setLoading(false);
-      }
+      } catch { toast.error("Erro ao carregar propinas"); }
+      finally { setLoading(false); }
     };
     carregar();
   }, []);
 
-  const handleSort = (chave: "nome_estudante") => {
+  useEffect(() => {
+    const sessao = exigirSessao();
+    if (sessao) setUser(sessao.usuario);
+  }, []);
+
+  if (!user) return (
+    <div className="flex h-screen items-center justify-center bg-gray-50">
+      <div className="flex items-center gap-3 text-[#184d8a]">
+        <div className="w-5 h-5 border-2 border-[#184d8a] border-t-transparent rounded-full animate-spin" />
+        <span className="font-medium">A verificar autenticação...</span>
+      </div>
+    </div>
+  );
+
+  const handleSort = () => {
     const ordenados = [...tabela].sort((a, b) =>
-      ordemCrescente ? a[chave].localeCompare(b[chave]) : b[chave].localeCompare(a[chave])
+      ordemCrescente
+        ? a.nome_estudante.localeCompare(b.nome_estudante)
+        : b.nome_estudante.localeCompare(a.nome_estudante)
     );
     setTabela(ordenados);
     setOrdemCrescente(!ordemCrescente);
   };
 
-  const colorsSit = (status: string) => {
-    switch (status) {
-      case "Paga": return "text-green-500";
-      case "Pendente": return "text-orange-400";
-      case "Atrasada": return "text-red-500";
-      default: return "text-black";
-    }
-  };
+  const tabelaFiltrada = tabela.filter(row => {
+    const matchStatus = !filtroStatus || row.status === filtroStatus;
+    const matchClasse = !filtroClasse || String(row.classe) === filtroClasse;
+    return matchStatus && matchClasse;
+  });
+
+  const classes = [...new Set(tabela.map(r => r.classe).filter(Boolean))].sort();
 
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuSecretaria />
-      <main className="flex-1 p-8 custom_scroll">
-        <div className="flex justify-between items-center mb-10">
-          <h1 className="text-xl font-bold text-[#184d8a]">Gestão de Propinas</h1>
-          <header className="flex items-center gap-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-              <input type="search" placeholder="Procurar por um código..."
-                className="w-80 pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#184d8a]/20 outline-none transition-all" />
+
+      <main className="flex-1 flex flex-col overflow-hidden">
+        <Header
+          titulo="Gestão de Propinas"
+          usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
+        />
+
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          {/* KPI Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+            <CardKpi title="Propinas Pagas" value={loading ? "—" : cards.total_pagas} subtext="no último mês" trend="up" color="green" />
+            <CardKpi title="Propinas Pendentes" value={loading ? "—" : cards.total_pendentes} subtext="no último mês" color="orange" />
+            <CardKpi title="Propinas em Atraso" value={loading ? "—" : cards.total_atrasadas} subtext="no último mês" trend="down" color="red" />
+          </div>
+
+          {/* Filtros */}
+          <div className="flex flex-wrap gap-3 mb-6">
+            <div className="flex flex-col gap-1 min-w-[130px]">
+              <label className="text-xs font-semibold text-gray-400 ml-1">Estado</label>
+              <select
+                value={filtroStatus}
+                onChange={e => setFiltroStatus(e.target.value)}
+                className="bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-600 outline-none focus:border-[#184d8a] cursor-pointer"
+              >
+                <option value="">Todos</option>
+                <option value="Paga">Paga</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Atrasada">Atrasada</option>
+              </select>
             </div>
-            <div className="relative cursor-pointer group">
-              <Bell className="text-[#184d8a] group-hover:scale-110 transition-transform" />
-              <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white" />
+            <div className="flex flex-col gap-1 min-w-[130px]">
+              <label className="text-xs font-semibold text-gray-400 ml-1">Classe</label>
+              <select
+                value={filtroClasse}
+                onChange={e => setFiltroClasse(e.target.value)}
+                className="bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm text-gray-600 outline-none focus:border-[#184d8a] cursor-pointer"
+              >
+                <option value="">Todas</option>
+                {classes.map(c => <option key={c} value={String(c)}>{c}ª Classe</option>)}
+              </select>
             </div>
-          </header>
-        </div>
-
-        <section className="mb-12">
-          <div className="flex gap-4 mb-8">
-            {["Mês", "Classe", "Estado"].map((filtro) => (
-              <div key={filtro} className="flex flex-col gap-1">
-                <label className="text-sm text-gray-500 ml-1">{filtro}</label>
-                <select className="bg-white border rounded-lg px-4 py-2 text-sm text-gray-400 outline-none focus:border-[#184d8a] min-w-[140px] cursor-pointer">
-                  <option>Sem filtro</option>
-                </select>
-              </div>
-            ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 cursor-default">
-            <CardKpi title="Propinas Pagas" value={loading ? "..." : cards.total_pagas} subtext="no último mês" trend="up" />
-            <CardKpi title="Propinas Pendentes" value={loading ? "..." : cards.total_pendentes} subtext="no último mês" />
-            <CardKpi title="Propinas em Atraso" value={loading ? "..." : cards.total_atrasadas} subtext="no último mês" trend="down" />
-          </div>
-        </section>
+          {/* Tabela */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-8">
+            <div className="px-5 py-4 border-b border-gray-100 flex flex-wrap justify-between items-center gap-2 bg-gray-50/50">
+              <h3 className="font-bold text-gray-700">Tabela de Propinas</h3>
+              <span className="text-xs text-gray-400 font-medium bg-white px-3 py-1 rounded-full border">
+                {tabelaFiltrada.length} registo{tabelaFiltrada.length !== 1 ? "s" : ""}
+              </span>
+            </div>
 
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-20">
-          <div className="p-5 border-b border-gray-50 flex justify-between items-center bg-gray-50/30">
-            <h3 className="font-bold text-gray-700">Tabela de Propinas</h3>
-            <span className="text-xs text-gray-400 font-medium">{tabela.length} registos encontrados</span>
-          </div>
-
-          <table className="w-full border-collapse cursor-default">
-            <thead>
-              <tr className="bg-[#184d8a]/70 text-white text-[14px] font-black border-b border-gray-200">
-                <th className="px-4 py-4">Código</th>
-                <th className="px-4 py-4 cursor-pointer" onClick={() => handleSort("nome_estudante")}>
-                  <div className="flex items-center justify-center gap-1">
-                    Nome {ordemCrescente ? <ArrowDown size={14} /> : <ArrowUp size={14} />}
-                  </div>
-                </th>
-                <th className="px-4 py-4">Classe</th>
-                <th className="px-4 py-4">Data</th>
-                <th className="px-4 py-4">Serviço</th>
-                <th className="px-4 py-4">Valor</th>
-                <th className="px-4 py-4">Multa</th>
-                <th className="px-4 py-4">Estado</th>
-                <th className="px-4 py-4">Ação</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {loading ? (
-                <tr><td colSpan={9} className="py-12 text-center text-sm text-gray-400">A carregar...</td></tr>
-              ) : tabela.length === 0 ? (
-                <tr><td colSpan={9} className="py-12 text-center text-sm text-gray-400">Nenhuma propina encontrada</td></tr>
-              ) : (
-                tabela.map((row, index) => (
-                  <tr key={index} className="hover:bg-[#184d8a]/5 transition-colors text-center hover:border-b hover:border-dashed hover:border-[#184d8a]">
-                    <td className="px-4 py-4 text-sm text-gray-500">{row.codigo}</td>
-                    <td className="px-4 py-4 text-sm text-gray-700">{row.nome_estudante}</td>
-                    <td className="px-4 py-4 text-sm text-gray-500">{row.classe ? `${row.classe}ª` : "—"}</td>
-                    <td className="px-4 py-4 text-sm text-gray-500">{row.data ?? "—"}</td>
-                    <td className="px-4 py-4 text-sm text-gray-600">{row.servico}</td>
-                    <td className="px-4 py-4 text-sm text-gray-800">
-                      {Number(row.valor).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })}
-                    </td>
-                    <td className="px-4 py-4 text-sm text-red-500">
-                      {Number(row.multa_estimada) > 0
-                        ? Number(row.multa_estimada).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })
-                        : "—"}
-                    </td>
-                    <td className="px-4 py-4">
-                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold border inline-block min-w-[85px] ${colorsSit(row.status)}`}>
-                        {row.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-4">
-                      <div className="group w-max relative flex items-center mx-auto cursor-pointer">
-                        <div className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-500 shadow-sm">
-                          <EyeIcon size={18} />
-                        </div>
-                        <span className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border text-xs px-2 py-2 opacity-0 group-hover:opacity-100 transition-all duration-500">Visualizar</span>
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full border-collapse text-center">
+                <thead>
+                  <tr className="bg-[#184d8a] text-white text-[13px] font-semibold">
+                    <th className="px-4 py-3.5">Código</th>
+                    <th className="px-4 py-3.5 cursor-pointer hover:bg-[#1a5fad] transition-colors" onClick={handleSort}>
+                      <div className="flex items-center justify-center gap-1">
+                        Nome {ordemCrescente ? <ArrowDown size={13} /> : <ArrowUp size={13} />}
                       </div>
-                    </td>
+                    </th>
+                    <th className="px-4 py-3.5">Classe</th>
+                    <th className="px-4 py-3.5">Data</th>
+                    <th className="px-4 py-3.5">Serviço</th>
+                    <th className="px-4 py-3.5">Valor</th>
+                    <th className="px-4 py-3.5">Multa</th>
+                    <th className="px-4 py-3.5">Estado</th>
+                    <th className="px-4 py-3.5">Ação</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  {loading ? (
+                    <tr><td colSpan={9} className="py-14 text-center text-sm text-gray-400">
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-4 h-4 border-2 border-[#184d8a] border-t-transparent rounded-full animate-spin" />
+                        A carregar...
+                      </div>
+                    </td></tr>
+                  ) : tabelaFiltrada.length === 0 ? (
+                    <tr><td colSpan={9} className="py-14 text-center text-sm text-gray-400">
+                      Nenhuma propina encontrada
+                    </td></tr>
+                  ) : tabelaFiltrada.map((row, i) => (
+                    <tr key={i} className="hover:bg-[#184d8a]/3 transition-colors group">
+                      <td className="px-4 py-4 text-sm font-mono text-gray-400">{row.codigo}</td>
+                      <td className="px-4 py-4 text-sm font-semibold text-gray-700">{row.nome_estudante}</td>
+                      <td className="px-4 py-4 text-sm text-gray-500">{row.classe ? `${row.classe}ª` : "—"}</td>
+                      <td className="px-4 py-4 text-sm text-gray-500">{row.data ?? "—"}</td>
+                      <td className="px-4 py-4 text-sm text-gray-600">{row.servico}</td>
+                      <td className="px-4 py-4 text-sm font-semibold text-gray-800">
+                        {Number(row.valor).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })}
+                      </td>
+                      <td className="px-4 py-4 text-sm font-semibold text-red-500">
+                        {Number(row.multa_estimada) > 0
+                          ? Number(row.multa_estimada).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })
+                          : <span className="text-gray-300">—</span>}
+                      </td>
+                      <td className="px-4 py-4"><StatusBadge status={row.status} /></td>
+                      <td className="px-4 py-4">
+                        <button
+                          onClick={() => setSelectedRow(row)}
+                          className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-200 shadow-sm mx-auto block"
+                          title="Visualizar"
+                        >
+                          <EyeIcon size={16} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="md:hidden divide-y divide-gray-100">
+              {loading ? (
+                <div className="py-10 text-center text-sm text-gray-400">A carregar...</div>
+              ) : tabelaFiltrada.length === 0 ? (
+                <div className="py-10 text-center text-sm text-gray-400">Nenhuma propina encontrada</div>
+              ) : tabelaFiltrada.map((row, i) => (
+                <div key={i} className="p-4 hover:bg-gray-50 transition-colors">
+                  <div className="flex justify-between items-start mb-2">
+                    <div>
+                      <p className="font-semibold text-gray-700 text-sm">{row.nome_estudante}</p>
+                      <p className="text-xs text-gray-400">{row.servico} · {row.classe ? `${row.classe}ª` : "—"}</p>
+                    </div>
+                    <StatusBadge status={row.status} />
+                  </div>
+                  <div className="flex justify-between items-center mt-3">
+                    <div>
+                      <p className="text-sm font-bold text-gray-800">
+                        {Number(row.valor).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })}
+                      </p>
+                      {Number(row.multa_estimada) > 0 && (
+                        <p className="text-xs text-red-500 font-medium">
+                          + {Number(row.multa_estimada).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })} multa
+                        </p>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => setSelectedRow(row)}
+                      className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all"
+                    >
+                      <EyeIcon size={16} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </main>
+
+      {selectedRow && <ModalDetalhes row={selectedRow} onClose={() => setSelectedRow(null)} />}
     </div>
   );
 }

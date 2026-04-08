@@ -1,11 +1,11 @@
 import Administaradores from "@/Pages/Administrador/Administradores";
 import Configuracoes from "@/Pages/Administrador/Configuracoes";
 import DashboardAdmin from "@/Pages/Administrador/DashboardAdmin";
-import GestaoDeUsuarios from "@/Pages/Administrador/GestaoDeUsuarios";
-import GestaoEstudantes from "@/Pages/Administrador/GestaoEstudantes";
+import GestaoDeRelatorios from "@/Pages/Administrador/GestaoDeRelatorio";
 import GestaoDeInstituicao from "@/Pages/Administrador/GestaoInstituicaoAdmin/GestaoDeInstituicao";
 import GestaoLogs from "@/Pages/Administrador/GestaoLogs";
-import GestaoPropinasAdmin from "@/Pages/Administrador/GestaoPropinasAdmin";
+import PermissoesAcessos from "@/Pages/Administrador/PermissoesAcessos";
+import SuporteAjuda from "@/Pages/Administrador/SuporteAjuda";
 import ConfiguracaoEncar from "@/Pages/Encarregado/ConfiguracaoEncar";
 import Encarregado from "@/Pages/Encarregado/Encarregado";
 import PagamentoEncar from "@/Pages/Encarregado/PagamentoEncar";
@@ -22,6 +22,7 @@ import GestaodeServiços from "@/Pages/Secretaria/GestãodeServiços/GestaodeSer
 import ModulodeMulta from "@/Pages/Secretaria/MódulodeMultas/ModulodeMulta";
 import Relatorio from "@/Pages/Secretaria/Relatorio/Relatorio";
 import Secretaria from "@/Pages/Secretaria/Secretaria";
+import SolicitacoesCadastro from "@/Pages/Secretaria/Solicitacoes/SolicitacoesCadastro";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Cadastro from "../Pages/Cadastros/Cadastro";
 import DashboardEstud from "../Pages/Estudante/Dashboard/DashboardEstud";
@@ -32,10 +33,6 @@ import PaginaInicial from "../Pages/Index/PaginaInicial/Index";
 import Instituicoes from "../Pages/Instituições/Instituições";
 import Login from "../Pages/Login/Login";
 import Pagamento from "../Pages/Pagamento/Pagamento";
-import GestaoDeRelatorios from "@/Pages/Administrador/GestaoDeRelatorio";
-import PermissoesAcessos from "@/Pages/Administrador/PermissoesAcessos";
-import SuporteAjuda from "@/Pages/Administrador/SuporteAjuda";
-import SolicitacoesCadastro from "@/Pages/Secretaria/Solicitacoes/SolicitacoesCadastro";
 
 export default function AppRoutes() {
   return (
@@ -75,13 +72,7 @@ export default function AppRoutes() {
         path="/GestaoDeInstituicao"
         element={<GestaoDeInstituicao />}
       ></Route>
-      <Route path="/GestaoEstudantes" element={<GestaoEstudantes />}></Route>
-      <Route path="/GestaoDeUsuarios" element={<GestaoDeUsuarios />}></Route>
       <Route path="/GestaoLogs" element={<GestaoLogs />}></Route>
-      <Route
-        path="/GestaoPropinasAdmin"
-        element={<GestaoPropinasAdmin />}
-      ></Route>
       <Route path="/Configuracoes" element={<Configuracoes />}></Route>
       <Route path="/ConfiguracaoEncar" element={<ConfiguracaoEncar />}></Route>
       <Route path="/ReclamacoesEncar" element={<ReclamacoesEncar />}></Route>

@@ -67,7 +67,7 @@ export default function FAQScreen() {
           <p className="text-gray-800 font-bold text-sm mb-4">
             Necessito de esclarecimentos adicionais?
           </p>
-          <button className="bg-[#184d8a] text-white px-8 py-2 rounded-lg text-sm animate-bounce font-bold hover:bg-blue-600 transition-all shadow-md">
+          <button className="bg-[#184d8a] text-white px-8 py-2 rounded-lg text-sm animate-bounce font-bold hover:bg-[#184d8a]/80 transition-all shadow-md">
             Entrar em contacto
           </button>
         </div>

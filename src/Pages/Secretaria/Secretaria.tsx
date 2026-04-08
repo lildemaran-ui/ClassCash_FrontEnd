@@ -1,13 +1,50 @@
+// src/Pages/Secretaria/Secretaria.tsx
 import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  exigirSessao,
+  getToken,
+  type SessaoUsuario,
+} from "@/types/global/sessao";
+import { SelectTrigger } from "@radix-ui/react-select";
 import { Download, TrendingDown, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
-const MonthlyBarChartSimulation: React.FC = () => {
-  const months = [
+const API = "http://localhost:5000/api";
+
+// ─── Tipos ─────────────────────────────────────────────────────────────────
+interface PainelData {
+  contagemUltimoMes: {
+    total_estudantes_mes: number;
+    total_encarregados_mes: number;
+  };
+  statusEstudantes: { status: string; total: number }[];
+  listaAlunos: {
+    nome_estudante: string;
+    num_processo: string;
+    classe: number | null;
+  }[];
+  faturamentoMensal: { mes: string; valor: number }[];
+  faturamentoAnual: { ano: string; valor: number }[];
+  metodosMaisUsados: { metodo: string; total: number }[];
+}
+
+// ─── Gráfico de barras mensal ────────────────────────────────────────────
+const MonthlyBarChart = ({
+  dados,
+}: {
+  dados: { mes: string; valor: number }[];
+}) => {
+  const MONTHS = [
     "JAN",
     "FEV",
     "MAR",
@@ -21,7 +58,15 @@ const MonthlyBarChartSimulation: React.FC = () => {
     "NOV",
     "DEZ",
   ];
-  const values = [40, 65, 80, 5, 95, 20, 40, 60, 50, 5, 45, 35];
+  const maxValor = Math.max(...dados.map((d) => d.valor), 1);
+
+  // Normaliza para percentagem
+  const barras = MONTHS.map((mes) => {
+    const found = dados.find((d) =>
+      d.mes?.toUpperCase().startsWith(mes.slice(0, 3)),
+    );
+    return { mes, pct: found ? Math.round((found.valor / maxValor) * 100) : 0 };
+  });
 
   return (
     <div className="bg-white p-4 sm:p-8 rounded-xl mt-6 cursor-default overflow-x-auto">
@@ -39,29 +84,29 @@ const MonthlyBarChartSimulation: React.FC = () => {
               )}
             </div>
           ))}
-          {values.map((value, index) => (
+          {barras.map(({ mes, pct }, index) => (
             <div
               key={index}
               className="flex flex-col items-center h-full justify-end relative z-10"
-              style={{ width: `${100 / months.length}%` }}
+              style={{ width: `${100 / MONTHS.length}%` }}
             >
               <div
-                className="w-6 sm:w-10 bg-[#184d8a] hover:bg-blue-500 transition-all duration-300 rounded-t-md"
-                style={{ height: `${value}%` }}
-                title={`${months[index]}: ${value}% Pagos`}
+                className="w-6 sm:w-10 bg-[#184d8a] hover:bg-[#184d8a]/80 transition-all duration-300 rounded-t-md"
+                style={{ height: `${pct}%` }}
+                title={`${mes}: ${pct}%`}
               />
             </div>
           ))}
         </div>
         <div className="flex justify-between border-t border-gray-300 pt-2">
           <span className="text-gray-500 text-xs w-2">MM</span>
-          {months.map((month, index) => (
+          {barras.map(({ mes }, index) => (
             <div
               key={index}
               className="text-xs text-gray-600 font-medium text-center"
-              style={{ width: `${100 / months.length}%` }}
+              style={{ width: `${100 / MONTHS.length}%` }}
             >
-              {month}
+              {mes}
             </div>
           ))}
         </div>
@@ -94,32 +139,63 @@ const CardKpi = ({
   </div>
 );
 
+// ─── Página ────────────────────────────────────────────────────────────────
 export default function Secretaria() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SessaoUsuario | null>(null);
+  const [painel, setPainel] = useState<PainelData | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin && dadosDoLogin !== "undefined") {
-      setUser(JSON.parse(dadosDoLogin));
-    } else {
-      window.location.href = "/Login";
-    }
+    const sessao = exigirSessao();
+    if (!sessao) return;
+    setUser(sessao.usuario);
+
+    const carregar = async () => {
+      setLoading(true);
+      try {
+        const token = getToken();
+        const res = await fetch(`${API}/dashboard`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Erro ao carregar painel");
+        const data: PainelData = await res.json();
+        setPainel(data);
+      } catch {
+        toast.error("Erro ao carregar dados do painel");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    carregar();
   }, []);
 
   if (!user) return null;
+
+  const totalEstudantes =
+    painel?.statusEstudantes?.reduce((s, r) => s + Number(r.total), 0) ?? 0;
+  const ativos =
+    painel?.statusEstudantes?.find((s) => s.status === "Aceite")?.total ?? 0;
+  const inativos = totalEstudantes - ativos;
+  const totalEncarregados =
+    painel?.contagemUltimoMes?.total_encarregados_mes ?? 0;
+
+  // Faturamento: soma do mês mais recente com dados reais
+  const faturamentoMensal = painel?.faturamentoMensal ?? [];
+  const ultimoFaturamento = faturamentoMensal.at(-1);
+  const faturamentoAnualTotal = painel?.faturamentoAnual?.[0]?.valor ?? 0;
+
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuSecretaria />
-
       <main className="flex-1 overflow-y-auto min-w-0 top-0">
-        {/* Header sticky */}
         <Header
           titulo="Painel Geral"
-          usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+          usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
         />
 
         <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          {/* Filtros + Botão PDF */}
+          {/* Filtros + PDF */}
           <section className="mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
               <div className="flex flex-wrap gap-3">
@@ -128,91 +204,113 @@ export default function Secretaria() {
                     <label className="block text-xs text-gray-500 mb-1">
                       {filtro}
                     </label>
-                    <select className="bg-white border rounded-lg px-3 sm:px-6 py-2 text-sm text-gray-400 outline-none hover:border-[#184d8a] cursor-pointer">
-                      <option>Sem filtro</option>
-                    </select>
+                    <Select>
+                      <SelectTrigger className="w-full border-2 rounded-lg h-10 text-xs px-8 outline-none focus:border-[#184d8a]/80">
+                        <SelectValue placeholder="Sem filtro" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sem-filtro">Sem filtro</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 ))}
               </div>
-              <button className="flex items-center justify-center gap-2 px-4 py-2 bg-[#184d8a] text-white rounded-md text-sm font-semibold hover:bg-blue-500 transition-all duration-500 w-full sm:w-auto">
+              <button className="flex items-center justify-center gap-2 px-4 py-2 bg-[#184d8a] text-white rounded-md text-sm font-semibold hover:bg-[#184d8a]/80 transition-all duration-500 w-full sm:w-auto">
                 Gerar PDF <Download size={16} />
               </button>
             </div>
 
-            {/* KPI Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               <CardKpi
                 title="Total de estudantes"
-                value="50"
+                value={loading ? "..." : String(totalEstudantes)}
                 subtext="no último mês"
                 trend="up"
               />
               <CardKpi
                 title="Total de Encarregados"
-                value="100"
+                value={loading ? "..." : String(totalEncarregados)}
                 subtext="no último mês"
                 trend="up"
               />
               <CardKpi
                 title="Estudantes ativos"
-                value="50"
+                value={loading ? "..." : String(ativos)}
                 subtext="no último mês"
               />
               <CardKpi
                 title="Estudantes Inativos"
-                value="0"
+                value={loading ? "..." : String(inativos)}
                 subtext="no último mês"
                 trend="down"
               />
             </div>
           </section>
 
-          {/* Serviços */}
+          {/* Métodos mais usados */}
           <section className="mb-6 sm:mb-8">
             <h3 className="text-gray-700 font-bold mb-4 text-sm sm:text-base">
               Serviços mais utilizados
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              {["Multicaixa Express", "Unitel Money", "PayPay"].map(
-                (servico) => (
-                  <div
-                    key={servico}
-                    className="bg-white p-4 sm:p-6 rounded-xl border text-center"
-                  >
-                    <p className="font-bold text-gray-700 mb-3 text-sm sm:text-base">
-                      {servico}
-                    </p>
-                    <div className="h-2 w-4 bg-[#184d8a] rounded-full mb-2 mx-auto"></div>
-                    <p className="text-xs sm:text-sm text-gray-400">
-                      Serviço digital
-                    </p>
-                  </div>
-                ),
-              )}
+              {loading
+                ? ["—", "—", "—"].map((_, i) => (
+                    <div
+                      key={i}
+                      className="bg-white p-4 sm:p-6 rounded-xl border text-center animate-pulse h-20"
+                    />
+                  ))
+                : (painel?.metodosMaisUsados?.length
+                    ? painel.metodosMaisUsados.slice(0, 3)
+                    : [
+                        { metodo: "Multicaixa Express", total: 0 },
+                        { metodo: "Unitel Money", total: 0 },
+                        { metodo: "PayPay", total: 0 },
+                      ]
+                  ).map((s) => (
+                    <div
+                      key={s.metodo}
+                      className="bg-white p-4 sm:p-6 rounded-xl border text-center"
+                    >
+                      <p className="font-bold text-gray-700 mb-3 text-sm sm:text-base">
+                        {s.metodo}
+                      </p>
+                      <div className="h-2 w-4 bg-[#184d8a] rounded-full mb-2 mx-auto" />
+                      <p className="text-xs sm:text-sm text-gray-400">
+                        {s.total} transações
+                      </p>
+                    </div>
+                  ))}
             </div>
           </section>
 
-          {/* Alunos */}
+          {/* Lista de alunos */}
           <section className="mb-6 sm:mb-8">
             <h3 className="text-gray-700 font-bold mb-4 text-sm sm:text-base">
               Alunos Cadastrados
             </h3>
             <div className="flex flex-col gap-1 border font-medium rounded overflow-hidden">
-              {[
-                { nome: "Délcio Valente de Sousa", processo: "21234" },
-                { nome: "Jacira de Almeida Cassongo", processo: "20455" },
-                { nome: "Andreia Lurdes do Rosário Lima", processo: "19982" },
-              ].map((aluno, i) => (
-                <div
-                  key={i}
-                  className={`p-3 sm:p-4 ${i % 2 === 0 ? "bg-[#184d8a] text-white" : "bg-white text-gray-700"}`}
-                >
-                  <p className="font-bold text-xs sm:text-sm">{aluno.nome}</p>
-                  <p className="text-xs sm:text-sm opacity-80">
-                    Classe: 7ª | Nº de processo: {aluno.processo}
-                  </p>
-                </div>
-              ))}
+              {loading
+                ? [1, 2, 3].map((i) => (
+                    <div
+                      key={i}
+                      className="p-3 sm:p-4 bg-gray-100 animate-pulse h-14"
+                    />
+                  ))
+                : (painel?.listaAlunos?.slice(0, 3) ?? []).map((aluno, i) => (
+                    <div
+                      key={i}
+                      className={`p-3 sm:p-4 ${i % 2 === 0 ? "bg-[#184d8a] text-white" : "bg-white text-gray-700"}`}
+                    >
+                      <p className="font-bold text-xs sm:text-sm">
+                        {aluno.nome_estudante}
+                      </p>
+                      <p className="text-xs sm:text-sm opacity-80">
+                        {aluno.classe ? `Classe: ${aluno.classe}ª | ` : ""}Nº de
+                        processo: {aluno.num_processo}
+                      </p>
+                    </div>
+                  ))}
             </div>
             <Link to="/GestaoAlunos">
               <button className="mt-4 bg-[#184d8a] text-white px-6 py-2 rounded text-sm hover:px-7 transition-all duration-500 font-bold shadow-md">
@@ -229,13 +327,18 @@ export default function Secretaria() {
                   Faturamento mensal
                 </p>
                 <p className="text-[#184d8a] font-bold text-sm sm:text-base">
-                  375.600,00 Kz
+                  {ultimoFaturamento
+                    ? Number(ultimoFaturamento.valor).toLocaleString("pt-AO", {
+                        style: "currency",
+                        currency: "AOA",
+                      })
+                    : "—"}
                 </p>
               </div>
               <div className="text-center">
                 <p className="text-xs sm:text-sm text-gray-500">Mês</p>
                 <p className="text-blue-900 font-bold text-sm sm:text-base">
-                  Outubro
+                  {ultimoFaturamento?.mes ?? "—"}
                 </p>
               </div>
               <div>
@@ -243,11 +346,16 @@ export default function Secretaria() {
                   Faturamento anual
                 </p>
                 <p className="text-[#184d8a] font-bold text-sm sm:text-base">
-                  4.507.200,00 Kz
+                  {faturamentoAnualTotal
+                    ? Number(faturamentoAnualTotal).toLocaleString("pt-AO", {
+                        style: "currency",
+                        currency: "AOA",
+                      })
+                    : "—"}
                 </p>
               </div>
             </div>
-            <MonthlyBarChartSimulation />
+            <MonthlyBarChart dados={faturamentoMensal} />
           </section>
         </div>
       </main>

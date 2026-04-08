@@ -1,38 +1,36 @@
 // --- CONTEÚDO DA PÁGINA: CONFIGURAÇÕES ---
 
+import MenuAdmin from "@/components/Menu/MenuAdmin";
+import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import {
   AlertCircle,
   Bell,
   BellRing,
   ChevronDown,
   CircleUser,
-  FileText,
-  InfoIcon,
-  KeyIcon,
-  LayoutDashboard,
   Lock,
   Menu,
-  School,
-  ScrollText,
   Settings,
   User,
-  Users,
-  type LucideIcon,
+  type LucideIcon
 } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import logo555 from "../../assets/logo555.png";
-import MenuAdmin from "@/components/Menu/MenuAdmin";
+import React, { useEffect, useState } from "react";
 
 export default function Configuracoes() {
   const [menu, setMenu] = useState(true);
   function OpenMenu() {
     setMenu(true);
   }
-  function CloseMenu() {
-    setMenu(false);
-  }
   const [activeSetting, setActiveSetting] = useState("Geral");
+  const [user, setUser] = useState<SessaoUsuario | null>(null);
+
+  useEffect(() => {
+    const sessao = exigirSessao();
+    if (sessao) setUser(sessao.usuario);
+  }, []);
+
+  if (!user) return null;
+
 
   const settingItems = [
     { key: "Geral", label: "Geral", icon: <Settings className="w-5 h-5" /> },

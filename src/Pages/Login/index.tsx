@@ -63,22 +63,39 @@ export default function TelaLogin() {
         return;
       }
       // Sessão terminada com sucesso
-localStorage.removeItem("sessao");
-
+      localStorage.removeItem("sessao");
+      localStorage.removeItem("UsuarioAtivo");
       // ── Login bem sucedido ────────────────────────────────────────────────
 
       const sessao = {
         token: data.token,
-        usuario : {
-        id: data.usuario?.idusuario,
-        nome: data.usuario?.nome,
-        perfil: data.perfil,
-        instituicao: data.instituicao,
-        idInstituicao: data.idInstituicao,
-        numProcesso: data.numProcesso,
-        }
+        usuario: {
+          idusuario: data.usuario?.idusuario,
+          nome: data.usuario?.nome,
+          email: data.usuario?.email,
+          foto: data.usuario?.foto ?? null,
+          perfil: data.perfil,
+          instituicao: data.instituicao,
+          idInstituicao: data.idInstituicao,
+          numProcesso: data.numProcesso,
+        },
       };
-    localStorage.setItem("sessao", JSON.stringify(sessao)); 
+      localStorage.setItem("sessao", JSON.stringify(sessao));
+      localStorage.setItem(
+        "UsuarioAtivo",
+        JSON.stringify({
+          // ✅ grava nas duas chaves
+          idusuario: data.usuario?.idusuario,
+          nome: data.usuario?.nome,
+          email: data.usuario?.email,
+          foto: data.usuario?.foto ?? null,
+          perfil: data.perfil,
+          instituicao: data.instituicao,
+          idInstituicao: data.idInstituicao,
+          numProcesso: data.numProcesso,
+          token: data.token,
+        }),
+      );
       // Redirecionar conforme perfil
       const perfil = data.perfil as string;
       if (perfil === "Estudante") navigate("/DashboardEstud");

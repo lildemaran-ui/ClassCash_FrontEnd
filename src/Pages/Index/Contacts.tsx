@@ -121,7 +121,7 @@ export default function Contactos() {
             <InputField label="Assunto" />
             <InputField label="Sua Mensagem" isTextArea />
 
-            <button className="w-full bg-[#184d8a] text-white py-3 sm:py-4 rounded-xl font-bold hover:bg-blue-600 transition-colors duration-500 active:scale-[0.98] shadow-lg">
+            <button className="w-full bg-[#184d8a] text-white py-3 sm:py-4 rounded-xl font-bold hover:bg-[#184d8a]/80 transition-colors duration-500 active:scale-[0.98] shadow-lg">
               Enviar mensagem
             </button>
           </form>

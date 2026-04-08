@@ -3,34 +3,27 @@ import { Header } from "@/components/Header/header";
 import PagamentoGeral from "@/components/Pagamento/PagamentoGeral";
 import { useEffect, useState } from "react";
 import { Layout } from "../layout";
+import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 
 export default function Pagamentos() {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin && dadosDoLogin !== "undefined") {
-      setUser(JSON.parse(dadosDoLogin));
-    } else {
-      window.location.href = "/Login";
-    }
-  }, []);
-
-  if (!user) return null;
+ const [user, setUser] = useState<SessaoUsuario | null>(null);
+ 
+   useEffect(() => {
+     const sessao = exigirSessao();
+     if (sessao) setUser(sessao.usuario);
+   }, []);
+ 
+   if (!user) return null;
 
   return (
     <Layout>
-      <div className="flex flex-col w-full min-h-screen">
-        <div className="flex flex-col flex-1 overflow-auto">
           <Header
             titulo="Pagamento"
-            usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+            usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
           />
-          <div className="flex-1 p-4 sm:p-6">
+          <div className="flex-1 p-4 sm:p-6 overflow-auto">
             <PagamentoGeral />
           </div>
-        </div>
-      </div>
     </Layout>
   );
 }

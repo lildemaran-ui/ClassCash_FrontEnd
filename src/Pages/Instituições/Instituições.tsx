@@ -117,7 +117,7 @@ export default function Instituicoes() {
           idinstituicao: inst.id,
           nome: inst.name,
         },
-        fromInstitutions:true
+        fromInstitutions: true,
       },
     });
   };
@@ -221,7 +221,7 @@ export default function Instituicoes() {
                           disabled={inst.status === "Inativo"}
                           className={`text-xs font-bold px-4 py-1.5 rounded-lg transition-all duration-200 shadow-sm ${
                             inst.status === "Ativo"
-                              ? "bg-[#184d8a] text-white hover:bg-blue-600 hover:shadow-md active:scale-95"
+                              ? "bg-[#184d8a] text-white hover:bg-[#184d8a]/80 hover:shadow-md active:scale-95"
                               : "bg-gray-100 text-gray-400 cursor-not-allowed"
                           }`}
                         >

@@ -98,19 +98,7 @@ export default function ConteudoIndex() {
           </div>
         </section>
 
-        {/* ══════════════════════════════════════════
-            BADGE DE CREDIBILIDADE
-        ══════════════════════════════════════════ */}
-        <section className="py-10 border-b border-gray-100" style={{ background: "var(--cinza)" }}>
-          <div className="max-w-6xl mx-auto px-6 flex flex-wrap items-center justify-center gap-8 text-gray-400 text-sm font-semibold">
-            {["Multicaixa Express", "Unitel Money", "PayPay", "BFA", "BIC", "BAI"].map(b => (
-              <span key={b} className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#268cff] opacity-60" />
-                {b}
-              </span>
-            ))}
-          </div>
-        </section>
+      
 
         {/* ══════════════════════════════════════════
             OBJECTIVOS / DIFERENCIAIS

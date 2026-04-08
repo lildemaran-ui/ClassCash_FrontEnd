@@ -15,6 +15,7 @@ export default function MenuEstatico() {
     <header className=" fixed top-0 w-full scrooll-smooth transparent-bg z-50 antialiased">
       <div>
         <nav className="flex h-16 sm:h-20 items-center justify-between  menu-translucido px-4 sm:px-6 lg:px-10">
+          <Link to="/PaginaInicial ">
           <div className="text-[#184d8a] flex items-center font-semibold text-xl sm:text-3xl">
             <img
               loading="lazy"
@@ -29,6 +30,7 @@ export default function MenuEstatico() {
               </p>
             </div>
           </div>
+          </Link>
           <div className="hidden lg:flex lg:items-center lg:gap-4 gap-3 text-white font-semibold text-sm sm:text-base ">
             <Link
               to="/PaginaInicial"

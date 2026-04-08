@@ -23,7 +23,7 @@ export function Header(props) {
       className="flex items-center justify-between  top-0 
       px-4 sm:px-6 lg:px-8
       py-3 sm:py-4
-      w-full bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky z-10"
+      w-full bg-translucido backdrop-blur-sm border-b border-gray-100 sticky z-10"
     >
       {/* Título — menor no mobile */}
       <h1 className="text-base sm:text-lg lg:text-xl pl-10 lg:pl-0 font-bold text-[#184d8a] truncate max-w-[60%] sm:max-w-none">

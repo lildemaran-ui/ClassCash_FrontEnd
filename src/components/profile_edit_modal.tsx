@@ -119,7 +119,7 @@ export function ProfileEditModal({
             </button>
             <button
               type="button"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-500 text-sm sm:text-base"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-[#184d8a]/80 transition-colors duration-500 text-sm sm:text-base"
               onClick={onClose}
             >
               Concluído

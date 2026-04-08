@@ -32,8 +32,7 @@ function PieCenterLabel({ children }: { children: React.ReactNode }) {
 
 export default function ChartEstud() {
   return (
-    <PieChart series={[{ data, innerRadius: 80 }]} {...size}>
-      <PieCenterLabel>Serviços solicitados</PieCenterLabel>
+    <PieChart series={[{ data, innerRadius: 0 }]} {...size}>
     </PieChart>
   );
 }

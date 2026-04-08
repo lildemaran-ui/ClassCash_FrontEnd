@@ -1,21 +1,24 @@
+import Avatar from "@/components/Avatar/Avatar";
+import { Header } from "@/components/Header/header";
 import MenuAdmin from "@/components/Menu/MenuAdmin";
+import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import {
+  AlertCircle,
   Bell,
+  Check,
+  ChevronDown,
   CircleUser,
-  Search,
-  Shield,
-  UserPlus,
-  ToggleLeft,
-  ToggleRight,
   Crown,
   Lock,
+  Search,
+  Shield,
+  ToggleLeft,
+  ToggleRight,
   Unlock,
-  ChevronDown,
+  UserPlus,
   X,
-  Check,
-  AlertCircle,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 type Perfil = "Super Admin" | "Admin Local" | "Secretaria";
@@ -198,7 +201,7 @@ function ModalNovoAdmin({ onClose }: { onClose: () => void }) {
           >
             Cancelar
           </button>
-          <button className="bg-[#184d8a] text-white text-sm font-medium py-2 px-6 rounded-lg hover:bg-blue-600 transition-colors shadow">
+          <button className="bg-[#184d8a] text-white text-sm font-medium py-2 px-6 rounded-lg hover:bg-[#184d8a]/80 transition-colors shadow">
             Criar
           </button>
         </div>
@@ -240,6 +243,14 @@ export default function PermissoesAcessos() {
       ),
     );
   };
+  const [user, setUser] = useState<SessaoUsuario | null>(null);
+
+  useEffect(() => {
+    const sessao = exigirSessao();
+    if (sessao) setUser(sessao.usuario);
+  }, []);
+
+  if (!user) return null;
 
   return (
     <div className="flex bg-gray-50 font-sans min-h-screen">
@@ -247,28 +258,10 @@ export default function PermissoesAcessos() {
 
       <div className="flex flex-col flex-1 min-w-0">
         {/* Topbar */}
-        <div className="flex items-center justify-between p-6 sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-100">
-          <h1 className="text-xl font-bold text-[#184d8a]">
-            Permissões e Acessos
-          </h1>
-          <div className="flex items-center space-x-4">
-            <div className="relative hidden md:block">
-              <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Pesquisar utilizador..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#184d8a]/20 outline-none text-sm"
-              />
-            </div>
-            <div className="relative cursor-pointer">
-              <Bell className="text-[#184d8a]" />
-              <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white" />
-            </div>
-            <CircleUser className="w-8 h-8 text-[#184d8a]" />
-          </div>
-        </div>
+        <Header
+          titulo="Painel Geral"
+          usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+        />
 
         <main className="p-6 md:p-8 space-y-6">
           {/* Acções */}
@@ -293,7 +286,7 @@ export default function PermissoesAcessos() {
             </div>
             <button
               onClick={() => setModalAdmin(true)}
-              className="flex items-center gap-2 bg-[#184d8a] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors shadow-md"
+              className="flex items-center gap-2 bg-[#184d8a] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-[#184d8a]/80 transition-colors shadow-md"
             >
               <UserPlus className="w-4 h-4" /> Novo Administrador
             </button>

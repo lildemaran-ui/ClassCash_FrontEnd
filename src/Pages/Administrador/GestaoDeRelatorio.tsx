@@ -1,19 +1,20 @@
 // src/Pages/Administrador/Relatorios.tsx
 
+import Avatar from "@/components/Avatar/Avatar";
+import { Header } from "@/components/Header/header";
 import MenuAdmin from "@/components/Menu/MenuAdmin";
+import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import {
   BarChart3,
-  Bell,
   Building2,
   CheckCircle,
-  CircleUser,
   CreditCard,
   Download,
-  Search,
   TrendingUp,
   Users,
   XCircle,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -107,37 +108,30 @@ function KpiCard({
 
 // ─── Página ───────────────────────────────────────────────────────────────────
 export default function GestaoDeRelatorios() {
+  const [user, setUser] = useState<SessaoUsuario | null>(null);
+
+  useEffect(() => {
+    const sessao = exigirSessao();
+    if (sessao) setUser(sessao.usuario);
+  }, []);
+
+  if (!user) return null;
+
   return (
     <div className="flex bg-gray-50 font-sans min-h-screen">
       <MenuAdmin />
 
       <div className="flex flex-col flex-1 min-w-0">
         {/* Topbar */}
-        <div className="flex items-center justify-between p-6 sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-100">
-          <h1 className="text-xl font-bold text-[#184d8a]">
-            Gestão de Relatórios
-          </h1>
-          <div className="flex items-center space-x-4">
-            <div className="relative hidden md:block">
-              <Search className="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                placeholder="Pesquisar..."
-                className="pl-10 pr-4 py-2 w-64 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#184d8a]/20 outline-none text-sm"
-              />
-            </div>
-            <div className="relative cursor-pointer">
-              <Bell className="text-[#184d8a]" />
-              <span className="absolute -top-1 -right-1 bg-red-500 w-3 h-3 rounded-full border-2 border-white" />
-            </div>
-            <CircleUser className="w-8 h-8 text-[#184d8a]" />
-          </div>
-        </div>
+        <Header
+          titulo="Painel Geral"
+          usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+        />
 
         <main className="p-6 md:p-8 space-y-6">
           {/* Botão exportar */}
           <div className="flex justify-end">
-            <button className="flex items-center gap-2 bg-[#184d8a] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors shadow-md">
+            <button className="flex items-center gap-2 bg-[#184d8a] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-[#184d8a]/80 transition-colors shadow-md">
               <Download className="w-4 h-4" /> Exportar Relatório
             </button>
           </div>

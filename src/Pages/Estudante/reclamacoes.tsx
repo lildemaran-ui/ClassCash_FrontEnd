@@ -3,28 +3,24 @@ import { Header } from "@/components/Header/header";
 import ReclamacaoGeral from "@/components/Reclamacao/ReclamacaoGeral";
 import { useEffect, useState } from "react";
 import { Layout } from "../layout";
+import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 
 export default function Reclamacoes() {
-  const [user, setUser] = useState<User | null>(null);
-  useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-
-    if (dadosDoLogin && dadosDoLogin !== "undefined") {
-      setUser(JSON.parse(dadosDoLogin));
-    } else {
-      window.location.href = "/Login";
-    }
-  }, []);
-  if (!user) {
-    return <span>Carregado...</span>;
-  }
+    const [user, setUser] = useState<SessaoUsuario | null>(null);
+  
+    useEffect(() => {
+      const sessao = exigirSessao();
+      if (sessao) setUser(sessao.usuario);
+    }, []);
+  
+    if (!user) return null;
   return (
    <Layout>
-      <div className="flex-1 w-full h-full mx-auto ">
-        <div className="flex-1 overflow-auto">
+      <div className="flex h-screen bg-gray-50 font-sans custom_sroll ">
+        <div className="flex flex-1 flex-col">
           <Header
             titulo="Reclamações"
-            usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+            usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
           />
           <div className="">
             <ReclamacaoGeral />

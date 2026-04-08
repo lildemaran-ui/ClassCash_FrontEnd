@@ -1,4 +1,5 @@
 import MenuAdmin from "@/components/Menu/MenuAdmin";
+import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import {
   Bell,
   CheckCheck,
@@ -213,6 +214,14 @@ export default function SuporteAjuda() {
   const filtrados = tickets.filter(
     (t) => filtroStatus === "Todos" || t.status === filtroStatus,
   );
+  const [user, setUser] = useState<SessaoUsuario | null>(null);
+
+  useEffect(() => {
+    const sessao = exigirSessao();
+    if (sessao) setUser(sessao.usuario);
+  }, []);
+
+  if (!user) return null;
 
   return (
     <div className="flex bg-gray-50 font-sans min-h-screen">
@@ -399,7 +408,7 @@ export default function SuporteAjuda() {
                     <button
                       onClick={enviarMensagem}
                       disabled={!novaMensagem.trim()}
-                      className="w-10 h-10 bg-[#184d8a] text-white rounded-xl flex items-center justify-center hover:bg-blue-600 transition-colors disabled:opacity-40 shrink-0"
+                      className="w-10 h-10 bg-[#184d8a] text-white rounded-xl flex items-center justify-center hover:bg-[#184d8a]/80 transition-colors disabled:opacity-40 shrink-0"
                     >
                       <Send className="w-4 h-4" />
                     </button>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // src/Pages/Secretaria/SolicitacoesCadastro/SolicitacoesCadastro.tsx
 import MenuSecretaria from '@/components/Menu/MenuSecretaria'
 import {
@@ -254,9 +255,13 @@ function ModalDetalhes({
     </div>
   )
 }
+=======
+import DadosDasSolicitacoes from "./DadosDasSolicitacoes";
+>>>>>>> 8b3a2f00c786e404eeb4f2f2b347331a68e8136c
 
 // --- COMPONENTE PRINCIPAL ---
 export default function SolicitacoesCadastro() {
+<<<<<<< HEAD
   const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -451,5 +456,9 @@ export default function SolicitacoesCadastro() {
         />
       )}
     </div>
+=======
+  return(
+    <DadosDasSolicitacoes/>
+>>>>>>> 8b3a2f00c786e404eeb4f2f2b347331a68e8136c
   )
 }

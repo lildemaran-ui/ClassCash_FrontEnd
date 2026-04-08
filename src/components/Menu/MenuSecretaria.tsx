@@ -6,9 +6,12 @@ import {
   LogOut,
   Menu,
   MessageSquare,
+  NotepadText,
   Receipt,
   Settings,
+  UserCheck2Icon,
   Users,
+  Users2Icon,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -17,6 +20,10 @@ import logo555 from "../../assets/Logo5.5.png";
 import { useState, useEffect } from "react";
 
 export default function MenuSecretaria() {
+  const handleLogout = () => {
+    localStorage.removeItem("sessao");
+  };
+
   const [menu, setMenu] = useState<boolean>(() => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
       const saved = localStorage.getItem("menu_secretaria_aberto");
@@ -53,50 +60,55 @@ export default function MenuSecretaria() {
     localStorage.setItem("menu_secretaria_aberto", "false");
   }
 
-  const SidebarItem = ({
-    icon: Icon,
-    label,
-    active = false,
-  }: {
-    icon: LucideIcon;
-    label: string;
-    active?: boolean;
-  }) => (
-    <div
-      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-300 ${
-        active ? "bg-white/20" : "hover:bg-white/10"
-      }`}
-    >
-      <Icon size={22} className="text-white shrink-0" />
-      <span className="text-white font-medium text-sm">{label}</span>
-    </div>
-  );
-
   const links = [
     { to: "/Secretaria", icon: LayoutDashboard, label: "Painel Geral" },
     { to: "/GestaoAlunos", icon: Users, label: "Gestão de Estudantes" },
-    {
-      to: "/GestaodeEncarregados",
-      icon: Users,
-      label: "Gestão de Encarregados",
-    },
-    {
-      to: "/SolicitacoesCadastro",
-      icon: Users,
-      label: "Solicitações de Cadastro",
-    },
+    { to: "/GestaodeEncarregados", icon: Users2Icon, label: "Gestão de Encarregados" },
+    { to: "/SolicitacoesCadastro", icon: UserCheck2Icon, label: "Solicitações de Cadastro" },
     { to: "/GestaoPropinas", icon: CreditCard, label: "Gestão de Propinas" },
     { to: "/GestaoPagamentos", icon: Receipt, label: "Gestão de Pagamentos" },
-    { to: "/GestaodeServiços", icon: Settings, label: "Gestão de Serviços" },
-    {
-      to: "/GestaodeReclamacoes",
-      icon: MessageSquare,
-      label: "Gestão de Reclamações",
-    },
+    { to: "/GestaodeServiços", icon: NotepadText, label: "Gestão de Serviços" },
+    { to: "/GestaodeReclamacoes", icon: MessageSquare, label: "Gestão de Reclamações" },
     { to: "/ModulodeMulta", icon: AlertOctagon, label: "Gestão de Multas" },
     { to: "/Relatorio", icon: FileText, label: "Centro de Relatório" },
     { to: "/Configuracao", icon: Settings, label: "Configurações" },
   ];
+
+  // No mobile: overlay + drawer. No desktop: sidebar colapsável (ícones ou completo)
+  const isCollapsed = !isMobile && !menu;
+
+  const SidebarItem = ({
+    icon: Icon,
+    label,
+    active = false,
+    collapsed = false,
+  }: {
+    icon: LucideIcon;
+    label: string;
+    active?: boolean;
+    collapsed?: boolean;
+  }) => (
+    <div
+      title={collapsed ? label : undefined}
+      className={`flex items-center gap-3 rounded-lg cursor-pointer transition-all duration-300 group relative
+        ${collapsed ? "justify-center p-3" : "p-3"}
+        ${active ? "bg-white/20" : "hover:bg-white/10"}
+      `}
+    >
+      <Icon size={22} className="text-white shrink-0" />
+      {!collapsed && (
+        <span className="text-white font-medium text-sm whitespace-nowrap overflow-hidden">
+          {label}
+        </span>
+      )}
+      {/* Tooltip ao colapsar */}
+      {collapsed && (
+        <span className="absolute left-full ml-3 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50 shadow-lg">
+          {label}
+        </span>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -105,11 +117,11 @@ export default function MenuSecretaria() {
         <div className="fixed inset-0 bg-black/40 z-40" onClick={CloseMenu} />
       )}
 
-      {/* Botão hambúrguer */}
-      {!menu && (
+      {/* Botão hambúrguer — apenas mobile quando fechado */}
+      {isMobile && !menu && (
         <button
           onClick={OpenMenu}
-          className="fixed top-4 left-4 z-[60] p-2 rounded-lg bg-[#184d8a] text-white shadow-lg"
+          className="fixed top-3.5 left-4 z-[60] p-1 rounded-lg border border-[#184d8a]/50 focus:border-[#184d8a] text-[#184d8a] "
         >
           <Menu size={22} />
         </button>
@@ -119,63 +131,82 @@ export default function MenuSecretaria() {
       <aside
         style={{ height: "100dvh" }}
         className={`
-          bg-[#184d8a] text-white
-          transition-all duration-300 ease-in-out
-          ${
-            !menu
-              ? "hidden"
-              : isMobile
-                ? "flex flex-col fixed top-0 left-0 w-72 z-50"
-                : "flex flex-col sticky top-0 w-64 shrink-0"
+          bg-[#184d8a] text-white flex flex-col
+          transition-all duration-300 ease-in-out shrink-0
+          ${isMobile
+            ? menu
+              ? "fixed top-0 left-0 w-72 z-50"
+              : "hidden"
+            : isCollapsed
+              ? "sticky top-0 w-[68px]"
+              : "sticky top-0 w-64"
           }
         `}
       >
         {/* Header */}
-        <div className="px-4 pt-4 mb-8 flex items-center justify-between shrink-0">
-          <div className="flex items-center">
-            <img
-              loading="lazy"
-              src={logo555}
-              alt="Logo"
-              className="w-14 h-14"
-            />
-            <p className="text-white font-semibold">ClassCash</p>
-          </div>
+        <div className={`pt-4 mb-6 flex items-center shrink-0 ${isCollapsed ? "justify-center px-2" : "justify-between px-4"}`}>
+          {!isCollapsed && (
+            <div className="flex items-center gap-1">
+              <img loading="lazy" src={logo555} alt="Logo" className="w-14 h-14" />
+              <p className="text-white font-semibold">ClassCash</p>
+            </div>
+          )}
           <button
-            onClick={CloseMenu}
-            className="p-1 rounded hover:bg-white/10 transition"
+            onClick={isCollapsed ? OpenMenu : CloseMenu}
+            className="p-1.5 rounded hover:bg-white/10 transition shrink-0"
+            title={isCollapsed ? "Expandir menu" : "Recolher menu"}
           >
-            {isMobile ? <X size={22} /> : <Menu size={22} />}
+            {isMobile ? <X size={22} className="text-white" /> : <Menu size={22} className="text-white" />}
           </button>
         </div>
 
+        {/* Logo colapsado */}
+        {isCollapsed && (
+          <div className="flex justify-center mb-4 shrink-0">
+            <img loading="lazy" src={logo555} alt="Logo" className="w-9 h-9" />
+          </div>
+        )}
+
         {/* Nav */}
-        <nav className="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 px-3">
+        <nav className={`flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 ${isCollapsed ? "px-1" : "px-3"}`}>
           {links.map(({ to, icon, label }) => (
             <Link key={label} to={to}>
               <SidebarItem
                 icon={icon}
                 label={label}
                 active={window.location.pathname === to}
+                collapsed={isCollapsed}
               />
             </Link>
           ))}
         </nav>
 
         {/* Logout */}
-        <div className="shrink-0 px-3 py-4 border-t border-white/10">
-          <Link
-            to="/Login"
-            className="flex justify-between items-center p-3 rounded-lg bg-blue-500/50 hover:bg-blue-400 transition-all duration-300 group"
-          >
-            <span className="text-sm font-medium text-white group-hover:text-blue-700">
-              Terminar sessão
-            </span>
-            <LogOut
-              size={22}
-              className="text-white group-hover:text-blue-700"
-            />
-          </Link>
+        <div className={`shrink-0 py-4 border-t border-white/10 ${isCollapsed ? "px-1" : "px-3"}`}>
+          {isCollapsed ? (
+            <Link
+              to="/Login"
+              onClick={handleLogout}
+              title="Terminar sessão"
+              className="flex justify-center p-3 rounded-lg bg-blue-500/50 hover:bg-blue-400 transition-all duration-300 group relative"
+            >
+              <LogOut size={22} className="text-white" />
+              <span className="absolute left-full ml-3 px-2 py-1 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50 shadow-lg">
+                Terminar sessão
+              </span>
+            </Link>
+          ) : (
+            <Link
+              to="/Login"
+              onClick={handleLogout}
+              className="flex justify-between items-center p-3 rounded-lg bg-blue-500/50 hover:bg-blue-400 transition-all duration-300 group"
+            >
+              <span className="text-sm font-medium text-white group-hover:text-blue-700">
+                Terminar sessão
+              </span>
+              <LogOut size={22} className="text-white group-hover:text-blue-700" />
+            </Link>
+          )}
         </div>
       </aside>
     </>

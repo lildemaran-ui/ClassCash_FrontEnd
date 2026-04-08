@@ -1,32 +1,33 @@
-import Avatar from "@/components/Avatar/Avatar";
-import { ProfileEditModal } from "../profile_edit_modal";
-import { Bell, Settings } from "lucide-react";
-import { ReactNode, useEffect, useState } from "react";
+import Avatar from '@/components/Avatar/Avatar'
+import { ProfileEditModal } from '../profile_edit_modal'
+import { Bell, Settings } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
 interface AppLayoutProps {
-  titulo: string;
-  children: ReactNode;
-  sidebar: ReactNode; // recebe o MenuSecretaria (ou qualquer menu)
+  titulo: string
+  children: ReactNode
+  sidebar: ReactNode // recebe o MenuSecretaria (ou qualquer menu)
 }
 
 // ─── Navbar (antigo Header) ────────────────────────────────────────────────────
 
 function Navbar({ titulo }: { titulo: string }) {
-  const [Modal, setModal] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [Modal, setModal] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
+    const dadosDoLogin = localStorage.getItem('UsuarioAtivo')
     if (dadosDoLogin) {
-      setUser(JSON.parse(dadosDoLogin));
+      setUser(JSON.parse(dadosDoLogin))
     } else {
-      window.location.href = "/Login";
+      window.location.href = '/Login'
     }
-  }, []);
+  }, [])
 
-  if (!user) return null;
+  if (!user) return null
 
   return (
     <div
@@ -71,7 +72,7 @@ function Navbar({ titulo }: { titulo: string }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 // ─── AppLayout (Sidebar + Navbar juntos) ──────────────────────────────────────
@@ -89,5 +90,5 @@ export function AppLayout({ titulo, children, sidebar }: AppLayoutProps) {
         {children}
       </main>
     </div>
-  );
+  )
 }

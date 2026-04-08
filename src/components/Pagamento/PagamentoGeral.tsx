@@ -1,22 +1,20 @@
-import { useState, useEffect } from "react";
-import img1 from "../../assets/Plain credit card-amico.svg";
-import { ImagePlus, Wallet } from "lucide-react";
-import { toast } from "sonner";
+'use client'
 
-// FIX: interface User definida — estava em falta
+import { useState, useEffect } from 'react'
+import img1 from '../../assets/Plain credit card-amico.svg'
+import { ImagePlus, Wallet, CheckCircle } from 'lucide-react'
+import { toast } from 'sonner'
+
 interface User {
-  idusuario: number;
-  nome: string;
-  email: string;
-  numTel?: string;
-  perfil?: string;
-  // Campos vindos do login para estudante
-  numProcesso?: string;
-  idInstituicao?: number;
-  instituicao?: string;
-  // codigo_plataforma vem da aprovação — pode não existir ainda
-  codigo_plataforma?: string;
-  // IBAN é buscado dinamicamente na API de pagamento — não vem do login
+  idusuario: number
+  nome: string
+  email: string
+  numTel?: string
+  perfil?: string
+  numProcesso?: string
+  idInstituicao?: number
+  instituicao?: string
+  codigo_plataforma?: string
 }
 
 const PRECOS_SERVICOS: { [key: string]: number } = {
@@ -26,104 +24,70 @@ const PRECOS_SERVICOS: { [key: string]: number } = {
   Certificado: 2000,
   CartãodeEstudante: 1000,
   Uniforme: 12000,
-};
+}
 
 const mesesDoAno = [
-  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro",
-];
+  'Janeiro',
+  'Fevereiro',
+  'Março',
+  'Abril',
+  'Maio',
+  'Junho',
+  'Julho',
+  'Agosto',
+  'Setembro',
+  'Outubro',
+  'Novembro',
+  'Dezembro',
+]
 
-// Mapeamento serviço → ID (conforme tabela servico na BD)
 const servicoMap: { [key: string]: string } = {
-  Propina: "2",
-  Justificativo: "8",
-  Transferência: "9",
-  Certificado: "5",
-  CartãodeEstudante: "6",
-  Uniforme: "3",
-};
+  Propina: '2',
+  Justificativo: '8',
+  Transferência: '9',
+  Certificado: '5',
+  CartãodeEstudante: '6',
+  Uniforme: '3',
+}
 
 export default function PagamentoGeral() {
-  const [showModal, setShowModal] = useState(false);
-  const [image, setImage] = useState<string | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [showModal, setShowModal] = useState(false)
+  const [image, setImage] = useState<string | null>(null)
+  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [user, setUser] = useState<User | null>(null)
+
+  // ESTADOS PARA PAGAMENTO DIGITAL AUTOMÁTICO
+  const [isDigitalSuccess, setIsDigitalSuccess] = useState(false)
+  const [transactionId, setTransactionId] = useState('')
 
   const [pagamento, setPagamento] = useState({
-    metodo: "",
-    servico: "Propina",
-    mesInicial: "Janeiro",
-    mesFinal: "Janeiro",
-    plataforma: "Multicaxa Express",
-  });
+    metodo: '',
+    servico: 'Propina',
+    mesInicial: 'Janeiro',
+    mesFinal: 'Janeiro',
+    plataforma: 'Multicaxa Express',
+  })
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
-    setPagamento((prev) => ({ ...prev, [name]: value }));
-    if (name === "metodo" && value === "Dinheiro Físico") {
-      setShowModal(true);
-    }
-  };
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => setImage(reader.result as string);
-      reader.readAsDataURL(file);
-    } else {
-      setImage(null);
-      setImageFile(null);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (!formularioValido || !user) return;
-
-    try {
-      const formData = new FormData();
-      formData.append("usuarioId", String(user.idusuario));
-      formData.append("servicoId", servicoMap[pagamento.servico] ?? "2");
-      formData.append("meses", String(quantidadeMeses));
-      formData.append("tipoPagamentoId", pagamento.metodo === "De forma digital" ? "1" : "2");
-
-      if (imageFile) {
-        formData.append("comprovativo", imageFile);
-      } else {
-        toast.error("Por favor, selecione um comprovativo");
-        return;
-      }
-
-      const response = await fetch("http://localhost:5000/api/pagamento", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        const dados = await response.json();
-        toast.success(`Pagamento criado! Código: ${dados.codigo} | Valor: KZ ${dados.valor}`);
-        setImage(null);
-        setImageFile(null);
-        setPagamento({ metodo: "", servico: "Propina", mesInicial: "Janeiro", mesFinal: "Janeiro", plataforma: "Multicaxa Express" });
-        const fileInput = document.getElementById("fotoInput") as HTMLInputElement;
-        if (fileInput) fileInput.value = "";
-      } else {
-        const erro = await response.json();
-        toast.error(`Erro: ${erro.error}`);
-      }
-    } catch (error) {
-      console.error("Erro na conexão:", error);
-      toast.error("Não foi possível conectar ao servidor.");
-    }
-  };
-
+  // 1. CAPTURAR RETORNO DA API MULTICAIXA NA URL
   useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin && dadosDoLogin !== "undefined") {
+    const params = new URLSearchParams(window.location.search)
+    const status = params.get('status')
+    const txn = params.get('txn')
+
+    if (status === 'success' && txn) {
+      setIsDigitalSuccess(true)
+      setTransactionId(txn)
+      setPagamento((prev) => ({ ...prev, metodo: 'De forma digital' }))
+      toast.success('Pagamento confirmado via Multicaixa Express!')
+    }
+  }, [])
+
+  // 2. CARREGAR USUÁRIO
+  useEffect(() => {
+    const dadosDoLogin = localStorage.getItem('UsuarioAtivo')
+    if (dadosDoLogin && dadosDoLogin !== 'undefined') {
       try {
-        const parsed = JSON.parse(dadosDoLogin);
-        // FIX: monta o User a partir dos dados reais do login
+        const parsed = JSON.parse(dadosDoLogin)
         setUser({
           idusuario: parsed.usuario?.idusuario ?? parsed.idusuario,
           nome: parsed.usuario?.nome ?? parsed.nome,
@@ -134,24 +98,106 @@ export default function PagamentoGeral() {
           idInstituicao: parsed.idInstituicao,
           instituicao: parsed.instituicao,
           codigo_plataforma: parsed.codigo_plataforma,
-        });
+        })
       } catch {
-        window.location.href = "/Login";
+        // window.location.href = '/Login'
       }
     } else {
-      window.location.href = "/Login";
+      // window.location.href = '/Login'
     }
-  }, []);
+  }, [])
 
-  const precoBase = PRECOS_SERVICOS[pagamento.servico] || 0;
-  const indexInicio = mesesDoAno.indexOf(pagamento.mesInicial);
-  const indexFim = mesesDoAno.indexOf(pagamento.mesFinal);
-  const quantidadeMeses = indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1;
-  const valorTotal = precoBase * quantidadeMeses;
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
+    const { name, value } = event.target
+    setPagamento((prev) => ({ ...prev, [name]: value }))
+    if (name === 'metodo' && value === 'Dinheiro Físico') {
+      setShowModal(true)
+    }
+  }
 
-  const formularioValido = pagamento.metodo !== "" && imageFile !== null && indexFim >= indexInicio;
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setImageFile(file)
+      const reader = new FileReader()
+      reader.onloadend = () => setImage(reader.result as string)
+      reader.readAsDataURL(file)
+    }
+  }
 
-  if (!user) return <span>A carregar...</span>;
+  // 3. SUBMISSÃO UNIFICADA (DIGITAL VS MANUAL)
+  const handleSubmit = async () => {
+    if (!user) return
+
+    // FLUXO A: PAGAMENTO DIGITAL (Redireciona para API Externa)
+    if (pagamento.metodo === 'De forma digital' && !isDigitalSuccess) {
+      const ibanInstituicao = 'AO060000123456789101112' // Exemplo
+      const urlMulticaixa = `http://localhost:3000/?iban=${ibanInstituicao}&valor=${valorTotal}&ref=${user.codigo_plataforma}`
+
+      toast.info('Redirecionando para o Multicaixa Express...')
+      setTimeout(() => {
+        window.location.href = urlMulticaixa
+      }, 1500)
+      return
+    }
+
+    // FLUXO B: PAGAMENTO MANUAL OU FINALIZAÇÃO DO DIGITAL
+    try {
+      const formData = new FormData()
+      formData.append('usuarioId', String(user.idusuario))
+      formData.append('servicoId', servicoMap[pagamento.servico] ?? '2')
+      formData.append('meses', String(quantidadeMeses))
+      formData.append(
+        'tipoPagamentoId',
+        pagamento.metodo === 'De forma digital' ? '1' : '2',
+      )
+
+      if (isDigitalSuccess) {
+        // Se for digital, o "comprovativo" é o ID da transação (texto)
+        formData.append('comprovativo_digital_id', transactionId)
+      } else if (imageFile) {
+        formData.append('comprovativo', imageFile)
+      } else {
+        toast.error('Por favor, anexe o comprovativo.')
+        return
+      }
+
+      const response = await fetch('http://localhost:5000/api/pagamento', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (response.ok) {
+        toast.success('Pagamento registado com sucesso no sistema!')
+        setIsDigitalSuccess(false)
+        setImage(null)
+        // Limpar URL para não repetir o sucesso ao dar F5
+        window.history.replaceState(
+          {},
+          document.title,
+          window.location.pathname,
+        )
+      }
+    } catch {
+      toast.error('Erro ao conectar ao servidor Node.js.')
+    }
+  }
+
+  const precoBase = PRECOS_SERVICOS[pagamento.servico] || 0
+  const indexInicio = mesesDoAno.indexOf(pagamento.mesInicial)
+  const indexFim = mesesDoAno.indexOf(pagamento.mesFinal)
+  const quantidadeMeses =
+    indexFim >= indexInicio ? indexFim - indexInicio + 1 : 1
+  const valorTotal = precoBase * quantidadeMeses
+
+  // Validação: No digital sucesso, o formulário já é válido por padrão
+  const formularioValido =
+    isDigitalSuccess ||
+    (pagamento.metodo !== '' && imageFile !== null && indexFim >= indexInicio)
+
+  if (!user) return <span>A carregar...</span>
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
@@ -159,121 +205,177 @@ export default function PagamentoGeral() {
         <div className="flex-1 p-4 md:p-8">
           <div className="max-w-2xl mx-auto py-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-              {/* COLUNA ESQUERDA */}
+              {/* COLUNA ESQUERDA: Configurações */}
               <div className="flex flex-col gap-6">
                 <div>
-                  <label className="block mb-1 font-bold text-gray-700">Código</label>
-                  <input type="text"
-                    value={user.codigo_plataforma ?? "Aguardando aprovação"}
+                  <label className="block mb-1 font-bold text-gray-700">
+                    Código do Aluno
+                  </label>
+                  <input
+                    type="text"
+                    value={user.codigo_plataforma ?? 'Aguardando aprovação'}
                     readOnly
-                    className="w-full border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono" />
+                    className="w-full border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono"
+                  />
                 </div>
 
                 <div className="p-4 border border-gray-100 rounded-xl bg-white shadow-sm">
-                  <label className="block mb-3 font-bold text-gray-700">Como será feito o pagamento?</label>
+                  <label className="block mb-3 font-bold text-gray-700">
+                    Método de Pagamento
+                  </label>
                   <div className="flex flex-col gap-3">
-                    {["De forma digital", "No banco", "Dinheiro Físico"].map((m) => (
-                      <label key={m} className="flex items-center gap-2 cursor-pointer group">
-                        <input type="radio" name="metodo" value={m} checked={pagamento.metodo === m}
-                          onChange={handleChange} className="w-4 h-4 accent-[#184d8a]" />
-                        <span className={`transition-colors text-sm md:text-base ${pagamento.metodo === m ? "font-semibold text-[#184d8a]" : "text-gray-600 group-hover:text-blue-400"}`}>
-                          {m}
-                        </span>
-                      </label>
-                    ))}
+                    {['De forma digital', 'No banco', 'Dinheiro Físico'].map(
+                      (m) => (
+                        <label
+                          key={m}
+                          className="flex items-center gap-2 cursor-pointer group"
+                        >
+                          <input
+                            type="radio"
+                            name="metodo"
+                            value={m}
+                            checked={pagamento.metodo === m}
+                            onChange={handleChange}
+                            className="w-4 h-4 accent-[#184d8a]"
+                          />
+                          <span
+                            className={`text-sm ${pagamento.metodo === m ? 'font-semibold text-[#184d8a]' : 'text-gray-600'}`}
+                          >
+                            {m}
+                          </span>
+                        </label>
+                      ),
+                    )}
                   </div>
                 </div>
 
-                {(pagamento.metodo === "De forma digital" || pagamento.metodo === "No banco") && (
-                  <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-top-4">
-                    <h3 className="font-bold text-gray-800 border-b pb-2">Dados do Serviço</h3>
-                    <div>
-                      <label className="block mb-2 font-medium text-gray-700">Serviço:</label>
-                      <select name="servico" value={pagamento.servico} onChange={handleChange}
-                        className="w-full border rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-blue-100 outline-none text-sm md:text-base">
-                        {Object.keys(PRECOS_SERVICOS).map((s) => (<option key={s} value={s}>{s}</option>))}
+                {pagamento.metodo && pagamento.metodo !== 'Dinheiro Físico' && (
+                  <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-top-2">
+                    <label className="font-bold text-gray-800">
+                      Serviço e Período
+                    </label>
+                    <select
+                      name="servico"
+                      value={pagamento.servico}
+                      onChange={handleChange}
+                      className="w-full border rounded-lg px-3 py-2 bg-white text-sm"
+                    >
+                      {Object.keys(PRECOS_SERVICOS).map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+
+                    <div className="flex items-center gap-2">
+                      <select
+                        name="mesInicial"
+                        value={pagamento.mesInicial}
+                        onChange={handleChange}
+                        className="flex-1 border rounded-lg p-2 text-xs"
+                      >
+                        {mesesDoAno.map((m) => (
+                          <option key={m}>{m}</option>
+                        ))}
+                      </select>
+                      <span className="text-gray-400">à</span>
+                      <select
+                        name="mesFinal"
+                        value={pagamento.mesFinal}
+                        onChange={handleChange}
+                        className="flex-1 border rounded-lg p-2 text-xs"
+                      >
+                        {mesesDoAno.map((m) => (
+                          <option key={m}>{m}</option>
+                        ))}
                       </select>
                     </div>
-
-                    {pagamento.metodo === "De forma digital" && (
-                      <div className="animate-in fade-in flex flex-col gap-4">
-                        <div>
-                          <label className="font-medium block mb-2 text-gray-700">Plataforma:</label>
-                          <select name="plataforma" value={pagamento.plataforma} onChange={handleChange}
-                            className="p-3 border rounded-lg w-full bg-white text-sm md:text-base">
-                            <option value="Multicaxa Express">Multicaixa Express</option>
-                            <option value="Unitel Money">Unitel Money</option>
-                            <option value="PayPay">Pay Pay</option>
-                          </select>
-                        </div>
-                        <div>
-                          <label className="font-medium block mb-2 text-gray-700">Meses a pagar:</label>
-                          <div className="flex items-center gap-3">
-                            <div className="flex-1">
-                              <p className="text-[10px] font-bold text-gray-400">De:</p>
-                              <select name="mesInicial" value={pagamento.mesInicial} onChange={handleChange}
-                                className="w-full border rounded-lg px-2 py-2 bg-white text-sm">
-                                {mesesDoAno.map((m) => (<option key={m}>{m}</option>))}
-                              </select>
-                            </div>
-                            <span className="mt-5 text-gray-400 font-bold">à</span>
-                            <div className="flex-1">
-                              <p className="text-[10px] font-bold text-gray-400">Até:</p>
-                              <select name="mesFinal" value={pagamento.mesFinal} onChange={handleChange}
-                                className="w-full border rounded-lg px-2 py-2 bg-white text-sm">
-                                {mesesDoAno.map((m) => (<option key={m}>{m}</option>))}
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>
 
-              {/* COLUNA DIREITA */}
+              {/* COLUNA DIREITA: Resumo e Comprovativo */}
               <div className="flex flex-col gap-6">
-                {(pagamento.metodo === "De forma digital" || pagamento.metodo === "No banco") && (
+                {pagamento.metodo && pagamento.metodo !== 'Dinheiro Físico' && (
                   <div className="flex flex-col gap-6 animate-in fade-in">
-                    <h3 className="font-bold text-gray-800 border-b pb-2">Finalização</h3>
-
-                    <div className="bg-blue-50 p-5 rounded-xl border border-blue-100 shadow-sm">
-                      <label className="block text-sm text-blue-600 font-semibold tracking-wider">Total a pagar</label>
-                      <div className="text-2xl md:text-3xl font-black text-blue-700">
-                        KZ {valorTotal.toLocaleString("pt-PT")},00
-                      </div>
-                      <p className="text-xs text-blue-400 mt-1 italic">{quantidadeMeses} mês(es) selecionado(s)</p>
-                    </div>
-
-                    <div>
-                      <label className="font-medium block mb-2 text-gray-700">IBAN da Instituição</label>
-                      <p className="text-xs text-gray-400 mb-1">Disponível após confirmar o pagamento na API</p>
-                      <input type="text" value="Gerado ao criar o pagamento" readOnly
-                        className="w-full border bg-gray-100 rounded-lg px-3 py-2 text-sm font-mono text-gray-500" />
-                    </div>
-
-                    <div>
-                      <label className="font-medium block mb-2 text-gray-700">Comprovativo</label>
-                      <label htmlFor="fotoInput"
-                        className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-14 text-center hover:border-[#184d8a] transition-colors cursor-pointer overflow-hidden">
-                        {image ? (
-                          <img loading="lazy" src={image} alt="preview" className="h-20 object-contain rounded-lg" />
-                        ) : (
-                          <>
-                            <ImagePlus className="w-8 h-8 text-gray-400 mb-1" />
-                            <p className="text-xs text-gray-500">Arraste ou clique para carregar</p>
-                          </>
-                        )}
+                    <div className="bg-[#184d8a] p-5 rounded-xl text-white shadow-inner">
+                      <label className="block text-[10px] uppercase opacity-70 font-bold">
+                        Total a Liquidar
                       </label>
-                      <input id="fotoInput" type="file" accept="image/*" className="hidden" onChange={handleImageChange} />
+                      <div className="text-2xl font-black">
+                        KZ {valorTotal.toLocaleString('pt-PT')},00
+                      </div>
                     </div>
 
-                    <button onClick={handleSubmit} disabled={!formularioValido}
-                      className={`py-4 rounded-xl font-bold text-base md:text-lg transition-all transform active:scale-95 shadow-lg ${
-                        formularioValido ? "bg-[#184d8a] text-white hover:bg-blue-600" : "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none"
-                      }`}>
-                      Enviar Pagamento
+                    <div>
+                      <label className="font-medium block mb-2 text-gray-700">
+                        Comprovativo
+                      </label>
+
+                      {isDigitalSuccess ? (
+                        /* COMPROVATIVO DIGITAL AUTOMÁTICO */
+                        <div className="border-2 border-orange-400 bg-orange-50 rounded-xl p-6 flex flex-col items-center text-center shadow-md animate-in zoom-in-95">
+                          <CheckCircle className="text-orange-500 w-10 h-10 mb-2" />
+                          <p className="text-[10px] font-bold text-orange-700 uppercase tracking-tighter">
+                            Confirmado via Express
+                          </p>
+                          <p className="text-sm font-mono font-bold text-gray-800 mt-2">
+                            {transactionId}
+                          </p>
+                          <p className="text-[9px] text-gray-400 mt-4 italic">
+                            O documento foi anexado automaticamente ao seu
+                            processo.
+                          </p>
+                        </div>
+                      ) : (
+                        /* UPLOAD MANUAL */
+                        <>
+                          <label
+                            htmlFor="fotoInput"
+                            className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:border-[#184d8a] cursor-pointer"
+                          >
+                            {image ? (
+                              <img
+                                src={image}
+                                alt="preview"
+                                className="h-20 object-contain"
+                              />
+                            ) : (
+                              <>
+                                <ImagePlus className="w-8 h-8 text-gray-300 mb-2" />
+                                <p className="text-[10px] text-gray-500">
+                                  {pagamento.metodo === 'De forma digital'
+                                    ? 'O comprovativo aparecerá aqui após o pagamento'
+                                    : 'Clique para carregar o talão do banco'}
+                                </p>
+                              </>
+                            )}
+                          </label>
+                          <input
+                            id="fotoInput"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleImageChange}
+                            disabled={pagamento.metodo === 'De forma digital'}
+                          />
+                        </>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={handleSubmit}
+                      disabled={!formularioValido && !isDigitalSuccess}
+                      className={`py-4 rounded-xl font-bold transition-all transform active:scale-95 ${
+                        formularioValido || isDigitalSuccess
+                          ? 'bg-[#184d8a] text-white'
+                          : 'bg-gray-200 text-gray-400'
+                      }`}
+                    >
+                      {pagamento.metodo === 'De forma digital' &&
+                      !isDigitalSuccess
+                        ? 'Ir para Multicaixa Express'
+                        : 'Confirmar Pagamento'}
                     </button>
                   </div>
                 )}
@@ -283,27 +385,37 @@ export default function PagamentoGeral() {
         </div>
       </div>
 
-      <div className="hidden lg:flex w-1/2 items-center justify-center border-l border-gray-200 bg-gray-50 p-8">
-        <img src={img1} alt="" className="w-full max-w-md object-contain" />
+      <div className="hidden lg:flex w-1/2 items-center justify-center bg-gray-50 p-8 border-l">
+        <img
+          src={img1}
+          alt="Credit Card"
+          className="w-full max-w-sm opacity-80"
+        />
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div className="bg-white rounded-2xl p-6 md:p-8 max-w-md w-full text-center shadow-2xl">
-            <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Wallet size={32} />
-            </div>
-            <h1 className="text-xl font-bold mb-2">Pagamento Presencial</h1>
-            <p className="text-gray-600 mb-6 text-sm md:text-base">
-              Por favor, dirija-se à Secretaria da Instituição para efetuar o pagamento em numerário.
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl p-8 max-w-sm w-full text-center">
+            <Wallet className="w-12 h-12 text-blue-900 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-gray-800">
+              Pagamento na Secretaria
+            </h2>
+            <p className="text-gray-500 text-sm mt-2 mb-6">
+              Dirija-se à instituição com o valor em mãos para obter o seu
+              recibo físico.
             </p>
-            <button onClick={() => { setShowModal(false); setPagamento((p) => ({ ...p, metodo: "" })); }}
-              className="w-full bg-[#184d8a] text-white py-3 rounded-lg font-bold">
+            <button
+              onClick={() => {
+                setShowModal(false)
+                setPagamento((p) => ({ ...p, metodo: '' }))
+              }}
+              className="w-full bg-[#184d8a] text-white py-3 rounded-lg font-bold"
+            >
               Entendido
             </button>
           </div>
         </div>
       )}
     </div>
-  );
+  )
 }

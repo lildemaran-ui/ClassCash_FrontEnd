@@ -1,44 +1,44 @@
-import ChartEstud from "@/components/Charts/ChartEstud";
-import { ProfileEditModal } from "@/components/profile_edit_modal";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import { ArrowLeft, CheckCircle, Download, Pen } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import ChartEstud from '@/components/Charts/ChartEstud'
+import { ProfileEditModal } from '@/components/profile_edit_modal'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+import { ArrowLeft, CheckCircle, Download, Pen } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 export default function DadosDashEstd() {
   // No topo do componente:
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
   const fromEncarregado =
-    (location.state as { fromEncarregado?: boolean })?.fromEncarregado ?? false;
+    (location.state as { fromEncarregado?: boolean })?.fromEncarregado ?? false
 
-  const pdfRef = useRef<HTMLDivElement>(null);
+  const pdfRef = useRef<HTMLDivElement>(null)
 
   const gerarPDF = async () => {
-    const elemento = pdfRef.current;
-    if (!elemento) return;
-    const canvas = await html2canvas(elemento, { scale: 2 });
-    const imagem = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const largura = pdf.internal.pageSize.getWidth();
-    const altura = (canvas.height * largura) / canvas.width;
-    pdf.addImage(imagem, "PNG", 0, 0, largura, altura);
-    pdf.save("relatorio.pdf");
-  };
+    const elemento = pdfRef.current
+    if (!elemento) return
+    const canvas = await html2canvas(elemento, { scale: 2 })
+    const imagem = canvas.toDataURL('image/png')
+    const pdf = new jsPDF('p', 'mm', 'a4')
+    const largura = pdf.internal.pageSize.getWidth()
+    const altura = (canvas.height * largura) / canvas.width
+    pdf.addImage(imagem, 'PNG', 0, 0, largura, altura)
+    pdf.save('relatorio.pdf')
+  }
 
-  const [Modal, setModal] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [Modal, setModal] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
-    if (dadosDoLogin && dadosDoLogin !== "undefined") {
-      setUser(JSON.parse(dadosDoLogin));
+    const dadosDoLogin = localStorage.getItem('UsuarioAtivo')
+    if (dadosDoLogin && dadosDoLogin !== 'undefined') {
+      setUser(JSON.parse(dadosDoLogin))
     } else {
-      window.location.href = "/Login";
+      //window.location.href = "/Login";
     }
-  }, []);
+  }, [])
 
-  if (!user) return <span>Carregado...</span>;
+  if (!user) return <span>Carregado...</span>
 
   // ... (mantenha os imports e lógica de estado iguais)
 
@@ -47,17 +47,17 @@ export default function DadosDashEstd() {
     value,
     isLast,
   }: {
-    label: string;
-    value: string;
-    isLast?: boolean;
+    label: string
+    value: string
+    isLast?: boolean
   }) => (
     <div
-      className={`flex justify-between items-center py-3 ${!isLast ? "border-b border-gray-50" : ""}`}
+      className={`flex justify-between items-center py-3 ${!isLast ? 'border-b border-gray-50' : ''}`}
     >
       <span className="text-gray-400 font-medium text-sm">{label}</span>
       <span className="text-gray-800 font-bold text-base">{value}</span>
     </div>
-  );
+  )
 
   return (
     <div className="flex flex-col w-full px-4 sm:px-6 lg:px-8 py-4 bg-[#f8fafc] min-h-screen">
@@ -74,10 +74,10 @@ export default function DadosDashEstd() {
           Voltar ao Painel
         </button>
       )}
-      
+
       <div ref={pdfRef} className="space-y-8">
         {/* Header Modernizado */}
-        
+
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative group">
@@ -112,7 +112,7 @@ export default function DadosDashEstd() {
               <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
                 <p>
                   <strong>ID:</strong> {user.processo}
-                </p> 
+                </p>
                 <p>
                   <strong>Classe:</strong> {user.classe}
                 </p>
@@ -167,7 +167,7 @@ export default function DadosDashEstd() {
               </select>
             </div>
             <div className="h-[250px] w-full">
-              <ChartEstud/>
+              <ChartEstud />
             </div>
           </div>
         </div>
@@ -234,5 +234,5 @@ export default function DadosDashEstd() {
         user={user}
       />
     </div>
-  );
+  )
 }

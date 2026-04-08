@@ -1,25 +1,38 @@
+/* layout da página inicial */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --azul: #184d8a;
+  --azul-escuro: #0a2540;
+  --dourado: #f0a500;
+  --branco: #ffffff;
+  --cinza: #f7f9fc;
+  --font-principal: 'Poppins', sans-serif;
+}
+
 * {
   min-width: 0;
 }
+
 body {
   background-color: #ffffff;
 }
 .playwrite-de-grund-guides-regular {
-  font-family: "Playwrite DE Grund Guides", cursive;
+  font-family: 'Playwrite DE Grund Guides', cursive;
   font-weight: 400;
   font-style: normal;
 }
 
 .roboto-letters-100 {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-optical-sizing: auto;
   font-weight: 100;
   font-style: normal;
-  font-variation-settings: "wdth" 100;
+  font-variation-settings: 'wdth' 100;
 }
 .transparent-bg {
   background-color: rgba(38, 140, 255, 0);
@@ -121,7 +134,7 @@ Keywords: cog, edit, gear, preferences
   left: 6207px;
   top: 417px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 300;
   font-size: 80px;
@@ -274,7 +287,7 @@ Keywords: alarm, notification, sound
   left: 485px;
   top: 1511px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -315,7 +328,7 @@ Keywords: house, living
   left: 485px;
   top: 1934px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -335,7 +348,7 @@ Keywords: house, living
   left: 485px;
   top: 2357px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -355,7 +368,7 @@ Keywords: house, living
   top: 20.82%;
   bottom: 77.74%;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -374,7 +387,7 @@ Keywords: house, living
   top: 24.08%;
   bottom: 74.48%;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -401,7 +414,7 @@ Keywords: house, living
   left: 485px;
   top: 3650px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -470,7 +483,7 @@ Keywords: cog, edit, gear, preferences
   left: 430px;
   top: 139px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -498,7 +511,7 @@ Keywords: cog, edit, gear, preferences
   left: 2176px;
   top: 186px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -542,7 +555,7 @@ Keywords: cog, edit, gear, preferences
   left: 1049px;
   top: 217px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -562,7 +575,7 @@ Keywords: cog, edit, gear, preferences
   left: 1049px;
   top: 499px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -607,7 +620,7 @@ Keywords: cog, edit, gear, preferences
   left: 1034px;
   top: 201px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -627,7 +640,7 @@ Keywords: cog, edit, gear, preferences
   left: 1034px;
   top: 408px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -661,7 +674,7 @@ Keywords: cog, edit, gear, preferences
   left: 1003px;
   top: 281px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -681,7 +694,7 @@ Keywords: cog, edit, gear, preferences
   left: 1003px;
   top: 516px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -715,7 +728,7 @@ Keywords: cog, edit, gear, preferences
   left: 1038px;
   top: 211px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -735,7 +748,7 @@ Keywords: cog, edit, gear, preferences
   left: 1038px;
   top: 446px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -769,7 +782,7 @@ Keywords: cog, edit, gear, preferences
   left: 983px;
   top: 281px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -789,7 +802,7 @@ Keywords: cog, edit, gear, preferences
   left: 983px;
   top: 461px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -823,7 +836,7 @@ Keywords: cog, edit, gear, preferences
   left: 983px;
   top: 441px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -843,7 +856,7 @@ Keywords: cog, edit, gear, preferences
   left: 983px;
   top: 206px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -889,7 +902,7 @@ Keywords: cog, edit, gear, preferences
   left: calc(50% - 486px / 2 + 2401px);
   top: 1213px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 100px;
@@ -908,7 +921,7 @@ Keywords: cog, edit, gear, preferences
   left: calc(50% - 451px / 2 + 3597.5px);
   top: 1213px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 500;
   font-size: 100px;
@@ -938,7 +951,7 @@ Keywords: cog, edit, gear, preferences
   left: 49px;
   top: -4115px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -958,7 +971,7 @@ Keywords: cog, edit, gear, preferences
   left: 171px;
   top: 84px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -989,7 +1002,7 @@ Keywords: cog, edit, gear, preferences
   left: 372px;
   top: 84px;
 
-  font-family: "Poppins";
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   font-size: 120px;
@@ -1131,27 +1144,16 @@ button:active {
   }
 }
 
-/* layout da página inicial */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
-
-:root {
-  --azul: #184d8a;
-  --azul-escuro: #0a2540;
-  --dourado: #f0a500;
-  --branco: #ffffff;
-  --cinza: #f7f9fc;
-  --font-principal: "Poppins", sans-serif;
-}
 .font-display,
 .font-body,
 .font-poppins {
-  font-family: "poppins", sans-serif !important;
+  font-family: 'poppins', sans-serif !important;
   -webkit-font-smoothing: antialiased; /* Deixa a fonte mais "fina" e elegante no Mac/iOS */
 }
 
 /* Dica: Para títulos impactantes no Dashboard, use pesos 700 ou 800 */
 .dashboard-title {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-weight: 800;
   letter-spacing: -0.02em; /* Um leve ajuste no espaçamento deixa ela mais moderna */
 }
@@ -1186,7 +1188,7 @@ button:active {
 
 /* Linha dourada decorativa */
 .gold-line::after {
-  content: "";
+  content: '';
   display: block;
   width: 64px;
   height: 3px;
@@ -1201,7 +1203,7 @@ button:active {
   color: white;
   padding: 14px 36px;
   border-radius: 12px;
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 600;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -1222,7 +1224,7 @@ button:active {
   color: white;
   padding: 13px 32px;
   border-radius: 12px;
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -1255,7 +1257,7 @@ button:active {
   overflow: hidden;
 }
 .feature-card::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -1281,7 +1283,7 @@ button:active {
   overflow: hidden;
 }
 .section-dark::before {
-  content: "";
+  content: '';
   position: absolute;
   top: -120px;
   right: -120px;
@@ -1297,7 +1299,7 @@ button:active {
 
 /* Número grande decorativo */
 .step-number {
-  font-family: "Playfair Display", serif;
+  font-family: 'Playfair Display', serif;
   font-size: 5rem;
   font-weight: 900;
   color: rgba(38, 140, 255, 0.08);
@@ -1314,7 +1316,7 @@ button:active {
   overflow: hidden;
 }
 .img-frame::after {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: 24px;
@@ -1340,7 +1342,7 @@ button:active {
   padding: 6px 14px;
   font-size: 0.75rem;
   font-weight: 600;
-  font-family: "DM Sans", sans-serif;
+  font-family: 'DM Sans', sans-serif;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }

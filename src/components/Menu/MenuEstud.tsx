@@ -1,16 +1,15 @@
+import { handleLogout } from "@/lib/logout";
 import {
   LayoutDashboard, LifeBuoy, LogOut, Menu,
-  MessageSquare, Settings, Wallet, X, type LucideIcon
+  MessageSquare, Settings, Wallet, X
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo555 from "../../assets/Logo5.5.png";
-
 type MenuMode = "open" | "collapsed" | "hidden";
 
 export default function MenuEstud() {
-  const handleLogout = () => localStorage.removeItem("sessao");
-
+ 
   const [isMobile, setIsMobile] = useState<boolean>(
     typeof window !== "undefined" ? window.innerWidth < 1024 : false
   );

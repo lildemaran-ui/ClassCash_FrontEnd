@@ -19,8 +19,7 @@ interface Reclamacao {
   encarregado: string;
   aluno: string;
   assunto: string;
-  prioridade: "Alta" | "Média" | "Baixa";
-  status: "Pendente" | "Em Tratamento" | "Resolvida";
+  status: "Pendente"| "Resolvida";
   descricao?: string;
   resposta?: string;
 }
@@ -28,42 +27,31 @@ interface Reclamacao {
 const RECLAMACOES_MOCK: Reclamacao[] = [
   {
     id: 1, data: "22 Jan 2025", encarregado: "João Manuel", aluno: "Pedro Manuel",
-    assunto: "Demora na entrega dos uniformes", prioridade: "Alta", status: "Pendente",
+    assunto: "Demora na entrega dos uniformes",  status: "Pendente",
     descricao: "Os uniformes foram solicitados há mais de 3 semanas e até agora não foram entregues. Isso está a causar problemas para o aluno nas aulas de educação física.",
   },
   {
     id: 2, data: "19 Jan 2025", encarregado: "Maria Silva", aluno: "Carlos Silva",
-    assunto: "Erro no valor da propina", prioridade: "Média", status: "Em Tratamento",
+    assunto: "Erro no valor da propina", status: "Pendente",
     descricao: "Fui cobrado um valor superior ao acordado no início do ano lectivo.",
     resposta: "A situação está a ser analisada pelo departamento financeiro. Aguarde contacto.",
   },
   {
     id: 3, data: "15 Jan 2025", encarregado: "António Costa", aluno: "Ana Costa",
-    assunto: "Pedido de justificativo de faltas", prioridade: "Baixa", status: "Resolvida",
+    assunto: "Pedido de justificativo de faltas", status: "Resolvida",
     descricao: "Necessito de justificativo para as faltas da semana de 8 a 12 de Janeiro.",
     resposta: "O justificativo foi emitido e está disponível na secretaria.",
   },
 ];
 
-const CATEGORIAS = ["Todas", "Propinas", "Uniformes", "Justificativos", "Certificados", "Transferências", "Cartão Escolar"];
 
-/* ── Badge de Prioridade ── */
-const PrioridadeBadge = ({ p }: { p: string }) => {
-  const map: Record<string, string> = {
-    Alta: "bg-red-50 text-red-700 border-red-200",
-    Média: "bg-orange-50 text-orange-700 border-orange-200",
-    Baixa: "bg-blue-50 text-blue-700 border-blue-200",
-  };
-  return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${map[p] ?? ""}`}>{p}</span>
-  );
-};
+
+
 
 /* ── Badge de Status ── */
 const StatusBadge = ({ s }: { s: string }) => {
   const map: Record<string, { cls: string; icon: React.ReactNode }> = {
     Pendente: { cls: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock size={10} /> },
-    "Em Tratamento": { cls: "bg-blue-50 text-blue-700 border-blue-200", icon: <MessageSquare size={10} /> },
     Resolvida: { cls: "bg-green-50 text-green-700 border-green-200", icon: <CheckCircle size={10} /> },
   };
   const c = map[s] ?? { cls: "bg-gray-50 text-gray-600 border-gray-200", icon: null };
@@ -139,7 +127,7 @@ const ModalResposta = ({
               className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] cursor-pointer"
             >
               <option value="Pendente">Pendente</option>
-              <option value="Em Tratamento">Em Tratamento</option>
+              
               <option value="Resolvida">Resolvida</option>
             </select>
           </div>
@@ -199,7 +187,6 @@ const ModalExclusao = ({ onClose, onConfirm }: { onClose: () => void; onConfirm:
 /* ══════════════════════════════════════════════════════════════ */
 export default function GestaodeReclamacoes() {
   const [reclamacoes, setReclamacoes] = useState<Reclamacao[]>(RECLAMACOES_MOCK);
-  const [categoriaAtiva, setCategoriaAtiva] = useState("Todas");
   const [modalResposta, setModalResposta] = useState<Reclamacao | null>(null);
   const [modalExclusao, setModalExclusao] = useState<number | null>(null);
 const [user, setUser] = useState<SessaoUsuario | null>(null);
@@ -222,7 +209,7 @@ const [user, setUser] = useState<SessaoUsuario | null>(null);
 
   const pendentes = reclamacoes.filter(r => r.status === "Pendente").length;
   const resolvidas = reclamacoes.filter(r => r.status === "Resolvida").length;
-  const emTratamento = reclamacoes.filter(r => r.status === "Em Tratamento").length;
+  
 
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
@@ -232,11 +219,11 @@ const [user, setUser] = useState<SessaoUsuario | null>(null);
         {/* Header */}
         <div className="bg-white border-b border-gray-100 px-4 sm:px-8 py-4 flex flex-wrap justify-between items-center gap-3 flex-shrink-0">
           <Header
-          titulo="Reclamações"
+          titulo="Gestão deReclamações"
           usuario={user ? <Avatar name={user.nome} src={user.foto} size="sm" /> : null}
         />
           <button className="flex items-center gap-2 bg-[#184d8a] text-white hover:bg-[#1a5fad] px-4 py-2 rounded-xl font-bold transition-all text-sm">
-            <Download size={16} /> Exportar
+            <Download size={16} /> Exportar PDF
           </button>
         </div>
 
@@ -259,32 +246,10 @@ const [user, setUser] = useState<SessaoUsuario | null>(null);
               <h3 className="text-3xl font-bold text-gray-800">{String(resolvidas).padStart(2, "0")}</h3>
               <span className="text-green-500 text-[11px] font-bold">Concluídas</span>
             </div>
-            <div className="bg-white p-5 rounded-2xl border-l-4 border-purple-500 shadow-sm hover:shadow-md transition-all col-span-2 sm:col-span-1">
-              <div className="flex items-center gap-2 mb-1">
-                <AlertTriangle size={14} className="text-purple-500" />
-                <p className="text-xs font-medium text-gray-400">Satisfação Média</p>
-              </div>
-              <h3 className="text-3xl font-bold text-gray-800">4.2<span className="text-base text-gray-400">/5</span></h3>
-              <span className="text-purple-500 text-[11px] font-bold">Baseado em feedbacks</span>
-            </div>
+          
           </div>
 
-          {/* Filtros por Categoria */}
-          <div className="flex gap-2 mb-6 flex-wrap">
-            {CATEGORIAS.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setCategoriaAtiva(cat)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
-                  categoriaAtiva === cat
-                    ? "bg-[#184d8a] text-white border-[#184d8a]"
-                    : "bg-white border-gray-200 text-gray-500 hover:border-[#184d8a] hover:text-[#184d8a]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+        
 
           {/* Tabela */}
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-8">
@@ -317,7 +282,6 @@ const [user, setUser] = useState<SessaoUsuario | null>(null);
                       <td className="px-6 py-4 text-sm text-gray-600 max-w-[200px] text-left">
                         <span className="line-clamp-1">{r.assunto}</span>
                       </td>
-                      <td className="px-6 py-4"><PrioridadeBadge p={r.prioridade} /></td>
                       <td className="px-6 py-4"><StatusBadge s={r.status} /></td>
                       <td className="px-6 py-4">
                         <div className="flex gap-2 justify-center">
@@ -352,7 +316,6 @@ const [user, setUser] = useState<SessaoUsuario | null>(null);
                       <p className="font-bold text-gray-700 text-sm truncate">{r.encarregado}</p>
                       <p className="text-[11px] text-gray-400 italic">{r.aluno} · {r.data}</p>
                     </div>
-                    <PrioridadeBadge p={r.prioridade} />
                   </div>
                   <p className="text-sm text-gray-600 mb-3 line-clamp-1">{r.assunto}</p>
                   <div className="flex justify-between items-center">

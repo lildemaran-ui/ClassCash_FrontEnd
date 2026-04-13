@@ -12,14 +12,12 @@ import {
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo555 from "../../assets/Logo5.5.png";
+import { handleLogout } from "@/lib/logout";
+export default function MenuEncar() {
 
-export default function MenuEstud() {
-  const handleLogout = () => {
-  localStorage.removeItem("sessao");
-};
   const [menu, setMenu] = useState<boolean>(() => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-      const saved = localStorage.getItem("menu_estud_aberto");
+      const saved = localStorage.getItem("menu_encar_aberto");
       return saved !== "false";
     }
     return false;
@@ -73,15 +71,15 @@ export default function MenuEstud() {
   );
 
   const links = [
-    { to: "/DashboardEstud", icon: LayoutDashboard, label: "Painel Geral" },
-    { to: "/Pagamentos", icon: Wallet, label: "Pagamentos" },
+    { to: "/Encarregado", icon: LayoutDashboard, label: "Painel Geral" },
+    { to: "/PagamentoEncar", icon: Wallet, label: "Pagamentos" },
     {
-      to: "/Reclamacoes",
+      to: "/ReclamacoesEncar",
       icon: MessageSquare,
       label: "Reclamações",
     },
     {
-      to: "/Config",
+      to: "/ConfiguracaoEncar",
       icon: Settings,
       label: "Configurações",
     },

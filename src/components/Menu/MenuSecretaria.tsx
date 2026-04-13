@@ -18,11 +18,10 @@ import {
 import { Link } from "react-router-dom";
 import logo555 from "../../assets/Logo5.5.png";
 import { useState, useEffect } from "react";
+import { handleLogout } from "@/lib/logout";
 
 export default function MenuSecretaria() {
-  const handleLogout = () => {
-    localStorage.removeItem("sessao");
-  };
+
 
   const [menu, setMenu] = useState<boolean>(() => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {

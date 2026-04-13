@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { fetchComAuth } from "@/types/global/fetchComAuth";
 import {
   AlertCircle,
   ArrowRight,
@@ -233,7 +234,7 @@ export function TelaCadastro() {
         : "http://localhost:5000/api/cadastroEncarregado";
 
     try {
-      const res = await fetch(rota, {
+      const res = await fetchComAuth(rota, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

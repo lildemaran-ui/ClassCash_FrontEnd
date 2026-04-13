@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import img1 from "../../assets/Plain credit card-amico.svg";
 import { ImagePlus, Wallet } from "lucide-react";
 import { toast } from "sonner";
+import { fetchComAuth } from "@/types/global/fetchComAuth";
 
 // ✅ Interface alinhada com o tipo User do teu sistema
 interface User {
@@ -114,7 +115,7 @@ const token = sessao.token;
         return;
       }
 
-     const response = await fetch("http://localhost:5000/api/pagamento", {
+     const response = await fetchComAuth("http://localhost:5000/api/pagamento", {
   method: "POST",
   headers: {
     Authorization: `Bearer ${token}`,

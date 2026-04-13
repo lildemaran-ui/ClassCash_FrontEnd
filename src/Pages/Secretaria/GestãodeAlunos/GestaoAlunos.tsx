@@ -4,6 +4,8 @@ import ChartGestaoEstud from "@/components/Charts/ChartGestaoEstud";
 import ChartGestaoEstud2 from "@/components/Charts/ChartGestaoEstud2";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
+import { useClasses } from "@/Hooks/useClasses";
+import { fetchComAuth } from "@/types/global/fetchComAuth";
 import {
   exigirSessao,
   getToken,
@@ -12,16 +14,15 @@ import {
 import {
   ArrowDown,
   ArrowUp,
+  BadgeCheck,
+  BookOpen,
   EyeIcon,
+  Hash,
   PencilIcon,
   Plus,
-  Search,
   Trash2,
-  X,
   UserCircle2,
-  BookOpen,
-  Hash,
-  BadgeCheck,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -86,6 +87,7 @@ function ModalCadastrar({
 }) {
   const [form, setForm] = useState<FormCadastro>(FORM_VAZIO);
   const [loading, setLoading] = useState(false);
+  const classes = useClasses();
 
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -94,7 +96,7 @@ function ModalCadastrar({
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${API}/gestaoEstudantes`, {
+      const res = await fetchComAuth(`${API}/gestaoEstudantes`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -121,20 +123,20 @@ function ModalCadastrar({
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="bg-[#184d8a] px-6 py-5 flex justify-between items-center sticky top-0">
           <div>
-            <h2 className="text-base font-bold text-[#184d8a]">
+            <h2 className="text-lg font-bold text-white">
               Cadastrar Estudante
             </h2>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-blue-200">
               Preencha os dados do novo estudante
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
           >
-            <X size={18} className="text-gray-500" />
+            <X size={18} className="text-white" />
           </button>
         </div>
         <form onSubmit={submeter} className="p-6 flex flex-col gap-4">
@@ -187,20 +189,21 @@ function ModalCadastrar({
             </div>
             <div>
               <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Classe (opcional)
+                Classe
               </label>
-              <input
+              <select
                 name="classe"
                 value={form.classe}
-                placeholder="Ex: 10"
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    classe: e.target.value.replace(/\D/g, ""),
-                  }))
-                }
-                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
-              />
+                onChange={handle}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white transition-colors"
+              >
+                <option value="">Selecionar classe</option>
+                {classes.map((c) => (
+                  <option key={c.idclasse} value={c.nivel.toString()}>
+                    {c.nivel}ª Classe
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-xs mb-1 text-gray-600 font-medium">
@@ -257,7 +260,7 @@ function ModalEditar({
     status: estudante.status,
   });
   const [loading, setLoading] = useState(false);
-
+  const classes = useClasses();
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -265,7 +268,7 @@ function ModalEditar({
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(
+      const res = await fetchComAuth(
         `${API}/gestaoEstudantes/${estudante.idestudante}`,
         {
           method: "PUT",
@@ -351,17 +354,20 @@ function ModalEditar({
               <label className="block text-xs mb-1 text-gray-600 font-medium">
                 Classe
               </label>
-              <input
+              <select
                 name="classe"
                 value={form.classe}
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    classe: e.target.value.replace(/\D/g, ""),
-                  }))
-                }
-                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
-              />
+                onChange={handle}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white transition-colors"
+              >
+                <option value="">Sem classe</option>
+                {classes.map((c) => (
+                 <option key={c.idclasse} value={c.nivel.toString()}>
+                    {c.nivel}ª Classe —{" "}
+                    {Number(c.valorservico).toLocaleString("pt-AO")} AOA
+                  </option>
+                ))}
+              </select>
             </div>
             <div>
               <label className="block text-xs mb-1 text-gray-600 font-medium">
@@ -563,16 +569,22 @@ export default function GestaoAlunos() {
     null,
   );
   const [modalDelete, setModalDelete] = useState<Estudante | null>(null);
-
+  const [estatisticas, setEstatisticas] = useState<
+    DashboardData["estatisticas"]
+  >({
+    pizza: [],
+    linha: [],
+  });
   const carregar = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/gestaoEstudantes`, {
+      const res = await fetchComAuth(`${API}/gestaoEstudantes`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (!res.ok) throw new Error("Erro ao carregar estudantes");
       const data: DashboardData = await res.json();
       setEstudantes(data.estudantes ?? []);
+      setEstatisticas(data.estatisticas ?? { pizza: [], linha: [] });
     } catch {
       toast.error("Erro ao carregar estudantes");
     } finally {
@@ -601,7 +613,7 @@ export default function GestaoAlunos() {
   const handleDelete = async () => {
     if (!modalDelete) return;
     try {
-      const res = await fetch(
+      const res = await fetchComAuth(
         `${API}/gestaoEstudantes/${modalDelete.idestudante}`,
         {
           method: "DELETE",
@@ -854,44 +866,34 @@ export default function GestaoAlunos() {
                     label: "Total",
                     value: estudantes.length,
                     sub: "estudantes registados",
-                    color: "text-[#184d8a]",
-                    bg: "bg-[#184d8a]/5 border-[#184d8a]/10",
                   },
                   {
                     label: "Aceites",
                     value: estudantes.filter((e) => e.status === "Aceite")
                       .length,
                     sub: "com acesso ativo",
-                    color: "text-green-600",
-                    bg: "bg-green-50 border-green-100",
                   },
                   {
                     label: "Pendentes",
                     value: estudantes.filter((e) => e.status === "Pendente")
                       .length,
                     sub: "aguardam validação",
-                    color: "text-orange-500",
-                    bg: "bg-orange-50 border-orange-100",
                   },
                   {
                     label: "Recusados",
                     value: estudantes.filter((e) => e.status === "Recusado")
                       .length,
                     sub: "sem acesso",
-                    color: "text-red-500",
-                    bg: "bg-red-50 border-red-100",
                   },
                 ].map((card) => (
                   <div
                     key={card.label}
-                    className={`rounded-2xl border p-5 flex flex-col gap-1 ${card.bg}`}
+                    className={`rounded-2xl border p-5 flex flex-col gap-1 `}
                   >
                     <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                       {card.label}
                     </p>
-                    <p className={`text-3xl font-bold ${card.color}`}>
-                      {card.value}
-                    </p>
+                    <p className={`text-3xl font-bold `}>{card.value}</p>
                     <p className="text-xs text-gray-400">{card.sub}</p>
                   </div>
                 ))}
@@ -907,7 +909,7 @@ export default function GestaoAlunos() {
                     Proporção atual por estado
                   </p>
                   <div className="flex-grow flex items-center justify-center min-h-[250px] sm:min-h-[300px]">
-                    <ChartGestaoEstud />
+                    <ChartGestaoEstud dados={estatisticas.pizza} />
                   </div>
                 </div>
                 <div className="bg-white border border-gray-200 p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col">
@@ -918,7 +920,7 @@ export default function GestaoAlunos() {
                     Registo de entradas por mês
                   </p>
                   <div className="flex-grow flex items-center justify-center min-h-[250px] sm:min-h-[300px]">
-                    <ChartGestaoEstud2 />
+                    <ChartGestaoEstud2 dados={estatisticas.linha} />
                   </div>
                 </div>
               </div>

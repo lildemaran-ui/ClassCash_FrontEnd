@@ -6,13 +6,54 @@ import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import { CheckCircle, Download, Pen } from "lucide-react";
 import { useEffect, useState } from "react";
 
+interface ResumoFinanceiro {
+  ultimo_pagamento: string | null;
+  proximo_vencimento: string | null;
+  total_pago_mes: number | null;
+  total_acumulado: number | null;
+}
+
+interface Transacao {
+  data: string;
+  servico: string;
+  valor_total: number;
+  status: string;
+}
+
+function formatarData(data: string | null): string {
+  if (!data) return "—";
+  return new Date(data).toLocaleDateString("pt-PT");
+}
+
+function formatarValor(valor: number | null): string {
+  if (valor === null || valor === undefined) return "Kz 0,00";
+  return `Kz ${Number(valor).toLocaleString("pt-PT")},00`;
+}
+
 export default function Encarregado() {
   const [Modal, setModal] = useState(false);
   const [user, setUser] = useState<SessaoUsuario | null>(null);
+  const [resumo, setResumo] = useState<ResumoFinanceiro | null>(null);
+  const [historico, setHistorico] = useState<Transacao[]>([]);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     const sessao = exigirSessao();
-    if (sessao) setUser(sessao.usuario);
+    if (!sessao) return;
+    setUser(sessao.usuario);
+
+    const token = sessao.token;
+
+    fetch("http://localhost:5000/api/dashboardEncarregado", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((dados) => {
+        if (dados.resumo_financeiro) setResumo(dados.resumo_financeiro);
+        if (dados.historico_transacoes) setHistorico(dados.historico_transacoes);
+      })
+      .catch((err) => console.error("Erro ao carregar dashboard do encarregado:", err))
+      .finally(() => setCarregando(false));
   }, []);
 
   if (!user) return <span>A verificar autenticação...</span>;
@@ -34,11 +75,7 @@ export default function Encarregado() {
             <div className="relative group">
               <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-white transition-transform group-hover:scale-[1.02]">
                 {user.foto ? (
-                  <img
-                    src={user.foto}
-                    alt={user.nome}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={user.foto} alt={user.nome} className="w-full h-full object-cover" />
                 ) : (
                   <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-blue-400 to-[#184d8a] text-white shadow-inner text-4xl font-black">
                     {user.nome?.substring(0, 2).toUpperCase()}
@@ -57,9 +94,7 @@ export default function Encarregado() {
               <span className="bg-blue-100 text-[#184d8a] text-[10px] font-black uppercase tracking-wider px-2 py-1 rounded-md">
                 {user.perfil}
               </span>
-              <h1 className="text-3xl font-black text-gray-800 mt-2 tracking-tight">
-                {user.nome}
-              </h1>
+              <h1 className="text-3xl font-black text-gray-800 mt-2 tracking-tight">{user.nome}</h1>
               <div className="flex flex-col justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
                 <p>
                   <strong>Grau parentesco:</strong> {user.relacao}
@@ -71,42 +106,39 @@ export default function Encarregado() {
             </div>
           </div>
 
-          {/* Card de Situação Rápida */}
           <div className="bg-gradient-to-br from-emerald-50 to-white p-4 rounded-2xl border border-emerald-100 flex items-center gap-4 shadow-sm min-w-[280px]">
             <div className="bg-emerald-500 p-2 rounded-xl text-white">
               <CheckCircle size={24} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-emerald-900">
-                Situação Financeira do seu Educando
-              </h3>
-              <p className="text-emerald-600 text-xs font-semibold">
-                Conta Regularizada
-              </p>
+              <h3 className="text-sm font-bold text-emerald-900">Situação Financeira do seu Educando</h3>
+              <p className="text-emerald-600 text-xs font-semibold">Conta Regularizada</p>
             </div>
           </div>
         </header>
+
         <div className="mt-8 flex justify-end mb-8">
           <button className="bg-[#184d8a] text-white px-4 py-2.5 rounded-lg flex items-center gap-3 hover:bg-[#184d8a]/80 transition-all shadow-lg hover:shadow-blue-200 active:scale-95">
             <Download size={20} />
             <span className="font-bold">Exportar Relatório</span>
           </button>
         </div>
-        <ProfileEditModal
-          isOpen={Modal}
-          onClose={() => setModal(false)}
-          user={user}
-        />
+
+        <ProfileEditModal isOpen={Modal} onClose={() => setModal(false)} user={user} />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="bg-white p-6 rounded-xl border">
             <h3 className="font-bold mb-6 text-gray-800">Resumo Financeiro:</h3>
-            <div className="space-y-4">
-              <SummaryRow label="Último pagamento:" value="09/11/2025" />
-              <SummaryRow label="Próximo vencimento:" value="09/12/2025" />
-              <SummaryRow label="Total pago no mês:" value="Kz 55.300,00" />
-              <SummaryRow label="Total pago no ano:" value="Kz 313.000,00" />
-            </div>
+            {carregando ? (
+              <p className="text-sm text-gray-400">A carregar...</p>
+            ) : (
+              <div className="space-y-4">
+                <SummaryRow label="Último pagamento:" value={formatarData(resumo?.ultimo_pagamento ?? null)} />
+                <SummaryRow label="Próximo vencimento:" value={formatarData(resumo?.proximo_vencimento ?? null)} />
+                <SummaryRow label="Total pago no mês:" value={formatarValor(resumo?.total_pago_mes ?? null)} />
+                <SummaryRow label="Total pago no ano:" value={formatarValor(resumo?.total_acumulado ?? null)} />
+              </div>
+            )}
           </div>
           <div className="bg-white rounded-xl border p-4">
             <ChartEstud />
@@ -131,23 +163,39 @@ export default function Encarregado() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {[1, 2, 3, 4].map((i) => (
-                  <tr key={i} className="text-sm text-gray-600">
-                    <td className="p-4">09/11/2025</td>
-                    <td className="p-4">Propina</td>
-                    <td className="p-4 font-medium text-gray-900">
-                      Kz 31.300,00
+                {carregando ? (
+                  <tr>
+                    <td colSpan={5} className="p-4 text-sm text-gray-400 text-center">
+                      A carregar...
                     </td>
-                    <td className="p-4 text-gray-400">Kz 0,00</td>
-                    <td className="p-4 text-green-500 font-medium">Em dia</td>
                   </tr>
-                ))}
+                ) : historico.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="p-4 text-sm text-gray-400 text-center">
+                      Sem transações registadas.
+                    </td>
+                  </tr>
+                ) : (
+                  historico.map((t, i) => (
+                    <tr key={i} className="text-sm text-gray-600">
+                      <td className="p-4">{formatarData(t.data)}</td>
+                      <td className="p-4">{t.servico}</td>
+                      <td className="p-4 font-medium text-gray-900">{formatarValor(t.valor_total)}</td>
+                      <td className="p-4 text-gray-400">Kz 0,00</td>
+                      <td
+                        className={`p-4 font-medium ${
+                          t.status === "pago" ? "text-green-500" : "text-amber-500"
+                        }`}
+                      >
+                        {t.status === "pago" ? "Em dia" : "Pendente"}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
-
-       
       </main>
     </div>
   );

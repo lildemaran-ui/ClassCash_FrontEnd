@@ -1,5 +1,6 @@
 // src/Pages/Administrador/GestaoInstituicaoAdmin/InstitutionContext.tsx
 
+import { fetchComAuth } from '@/types/global/fetchComAuth'
 import React, { createContext, useContext, useState, useEffect } from 'react'
 
 const API = 'http://localhost:5000/api'
@@ -61,7 +62,7 @@ export function InstitutionProvider({ children }: { children: React.ReactNode })
   const carregar = async () => {
     setLoading(true)
     try {
-      const res = await fetch(`${API}/cadastro-instituicao`)
+      const res = await fetchComAuth(`${API}/cadastro-instituicao`)
       const data = await res.json()
       if (Array.isArray(data)) {
         setInstitutions(data.map(mapInstituicao))

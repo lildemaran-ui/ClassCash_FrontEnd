@@ -8,6 +8,7 @@ import ChartGestaoMulta2 from "@/components/Charts/ChartGestaoMulta2";
 import { Header } from "@/components/Header/header";
 import ItemsDoCabeçalho from "@/components/ItemsDoCabeçalho/ItemsDoCabeçalho";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
+import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { exigirSessao, getToken, type SessaoUsuario } from "@/types/global/sessao";
 import {
   CheckCircle, DollarSign, Download, EyeIcon, Plus, TrendingUp,
@@ -307,7 +308,7 @@ export default function ModulodeMulta() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch(`${API}/gestaoMultas`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetchComAuth(`${API}/gestaoMultas`, { headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) throw new Error("Erro ao carregar multas");
       const data = await res.json();
       setCards(data.cards ?? null);

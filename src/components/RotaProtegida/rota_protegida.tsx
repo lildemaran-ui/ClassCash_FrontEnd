@@ -1,11 +1,14 @@
-// src/components/RotaProtegida.tsx
-import { getSessao, logout } from "@/types/global/auth";
+// src/components/RotaProtegida/rota_protegida.tsx
+import { getSessao, clearSessao } from "@/types/global/sessao";
 import { useEffect } from "react";
 
 export default function RotaProtegida({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const sessao = getSessao();
-    if (!sessao) logout();
+    if (!sessao) {
+      clearSessao();
+      window.location.href = "/Login";
+    }
   }, []);
 
   if (!getSessao()) return null;

@@ -5,6 +5,7 @@
 import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
+import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { exigirSessao, getToken, type SessaoUsuario } from "@/types/global/sessao";
 import {
   ArrowDown, ArrowUp, EyeIcon, TrendingDown, TrendingUp,
@@ -23,20 +24,9 @@ interface PropinaRow {
 interface Cards { total_pagas: string; total_pendentes: string; total_atrasadas: string; }
 
 /* ── KPI Card ── */
-const CardKpi = ({
-  title, value, subtext, trend, color
-}: {
-  title: string; value: string; subtext: string;
-  trend?: "up" | "down"; color?: "green" | "orange" | "red";
-}) => {
-  const colors = {
-    green: "bg-green-50 border-green-200 text-green-700",
-    orange: "bg-orange-50 border-orange-200 text-orange-700",
-    red: "bg-red-50 border-red-200 text-red-700",
-  };
-  const base = color ? colors[color] : "bg-white border-gray-200 text-gray-700";
+const CardKpi = ({ title, value, subtext, trend, color }: { title: string; value: string; subtext: string; trend?: "up" | "down"; color: "green" | "orange" | "red" }) => {
   return (
-    <div className={`p-5 rounded-2xl flex flex-col items-center text-center border ${base} transition-all duration-300 hover:shadow-md`}>
+    <div className={`p-5 rounded-2xl flex flex-col items-center text-center border transition-all duration-300 hover:shadow-md`}>
       <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
       <div className="flex items-center gap-2">
         <span className="text-2xl font-bold">{value}</span>
@@ -50,14 +40,14 @@ const CardKpi = ({
 
 /* ── Status Badge ── */
 const StatusBadge = ({ status }: { status: string }) => {
-  const map: Record<string, { bg: string; text: string; icon: React.ReactNode }> = {
-    Paga: { bg: "bg-green-50 border-green-200", text: "text-green-700", icon: <CheckCircle size={12} /> },
-    Pendente: { bg: "bg-orange-50 border-orange-200", text: "text-orange-700", icon: <Clock size={12} /> },
-    Atrasada: { bg: "bg-red-50 border-red-200", text: "text-red-700", icon: <AlertTriangle size={12} /> },
+  const map: Record<string, {  text: string; icon: React.ReactNode }> = {
+    Paga: {  text: "text-green-700", icon: <CheckCircle size={12} /> },
+    Pendente: {  text: "text-orange-700", icon: <Clock size={12} /> },
+    Atrasada: {  text: "text-red-700", icon: <AlertTriangle size={12} /> },
   };
   const s = map[status] ?? { bg: "bg-gray-50 border-gray-200", text: "text-gray-600", icon: null };
   return (
-    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold border ${s.bg} ${s.text}`}>
+    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold border ${s.text}`}>
       {s.icon} {status}
     </span>
   );
@@ -191,7 +181,7 @@ export default function GestaoPropinas() {
       setLoading(true);
       try {
         const token = getToken();
-        const res = await fetch(`${API}/gestaoPropinas`, {
+        const res = await fetchComAuth(`${API}/gestaoPropinas`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Erro ao carregar propinas");

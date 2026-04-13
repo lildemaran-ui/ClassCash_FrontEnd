@@ -22,6 +22,8 @@ import {
   getToken,
   type SessaoUsuario,
 } from "@/types/global/sessao";
+import { fetchComAuth } from "@/types/global/fetchComAuth";
+import { useClasses } from "@/Hooks/useClasses";
 
 const API = "http://localhost:5000/api";
 
@@ -70,6 +72,7 @@ function ModalCadastro({
   const [form, setForm] = useState<FormData>(FORM_INICIAL);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
+  const classes = useClasses()
 
   const handle = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -78,7 +81,7 @@ function ModalCadastro({
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch(`${API}/GestaoEncarregados`, {
+      const res = await fetchComAuth(`${API}/GestaoEncarregados`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -113,18 +116,18 @@ function ModalCadastro({
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex bg-[#184d8a] items-center justify-between px-6 py-4 border-b border-gray-100">
           <div>
-            <h2 className="text-base font-bold text-[#184d8a]">
+            <h2 className="text-base font-bold text-white">
               Cadastrar Encarregado
             </h2>
-            <p className="text-xs text-gray-400">Passo {step} de 2</p>
+            <p className="text-xs text-gray-300">Passo {step} de 2</p>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+            className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
           >
-            <X size={18} className="text-gray-500" />
+            <X size={18} className="text-white" />
           </button>
         </div>
 
@@ -289,18 +292,20 @@ function ModalCadastro({
                   <label className="block text-xs mb-1 text-gray-600 font-medium">
                     Classe (opcional)
                   </label>
-                  <input
-                    name="idClasse"
+                  <select
                     value={form.idClasse}
-                    placeholder="ID da classe"
                     onChange={(e) =>
-                      setForm((f) => ({
-                        ...f,
-                        idClasse: e.target.value.replace(/\D/g, ""),
-                      }))
+                      setForm((f) => ({ ...f, idClasse: e.target.value }))
                     }
-                    className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
-                  />
+                    className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white transition-colors"
+                  >
+                    <option value="">Selecionar classe</option>
+                    {classes.map((c) => (
+                      <option key={c.idclasse} value={c.idclasse.toString()}>
+                        {c.nivel}ª Classe
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -462,7 +467,7 @@ export default function GestaodeEncarregados() {
   const carregarEncarregados = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/GestaoEncarregados`, {
+      const res = await fetchComAuth(`${API}/GestaoEncarregados`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       if (!res.ok) throw new Error("Erro ao carregar encarregados");
@@ -697,7 +702,7 @@ export default function GestaodeEncarregados() {
                   <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                     Total
                   </p>
-                  <p className="text-3xl font-bold text-[#184d8a]">{total}</p>
+                  <p className="text-3xl font-bold ">{total}</p>
                   <p className="text-xs text-gray-400">
                     encarregados registados
                   </p>
@@ -706,16 +711,14 @@ export default function GestaodeEncarregados() {
                   <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                     Ativos
                   </p>
-                  <p className="text-3xl font-bold text-green-600">{ativos}</p>
+                  <p className="text-3xl font-bold ">{ativos}</p>
                   <p className="text-xs text-gray-400">com acesso ativo</p>
                 </div>
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 flex flex-col gap-1">
                   <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                     Pendentes
                   </p>
-                  <p className="text-3xl font-bold text-orange-500">
-                    {pendentes}
-                  </p>
+                  <p className="text-3xl font-bold ">{pendentes}</p>
                   <p className="text-xs text-gray-400">aguardam validação</p>
                 </div>
               </div>

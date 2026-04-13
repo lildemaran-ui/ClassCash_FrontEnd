@@ -5,6 +5,7 @@
 import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
+import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { exigirSessao, getToken, type SessaoUsuario } from "@/types/global/sessao";
 import { ArrowDown, ArrowUp, Pen, Plus, Save, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -92,10 +93,17 @@ const ModalServico = ({
       const token = getToken();
       const url = isEdicao ? `${API}/gestaoServicos/${servico!.idservico}` : `${API}/gestaoServicos`;
       const method = isEdicao ? "PUT" : "POST";
-      const res = await fetch(url, {
+const payload = {
+  nome: form.servico,   // ✅ mapear servico → nome
+  nivel: form.classe,   // ✅ mapear classe → nivel
+  valorservico: form.valorservico,
+  multa_base: form.multa_base || 0,
+}
+
+      const res = await fetchComAuth(url, {
         method,
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) throw new Error("Erro ao guardar");
       toast.success(isEdicao ? "Serviço actualizado!" : "Serviço adicionado!");
@@ -107,6 +115,8 @@ const ModalServico = ({
       setSaving(false);
     }
   };
+
+const ehPropina = form.servico.toLowerCase().includes('propina')
 
   return (
     <div
@@ -171,16 +181,20 @@ const ModalServico = ({
                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all"
               />
             </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">Multa Base (AOA)</label>
-              <input
-                type="number"
-                placeholder="0.00"
-                value={form.multa_base}
-                onChange={e => setForm({ ...form, multa_base: e.target.value })}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all"
-              />
-            </div>
+           {ehPropina && (
+  <div>
+    <label className="block text-xs font-semibold text-gray-500 mb-1.5">
+      Multa Base (AOA)
+    </label>
+    <input
+      type="number"
+      placeholder="0.00"
+      value={form.multa_base}
+      onChange={e => setForm({ ...form, multa_base: e.target.value })}
+      className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all"
+    />
+  </div>
+)}
           </div>
 
           {form.valorservico && form.multa_base && (
@@ -238,7 +252,7 @@ export default function GestaodeServiços() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch(`${API}/gestaoServicos`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetchComAuth(`${API}/gestaoServicos`, { headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) throw new Error("Erro ao carregar serviços");
       const data = await res.json();
       setServicos(Array.isArray(data) ? data : []);
@@ -274,7 +288,7 @@ export default function GestaodeServiços() {
     setExcluindo(true);
     try {
       const token = getToken();
-      const res = await fetch(`${API}/gestaoServicos/${modalExclusao.servico.idservico}`, {
+      const res = await fetchComAuth(`${API}/gestaoServicos/${modalExclusao.servico.idservico}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });

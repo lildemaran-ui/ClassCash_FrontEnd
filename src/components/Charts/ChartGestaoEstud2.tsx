@@ -1,35 +1,36 @@
+import * as React from "react";
 import Box from "@mui/material/Box";
 import { LineChart } from "@mui/x-charts/LineChart";
 
-const margin = { right: 24 };
-const uData = [20, 21, 30, 46, 18, 23, 34, 34, 29, 37, 43, 50];
-const pData = [25, 12, 60, 39, 5, 38, 43, 23, 54, 32, 13, 44];
-const xLabels = [
-  "Jan",
-  "Fev",
-  "Mar",
-  "Abr",
-  "Mai",
-  "Jun",
-  "Jul",
-  "Ago",
-  "Set",
-  "Out",
-  "Nov",
-  "Dez",
-];
+const MESES = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
 
-export default function ChartGestaoEstud2() {
+interface Props {
+  dados: { mes: string; ativos: string; inativos: string }[];
+}
+
+export default function ChartGestaoEstud2({ dados }: Props) {
+  const labels = dados.map((r) => MESES[Number(r.mes) - 1]);
+  const ativos = dados.map((r) => Number(r.ativos));
+  const inativos = dados.map((r) => Number(r.inativos));
+
+  if (dados.length === 0) {
+    return (
+      <Box sx={{ width: "100%", height: 300, display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <p style={{ color: "#94a3b8", fontSize: 14 }}>Sem dados disponíveis</p>
+      </Box>
+    );
+  }
+
   return (
-    <Box sx={{ width: "100%", height: 300, transition: "all 50s ease-in-out" }}>
+    <Box sx={{ width: "100%", height: 300 }}>
       <LineChart
         series={[
-          { data: pData, label: "Ativo", color: "#184d8a" },
-          { data: uData, label: "Inativo", color: "#c76d50" },
+          { data: ativos, label: "Aceites", color: "#184d8a" },
+          { data: inativos, label: "Outros", color: "#f59e0b" },
         ]}
-        xAxis={[{ scaleType: "point", data: xLabels, height: 28 }]}
+        xAxis={[{ scaleType: "point", data: labels, height: 28 }]}
         yAxis={[{ width: 50 }]}
-        margin={margin}
+        margin={{ right: 24 }}
       />
     </Box>
   );

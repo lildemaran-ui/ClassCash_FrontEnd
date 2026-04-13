@@ -1,19 +1,22 @@
 // src/Pages/Secretaria/Secretaria.tsx
 import Avatar from "@/components/Avatar/Avatar";
+import { MonthlyBarChart } from "@/components/Charts/MonthlyBarChart";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 import {
   Select,
   SelectContent,
   SelectItem,
+  SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { fetchComAuth } from "@/types/global/fetchComAuth";
 import {
   exigirSessao,
   getToken,
   type SessaoUsuario,
 } from "@/types/global/sessao";
-import { SelectTrigger } from "@radix-ui/react-select";
+
 import { Download, TrendingDown, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -23,6 +26,13 @@ const API = "http://localhost:5000/api";
 
 // ─── Tipos ─────────────────────────────────────────────────────────────────
 interface PainelData {
+  estudantesRecentes: {
+    // ← adicionar este campo
+    nome_estudante: string;
+    num_processo: string;
+    classe: number | null;
+    status: string;
+  }[];
   contagemUltimoMes: {
     total_estudantes_mes: number;
     total_encarregados_mes: number;
@@ -37,83 +47,6 @@ interface PainelData {
   faturamentoAnual: { ano: string; valor: number }[];
   metodosMaisUsados: { metodo: string; total: number }[];
 }
-
-// ─── Gráfico de barras mensal ────────────────────────────────────────────
-const MonthlyBarChart = ({
-  dados,
-}: {
-  dados: { mes: string; valor: number }[];
-}) => {
-  const MONTHS = [
-    "JAN",
-    "FEV",
-    "MAR",
-    "ABR",
-    "MAI",
-    "JUN",
-    "JUL",
-    "AGO",
-    "SET",
-    "OUT",
-    "NOV",
-    "DEZ",
-  ];
-  const maxValor = Math.max(...dados.map((d) => d.valor), 1);
-
-  // Normaliza para percentagem
-  const barras = MONTHS.map((mes) => {
-    const found = dados.find((d) =>
-      d.mes?.toUpperCase().startsWith(mes.slice(0, 3)),
-    );
-    return { mes, pct: found ? Math.round((found.valor / maxValor) * 100) : 0 };
-  });
-
-  return (
-    <div className="bg-white p-4 sm:p-8 rounded-xl mt-6 cursor-default overflow-x-auto">
-      <div className="min-w-[400px]">
-        <div className="flex items-end h-48 sm:h-64 border-l border-b border-gray-300 relative">
-          {[0, 20, 40, 60, 80, 100].map((y) => (
-            <div
-              key={y}
-              className="absolute left-0 w-full text-xs sm:text-sm text-gray-500"
-              style={{ bottom: `${y}%`, transform: "translateY(50%)" }}
-            >
-              {y}
-              {y > 0 && (
-                <div className="absolute left-0 bottom-0 w-full border-t border-gray-200 -z-10" />
-              )}
-            </div>
-          ))}
-          {barras.map(({ mes, pct }, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center h-full justify-end relative z-10"
-              style={{ width: `${100 / MONTHS.length}%` }}
-            >
-              <div
-                className="w-6 sm:w-10 bg-[#184d8a] hover:bg-[#184d8a]/80 transition-all duration-300 rounded-t-md"
-                style={{ height: `${pct}%` }}
-                title={`${mes}: ${pct}%`}
-              />
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-between border-t border-gray-300 pt-2">
-          <span className="text-gray-500 text-xs w-2">MM</span>
-          {barras.map(({ mes }, index) => (
-            <div
-              key={index}
-              className="text-xs text-gray-600 font-medium text-center"
-              style={{ width: `${100 / MONTHS.length}%` }}
-            >
-              {mes}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const CardKpi = ({
   title,
@@ -152,9 +85,11 @@ export default function Secretaria() {
 
     const carregar = async () => {
       setLoading(true);
+      const token = getToken();
+      console.log("TOKEN:", token); // ← adiciona isto
+
       try {
-        const token = getToken();
-        const res = await fetch(`${API}/dashboard`, {
+        const res = await fetchComAuth(`${API}/dashboard`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Erro ao carregar painel");
@@ -200,12 +135,14 @@ export default function Secretaria() {
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
               <div className="flex flex-wrap gap-3">
                 {["Ano", "Semestre", "Mês"].map((filtro) => (
-                  <div key={filtro}>
+                  <div key={filtro} className="w-40">
+                    {" "}
+                    {/* ← adicionar largura fixa aqui */}
                     <label className="block text-xs text-gray-500 mb-1">
                       {filtro}
                     </label>
                     <Select>
-                      <SelectTrigger className="w-full border-2 rounded-lg h-10 text-xs px-8 outline-none focus:border-[#184d8a]/80">
+                      <SelectTrigger className="w-full border-2 rounded-lg h-10 text-xs px-3">
                         <SelectValue placeholder="Sem filtro" />
                       </SelectTrigger>
                       <SelectContent>
@@ -355,7 +292,9 @@ export default function Secretaria() {
                 </p>
               </div>
             </div>
-            <MonthlyBarChart dados={faturamentoMensal} />
+            <div style={{ width: "100%", height: 288 }}>
+              <MonthlyBarChart dados={faturamentoMensal} />
+            </div>
           </section>
         </div>
       </main>

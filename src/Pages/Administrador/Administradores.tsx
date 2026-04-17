@@ -20,10 +20,10 @@ export default function Administaradores() {
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuAdmin />
-      <main  className="flex-1 overflow-y-auto min-w-0 top-0">
+      <main className="flex-1 overflow-y-auto min-w-0 top-0">
         <Header
           titulo="Painel Geral"
-          usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+          usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
         />
         <DashboardAdmin />
       </main>

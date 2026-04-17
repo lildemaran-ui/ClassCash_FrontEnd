@@ -1,7 +1,8 @@
 import Avatar from "@/components/Avatar/Avatar";
 import { ProfileEditModal } from "../profile_edit_modal";
 import { Bell, Settings } from "lucide-react";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 // ─── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -67,7 +68,7 @@ function Navbar({ titulo }: { titulo: string }) {
         />
 
         <div className="avatar">
-          <Avatar name={user.nome} src={user.foto} size="md" />
+          <Avatar name={user.nome} src={user.foto} size="sm" />
         </div>
       </div>
     </div>

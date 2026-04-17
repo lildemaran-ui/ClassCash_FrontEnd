@@ -80,7 +80,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { id, value } = e.target;
     setForm((prev) => ({ ...prev, [id]: value }));
@@ -98,7 +98,10 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
 
   const handleSubmit = async () => {
     if (!form.nome.trim() || !form.email.trim() || !form.iban.trim()) {
-      setApiMsg({ texto: "Nome, email e IBAN são obrigatórios.", tipo: "erro" });
+      setApiMsg({
+        texto: "Nome, email e IBAN são obrigatórios.",
+        tipo: "erro",
+      });
       return;
     }
     if (
@@ -123,13 +126,23 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       fd.append("email", form.email.trim());
       fd.append("iban", form.iban.trim());
       fd.append("idTipoInstituicao", String(form.idTipoInstituicao));
-      if (form.localizacao.trim()) fd.append("localizacao", form.localizacao.trim());
+      if (form.localizacao.trim())
+        fd.append("localizacao", form.localizacao.trim());
       if (form.contacto.trim()) fd.append("contacto", form.contacto.trim());
       if (form.nif.trim()) fd.append("nif", form.nif.trim());
       if (form.logoFile) fd.append("logotipo", form.logoFile);
-      fd.append("nomeRepresentante", form.nomeRepresentante.trim() || "Administrador");
-      fd.append("emailRepresentante", form.emailRepresentante.trim() || form.email.trim());
-      fd.append("senhaRepresentante", form.senhaRepresentante.trim() || "provisorio123");
+      fd.append(
+        "nomeRepresentante",
+        form.nomeRepresentante.trim() || "Administrador",
+      );
+      fd.append(
+        "emailRepresentante",
+        form.emailRepresentante.trim() || form.email.trim(),
+      );
+      fd.append(
+        "senhaRepresentante",
+        form.senhaRepresentante.trim() || "provisorio123",
+      );
       if (form.numTelRepresentante.trim())
         fd.append("numTelRepresentante", form.numTelRepresentante.trim());
 
@@ -148,10 +161,14 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       };
 
       if (!res.ok)
-        throw new Error(data.error ?? data.detalhe ?? "Erro ao cadastrar instituição");
+        throw new Error(
+          data.error ?? data.detalhe ?? "Erro ao cadastrar instituição",
+        );
 
       if (!data.instituicao?.idinstituicao)
-        throw new Error("ID da instituição não retornado pela API após cadastro.");
+        throw new Error(
+          "ID da instituição não retornado pela API após cadastro.",
+        );
 
       const novaInst: Institution = {
         id: data.instituicao.idinstituicao,
@@ -214,13 +231,17 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
 
         <div className="p-4 sm:p-6">
           <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6">
-            Insira os dados da instituição e clique em "Concluir" para finalizar.
+            Insira os dados da instituição e clique em "Concluir" para
+            finalizar.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {/* Col 1 */}
             <div className="space-y-3 sm:space-y-4">
               <div>
-                <label htmlFor="idTipoInstituicao" className="block text-xs sm:text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="idTipoInstituicao"
+                  className="block text-xs sm:text-sm font-medium text-gray-700"
+                >
                   Tipo de Instituição <span className="text-red-500">*</span>
                 </label>
                 <div className="relative mt-1">
@@ -228,27 +249,49 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                     id="idTipoInstituicao"
                     value={form.idTipoInstituicao}
                     onChange={(e) =>
-                      setForm((p) => ({ ...p, idTipoInstituicao: Number(e.target.value) }))
+                      setForm((p) => ({
+                        ...p,
+                        idTipoInstituicao: Number(e.target.value),
+                      }))
                     }
                     className="appearance-none w-full border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     {TIPOS_INSTITUICAO.map((t) => (
-                      <option key={t.id} value={t.id}>{t.label}</option>
+                      <option key={t.id} value={t.id}>
+                        {t.label}
+                      </option>
                     ))}
                   </select>
                   <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
                 </div>
               </div>
               {[
-                { id: "nome", label: "Nome da Instituição", req: true, type: "text", ph: "Ex: Colégio Caracol" },
-                { id: "email", label: "Email da Instituição", req: true, type: "email", ph: "contacto@instituicao.ao" },
+                {
+                  id: "nome",
+                  label: "Nome da Instituição",
+                  req: true,
+                  type: "text",
+                  ph: "Ex: Colégio Caracol",
+                },
+                {
+                  id: "email",
+                  label: "Email da Instituição",
+                  req: true,
+                  type: "email",
+                  ph: "contacto@instituicao.ao",
+                },
               ].map(({ id, label, req, type, ph }) => (
                 <div key={id}>
-                  <label htmlFor={id} className="block text-xs sm:text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor={id}
+                    className="block text-xs sm:text-sm font-medium text-gray-700"
+                  >
                     {label} {req && <span className="text-red-500">*</span>}
                   </label>
                   <input
-                    id={id} type={type} placeholder={ph}
+                    id={id}
+                    type={type}
+                    placeholder={ph}
                     value={(form as any)[id]}
                     onChange={handleChange}
                     className="w-full border border-gray-300 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 outline-none mt-1"
@@ -256,14 +299,23 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                 </div>
               ))}
               <div>
-                <label htmlFor="contacto" className="block text-xs sm:text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="contacto"
+                  className="block text-xs sm:text-sm font-medium text-gray-700"
+                >
                   Contacto
                 </label>
                 <input
-                  id="contacto" type="tel" placeholder="+244 9XX XXX XXX" maxLength={9}
+                  id="contacto"
+                  type="tel"
+                  placeholder="+244 9XX XXX XXX"
+                  maxLength={9}
                   value={form.contacto}
                   onChange={(e) =>
-                    setForm((p) => ({ ...p, contacto: e.target.value.replace(/\D/g, "") }))
+                    setForm((p) => ({
+                      ...p,
+                      contacto: e.target.value.replace(/\D/g, ""),
+                    }))
                   }
                   className="w-full border border-gray-300 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 outline-none mt-1"
                 />
@@ -273,19 +325,36 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
             {/* Col 2 */}
             <div className="space-y-3 sm:space-y-4">
               {[
-                { id: "localizacao", label: "Endereço / Localização", req: false, ph: "Rua Principal, nº X" },
+                {
+                  id: "localizacao",
+                  label: "Endereço / Localização",
+                  req: false,
+                  ph: "Rua Principal, nº X",
+                },
                 { id: "nif", label: "NIF", req: false, ph: "0000000000" },
-                { id: "iban", label: "IBAN", req: true, ph: "AO06 XXXX XXXX XXXX" },
+                {
+                  id: "iban",
+                  label: "IBAN",
+                  req: true,
+                  ph: "AO06 XXXX XXXX XXXX",
+                },
               ].map(({ id, label, req, ph }) => (
                 <div key={id}>
-                  <label htmlFor={id} className="block text-xs sm:text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor={id}
+                    className="block text-xs sm:text-sm font-medium text-gray-700"
+                  >
                     {label} {req && <span className="text-red-500">*</span>}
                   </label>
                   <input
-                    id={id} type="text" placeholder={ph}
+                    id={id}
+                    type="text"
+                    placeholder={ph}
                     value={(form as any)[id]}
                     onChange={handleChange}
-                    maxLength={id === "iban" ? 30 : id === "nif" ? 14 : undefined}
+                    maxLength={
+                      id === "iban" ? 30 : id === "nif" ? 14 : undefined
+                    }
                     className="w-full border border-gray-300 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 outline-none mt-1"
                   />
                 </div>
@@ -299,15 +368,27 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                   className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors cursor-pointer overflow-hidden"
                 >
                   {form.logoPreview ? (
-                    <img src={form.logoPreview} alt="preview" className="h-16 sm:h-20 object-contain rounded" />
+                    <img
+                      src={form.logoPreview}
+                      alt="preview"
+                      className="h-16 sm:h-20 object-contain rounded"
+                    />
                   ) : (
                     <>
                       <ImagePlus className="w-6 h-6 sm:w-7 sm:h-7 text-gray-400 mb-1" />
-                      <p className="text-xs text-gray-500">Clique para carregar</p>
+                      <p className="text-xs text-gray-500">
+                        Clique para carregar
+                      </p>
                     </>
                   )}
                 </label>
-                <input id="logoInput" type="file" accept="image/*" className="hidden" onChange={handleLogo} />
+                <input
+                  id="logoInput"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleLogo}
+                />
               </div>
             </div>
 
@@ -319,29 +400,59 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                 </h4>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
-                    type="checkbox" checked={createAdmin}
-                    onChange={() => setCreateAdmin(!createAdmin)} className="sr-only peer"
+                    type="checkbox"
+                    checked={createAdmin}
+                    onChange={() => setCreateAdmin(!createAdmin)}
+                    className="sr-only peer"
                   />
                   <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all" />
                 </label>
               </div>
               <p className="text-xs text-gray-500 mb-3 sm:mb-4 leading-relaxed">
-                Se ativado, será criado um representante com acesso administrativo.
+                Se ativado, será criado um representante com acesso
+                administrativo.
               </p>
-              <div className={`space-y-2 sm:space-y-3 transition-opacity duration-300 ${createAdmin ? "opacity-100" : "opacity-40 pointer-events-none"}`}>
+              <div
+                className={`space-y-2 sm:space-y-3 transition-opacity duration-300 ${createAdmin ? "opacity-100" : "opacity-40 pointer-events-none"}`}
+              >
                 {[
-                  { id: "nomeRepresentante", label: "Nome", type: "text", ph: "Nome Completo" },
-                  { id: "emailRepresentante", label: "Email", type: "email", ph: "admin@instituicao.ao" },
-                  { id: "numTelRepresentante", label: "Contacto", type: "tel", ph: "9XX XXX XXX" },
-                  { id: "senhaRepresentante", label: "Palavra-passe", type: "password", ph: "Mín. 8 caracteres" },
+                  {
+                    id: "nomeRepresentante",
+                    label: "Nome",
+                    type: "text",
+                    ph: "Nome Completo",
+                  },
+                  {
+                    id: "emailRepresentante",
+                    label: "Email",
+                    type: "email",
+                    ph: "admin@instituicao.ao",
+                  },
+                  {
+                    id: "numTelRepresentante",
+                    label: "Contacto",
+                    type: "tel",
+                    ph: "9XX XXX XXX",
+                  },
+                  {
+                    id: "senhaRepresentante",
+                    label: "Palavra-passe",
+                    type: "password",
+                    ph: "Mín. 8 caracteres",
+                  },
                 ].map(({ id, label, type, ph }) => (
                   <div key={id}>
-                    <label htmlFor={id} className="block text-xs font-medium text-gray-700">
+                    <label
+                      htmlFor={id}
+                      className="block text-xs font-medium text-gray-700"
+                    >
                       {label}{" "}
                       {createAdmin && <span className="text-red-500">*</span>}
                     </label>
                     <input
-                      id={id} type={type} placeholder={ph}
+                      id={id}
+                      type={type}
+                      placeholder={ph}
                       value={(form as any)[id]}
                       onChange={handleChange}
                       disabled={!createAdmin}
@@ -356,13 +467,15 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
 
         <div className="flex justify-end items-center p-4 sm:p-6 bg-gray-50 border-t sticky bottom-0 gap-3">
           <button
-            onClick={onClose} disabled={loading}
+            onClick={onClose}
+            disabled={loading}
             className="text-gray-600 text-sm font-medium py-2 px-4 sm:px-6 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-40"
           >
             Cancelar
           </button>
           <button
-            onClick={handleSubmit} disabled={loading}
+            onClick={handleSubmit}
+            disabled={loading}
             className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium py-2 px-4 sm:px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-md disabled:opacity-60"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -374,7 +487,11 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
   );
 }
 
-function ExpandedInstitutionDetails({ institution }: { institution: Institution }) {
+function ExpandedInstitutionDetails({
+  institution,
+}: {
+  institution: Institution;
+}) {
   return (
     <div className="mt-4 p-3 sm:p-4 border border-gray-100 bg-gray-50 rounded-lg shadow-inner">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-y-4 sm:gap-x-8 items-start">
@@ -384,8 +501,12 @@ function ExpandedInstitutionDetails({ institution }: { institution: Institution 
               <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-700" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-semibold text-gray-800">Nome da Instituição</p>
-              <p className="text-sm sm:text-base text-gray-600">{institution.name}</p>
+              <p className="text-xs sm:text-sm font-semibold text-gray-800">
+                Nome da Instituição
+              </p>
+              <p className="text-sm sm:text-base text-gray-600">
+                {institution.name}
+              </p>
             </div>
           </div>
           <div className="space-y-1 ml-2 sm:ml-4 text-xs sm:text-sm">
@@ -398,7 +519,8 @@ function ExpandedInstitutionDetails({ institution }: { institution: Institution 
               <span>{institution.phone}</span>
             </div>
             <p className="text-xs sm:text-sm text-gray-500 mt-2 ml-6">
-              <span className="font-semibold">Endereço:</span> {institution.address}
+              <span className="font-semibold">Endereço:</span>{" "}
+              {institution.address}
             </p>
           </div>
         </div>
@@ -420,7 +542,9 @@ function ExpandedInstitutionDetails({ institution }: { institution: Institution 
         <div className="flex flex-row sm:flex-col sm:items-end gap-4 sm:gap-4 text-xs sm:text-sm md:border-l md:border-gray-200 md:pl-8 justify-between sm:justify-start">
           <div className="flex flex-col sm:items-end">
             <p className="font-medium text-gray-600">Status</p>
-            <div className={`flex items-center font-bold mt-1 ${institution.status === "Ativo" ? "text-green-600" : "text-red-600"}`}>
+            <div
+              className={`flex items-center font-bold mt-1 ${institution.status === "Ativo" ? "text-green-600" : "text-red-600"}`}
+            >
               {institution.status === "Ativo" ? (
                 <CheckCircle className="w-4 h-4 mr-1" />
               ) : (
@@ -463,7 +587,7 @@ export default function GestaoDeInstituicao() {
   };
 
   const filtered = institutions.filter((i) =>
-    i.name.toLowerCase().includes(search.toLowerCase())
+    i.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   if (!user) return null;
@@ -474,7 +598,7 @@ export default function GestaoDeInstituicao() {
       <div className="flex flex-col flex-1 min-w-0">
         <Header
           titulo="Gestão de Instituição"
-          usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+          usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
         />
 
         <main className="p-4 sm:p-6 md:p-8">
@@ -519,7 +643,9 @@ export default function GestaoDeInstituicao() {
 
             {filtered.length === 0 ? (
               <div className="text-center py-12 text-gray-400 text-sm">
-                {search ? "Nenhuma instituição encontrada." : "Ainda não há instituições registadas."}
+                {search
+                  ? "Nenhuma instituição encontrada."
+                  : "Ainda não há instituições registadas."}
               </div>
             ) : (
               <div className="divide-y divide-gray-200">
@@ -530,8 +656,8 @@ export default function GestaoDeInstituicao() {
                         newlyAddedId === inst.id
                           ? "bg-green-50 ring-2 ring-green-300 rounded-lg p-2 -mx-2"
                           : expandedId === inst.id
-                          ? "pb-4"
-                          : "hover:bg-blue-50 cursor-pointer rounded-lg p-2 -mx-2"
+                            ? "pb-4"
+                            : "hover:bg-blue-50 cursor-pointer rounded-lg p-2 -mx-2"
                       }`}
                     >
                       <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-indigo-50 border border-indigo-200 mr-3 sm:mr-4 flex-shrink-0">
@@ -548,7 +674,9 @@ export default function GestaoDeInstituicao() {
                             </span>
                           )}
                         </div>
-                        <p className="text-xs sm:text-sm text-gray-500 truncate">{inst.address}</p>
+                        <p className="text-xs sm:text-sm text-gray-500 truncate">
+                          {inst.address}
+                        </p>
                       </div>
                       <button
                         onClick={() =>

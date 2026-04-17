@@ -25,7 +25,7 @@ export default function ReclamacoesEncar() {
         <div className="flex-1 overflow-auto">
           <Header
             titulo="Reclamações"
-            usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+            usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
           />
           <div className="">
             <ReclamacaoGeral />

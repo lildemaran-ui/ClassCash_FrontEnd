@@ -3,7 +3,11 @@ import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuAdmin from "@/components/Menu/MenuAdmin";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
-import { exigirSessao, getToken, type SessaoUsuario } from "@/types/global/sessao";
+import {
+  exigirSessao,
+  getToken,
+  type SessaoUsuario,
+} from "@/types/global/sessao";
 import { ChevronDown, Clock, Loader2, RefreshCw, Search } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -19,10 +23,14 @@ interface LogEntry {
 
 const getLevelColor = (level: LogEntry["nivel"]) => {
   switch (level) {
-    case "INFO":  return "bg-blue-100 text-blue-800";
-    case "AVISO": return "bg-yellow-100 text-yellow-800";
-    case "ERRO":  return "bg-red-100 text-red-800";
-    default:      return "bg-gray-100 text-gray-800";
+    case "INFO":
+      return "bg-blue-100 text-blue-800";
+    case "AVISO":
+      return "bg-yellow-100 text-yellow-800";
+    case "ERRO":
+      return "bg-red-100 text-red-800";
+    default:
+      return "bg-gray-100 text-gray-800";
   }
 };
 
@@ -66,7 +74,8 @@ export default function GestaoLogs() {
 
   // Filtragem client-side
   const filtered = logs.filter((log) => {
-    const nivelOk = filtroNivel === "Todos os Níveis" || log.nivel === filtroNivel;
+    const nivelOk =
+      filtroNivel === "Todos os Níveis" || log.nivel === filtroNivel;
     const dataOk =
       !filtroData ||
       new Date(log.datahora).toLocaleDateString("pt-AO") ===
@@ -83,12 +92,17 @@ export default function GestaoLogs() {
   const LogCard = ({ log }: { log: LogEntry }) => (
     <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-3 space-y-2">
       <div className="flex items-center justify-between gap-2">
-        <span className={`inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${getLevelColor(log.nivel)}`}>
+        <span
+          className={`inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${getLevelColor(log.nivel)}`}
+        >
           {log.nivel}
         </span>
         <div className="flex items-center text-xs text-gray-400">
           <Clock className="w-3 h-3 mr-1" />
-          {new Date(log.datahora).toLocaleString("pt-AO", { dateStyle: "short", timeStyle: "short" })}
+          {new Date(log.datahora).toLocaleString("pt-AO", {
+            dateStyle: "short",
+            timeStyle: "short",
+          })}
         </div>
       </div>
       <div>
@@ -105,7 +119,7 @@ export default function GestaoLogs() {
       <div className="flex flex-col flex-1 min-w-0">
         <Header
           titulo="Logs de Atividade"
-          usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+          usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
         />
 
         <main className="flex-1 p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
@@ -161,11 +175,16 @@ export default function GestaoLogs() {
             {/* Contagem */}
             <div className="mt-2 flex items-center justify-between">
               <p className="text-xs text-gray-400">
-                {filtered.length} registo{filtered.length !== 1 ? "s" : ""} encontrado{filtered.length !== 1 ? "s" : ""}
+                {filtered.length} registo{filtered.length !== 1 ? "s" : ""}{" "}
+                encontrado{filtered.length !== 1 ? "s" : ""}
               </p>
               {(filtroNivel !== "Todos os Níveis" || filtroData || search) && (
                 <button
-                  onClick={() => { setFiltroNivel("Todos os Níveis"); setFiltroData(""); setSearch(""); }}
+                  onClick={() => {
+                    setFiltroNivel("Todos os Níveis");
+                    setFiltroData("");
+                    setSearch("");
+                  }}
                   className="text-xs text-[#184d8a] hover:underline"
                 >
                   Limpar filtros
@@ -191,7 +210,13 @@ export default function GestaoLogs() {
                 <table className="min-w-full divide-y divide-gray-200 text-center">
                   <thead className="bg-[#184d8a]/70">
                     <tr>
-                      {["Data/Hora", "Nível", "Utilizador", "Ação", "Detalhes"].map((header) => (
+                      {[
+                        "Data/Hora",
+                        "Nível",
+                        "Utilizador",
+                        "Ação",
+                        "Detalhes",
+                      ].map((header) => (
                         <th
                           key={header}
                           className="px-4 sm:px-6 py-3 text-center text-xs sm:text-sm font-bold text-white tracking-widest"
@@ -210,17 +235,23 @@ export default function GestaoLogs() {
                       </tr>
                     ) : (
                       filtered.map((log, i) => (
-                        <tr key={i} className="hover:bg-gray-50 transition-colors">
+                        <tr
+                          key={i}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
                           <td className="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                             <div className="flex items-center justify-center">
                               <Clock className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2 text-gray-400 shrink-0" />
                               {new Date(log.datahora).toLocaleString("pt-AO", {
-                                dateStyle: "short", timeStyle: "short",
+                                dateStyle: "short",
+                                timeStyle: "short",
                               })}
                             </div>
                           </td>
                           <td className="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm">
-                            <span className={`inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${getLevelColor(log.nivel)}`}>
+                            <span
+                              className={`inline-flex px-2 text-xs font-semibold leading-5 rounded-full ${getLevelColor(log.nivel)}`}
+                            >
                               {log.nivel}
                             </span>
                           </td>

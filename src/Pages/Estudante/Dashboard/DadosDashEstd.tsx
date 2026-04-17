@@ -1,21 +1,20 @@
-import Avatar from "@/components/Avatar/Avatar";
 import ChartEstud from "@/components/Charts/ChartEstud";
-import { Header } from "@/components/Header/header";
 import { ProfileEditModal } from "@/components/profile_edit_modal";
 import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { ArrowLeft, Bell, CheckCircle, Download, Pen, Settings } from "lucide-react";
+import { Bell, CheckCircle, Download, Pen, Settings } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function DadosDashEstd() {
   // No topo do componente:
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
   const fromEncarregado =
-    (location.state as { fromEncarregado?: boolean })?.fromEncarregado ?? false;
-  const pdfRef = useRef<HTMLDivElement>(null);
+    (location.state as { fromEncarregado?: boolean })?.fromEncarregado ?? false
+
+  const pdfRef = useRef<HTMLDivElement>(null)
 
   const [Modal, setModal] = useState(false);
   const [user, setUser] = useState<SessaoUsuario | null>(null);
@@ -28,46 +27,45 @@ export default function DadosDashEstd() {
   if (!user) return <>A verificar autenticação...</>;
 
   const gerarPDF = async () => {
-    const elemento = pdfRef.current;
-    if (!elemento) return;
-    const canvas = await html2canvas(elemento, { scale: 2 });
-    const imagem = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const largura = pdf.internal.pageSize.getWidth();
-    const altura = (canvas.height * largura) / canvas.width;
-    pdf.addImage(imagem, "PNG", 0, 0, largura, altura);
-    pdf.save("relatorio.pdf");
-  };
+    const elemento = pdfRef.current
+    if (!elemento) return
+    const canvas = await html2canvas(elemento, { scale: 2 })
+    const imagem = canvas.toDataURL('image/png')
+    const pdf = new jsPDF('p', 'mm', 'a4')
+    const largura = pdf.internal.pageSize.getWidth()
+    const altura = (canvas.height * largura) / canvas.width
+    pdf.addImage(imagem, 'PNG', 0, 0, largura, altura)
+    pdf.save('relatorio.pdf')
+  }
 
   const SummaryRow = ({
     label,
     value,
     isLast,
   }: {
-    label: string;
-    value: string;
-    isLast?: boolean;
+    label: string
+    value: string
+    isLast?: boolean
   }) => (
     <div
-      className={`flex justify-between items-center py-3 ${!isLast ? "border-b border-gray-50" : ""}`}
+      className={`flex justify-between items-center py-3 ${!isLast ? 'border-b border-gray-50' : ''}`}
     >
       <span className="text-gray-400 font-medium text-sm">{label}</span>
       <span className="text-gray-800 font-bold text-base">{value}</span>
     </div>
-  );
-  
+  )
+
   return (
     <div className="flex flex-col w-full px-4 sm:px-6 lg:px-8 bg-[#f8fafc] mb-8 ">
-    
-      <div ref={pdfRef} className="flex-1 overflow-y-auto min-w-0 top-0 space-y-8">
-        <div className="flex items-end justify-end mt-3">
-          <Link to="/Config">
-        <button
-          className="text-[#184d8a] hover:scale-110 transition-all p-1"
-        >
-          <Settings size={20} className="sm:hidden" />
-          <Settings size={24} className="hidden sm:block" />
-        </button></Link>
+      <div className="flex items-end justify-end mt-3">
+        <Link to="/Config">
+          <button
+            className="text-[#184d8a] hover:scale-110 transition-all p-1"
+          >
+            <Settings size={20} className="sm:hidden" />
+            <Settings size={24} className="hidden sm:block" />
+          </button>
+        </Link>
 
         {/* Sino de notificações */}
         <div className="relative cursor-pointer group p-1">
@@ -75,13 +73,10 @@ export default function DadosDashEstd() {
             size={20}
             className="text-[#184d8a] group-hover:scale-110 transition-transform sm:hidden"
           />
-          <Bell
-            size={24}
-            className="text-[#184d8a] group-hover:scale-110 transition-transform hidden sm:block"
-          />
-          <span className="absolute -top-0.5 -right-0.5 bg-red-500 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 border-white" />
         </div>
-        </div>
+      </div>
+
+      <div ref={pdfRef} className="space-y-8">
         {/* Header Modernizado */}
 
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
@@ -117,7 +112,7 @@ export default function DadosDashEstd() {
               </h1>
               <div className="flex flex-col justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
                 <p>
-                  <strong>Código:</strong> 
+                  <strong>ID:</strong> {user.processo}
                 </p>
                 <p>
                   <strong>Classe:</strong> {user.classe}
@@ -237,5 +232,5 @@ export default function DadosDashEstd() {
         user={user}
       />
     </div>
-  );
+  )
 }

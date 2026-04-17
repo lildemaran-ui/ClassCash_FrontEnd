@@ -12,6 +12,7 @@ import {
   X,
   Mail,
   Heart,
+  PencilIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
@@ -61,6 +62,7 @@ const FORM_INICIAL: FormData = {
 
 type Aba = "pesquisar" | "gestao";
 
+
 // ─── Modal Cadastro (melhorado) ───────────────────────────────────────────────
 function ModalCadastro({
   onClose,
@@ -72,7 +74,7 @@ function ModalCadastro({
   const [form, setForm] = useState<FormData>(FORM_INICIAL);
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState<1 | 2>(1);
-  const classes = useClasses()
+  const classes = useClasses();
 
   const handle = (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -345,6 +347,169 @@ function ModalCadastro({
     </div>
   );
 }
+// ─── Modal Editar ─────────────────────────────────────────────────────────────
+function ModalEditar({
+  enc,
+  onClose,
+  onSucesso,
+}: {
+  enc: Encarregado;
+  onClose: () => void;
+  onSucesso: () => void;
+}) {
+  const [form, setForm] = useState({
+    nomeEncarregado: enc.encarregado,
+    contacto: enc.contacto,
+    grauParentesco: enc.parentesco,
+    estado: enc.estado,
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  const submeter = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const res = await fetchComAuth(
+        `${API}/GestaoEncarregados/${enc.idencarregado}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: JSON.stringify(form),
+        },
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Erro ao editar");
+      toast.success("Encarregado atualizado com sucesso!");
+      onSucesso();
+      onClose();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao editar");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div className="flex bg-[#184d8a] items-center justify-between px-6 py-4">
+          <div>
+            <h2 className="text-base font-bold text-white">
+              Editar Encarregado
+            </h2>
+            <p className="text-xs text-gray-300">{enc.encarregado}</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <form onSubmit={submeter} className="p-6 flex flex-col gap-4">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2">
+              <label className="block text-xs mb-1 text-gray-600 font-medium">
+                Nome Completo
+              </label>
+              <input
+                required
+                name="nomeEncarregado"
+                value={form.nomeEncarregado}
+                onChange={handle}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">
+                Contacto
+              </label>
+              <input
+                required
+                name="contacto"
+                value={form.contacto}
+                maxLength={9}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    contacto: e.target.value.replace(/\D/g, ""),
+                  }))
+                }
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">
+                Grau de Parentesco
+              </label>
+              <input
+                required
+                name="grauParentesco"
+                value={form.grauParentesco}
+                onChange={(e) =>
+                  setForm((f) => ({
+                    ...f,
+                    grauParentesco: e.target.value.replace(/[0-9]/g, ""),
+                  }))
+                }
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">
+                Estado
+              </label>
+              <select
+                name="estado"
+                value={form.estado}
+                onChange={handle}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white transition-colors"
+              >
+                <option value="Pendente">Pendente</option>
+                <option value="Aceite">Aceite</option>
+                <option value="Recusado">Recusado</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Info do educando (só leitura) */}
+          <div className="bg-[#184d8a]/5 rounded-xl p-3 border border-[#184d8a]/10">
+            <p className="text-xs text-gray-500 mb-1 font-medium">
+              Educando associado
+            </p>
+            <p className="text-sm font-bold text-gray-700">
+              {enc.nomedoeducando}
+            </p>
+          </div>
+
+          <div className="flex gap-3 mt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 h-10 rounded-xl border-2 border-gray-200 text-sm text-gray-500 hover:bg-gray-50 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-[#184d8a]/80 transition-colors disabled:opacity-60"
+            >
+              {loading ? "A guardar..." : "Guardar Alterações"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
 
 // ─── Modal Visualizar ─────────────────────────────────────────────────────────
 function ModalVisualizar({
@@ -458,6 +623,7 @@ export default function GestaodeEncarregados() {
   const [loading, setLoading] = useState(true);
   const [pesquisa, setPesquisa] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [modalEditar, setModalEditar] = useState<Encarregado | null>(null);
   const [modalVisualizar, setModalVisualizar] = useState<Encarregado | null>(
     null,
   );
@@ -532,6 +698,13 @@ export default function GestaodeEncarregados() {
         <ModalVisualizar
           enc={modalVisualizar}
           onClose={() => setModalVisualizar(null)}
+        />
+      )}
+      {modalEditar && (
+        <ModalEditar
+          enc={modalEditar}
+          onClose={() => setModalEditar(null)}
+          onSucesso={carregarEncarregados}
         />
       )}
 
@@ -618,11 +791,21 @@ export default function GestaodeEncarregados() {
                           )}
                         </div>
                       </th>
-                      <th className="px-4 py-3">Educando (Aluno)</th>
-                      <th className="px-4 py-3">Parentesco</th>
-                      <th className="px-4 py-3">Contacto</th>
-                      <th className="px-4 py-3">Estado</th>
-                      <th className="px-4 py-3">Ação</th>
+                      <th className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                        Educando (Aluno)
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                        Parentesco
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                        Contacto
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                        Estado
+                      </th>
+                      <th className="px-3 sm:px-4 py-3 whitespace-nowrap">
+                        Ação
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
@@ -672,16 +855,31 @@ export default function GestaodeEncarregados() {
                             </span>
                           </td>
                           <td className="px-4 py-3">
-                            <div className="group relative w-max mx-auto">
-                              <div
-                                onClick={() => setModalVisualizar(enc)}
-                                className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
-                              >
-                                <EyeIcon size={16} />
+                            <div className="flex justify-center gap-2">
+                              {/* Editar */}
+                              <div className="group relative">
+                                <div
+                                  onClick={() => setModalEditar(enc)}
+                                  className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                                >
+                                  <PencilIcon size={16} />
+                                </div>
+                                <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-all z-10">
+                                  Editar
+                                </span>
                               </div>
-                              <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10">
-                                Visualizar
-                              </span>
+                              {/* Visualizar */}
+                              <div className="group relative">
+                                <div
+                                  onClick={() => setModalVisualizar(enc)}
+                                  className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                                >
+                                  <EyeIcon size={16} />
+                                </div>
+                                <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white border text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-all z-10">
+                                  Visualizar
+                                </span>
+                              </div>
                             </div>
                           </td>
                         </tr>
@@ -724,50 +922,85 @@ export default function GestaodeEncarregados() {
               </div>
 
               {/* Distribuição por parentesco */}
+              {/* Distribuição por parentesco */}
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-                <h3 className="text-base font-bold text-gray-700 mb-4">
+                <h3 className="text-base font-bold text-gray-700 mb-1">
                   Distribuição por Grau de Parentesco
                 </h3>
+                <p className="text-xs text-gray-400 mb-5">
+                  Número de encarregados por grau de parentesco
+                </p>
+
                 {encarregados.length === 0 ? (
                   <p className="text-sm text-gray-400 text-center py-8">
                     Sem dados disponíveis
                   </p>
                 ) : (
-                  <div className="flex flex-col gap-3">
-                    {Object.entries(
-                      encarregados.reduce(
-                        (acc, e) => {
-                          const p = e.parentesco || "Outro";
-                          acc[p] = (acc[p] || 0) + 1;
-                          return acc;
-                        },
-                        {} as Record<string, number>,
-                      ),
-                    )
-                      .sort((a, b) => b[1] - a[1])
-                      .map(([parentesco, count]) => {
-                        const pct = Math.round((count / total) * 100);
-                        return (
-                          <div
-                            key={parentesco}
-                            className="flex items-center gap-3"
-                          >
-                            <p className="text-sm text-gray-600 w-28 shrink-0">
-                              {parentesco}
-                            </p>
-                            <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-[#184d8a] rounded-full transition-all duration-700"
-                                style={{ width: `${pct}%` }}
-                              />
+                  (() => {
+                    const agrupado = encarregados.reduce(
+                      (acc, e) => {
+                        const p = e.parentesco || "Outro";
+                        acc[p] = (acc[p] || 0) + 1;
+                        return acc;
+                      },
+                      {} as Record<string, number>,
+                    );
+
+                    const lista = Object.entries(agrupado).sort(
+                      (a, b) => b[1] - a[1],
+                    );
+                    const maximo = Math.max(...lista.map(([, v]) => v));
+                    const cores = [
+                      "#185FA5",
+                      "#1D9E75",
+                      "#BA7517",
+                      "#888780",
+                      "#D85A30",
+                    ];
+
+                    return (
+                      <>
+                        {lista.map(([parentesco, count], i) => {
+                          const pct = Math.round((count / total) * 100);
+                          const largura = Math.round((count / maximo) * 100);
+                          return (
+                            <div key={parentesco} className="mb-5">
+                              <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-sm font-medium text-gray-700">
+                                  {parentesco}
+                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-gray-400">
+                                    {count} encarregado{count !== 1 ? "s" : ""}
+                                  </span>
+                                  <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200">
+                                    {pct}%
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div
+                                  className="h-full rounded-full transition-all duration-700"
+                                  style={{
+                                    width: `${largura}%`,
+                                    backgroundColor: cores[i % cores.length],
+                                  }}
+                                />
+                              </div>
                             </div>
-                            <p className="text-xs text-gray-400 w-10 text-right">
-                              {count}
-                            </p>
-                          </div>
-                        );
-                      })}
-                  </div>
+                          );
+                        })}
+                        <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between items-center">
+                          <span className="text-sm text-gray-400">
+                            Total geral
+                          </span>
+                          <span className="text-sm font-bold text-gray-700">
+                            {total} encarregados
+                          </span>
+                        </div>
+                      </>
+                    );
+                  })()
                 )}
               </div>
             </div>

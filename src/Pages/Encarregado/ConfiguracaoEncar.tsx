@@ -1,11 +1,9 @@
-
 import Avatar from "@/components/Avatar/Avatar";
 import ConfiguracaoGeral from "@/components/Configuracoes/ConfiguracaoGeral";
 import { Header } from "@/components/Header/header";
 import { useEffect, useState } from "react";
 import { LayoutEncarregado } from "../layout/index2";
 export default function ConfiguracaoEncar() {
-
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
@@ -19,15 +17,14 @@ export default function ConfiguracaoEncar() {
   if (!user) {
     return <span>Carregado...</span>;
   }
-  
+
   return (
-   
-         <LayoutEncarregado>
+    <LayoutEncarregado>
       <div className="flex-1 w-full h-full mx-auto ">
         <div className="flex-1 overflow-auto">
           <Header
             titulo="Configurações"
-            usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+            usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
           />
           <div className="">
             <ConfiguracaoGeral />

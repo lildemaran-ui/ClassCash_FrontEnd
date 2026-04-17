@@ -4,9 +4,9 @@ import Card2 from "../../assets/Card2PI.jpeg";
 import Card3 from "../../assets/Card3PI.jpeg";
 
 const cards = [
-  { src: Card1, alt: "App Screenshot 1", label: "Gerencie suas contas" },
-  { src: Card2, alt: "App Screenshot 2", label: "Controle seus gastos" },
-  { src: Card3, alt: "App Screenshot 3", label: "Visualize relatórios" },
+  { src: Card1, alt: "App Screenshot 1" },
+  { src: Card2, alt: "App Screenshot 2" },
+  { src: Card3, alt: "App Screenshot 3" },
 ];
 
 export default function AppsIlustr() {
@@ -54,7 +54,8 @@ export default function AppsIlustr() {
 
   return (
     <>
-      <style>{`
+      <style>
+        {`
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap');
 
         .carousel-root {
@@ -256,7 +257,15 @@ export default function AppsIlustr() {
         style={{ maxWidth: 900, margin: "40px auto" }}
       >
         {/* Background glow orbs */}
-        <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0 }}>
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            overflow: "hidden",
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        >
           <div className="orb orb-1" />
           <div className="orb orb-2" />
           <div className="orb orb-3" />
@@ -266,7 +275,11 @@ export default function AppsIlustr() {
           {/* Main carousel */}
           <div
             className="slide-wrap"
-            style={{ width: "100%", height: "clamp(220px, 45vw, 420px)", boxShadow: "0 30px 80px rgba(0,0,0,0.4)" }}
+            style={{
+              width: "100%",
+              height: "clamp(220px, 45vw, 420px)",
+              boxShadow: "0 30px 80px rgba(0,0,0,0.4)",
+            }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
@@ -274,37 +287,81 @@ export default function AppsIlustr() {
               key={current}
               src={cards[current].src}
               alt={cards[current].alt}
-              className={`slide-img ${animating ? (direction === "right" ? "slide-exit-right" : "slide-exit-left") : (direction === "right" ? "slide-enter-right" : "slide-enter-left")}`}
+              className={`slide-img ${animating ? (direction === "right" ? "slide-exit-right" : "slide-exit-left") : direction === "right" ? "slide-enter-right" : "slide-enter-left"}`}
             />
 
             {/* Shimmer overlay */}
             <div className="shimmer-overlay" />
 
             {/* Gradient bottom overlay */}
-            <div style={{
-              position: "absolute", bottom: 0, left: 0, right: 0, height: "45%",
-              background: "linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%)",
-              pointerEvents: "none"
-            }} />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "45%",
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%)",
+                pointerEvents: "none",
+              }}
+            />
 
             {/* Label badge */}
-            <div style={{ position: "absolute", bottom: 20, left: 20 }}>
-              <span key={current} className="label-badge">{cards[current].label}</span>
-            </div>
+            <div style={{ position: "absolute", bottom: 20, left: 20 }}></div>
 
             {/* Counter */}
             <div style={{ position: "absolute", top: 16, right: 16 }}>
-              <span className="counter">{String(current + 1).padStart(2, "0")} / {String(cards.length).padStart(2, "0")}</span>
+              <span className="counter">
+                {String(current + 1).padStart(2, "0")} /{" "}
+                {String(cards.length).padStart(2, "0")}
+              </span>
             </div>
 
             {/* Nav buttons */}
-            <button className="nav-btn" onClick={prev} style={{ position: "absolute", left: 16, top: "50%", transform: "translateY(-50%)" }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <button
+              className="nav-btn"
+              onClick={prev}
+              style={{
+                position: "absolute",
+                left: 16,
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
-            <button className="nav-btn" onClick={next} style={{ position: "absolute", right: 16, top: "50%", transform: "translateY(-50%)" }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <button
+              className="nav-btn"
+              onClick={next}
+              style={{
+                position: "absolute",
+                right: 16,
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </button>
@@ -312,11 +369,22 @@ export default function AppsIlustr() {
 
           {/* Progress bar */}
           <div className="progress-bar" style={{ marginTop: 12 }}>
-            <div key={current} className={`progress-fill ${isHovered ? "paused" : ""}`} />
+            <div
+              key={current}
+              className={`progress-fill ${isHovered ? "paused" : ""}`}
+            />
           </div>
 
           {/* Dot indicators */}
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, marginTop: 16 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 8,
+              marginTop: 16,
+            }}
+          >
             {cards.map((_, i) => (
               <div
                 key={i}
@@ -327,15 +395,29 @@ export default function AppsIlustr() {
           </div>
 
           {/* Thumbnail strip */}
-          <div style={{ display: "flex", gap: 12, marginTop: 20, justifyContent: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              marginTop: 20,
+              justifyContent: "center",
+            }}
+          >
             {cards.map((card, i) => (
               <div
                 key={i}
                 className={`thumb ${i === current ? "active" : ""}`}
-                style={{ width: "clamp(70px, 20%, 130px)", height: "clamp(44px, 7vw, 80px)" }}
+                style={{
+                  width: "clamp(70px, 20%, 130px)",
+                  height: "clamp(44px, 7vw, 80px)",
+                }}
                 onClick={() => goTo(i, i > current ? "right" : "left")}
               >
-                <img src={card.src} alt={card.alt} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <img
+                  src={card.src}
+                  alt={card.alt}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
               </div>
             ))}
           </div>

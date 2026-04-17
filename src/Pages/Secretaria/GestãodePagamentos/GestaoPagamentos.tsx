@@ -1,6 +1,3 @@
-// ════════════════════════════════════════════════════════════════
-// FICHEIRO: src/Pages/Secretaria/GestaoPagamentos.tsx
-// ════════════════════════════════════════════════════════════════
 import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
@@ -20,12 +17,15 @@ import {
   CheckCircle,
   Clock,
   DollarSign,
+  Download,
   EyeIcon,
   FileText,
+  Image,
   PencilIcon,
   Plus,
   Save,
   Search,
+  ShieldCheck,
   TrendingDown,
   TrendingUp,
   User,
@@ -45,6 +45,8 @@ interface PagamentoRow {
   valor: string;
   multa_estimada: string;
   status: string;
+  comprovativo_url?: string | null;
+  tipopagamento?: string | null;
 }
 interface Cards {
   total_pagamentos: string;
@@ -67,6 +69,8 @@ interface Servico {
   classe: number;
   valorservico: string;
 }
+
+// ─── Helpers ────────────────────────────────────────────────────
 
 const CardKpi = ({
   title,
@@ -119,107 +123,282 @@ const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
+// ─── Componente: Visualizador de Comprovativo ────────────────────
+
+const ComprovatvivoViewer = ({ url }: { url: string }) => {
+  const isImage = /\.(png|jpe?g|gif|webp|bmp)$/i.test(url);
+  const isPdf = /\.pdf$/i.test(url);
+  const isTransacaoId = !isImage && !isPdf; // ID de transação Multicaixa
+
+  if (isTransacaoId) {
+    return (
+      <div className="bg-[#184d8a]/5 border border-[#184d8a]/20 rounded-xl px-4 py-3 flex items-center gap-3">
+        <ShieldCheck size={18} className="text-[#184d8a] shrink-0" />
+        <div>
+          <p className="text-[11px] text-gray-500 font-semibold uppercase tracking-wider">
+            ID Transação Multicaixa
+          </p>
+          <p className="text-sm font-mono font-bold text-gray-800">{url}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isImage) {
+    return (
+      <div className="rounded-xl overflow-hidden border border-gray-200">
+        <img
+          src={`http://localhost:5000/${url}`}
+          alt="Comprovativo"
+          className="w-full object-cover max-h-48"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src =
+              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='60'%3E%3Crect fill='%23f3f4f6' width='100' height='60'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-size='10'%3EImagem indisponível%3C/text%3E%3C/svg%3E";
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (isPdf) {
+    return (
+      <a
+        href={`http://localhost:5000/${url}`}
+        target="_blank"
+        rel="noreferrer"
+        className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-700 hover:bg-red-100 transition-colors"
+      >
+        <FileText size={16} />
+        <span className="text-sm font-semibold">Ver PDF do Comprovativo</span>
+        <Download size={14} className="ml-auto" />
+      </a>
+    );
+  }
+
+  return null;
+};
+
+// ─── Modal: Detalhes + Validação ────────────────────────────────
+
 const ModalDetalhes = ({
   row,
   onClose,
+  onValidar,
 }: {
   row: PagamentoRow;
   onClose: () => void;
-}) => (
-  <div
-    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-    onClick={(e) => e.target === e.currentTarget && onClose()}
-  >
-    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
-      <div className="bg-[#184d8a] px-6 py-5 flex justify-between items-start">
-        <div>
-          <h2 className="text-white font-bold text-lg">{row.nome_estudante}</h2>
-          <p className="text-blue-200 text-sm mt-0.5">
-            Pagamento #{row.codigo}
-          </p>
+  onValidar: () => void;
+}) => {
+  const [validando, setValidando] = useState(false);
+
+  const handleValidar = async () => {
+    setValidando(true);
+    try {
+      const res = await fetchComAuth(
+        `${API}/gestaoPagamentos/${row.codigo}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: JSON.stringify({ status: "Confirmado" }),
+        },
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Erro ao confirmar");
+      toast.success("Pagamento confirmado com sucesso!");
+      onValidar();
+      onClose();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao confirmar");
+    } finally {
+      setValidando(false);
+    }
+  };
+
+  const isPendente =
+    row.status?.toLowerCase() === "pendente";
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
+        <div className="bg-[#184d8a] px-6 py-5 flex justify-between items-start sticky top-0 z-10">
+          <div>
+            <h2 className="text-white font-bold text-lg">
+              {row.nome_estudante}
+            </h2>
+            <p className="text-blue-200 text-sm mt-0.5">
+              Pagamento #{row.codigo}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
+          >
+            <X size={18} />
+          </button>
         </div>
-        <button
-          onClick={onClose}
-          className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
-        >
-          <X size={18} />
-        </button>
-      </div>
-      <div className="px-6 py-5 space-y-4">
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            {
-              icon: <BookOpen size={13} className="text-[#184d8a]" />,
-              label: "Classe",
-              val: row.classe ? `${row.classe}ª Classe` : "—",
-            },
-            {
-              icon: <Calendar size={13} className="text-[#184d8a]" />,
-              label: "Data",
-              val: row.data ?? "—",
-            },
-            {
-              icon: <FileText size={13} className="text-[#184d8a]" />,
-              label: "Serviço",
-              val: row.servico,
-            },
-            {
-              icon: <User size={13} className="text-[#184d8a]" />,
-              label: "Estado",
-              val: <StatusBadge status={row.status} />,
-            },
-          ].map(({ icon, label, val }) => (
-            <div key={label} className="bg-gray-50 rounded-xl p-3">
-              <div className="flex items-center gap-1.5 mb-1">
-                {icon}
-                <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
-                  {label}
+
+        <div className="px-6 py-5 space-y-4">
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              {
+                icon: <BookOpen size={13} className="text-[#184d8a]" />,
+                label: "Classe",
+                val: row.classe ? `${row.classe}ª Classe` : "—",
+              },
+              {
+                icon: <Calendar size={13} className="text-[#184d8a]" />,
+                label: "Data",
+                val: row.data ?? "—",
+              },
+              {
+                icon: <FileText size={13} className="text-[#184d8a]" />,
+                label: "Serviço",
+                val: row.servico,
+              },
+              {
+                icon: <User size={13} className="text-[#184d8a]" />,
+                label: "Estado",
+                val: <StatusBadge status={row.status} />,
+              },
+            ].map(({ icon, label, val }) => (
+              <div key={label} className="bg-gray-50 rounded-xl p-3">
+                <div className="flex items-center gap-1.5 mb-1">
+                  {icon}
+                  <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                    {label}
+                  </span>
+                </div>
+                <div className="text-sm font-bold text-gray-700">{val}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tipo de pagamento */}
+          {row.tipopagamento && (
+            <div className="bg-gray-50 rounded-xl px-4 py-3 flex items-center gap-2">
+              <DollarSign size={14} className="text-[#184d8a]" />
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Tipo de Pagamento:
+              </span>
+              <span className="text-sm font-bold text-gray-700 ml-1">
+                {row.tipopagamento}
+              </span>
+            </div>
+          )}
+
+          {/* Valores */}
+          <div className="bg-[#184d8a]/5 rounded-2xl p-4 border border-[#184d8a]/10">
+            <div className="flex justify-between items-center mb-3">
+              <div className="flex items-center gap-2">
+                <DollarSign size={14} className="text-[#184d8a]" />
+                <span className="text-sm font-semibold text-gray-600">
+                  Valor
                 </span>
               </div>
-              <div className="text-sm font-bold text-gray-700">{val}</div>
-            </div>
-          ))}
-        </div>
-        <div className="bg-[#184d8a]/5 rounded-2xl p-4 border border-[#184d8a]/10">
-          <div className="flex justify-between items-center mb-3">
-            <div className="flex items-center gap-2">
-              <DollarSign size={14} className="text-[#184d8a]" />
-              <span className="text-sm font-semibold text-gray-600">Valor</span>
-            </div>
-            <span className="font-bold text-gray-800 text-lg">
-              {Number(row.valor).toLocaleString("pt-AO", {
-                style: "currency",
-                currency: "AOA",
-              })}
-            </span>
-          </div>
-          {Number(row.multa_estimada) > 0 && (
-            <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
-              <span className="text-sm font-semibold text-red-500">Multa</span>
-              <span className="font-bold text-red-600">
-                {Number(row.multa_estimada).toLocaleString("pt-AO", {
+              <span className="font-bold text-gray-800 text-lg">
+                {Number(row.valor).toLocaleString("pt-AO", {
                   style: "currency",
                   currency: "AOA",
                 })}
               </span>
             </div>
+            {Number(row.multa_estimada) > 0 && (
+              <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
+                <span className="text-sm font-semibold text-red-500">
+                  Multa
+                </span>
+                <span className="font-bold text-red-600">
+                  {Number(row.multa_estimada).toLocaleString("pt-AO", {
+                    style: "currency",
+                    currency: "AOA",
+                  })}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* ── Comprovativo ── */}
+          {row.comprovativo_url ? (
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Image size={14} className="text-[#184d8a]" />
+                <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                  Comprovativo Submetido
+                </span>
+              </div>
+              <ComprovatvivoViewer url={row.comprovativo_url} />
+            </div>
+          ) : (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-center gap-2 text-amber-700">
+              <AlertTriangle size={14} />
+              <span className="text-xs font-semibold">
+                Sem comprovativo submetido
+              </span>
+            </div>
+          )}
+
+          {/* ── Botão de Confirmação (só para pagamentos pendentes) ── */}
+          {isPendente && (
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-4">
+              <div className="flex items-start gap-3 mb-3">
+                <ShieldCheck
+                  size={18}
+                  className="text-green-600 shrink-0 mt-0.5"
+                />
+                <div>
+                  <p className="text-sm font-bold text-green-800">
+                    Validar Pagamento
+                  </p>
+                  <p className="text-xs text-green-600 mt-0.5">
+                    Após verificar o comprovativo, confirme o pagamento. Esta
+                    acção não pode ser desfeita.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={handleValidar}
+                disabled={validando}
+                className="w-full py-2.5 rounded-xl font-bold text-white bg-green-600 hover:bg-green-700 transition-all shadow-sm flex items-center justify-center gap-2 disabled:opacity-60"
+              >
+                {validando ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    A confirmar...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle size={16} /> Confirmar Pagamento
+                  </>
+                )}
+              </button>
+            </div>
           )}
         </div>
-      </div>
-      <div className="px-6 pb-6 flex gap-3">
-        <button
-          onClick={onClose}
-          className="flex-1 py-3 rounded-xl font-bold text-gray-500 border border-gray-200 hover:bg-gray-50 transition-all"
-        >
-          Fechar
-        </button>
-        <button className="flex-1 py-3 rounded-xl font-bold text-white bg-[#184d8a] hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200">
-          Imprimir Recibo
-        </button>
+
+        <div className="px-6 pb-6 flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 rounded-xl font-bold text-gray-500 border border-gray-200 hover:bg-gray-50 transition-all"
+          >
+            Fechar
+          </button>
+          <button className="flex-1 py-3 rounded-xl font-bold text-white bg-[#184d8a] hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200">
+            Imprimir Recibo
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
+
+// ─── Modal: Editar ───────────────────────────────────────────────
+
 const ModalEditar = ({
   row,
   onClose,
@@ -307,7 +486,6 @@ const ModalEditar = ({
         </div>
 
         <div className="px-6 py-5 space-y-4">
-          {/* Status */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 mb-1.5">
               Estado
@@ -324,7 +502,6 @@ const ModalEditar = ({
             </select>
           </div>
 
-          {/* Serviço */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 mb-1.5">
               Serviço
@@ -352,7 +529,6 @@ const ModalEditar = ({
             </select>
           </div>
 
-          {/* Meses */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 mb-1.5">
               Meses
@@ -366,7 +542,6 @@ const ModalEditar = ({
             />
           </div>
 
-          {/* Datas */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-gray-500 mb-1.5">
@@ -426,6 +601,8 @@ const ModalEditar = ({
   );
 };
 
+// ─── Modal: Adicionar ────────────────────────────────────────────
+
 const ModalAdicionar = ({
   onClose,
   onSave,
@@ -450,7 +627,7 @@ const ModalAdicionar = ({
     multa: "",
     meses: "1",
     valor: "",
-    tipopagamento: "3", // ✅ default Pagamento Físico
+    tipopagamento: "3",
   });
   const [saving, setSaving] = useState(false);
 
@@ -460,8 +637,8 @@ const ModalAdicionar = ({
       try {
         const headers = { Authorization: `Bearer ${getToken()}` };
         const [resEst, resSer] = await Promise.all([
-          fetch(`${API}/gestaoEstudantes`, { headers }),
-          fetch(`${API}/gestaoServicos`, { headers }),
+          fetchComAuth(`${API}/gestaoEstudantes`, { headers }),
+          fetchComAuth(`${API}/gestaoServicos`, { headers }),
         ]);
         const dataEst = await resEst.json();
         const dataSer = await resSer.json();
@@ -491,8 +668,8 @@ const ModalAdicionar = ({
     setEstudanteSelecionado(e);
     setPesquisa(e.nome_estudante);
     setMostrarSugestoes(false);
-    setServicoSelecionado(null); // ✅ limpa serviço ao trocar estudante
-    setForm((f) => ({ ...f, valor: "" })); // ✅ limpa valor também
+    setServicoSelecionado(null);
+    setForm((f) => ({ ...f, valor: "" }));
   };
 
   const selecionarServico = (id: string) => {
@@ -503,7 +680,7 @@ const ModalAdicionar = ({
       setForm((f) => ({
         ...f,
         valor: String(parseFloat(s.valorservico) * meses),
-      })); // ✅ multiplica já pelos meses
+      }));
     }
   };
 
@@ -647,6 +824,7 @@ const ModalAdicionar = ({
                 </div>
               )}
             </div>
+
             <div>
               <label className="block text-xs font-semibold text-gray-500 mb-1.5">
                 Tipo de Pagamento
@@ -665,7 +843,6 @@ const ModalAdicionar = ({
             </div>
 
             {/* Serviço */}
-
             <div>
               <label className="block text-xs font-semibold text-gray-500 mb-1.5">
                 Serviço <span className="text-red-500">*</span>
@@ -673,7 +850,7 @@ const ModalAdicionar = ({
               <select
                 value={servicoSelecionado?.idservico ?? ""}
                 onChange={(e) => selecionarServico(e.target.value)}
-                disabled={!estudanteSelecionado} // ✅ desactiva se não há estudante
+                disabled={!estudanteSelecionado}
                 className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] cursor-pointer transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <option value="">
@@ -686,7 +863,7 @@ const ModalAdicionar = ({
                     (s) =>
                       !estudanteSelecionado ||
                       s.classe === estudanteSelecionado.classe,
-                  ) // ✅ filtra pela classe
+                  )
                   .map((s) => (
                     <option
                       key={`${s.idservico}-${s.idclasse}`}
@@ -710,6 +887,7 @@ const ModalAdicionar = ({
                   </p>
                 )}
             </div>
+
             {/* Valor + Estado */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -749,6 +927,7 @@ const ModalAdicionar = ({
                 </select>
               </div>
             </div>
+
             {/* Datas */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -778,6 +957,7 @@ const ModalAdicionar = ({
                 />
               </div>
             </div>
+
             {/* Multa + Meses */}
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -838,6 +1018,8 @@ const ModalAdicionar = ({
   );
 };
 
+// ─── Página Principal ────────────────────────────────────────────
+
 export default function GestaoPagamentos() {
   const [modalEditar, setModalEditar] = useState<PagamentoRow | null>(null);
   const [tabela, setTabela] = useState<PagamentoRow[]>([]);
@@ -879,6 +1061,9 @@ export default function GestaoPagamentos() {
 
   useEffect(() => {
     carregar();
+    // Polling a cada 30s para apanhar novos pagamentos submetidos por estudantes
+    const interval = setInterval(carregar, 30_000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleSort = () => {
@@ -896,6 +1081,11 @@ export default function GestaoPagamentos() {
       !filtroEstado || r.status.toLowerCase() === filtroEstado.toLowerCase(),
   );
 
+  // Contagem de pendentes para badge de atenção
+  const totalPendentes = tabela.filter(
+    (r) => r.status.toLowerCase() === "pendente",
+  ).length;
+
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuSecretaria />
@@ -907,6 +1097,7 @@ export default function GestaoPagamentos() {
           }
         />
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+          {/* KPIs */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-8">
             <CardKpi
               title="Total Recebido"
@@ -922,7 +1113,7 @@ export default function GestaoPagamentos() {
             <CardKpi
               title="Pendentes"
               value={cards.pendentes}
-              subtext="em análise"
+              subtext="aguardam validação"
               trend="down"
             />
             <CardKpi
@@ -937,6 +1128,38 @@ export default function GestaoPagamentos() {
               subtext="estornados"
             />
           </div>
+
+          {/* Banner de atenção quando há pendentes */}
+          {totalPendentes > 0 && (
+            <div className="mb-6 bg-amber-50 border border-amber-200 rounded-2xl px-5 py-4 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-xl bg-amber-100 flex items-center justify-center shrink-0">
+                <Clock size={16} className="text-amber-600" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-amber-800">
+                  {totalPendentes} pagamento
+                  {totalPendentes > 1 ? "s" : ""} aguarda
+                  {totalPendentes > 1 ? "m" : ""} validação
+                </p>
+                <p className="text-xs text-amber-600">
+                  Clique no ícone{" "}
+                  <EyeIcon
+                    size={10}
+                    className="inline"
+                  />{" "}
+                  para ver o comprovativo e confirmar
+                </p>
+              </div>
+              <button
+                onClick={() => setFiltroEstado("pendente")}
+                className="text-xs font-bold text-amber-700 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition-colors"
+              >
+                Ver todos
+              </button>
+            </div>
+          )}
+
+          {/* Filtros + Botão Adicionar */}
           <div className="flex flex-wrap justify-between items-end gap-3 mb-6">
             <div>
               <label className="block text-xs font-semibold text-gray-400 mb-1">
@@ -961,6 +1184,8 @@ export default function GestaoPagamentos() {
               <Plus size={18} /> Adicionar
             </button>
           </div>
+
+          {/* Tabela */}
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-8">
             <div className="px-5 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
               <h3 className="font-bold text-gray-700">
@@ -970,8 +1195,10 @@ export default function GestaoPagamentos() {
                 {tabelaFiltrada.length} registos
               </span>
             </div>
+
+            {/* Desktop */}
             <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-center border-collapse min-w-[650px]">
+              <table className="w-full text-center border-collapse min-w-[700px]">
                 <thead>
                   <tr className="bg-[#184d8a] text-white text-[13px] font-semibold">
                     <th className="px-4 py-3.5">Código</th>
@@ -991,6 +1218,7 @@ export default function GestaoPagamentos() {
                     <th className="px-4 py-3.5">Classe</th>
                     <th className="px-4 py-3.5">Serviço</th>
                     <th className="px-4 py-3.5">Valor</th>
+                    <th className="px-4 py-3.5">Comprovativo</th>
                     <th className="px-4 py-3.5">Estado</th>
                     <th className="px-4 py-3.5">Ação</th>
                   </tr>
@@ -999,7 +1227,7 @@ export default function GestaoPagamentos() {
                   {loading ? (
                     <tr>
                       <td
-                        colSpan={7}
+                        colSpan={8}
                         className="py-14 text-center text-sm text-gray-400"
                       >
                         <div className="flex items-center justify-center gap-2">
@@ -1011,7 +1239,7 @@ export default function GestaoPagamentos() {
                   ) : tabelaFiltrada.length === 0 ? (
                     <tr>
                       <td
-                        colSpan={7}
+                        colSpan={8}
                         className="py-14 text-center text-sm text-gray-400"
                       >
                         Nenhum pagamento encontrado
@@ -1021,7 +1249,12 @@ export default function GestaoPagamentos() {
                     tabelaFiltrada.map((row, i) => (
                       <tr
                         key={i}
-                        className="hover:bg-[#184d8a]/3 transition-colors"
+                        className={`hover:bg-[#184d8a]/3 transition-colors ${
+                          row.status.toLowerCase() === "pendente" &&
+                          row.comprovativo_url
+                            ? "bg-amber-50/40"
+                            : ""
+                        }`}
                       >
                         <td className="px-4 py-4 text-sm font-mono text-gray-400">
                           {row.codigo}
@@ -1041,6 +1274,18 @@ export default function GestaoPagamentos() {
                             currency: "AOA",
                           })}
                         </td>
+                        {/* Indicador de comprovativo */}
+                        <td className="px-4 py-4">
+                          {row.comprovativo_url ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold bg-green-50 text-green-700 border border-green-200">
+                              <CheckCircle size={10} /> Submetido
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-bold bg-gray-50 text-gray-400 border border-gray-200">
+                              — Sem ficheiro
+                            </span>
+                          )}
+                        </td>
                         <td className="px-4 py-4">
                           <StatusBadge status={row.status} />
                         </td>
@@ -1049,12 +1294,14 @@ export default function GestaoPagamentos() {
                             <button
                               onClick={() => setSelectedRow(row)}
                               className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all"
+                              title="Ver detalhes e validar"
                             >
                               <EyeIcon size={16} />
                             </button>
                             <button
                               onClick={() => setModalEditar(row)}
-                              className="p-2 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg hover:bg-amber-500 hover:text-white transition-all"
+                              className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                              title="Editar"
                             >
                               <PencilIcon size={16} />
                             </button>
@@ -1066,6 +1313,8 @@ export default function GestaoPagamentos() {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile */}
             <div className="md:hidden divide-y divide-gray-100">
               {loading ? (
                 <div className="py-10 text-center text-sm text-gray-400">
@@ -1084,12 +1333,19 @@ export default function GestaoPagamentos() {
                       <StatusBadge status={row.status} />
                     </div>
                     <div className="flex justify-between items-center mt-2">
-                      <p className="text-sm font-bold text-gray-800">
-                        {Number(row.valor).toLocaleString("pt-AO", {
-                          style: "currency",
-                          currency: "AOA",
-                        })}
-                      </p>
+                      <div>
+                        <p className="text-sm font-bold text-gray-800">
+                          {Number(row.valor).toLocaleString("pt-AO", {
+                            style: "currency",
+                            currency: "AOA",
+                          })}
+                        </p>
+                        {row.comprovativo_url && (
+                          <p className="text-[11px] text-green-600 font-semibold mt-0.5">
+                            ✓ Comprovativo submetido
+                          </p>
+                        )}
+                      </div>
                       <button
                         onClick={() => setSelectedRow(row)}
                         className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all"
@@ -1104,8 +1360,13 @@ export default function GestaoPagamentos() {
           </div>
         </div>
       </main>
+
       {selectedRow && (
-        <ModalDetalhes row={selectedRow} onClose={() => setSelectedRow(null)} />
+        <ModalDetalhes
+          row={selectedRow}
+          onClose={() => setSelectedRow(null)}
+          onValidar={carregar}
+        />
       )}
       {modalEditar && (
         <ModalEditar

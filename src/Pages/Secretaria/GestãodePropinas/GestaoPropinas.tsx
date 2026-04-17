@@ -23,6 +23,16 @@ interface PropinaRow {
 }
 interface Cards { total_pagas: string; total_pendentes: string; total_atrasadas: string; }
 
+// ── Formatar data ──
+const formatarData = (data: string | null) => {
+  if (!data) return "—";
+  return new Date(data).toLocaleDateString("pt-AO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
+
 /* ── KPI Card ── */
 const CardKpi = ({ title, value, subtext, trend, color }: { title: string; value: string; subtext: string; trend?: "up" | "down"; color: "green" | "orange" | "red" }) => {
   return (
@@ -40,12 +50,12 @@ const CardKpi = ({ title, value, subtext, trend, color }: { title: string; value
 
 /* ── Status Badge ── */
 const StatusBadge = ({ status }: { status: string }) => {
-  const map: Record<string, {  text: string; icon: React.ReactNode }> = {
-    Paga: {  text: "text-green-700", icon: <CheckCircle size={12} /> },
-    Pendente: {  text: "text-orange-700", icon: <Clock size={12} /> },
-    Atrasada: {  text: "text-red-700", icon: <AlertTriangle size={12} /> },
+  const map: Record<string, { text: string; icon: React.ReactNode }> = {
+    Paga: { text: "text-green-700", icon: <CheckCircle size={12} /> },
+    Pendente: { text: "text-orange-700", icon: <Clock size={12} /> },
+    Atrasada: { text: "text-red-700", icon: <AlertTriangle size={12} /> },
   };
-  const s = map[status] ?? { bg: "bg-gray-50 border-gray-200", text: "text-gray-600", icon: null };
+  const s = map[status] ?? { text: "text-gray-600", icon: null };
   return (
     <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold border ${s.text}`}>
       {s.icon} {status}
@@ -104,7 +114,8 @@ const ModalDetalhes = ({ row, onClose }: { row: PropinaRow; onClose: () => void 
               <Calendar size={14} className="text-[#184d8a]" />
               <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Data</span>
             </div>
-            <p className="font-bold text-gray-700 text-sm">{row.data ?? "—"}</p>
+            {/* ✅ Data formatada */}
+            <p className="font-bold text-gray-700 text-sm">{formatarData(row.data)}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-4">
             <div className="flex items-center gap-2 mb-1">
@@ -173,7 +184,6 @@ export default function GestaoPropinas() {
   const [ordemCrescente, setOrdemCrescente] = useState(true);
   const [selectedRow, setSelectedRow] = useState<PropinaRow | null>(null);
   const [filtroStatus, setFiltroStatus] = useState("");
-  const [filtroMes, setFiltroMes] = useState("");
   const [filtroClasse, setFiltroClasse] = useState("");
 
   useEffect(() => {
@@ -318,7 +328,8 @@ export default function GestaoPropinas() {
                       <td className="px-4 py-4 text-sm font-mono text-gray-400">{row.codigo}</td>
                       <td className="px-4 py-4 text-sm font-semibold text-gray-700">{row.nome_estudante}</td>
                       <td className="px-4 py-4 text-sm text-gray-500">{row.classe ? `${row.classe}ª` : "—"}</td>
-                      <td className="px-4 py-4 text-sm text-gray-500">{row.data ?? "—"}</td>
+                      {/* ✅ Data formatada na tabela */}
+                      <td className="px-4 py-4 text-sm text-gray-500">{formatarData(row.data)}</td>
                       <td className="px-4 py-4 text-sm text-gray-600">{row.servico}</td>
                       <td className="px-4 py-4 text-sm font-semibold text-gray-800">
                         {Number(row.valor).toLocaleString("pt-AO", { style: "currency", currency: "AOA" })}

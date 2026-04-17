@@ -24,7 +24,7 @@ export default function PagamentoEncar() {
         <div className="flex-1 overflow-auto">
           <Header
             titulo="Pagamentos"
-            usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+            usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
           />
           <div className="">
             <PagamentoGeral />

@@ -362,7 +362,7 @@ function ModalEditar({
               >
                 <option value="">Sem classe</option>
                 {classes.map((c) => (
-                 <option key={c.idclasse} value={c.nivel.toString()}>
+                  <option key={c.idclasse} value={c.nivel.toString()}>
                     {c.nivel}ª Classe —{" "}
                     {Number(c.valorservico).toLocaleString("pt-AO")} AOA
                   </option>
@@ -837,7 +837,7 @@ export default function GestaoAlunos() {
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalDelete(aluno)}
-                                  className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-red-500 hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                                  className="p-1.5 bg-red-50 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all"
                                 >
                                   <Trash2 size={16} />
                                 </div>
@@ -926,6 +926,7 @@ export default function GestaoAlunos() {
               </div>
 
               {/* Distribuição por classe */}
+              {/* Distribuição por classe */}
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
                 <h3 className="text-base font-bold text-gray-700 mb-1">
                   Distribuição por Classe
@@ -933,47 +934,74 @@ export default function GestaoAlunos() {
                 <p className="text-xs text-gray-400 mb-5">
                   Número de estudantes registados por classe
                 </p>
+
                 {estudantes.length === 0 ? (
                   <p className="text-sm text-gray-400 text-center py-8">
                     Sem dados disponíveis
                   </p>
                 ) : (
-                  <div className="flex flex-col gap-3">
-                    {Object.entries(
-                      estudantes.reduce(
-                        (acc, e) => {
-                          const c = e.classe
-                            ? `${e.classe}ª Classe`
-                            : "Sem classe";
-                          acc[c] = (acc[c] || 0) + 1;
-                          return acc;
-                        },
-                        {} as Record<string, number>,
-                      ),
-                    )
-                      .sort((a, b) => b[1] - a[1])
-                      .map(([classe, count]) => {
-                        const pct = Math.round(
-                          (count / estudantes.length) * 100,
-                        );
-                        return (
-                          <div key={classe} className="flex items-center gap-3">
-                            <p className="text-sm text-gray-600 w-28 shrink-0">
-                              {classe}
-                            </p>
-                            <div className="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-[#184d8a] rounded-full transition-all duration-700"
-                                style={{ width: `${pct}%` }}
-                              />
+                  (() => {
+                    const agrupado = estudantes.reduce(
+                      (acc, e) => {
+                        const c = e.classe
+                          ? `${e.classe}ª Classe`
+                          : "Sem classe";
+                        acc[c] = (acc[c] || 0) + 1;
+                        return acc;
+                      },
+                      {} as Record<string, number>,
+                    );
+
+                    const lista = Object.entries(agrupado).sort(
+                      (a, b) => b[1] - a[1],
+                    );
+                    const totalGeral = lista.reduce((s, [, v]) => s + v, 0);
+                    const maximo = Math.max(...lista.map(([, v]) => v));
+                    const cores = ["#185FA5", "#1D9E75", "#BA7517", "#888780"];
+
+                    return (
+                      <>
+                        {lista.map(([classe, count], i) => {
+                          const pct = Math.round((count / totalGeral) * 100);
+                          const largura = Math.round((count / maximo) * 100);
+                          return (
+                            <div key={classe} className="mb-5">
+                              <div className="flex justify-between items-center mb-1.5">
+                                <span className="text-sm font-medium text-gray-700">
+                                  {classe}
+                                </span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-gray-400">
+                                    {count} estudantes
+                                  </span>
+                                  <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200">
+                                    {pct}%
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                                <div
+                                  className="h-full rounded-full transition-all duration-700"
+                                  style={{
+                                    width: `${largura}%`,
+                                    backgroundColor: cores[i % cores.length],
+                                  }}
+                                />
+                              </div>
                             </div>
-                            <p className="text-xs text-gray-400 w-10 text-right">
-                              {count}
-                            </p>
-                          </div>
-                        );
-                      })}
-                  </div>
+                          );
+                        })}
+                        <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between items-center">
+                          <span className="text-sm text-gray-400">
+                            Total geral
+                          </span>
+                          <span className="text-sm font-bold text-gray-700">
+                            {totalGeral} estudantes
+                          </span>
+                        </div>
+                      </>
+                    );
+                  })()
                 )}
               </div>
             </div>

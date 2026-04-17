@@ -3,18 +3,18 @@
 // Tipografia: Playfair Display (display) + DM Sans (corpo)
 // Animações: CSS puro com staggered reveals
 
+import { BarChart, LockIcon, Smartphone, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import FrasesRotativas from "../../../Hooks/FrasesRotativas";
-import ilustr  from "../../../assets/Corpo1PI.jpeg";
+import ilustr from "../../../assets/Corpo1PI.jpeg";
 import ilustr2 from "../../../assets/Corpo2PI.jpeg";
 import ilustr3 from "../../../assets/Corpo3PI.jpeg";
-import fundo   from "../../../assets/imgFundoPI.jpeg";
+import fundo from "../../../assets/imgFundoPI.jpeg";
 import AppsIlustr from "../AppsIlustr";
-import Cards      from "../Cards";
-import Objetivo   from "../Objetivos";
-import { BarChart, LockIcon, Smartphone, Zap, type Lock } from "lucide-react";
+import Cards from "../Cards";
+import Objetivo from "../Objetivos";
 
-export default function ConteudoIndex() {
+export default function     ConteudoIndex() {
   return (
     <>
 
@@ -139,7 +139,7 @@ export default function ConteudoIndex() {
               {[
                 { n: "01", title: "Registe-se", desc: "Crie a sua conta em minutos. Escolha o seu perfil — estudante, encarregado ou secretaria — e associe-se à sua instituição." },
                 { n: "02", title: "Aguarde Aprovação", desc: "A secretaria da sua instituição valida o cadastro e atribui-lhe um código único de identificação na plataforma." },
-                { n: "03", title: "Pague com Facilidade", desc: "Effectue os seus pagamentos online com Multicaixa Express, PayPay ou Unitel Money. Rápido, seguro e sem filas." },
+                { n: "03", title: "Pague com Facilidade", desc: "E fectue os seus pagamentos online com Multicaixa Express, PayPay ou Unitel Money. Rápido, seguro e sem filas." },
               ].map(step => (
                 <div key={step.n} className="relative p-8 rounded-2xl"
                   style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}>

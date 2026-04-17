@@ -125,7 +125,7 @@ export default function GestaoDeRelatorios() {
         {/* Topbar */}
         <Header
           titulo="Painel Geral"
-          usuario={<Avatar name={user.nome} src={user.foto} size="md" />}
+          usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
         />
 
         <main className="p-6 md:p-8 space-y-6">

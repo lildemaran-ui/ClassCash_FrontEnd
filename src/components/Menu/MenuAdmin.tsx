@@ -119,7 +119,7 @@ export default function MenuAdmin() {
         style={{ height: "100dvh" }}
         className={`
           bg-[#184d8a] text-white flex flex-col
-          transition-all duration-700 translate-all ease-in-out shrink-0
+          transition-all duration-700 translate-all ease-in-out shrink-0 
           ${isMobile
             ? menu
               ? "fixed top-0 left-0 w-72 z-50"

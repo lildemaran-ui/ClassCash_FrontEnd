@@ -223,7 +223,7 @@ export default function TelaLogin() {
           <p className="text-xs text-gray-400">
             Esqueceu a palavra-passe?{" "}
             <Link
-              to="/AlterarSenha"
+              to="/solicitarRecuperacao"
               className="text-[#184d8a] hover:underline font-medium"
             >
               Alterar Senha

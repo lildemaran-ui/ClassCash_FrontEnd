@@ -2,15 +2,12 @@
 import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuAdmin from "@/components/Menu/MenuAdmin";
+
 import { fetchComAuth } from "@/types/global/fetchComAuth";
-import {
-  exigirSessao,
-  getToken,
-  type SessaoUsuario,
-} from "@/types/global/sessao";
+import { exigirSessao, getToken, type SessaoUsuario } from "@/types/global/sessao";
 import {
   AlertCircle,
-  ChevronDown,
+  ChevronRight,
   Crown,
   Loader2,
   Lock,
@@ -19,13 +16,16 @@ import {
   Unlock,
   UserPlus,
   X,
+  ChevronDown,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import type { UtilizadorDetalhes } from "./Modaldetalhesutilizador";
+import ModalDetalhesUtilizador from "./Modaldetalhesutilizador";
 
 const API_BASE = "http://localhost:5000/api";
 
-// ─── Toggle Switch ────────────────────────────────────────────
+// ─── Toggle Switch ────────────────────────────────────────────────────────────
 function Toggle({
   checked,
   onChange,
@@ -56,7 +56,7 @@ function Toggle({
   );
 }
 
-// ─── Tipos ────────────────────────────────────────────────────
+// ─── Tipos ────────────────────────────────────────────────────────────────────
 type Perfil = "Encarregado" | "Estudante" | "Instituição";
 type StatusAcesso = "Ativo" | "Inativo" | "Bloqueado";
 
@@ -93,7 +93,7 @@ const STATUS_COR: Record<StatusAcesso, string> = {
   Bloqueado: "bg-red-100 text-red-600",
 };
 
-// ─── Modal Novo Admin ─────────────────────────────────────────
+// ─── Modal Novo Admin ─────────────────────────────────────────────────────────
 function ModalNovoAdmin({
   onClose,
   onCreated,
@@ -101,12 +101,7 @@ function ModalNovoAdmin({
   onClose: () => void;
   onCreated: () => void;
 }) {
-  const [form, setForm] = useState({
-    nome: "",
-    email: "",
-    senha: "",
-    perfil: "Encarregado",
-  });
+  const [form, setForm] = useState({ nome: "", email: "", senha: "", perfil: "Encarregado" });
   const [loading, setLoading] = useState(false);
 
   const handleCriar = async () => {
@@ -119,21 +114,11 @@ function ModalNovoAdmin({
       const token = getToken();
       const res = await fetchComAuth(`${API_BASE}/cadastroAdmin`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          nome: form.nome,
-          email: form.email,
-          senha: form.senha,
-        }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ nome: form.nome, email: form.email, senha: form.senha }),
       });
       const data = await res.json();
-      if (!res.ok)
-        throw new Error(
-          data.error || data.message || "Erro ao criar administrador",
-        );
+      if (!res.ok) throw new Error(data.error || data.message || "Erro ao criar administrador");
       toast.success("Administrador criado com sucesso!");
       onCreated();
       onClose();
@@ -151,42 +136,19 @@ function ModalNovoAdmin({
     >
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
         <div className="flex justify-between items-center p-4 sm:p-5 border-b">
-          <h2 className="font-bold text-gray-800 text-sm sm:text-base">
-            Adicionar Novo Administrador
-          </h2>
-          <button
-            onClick={onClose}
-            disabled={loading}
-            className="p-1 rounded-full hover:bg-gray-100 disabled:opacity-40"
-          >
+          <h2 className="font-bold text-gray-800 text-sm sm:text-base">Adicionar Novo Administrador</h2>
+          <button onClick={onClose} disabled={loading} className="p-1 rounded-full hover:bg-gray-100 disabled:opacity-40">
             <X className="w-5 h-5 text-gray-400" />
           </button>
         </div>
         <div className="p-4 sm:p-5 space-y-3 sm:space-y-4">
           {[
-            {
-              label: "Nome Completo",
-              key: "nome",
-              type: "text",
-              placeholder: "Nome do administrador",
-            },
-            {
-              label: "Email",
-              key: "email",
-              type: "email",
-              placeholder: "email@classcash.ao",
-            },
-            {
-              label: "Palavra-passe Provisória",
-              key: "senha",
-              type: "password",
-              placeholder: "Mín. 8 caracteres",
-            },
+            { label: "Nome Completo", key: "nome", type: "text", placeholder: "Nome do administrador" },
+            { label: "Email", key: "email", type: "email", placeholder: "email@classcash.ao" },
+            { label: "Palavra-passe Provisória", key: "senha", type: "password", placeholder: "Mín. 8 caracteres" },
           ].map(({ label, key, type, placeholder }) => (
             <div key={key}>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                {label}
-              </label>
+              <label className="block text-xs font-medium text-gray-700 mb-1">{label}</label>
               <input
                 type={type}
                 placeholder={placeholder}
@@ -197,9 +159,7 @@ function ModalNovoAdmin({
             </div>
           ))}
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              Tipo de Perfil
-            </label>
+            <label className="block text-xs font-medium text-gray-700 mb-1">Tipo de Perfil</label>
             <div className="relative">
               <select
                 value={form.perfil}
@@ -214,18 +174,10 @@ function ModalNovoAdmin({
           </div>
         </div>
         <div className="flex justify-end gap-3 p-4 sm:p-5 bg-gray-50 border-t rounded-b-2xl">
-          <button
-            onClick={onClose}
-            disabled={loading}
-            className="text-gray-600 text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-xl hover:bg-gray-200 transition-colors disabled:opacity-40"
-          >
+          <button onClick={onClose} disabled={loading} className="text-gray-600 text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-xl hover:bg-gray-200 transition-colors disabled:opacity-40">
             Cancelar
           </button>
-          <button
-            onClick={handleCriar}
-            disabled={loading}
-            className="flex items-center gap-2 bg-[#184d8a] text-white text-xs sm:text-sm font-medium py-2 px-4 sm:px-5 rounded-xl hover:bg-[#184d8a]/80 transition-colors shadow disabled:opacity-60"
-          >
+          <button onClick={handleCriar} disabled={loading} className="flex items-center gap-2 bg-[#184d8a] text-white text-xs sm:text-sm font-medium py-2 px-4 sm:px-5 rounded-xl hover:bg-[#184d8a]/80 transition-colors shadow disabled:opacity-60">
             {loading && <Loader2 className="w-3 h-3 animate-spin" />}
             {loading ? "A criar..." : "Criar"}
           </button>
@@ -235,38 +187,38 @@ function ModalNovoAdmin({
   );
 }
 
-// ─── Card mobile ──────────────────────────────────────────────
+// ─── Card mobile com hint de clique ──────────────────────────────────────────
 function UtilizadorCard({
   u,
   onToggleStatus,
   onTogglePlano,
+  onClick,
 }: {
   u: Utilizador;
-  onToggleStatus: () => void;
-  onTogglePlano: () => void;
+  onToggleStatus: (e: React.MouseEvent) => void;
+  onTogglePlano: (e: React.MouseEvent) => void;
+  onClick: () => void;
 }) {
-  const BadgeIcon = BADGE[u.perfil]?.icon ?? Lock; // ✅ fallback
+  const BadgeIcon = BADGE[u.perfil]?.icon ?? Lock;
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 space-y-3">
+    <div
+      onClick={onClick}
+      className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sm:p-4 space-y-3 cursor-pointer hover:border-[#184d8a]/40 hover:shadow-md transition-all"
+    >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <p className="font-bold text-gray-800 text-xs sm:text-sm truncate">
-            {u.nome}
-          </p>
+          <p className="font-bold text-gray-800 text-xs sm:text-sm truncate">{u.nome}</p>
           <p className="text-xs text-gray-400 truncate">{u.email}</p>
         </div>
-        <span
-          className={`flex-shrink-0 text-xs font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full ${STATUS_COR[u.status] ?? "bg-gray-100 text-gray-500"}`}
-        >
-          {u.status}
-        </span>
+        <div className="flex items-center gap-1.5 flex-shrink-0">
+          <span className={`text-xs font-semibold px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full ${STATUS_COR[u.status] ?? "bg-gray-100 text-gray-500"}`}>
+            {u.status}
+          </span>
+          <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
+        </div>
       </div>
       <div className="flex flex-wrap gap-2">
-        <span
-          className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${BADGE[u.perfil]?.cor ?? "bg-gray-100 text-gray-600"}`}
-        >
-          {" "}
-          {/* ✅ fallback */}
+        <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${BADGE[u.perfil]?.cor ?? "bg-gray-100 text-gray-600"}`}>
           <BadgeIcon className="w-3 h-3" />
           {u.perfil}
         </span>
@@ -276,29 +228,26 @@ function UtilizadorCard({
           </span>
         )}
       </div>
-      <div className="flex items-center justify-between pt-2 border-t border-gray-50 gap-4">
+      <div
+        className="flex items-center justify-between pt-2 border-t border-gray-50 gap-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center gap-2">
-          <Toggle checked={u.planoActivo} onChange={onTogglePlano} size="sm" />
-          <span
-            className={`text-xs font-medium ${u.planoActivo ? "text-[#184d8a]" : "text-gray-400"}`}
-          >
+          <Toggle checked={u.planoActivo} onChange={() => {}} size="sm" />
+          <span className={`text-xs font-medium ${u.planoActivo ? "text-[#184d8a]" : "text-gray-400"}`}>
             Plano {u.planoActivo ? "activo" : "inactivo"}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-[11px] text-gray-400">{u.ultimoAcesso}</span>
-          <Toggle
-            checked={u.status === "Ativo"}
-            onChange={onToggleStatus}
-            size="sm"
-          />
+          <Toggle checked={u.status === "Ativo"} onChange={() => {}} size="sm" />
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Página ───────────────────────────────────────────────────
+// ─── Página principal ─────────────────────────────────────────────────────────
 export default function PermissoesAcessos() {
   const [utilizadores, setUtilizadores] = useState<Utilizador[]>([]);
   const [loading, setLoading] = useState(true);
@@ -306,6 +255,9 @@ export default function PermissoesAcessos() {
   const [modalAdmin, setModalAdmin] = useState(false);
   const [filtro, setFiltro] = useState<Perfil | "Todos">("Todos");
   const [user, setUser] = useState<SessaoUsuario | null>(null);
+
+  // ← NOVO: utilizador selecionado para o modal de detalhes
+  const [utilizadorSelecionado, setUtilizadorSelecionado] = useState<UtilizadorDetalhes | null>(null);
 
   useEffect(() => {
     const sessao = exigirSessao();
@@ -323,7 +275,6 @@ export default function PermissoesAcessos() {
       if (!res.ok) throw new Error("Erro ao carregar permissões");
       const rows = await res.json();
 
-      // Mapear resposta do backend para o tipo Utilizador
       const mapped: Utilizador[] = rows.map((r: any, i: number) => ({
         id: r.idusuario ?? i,
         nome: r.nome,
@@ -333,10 +284,7 @@ export default function PermissoesAcessos() {
         status: (r.status as StatusAcesso) || "Ativo",
         planoActivo: r.plano_ativo === "Ativo",
         ultimoAcesso: r.ultimo_acesso
-          ? new Date(r.ultimo_acesso).toLocaleString("pt-AO", {
-              dateStyle: "short",
-              timeStyle: "short",
-            })
+          ? new Date(r.ultimo_acesso).toLocaleString("pt-AO", { dateStyle: "short", timeStyle: "short" })
           : "—",
       }));
       setUtilizadores(mapped);
@@ -353,26 +301,31 @@ export default function PermissoesAcessos() {
 
   if (!user) return null;
 
-  const filtered = utilizadores.filter(
-    (u) => filtro === "Todos" || u.perfil === filtro,
-  );
+  const filtered = utilizadores.filter((u) => filtro === "Todos" || u.perfil === filtro);
 
-  // Toggles locais (sem endpoint específico, apenas UI)
   const toggleStatus = (id: number) =>
     setUtilizadores((prev) =>
-      prev.map((u) =>
-        u.id === id
-          ? { ...u, status: u.status === "Ativo" ? "Inativo" : "Ativo" }
-          : u,
-      ),
+      prev.map((u) => u.id === id ? { ...u, status: u.status === "Ativo" ? "Inativo" : "Ativo" } : u)
     );
 
   const togglePlano = (id: number) =>
     setUtilizadores((prev) =>
-      prev.map((u) =>
-        u.id === id ? { ...u, planoActivo: !u.planoActivo } : u,
-      ),
+      prev.map((u) => u.id === id ? { ...u, planoActivo: !u.planoActivo } : u)
     );
+
+  // ← Converte Utilizador → UtilizadorDetalhes e abre modal
+  const abrirDetalhes = (u: Utilizador) => {
+    setUtilizadorSelecionado({
+      id: u.id,
+      nome: u.nome,
+      email: u.email,
+      perfil: u.perfil,
+      instituicao: u.instituicao,
+      status: u.status,
+      planoActivo: u.planoActivo,
+      ultimoAcesso: u.ultimoAcesso,
+    });
+  };
 
   return (
     <div className="flex bg-gray-50 font-sans min-h-screen">
@@ -387,13 +340,8 @@ export default function PermissoesAcessos() {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
           {/* Acções */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div
-              className="flex gap-2 overflow-x-auto pb-1"
-              style={{ scrollbarWidth: "none" }}
-            >
-              {(
-                ["Todos", "Encarregado", "Estudante", "Instituição"] as const
-              ).map((p) => (
+            <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+              {(["Todos", "Encarregado", "Estudante", "Instituição"] as const).map((p) => (
                 <button
                   key={p}
                   onClick={() => setFiltro(p)}
@@ -408,27 +356,18 @@ export default function PermissoesAcessos() {
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <button
-                onClick={fetchPermissoes}
-                className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:text-[#184d8a] hover:border-[#184d8a] transition-colors"
-              >
+              <button onClick={fetchPermissoes} className="p-2 rounded-lg border border-gray-200 text-gray-500 hover:text-[#184d8a] hover:border-[#184d8a] transition-colors">
                 <RefreshCw className="w-4 h-4" />
               </button>
-              <button
-                onClick={() => setModalAdmin(true)}
-                className="flex items-center justify-center gap-2 bg-[#184d8a] text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-xl hover:bg-[#184d8a]/80 transition-colors shadow-md w-full sm:w-auto"
-              >
+              <button onClick={() => setModalAdmin(true)} className="flex items-center justify-center gap-2 bg-[#184d8a] text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-xl hover:bg-[#184d8a]/80 transition-colors shadow-md w-full sm:w-auto">
                 <UserPlus className="w-4 h-4" />
-                <span className="hidden xs:inline">Novo Administrador</span>
-                <span className="xs:hidden">Novo Admin</span>
+                <span>Novo Administrador</span>
               </button>
             </div>
           </div>
 
           {error && (
-            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">
-              {error}
-            </div>
+            <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-2">{error}</div>
           )}
 
           {loading ? (
@@ -440,9 +379,7 @@ export default function PermissoesAcessos() {
               {/* ── Tabela desktop ── */}
               <div className="hidden md:block bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                  <h2 className="font-bold text-gray-800 text-sm">
-                    Utilizadores e Permissões
-                  </h2>
+                  <h2 className="font-bold text-gray-800 text-sm">Utilizadores e Permissões</h2>
                   <span className="text-xs bg-[#184d8a]/10 text-[#184d8a] font-semibold px-3 py-1 rounded-full">
                     {filtered.length} utilizadores
                   </span>
@@ -458,68 +395,56 @@ export default function PermissoesAcessos() {
                         <th className="px-6 py-3 text-center">Plano</th>
                         <th className="px-6 py-3 text-left">Último Acesso</th>
                         <th className="px-6 py-3 text-center">Activo</th>
+                        <th className="px-6 py-3 text-center">Detalhes</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                       {filtered.map((u) => {
                         const BadgeIcon = BADGE[u.perfil]?.icon ?? Lock;
                         return (
-                          <tr
-                            key={u.id}
-                            className="hover:bg-gray-50/60 transition-colors"
-                          >
+                          <tr key={u.id} className="hover:bg-blue-50/40 transition-colors group">
                             <td className="px-6 py-4">
-                              <p className="font-semibold text-gray-900 text-xs">
-                                {u.nome}
-                              </p>
+                              <p className="font-semibold text-gray-900 text-xs">{u.nome}</p>
                               <p className="text-gray-400 text-xs">{u.email}</p>
                             </td>
                             <td className="px-6 py-4">
-                              <span
-                                className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${BADGE[u.perfil]?.cor ?? "bg-gray-100 text-gray-600"}`}
-                              >
+                              <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${BADGE[u.perfil]?.cor ?? "bg-gray-100 text-gray-600"}`}>
                                 <BadgeIcon className="w-3 h-3" />
                                 {u.perfil}
                               </span>
                             </td>
-                            <td className="px-6 py-4 text-xs text-gray-600">
-                              {u.instituicao}
-                            </td>
+                            <td className="px-6 py-4 text-xs text-gray-600">{u.instituicao}</td>
                             <td className="px-6 py-4 text-center">
-                              <span
-                                className={`inline-flex text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COR[u.status]}`}
-                              >
+                              <span className={`inline-flex text-xs font-semibold px-2.5 py-1 rounded-full ${STATUS_COR[u.status]}`}>
                                 {u.status}
                               </span>
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex items-center justify-center gap-2">
-                                <Toggle
-                                  checked={u.planoActivo}
-                                  onChange={() => togglePlano(u.id)}
-                                />
-                                <span
-                                  className={`text-xs font-medium w-14 ${u.planoActivo ? "text-[#184d8a]" : "text-gray-400"}`}
-                                >
+                                <Toggle checked={u.planoActivo} onChange={() => togglePlano(u.id)} />
+                                <span className={`text-xs font-medium w-14 ${u.planoActivo ? "text-[#184d8a]" : "text-gray-400"}`}>
                                   {u.planoActivo ? "Activo" : "Inactivo"}
                                 </span>
                               </div>
                             </td>
-                            <td className="px-6 py-4 text-xs text-gray-500">
-                              {u.ultimoAcesso}
-                            </td>
+                            <td className="px-6 py-4 text-xs text-gray-500">{u.ultimoAcesso}</td>
                             <td className="px-6 py-4">
                               <div className="flex items-center justify-center gap-2">
-                                <Toggle
-                                  checked={u.status === "Ativo"}
-                                  onChange={() => toggleStatus(u.id)}
-                                />
-                                <span
-                                  className={`text-xs font-medium ${u.status === "Ativo" ? "text-green-600" : "text-gray-400"}`}
-                                >
+                                <Toggle checked={u.status === "Ativo"} onChange={() => toggleStatus(u.id)} />
+                                <span className={`text-xs font-medium ${u.status === "Ativo" ? "text-green-600" : "text-gray-400"}`}>
                                   {u.status === "Ativo" ? "On" : "Off"}
                                 </span>
                               </div>
+                            </td>
+                            {/* ← NOVO: botão de detalhes */}
+                            <td className="px-6 py-4 text-center">
+                              <button
+                                onClick={() => abrirDetalhes(u)}
+                                className="text-xs font-semibold text-[#184d8a] border border-[#184d8a]/30 px-3 py-1.5 rounded-lg hover:bg-[#184d8a] hover:text-white transition-all flex items-center gap-1 mx-auto"
+                              >
+                                Ver
+                                <ChevronRight className="w-3 h-3" />
+                              </button>
                             </td>
                           </tr>
                         );
@@ -527,9 +452,7 @@ export default function PermissoesAcessos() {
                     </tbody>
                   </table>
                   {filtered.length === 0 && (
-                    <div className="text-center py-12 text-gray-400 text-sm">
-                      Nenhum utilizador encontrado.
-                    </div>
+                    <div className="text-center py-12 text-gray-400 text-sm">Nenhum utilizador encontrado.</div>
                   )}
                 </div>
               </div>
@@ -537,24 +460,21 @@ export default function PermissoesAcessos() {
               {/* ── Cards mobile ── */}
               <div className="md:hidden space-y-3">
                 <div className="flex items-center justify-between">
-                  <h2 className="font-bold text-gray-800 text-sm">
-                    Utilizadores
-                  </h2>
+                  <h2 className="font-bold text-gray-800 text-sm">Utilizadores</h2>
                   <span className="text-xs bg-[#184d8a]/10 text-[#184d8a] font-semibold px-3 py-1 rounded-full">
                     {filtered.length}
                   </span>
                 </div>
                 {filtered.length === 0 ? (
-                  <div className="text-center py-8 text-gray-400 text-sm">
-                    Nenhum utilizador encontrado.
-                  </div>
+                  <div className="text-center py-8 text-gray-400 text-sm">Nenhum utilizador encontrado.</div>
                 ) : (
                   filtered.map((u) => (
                     <UtilizadorCard
                       key={u.id}
                       u={u}
-                      onToggleStatus={() => toggleStatus(u.id)}
-                      onTogglePlano={() => togglePlano(u.id)}
+                      onClick={() => abrirDetalhes(u)}
+                      onToggleStatus={(e) => { e.stopPropagation(); toggleStatus(u.id); }}
+                      onTogglePlano={(e) => { e.stopPropagation(); togglePlano(u.id); }}
                     />
                   ))
                 )}
@@ -569,13 +489,9 @@ export default function PermissoesAcessos() {
                 <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" />
               </div>
               <div>
-                <h2 className="font-bold text-gray-800 text-xs sm:text-sm">
-                  Controlo de Acesso — Instituição
-                </h2>
+                <h2 className="font-bold text-gray-800 text-xs sm:text-sm">Controlo de Acesso — Instituição</h2>
                 <p className="text-xs text-gray-500 mt-0.5">
-                  As abas marcadas com{" "}
-                  <Lock className="w-3 h-3 inline text-amber-500" /> requerem
-                  plano activo.
+                  As abas marcadas com <Lock className="w-3 h-3 inline text-amber-500" /> requerem plano activo.
                 </p>
               </div>
             </div>
@@ -583,29 +499,16 @@ export default function PermissoesAcessos() {
               {ABAS_Instituição.map((aba) => (
                 <div
                   key={aba.id}
-                  className={`flex items-center justify-between p-2.5 sm:p-3 rounded-xl border ${
-                    aba.requerPlano
-                      ? "border-amber-200 bg-amber-50"
-                      : "border-gray-100 bg-gray-50"
-                  }`}
+                  className={`flex items-center justify-between p-2.5 sm:p-3 rounded-xl border ${aba.requerPlano ? "border-amber-200 bg-amber-50" : "border-gray-100 bg-gray-50"}`}
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    {aba.requerPlano ? (
-                      <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500 shrink-0" />
-                    ) : (
-                      <Unlock className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 shrink-0" />
-                    )}
-                    <span className="text-xs font-semibold text-gray-700 truncate">
-                      {aba.label}
-                    </span>
+                    {aba.requerPlano
+                      ? <Lock className="w-3 h-3 sm:w-4 sm:h-4 text-amber-500 shrink-0" />
+                      : <Unlock className="w-3 h-3 sm:w-4 sm:h-4 text-green-500 shrink-0" />
+                    }
+                    <span className="text-xs font-semibold text-gray-700 truncate">{aba.label}</span>
                   </div>
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1 ${
-                      aba.requerPlano
-                        ? "bg-amber-100 text-amber-700"
-                        : "bg-green-100 text-green-700"
-                    }`}
-                  >
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ml-1 ${aba.requerPlano ? "bg-amber-100 text-amber-700" : "bg-green-100 text-green-700"}`}>
                     {aba.requerPlano ? "Pago" : "Grátis"}
                   </span>
                 </div>
@@ -615,10 +518,17 @@ export default function PermissoesAcessos() {
         </main>
       </div>
 
+      {/* Modal novo admin */}
       {modalAdmin && (
-        <ModalNovoAdmin
-          onClose={() => setModalAdmin(false)}
-          onCreated={fetchPermissoes}
+        <ModalNovoAdmin onClose={() => setModalAdmin(false)} onCreated={fetchPermissoes} />
+      )}
+
+      {/* ← NOVO: Modal de detalhes do utilizador */}
+      {utilizadorSelecionado && (
+        <ModalDetalhesUtilizador
+          utilizador={utilizadorSelecionado}
+          onClose={() => setUtilizadorSelecionado(null)}
+          onUpdated={fetchPermissoes}
         />
       )}
     </div>

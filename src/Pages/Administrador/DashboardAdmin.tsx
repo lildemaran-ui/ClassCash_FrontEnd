@@ -66,81 +66,67 @@ export default function DashboardAdmin() {
   }, [fetchPainel]);
 
   // ── Gráfico de barras horizontais com dados reais ──────────────
-  const VerticalBarChartSimulation = () => {
-    const barData = data
-      ? [
-          {
-            label: "Total de Instituições",
-            value: parseFloat(data.percentuais.instituicoes),
-            color: "bg-[#184d8a]",
-          },
-          {
-            label: "Total de Estudantes",
-            value: parseFloat(data.percentuais.estudantes),
-            color: "bg-[#184d8a]",
-          },
-          {
-            label: "Total de Encarregados",
-            value: parseFloat(data.percentuais.encarregados),
-            color: "bg-[#184d8a]",
-          },
-          {
-            label: "Total de Serviços",
-            value: Math.min(
-              100,
-              data.cards.servicos > 0 ? (data.cards.servicos / 10) * 100 : 0
-            ),
-            color: "bg-[#184d8a]",
-          },
-          {
-            label: "Total de Receita",
-            value: Math.min(
-              100,
-              data.cards.receitaUltimoMes > 0 ? 60 : 0
-            ),
-            color: "bg-[#184d8a]",
-          },
-        ]
-      : [];
+const VerticalBarChartSimulation = () => {
+  if (!data) return null;
 
-    return (
-      <div className="bg-white p-4 sm:p-6 rounded-xl border mt-6">
-        <h1 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
-          Análise Gráfico
-        </h1>
-        {loading ? (
-          <div className="flex justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin text-[#184d8a]" />
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {barData.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0"
-              >
-                <div className="w-full sm:w-48 text-xs sm:text-sm text-gray-600 truncate">
-                  {item.label}
+  const total =
+    data.cards.estudantes +
+    data.cards.encarregados +
+    data.cards.instituicoes;
+
+  const barData = [
+    {
+      label: "Total de Instituições",
+      value: total > 0 ? (data.cards.instituicoes / total) * 100 : 0,
+    },
+    {
+      label: "Total de Estudantes",
+      value: total > 0 ? (data.cards.estudantes / total) * 100 : 0,
+    },
+    {
+      label: "Total de Encarregados",
+      value: total > 0 ? (data.cards.encarregados / total) * 100 : 0,
+    },
+    {
+      label: "Total de Serviços",
+      value: total > 0 ? Math.min((data.cards.servicos / total) * 100, 100) : 0,
+    },
+  ];
+
+  return (
+    <div className="bg-white p-4 sm:p-6 rounded-xl border mt-6">
+      <h1 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+        Análise Gráfico
+      </h1>
+      {loading ? (
+        <div className="flex justify-center py-8">
+          <Loader2 className="w-6 h-6 animate-spin text-[#184d8a]" />
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {barData.map((item, index) => (
+            <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
+              <div className="w-full sm:w-48 text-xs sm:text-sm text-gray-600 truncate">
+                {item.label}
+              </div>
+              <div className="flex-1 sm:ml-4 flex items-center">
+                <div className="flex-1 bg-gray-100 rounded-r-md h-6 overflow-hidden">
+                  <div
+                    className="bg-[#184d8a] h-6 rounded-r-md transition-all duration-700"
+                    style={{ width: `${item.value}%` }}
+                  />
                 </div>
-                <div className="flex-1 sm:ml-4 flex items-center">
-                  <div className="flex-1 bg-gray-100 rounded-r-md h-6 overflow-hidden">
-                    <div
-                      className={`${item.color} h-6 rounded-r-md transition-all duration-700`}
-                      style={{ width: `${item.value}%` }}
-                    />
-                  </div>
-                  <div className="ml-3 text-xs sm:text-sm font-medium text-gray-700 w-12 text-right">
-                    {item.value.toFixed(1)}%
-                  </div>
+                <div className="ml-3 text-xs sm:text-sm font-medium text-gray-700 w-12 text-right">
+                  {item.value.toFixed(1)}%
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  };
-
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
   // ── Cards de métricas ──────────────────────────────────────────
   interface MetricCardProps {
     title: string;
@@ -305,11 +291,11 @@ export default function DashboardAdmin() {
         </div>
 
         {/* Gráficos */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 w-full">
-          <div className="w-full min-w-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 ">
+          <div className="w-full h-full ">
             <VerticalBarChartSimulation />
           </div>
-          <div className="w-full min-w-0">
+          <div className="w-full h-full ">
             <ChartAdmin data={data?.graficoCadastros} />
           </div>
         </div>

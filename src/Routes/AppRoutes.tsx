@@ -37,6 +37,8 @@ import PaginaInicial from '../Pages/Index/PaginaInicial/Index'
 import Instituicoes from '../Pages/Instituições/Instituições'
 import Login from '../Pages/Login/Login'
 import Pagamento from '../Pages/Pagamento/Pagamento'
+import RecuperacaodeSenha from '@/components/Recuperacao_de_senha/recuperacaodesenha'
+import SolicitarRecuperacao from '@/Pages/Login/SolicitarRecuperacao'
 
 export default function AppRoutes() {
   return (
@@ -76,6 +78,9 @@ export default function AppRoutes() {
       <Route path="/SuporteAjuda" element={<SuporteAjuda />} />
       <Route path="/GestaoDeRelatorio" element={<GestaoDeRelatorios />} />
       <Route path="/SolicitacoesCadastro" element={<SolicitacoesCadastro />} />
+      <Route path='/recuperacaodesenha' element={<RecuperacaodeSenha/>}></Route>
+      <Route path='/solicitarRecuperacao' element={<SolicitarRecuperacao/>}></Route>
+
     </Routes>
   )
 }

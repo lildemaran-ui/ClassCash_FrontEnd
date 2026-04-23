@@ -7,14 +7,13 @@ import {
   Settings,
   Wallet,
   X,
-  type LucideIcon
+  type LucideIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo555 from "../../assets/Logo5.5.png";
 import { handleLogout } from "@/lib/logout";
 export default function MenuEncar() {
-
   const [menu, setMenu] = useState<boolean>(() => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
       const saved = localStorage.getItem("menu_encar_aberto");
@@ -84,7 +83,6 @@ export default function MenuEncar() {
       label: "Configurações",
     },
     { to: "", icon: LifeBuoy, label: "Ajuda e Suporte" },
-   
   ];
 
   return (
@@ -98,7 +96,7 @@ export default function MenuEncar() {
       {!menu && (
         <button
           onClick={OpenMenu}
-          className="fixed top-4 left-4 z-[60] p-2 rounded-lg bg-[#184d8a] text-white shadow-lg"
+          className="fixed top-4 left-4 z-[60] p-2 rounded-lg bg-primary text-white shadow-lg"
         >
           <Menu size={22} />
         </button>
@@ -108,7 +106,7 @@ export default function MenuEncar() {
       <aside
         style={{ height: "100dvh" }}
         className={`
-          bg-[#184d8a] text-white
+          bg-primary text-white
           transition-all duration-300 ease-in-out
           ${
             !menu

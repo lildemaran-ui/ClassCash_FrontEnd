@@ -1,7 +1,13 @@
 import { handleLogout } from "@/lib/logout";
 import {
-  LayoutDashboard, LifeBuoy, LogOut, Menu,
-  MessageSquare, Settings, Wallet, X
+  LayoutDashboard,
+  LifeBuoy,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Settings,
+  Wallet,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -9,9 +15,8 @@ import logo555 from "../../assets/Logo5.5.png";
 type MenuMode = "open" | "collapsed" | "hidden";
 
 export default function MenuEstud() {
- 
   const [isMobile, setIsMobile] = useState<boolean>(
-    typeof window !== "undefined" ? window.innerWidth < 1024 : false
+    typeof window !== "undefined" ? window.innerWidth < 1024 : false,
   );
 
   // desktop: "open" | "collapsed"   mobile: "open" | "hidden"
@@ -27,7 +32,10 @@ export default function MenuEstud() {
       const mobile = window.innerWidth < 1024;
       setIsMobile(mobile);
       if (mobile) setMode("hidden");
-      else setMode((localStorage.getItem("menu_estud_modo") as MenuMode) ?? "open");
+      else
+        setMode(
+          (localStorage.getItem("menu_estud_modo") as MenuMode) ?? "open",
+        );
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -47,21 +55,24 @@ export default function MenuEstud() {
 
   const links = [
     { to: "/DashboardEstud", icon: LayoutDashboard, label: "Painel Geral" },
-    { to: "/Pagamentos",      icon: Wallet,          label: "Pagamentos" },
-    { to: "/Reclamacoes",     icon: MessageSquare,   label: "Reclamações" },
-    { to: "/Config",          icon: Settings,        label: "Configurações" },
-    { to: "",                 icon: LifeBuoy,        label: "Ajuda e Suporte" },
+    { to: "/Pagamentos", icon: Wallet, label: "Pagamentos" },
+    { to: "/Reclamacoes", icon: MessageSquare, label: "Reclamações" },
+    { to: "/Config", icon: Settings, label: "Configurações" },
+    { to: "", icon: LifeBuoy, label: "Ajuda e Suporte" },
   ];
 
-  const isOpen      = mode === "open";
+  const isOpen = mode === "open";
   const isCollapsed = mode === "collapsed";
-  const isHidden    = mode === "hidden";
+  const isHidden = mode === "hidden";
 
   return (
     <>
       {/* Overlay mobile */}
       {isMobile && isOpen && (
-        <div className="fixed inset-0 bg-black/40 z-40" onClick={collapseOrClose} />
+        <div
+          className="fixed inset-0 bg-black/40 z-40"
+          onClick={collapseOrClose}
+        />
       )}
 
       {/* Botão hambúrguer — só aparece quando sidebar está escondida (mobile) */}
@@ -78,15 +89,16 @@ export default function MenuEstud() {
       <aside
         style={{ height: "100dvh" }}
         className={`
-          bg-[#184d8a] text-white flex flex-col
+          bg-primary text-white flex flex-col
           transition-all duration-300 ease-in-out overflow-hidden shrink-0
-          ${isHidden
-            ? "hidden"
-            : isMobile && isOpen
-              ? "fixed top-0 left-0 z-50 w-72"
-              : isCollapsed
-                ? "sticky top-0 w-16"   // ← modo ícones
-                : "sticky top-0 w-64"   // ← modo aberto
+          ${
+            isHidden
+              ? "hidden"
+              : isMobile && isOpen
+                ? "fixed top-0 left-0 z-50 w-72"
+                : isCollapsed
+                  ? "sticky top-0 w-16" // ← modo ícones
+                  : "sticky top-0 w-64" // ← modo aberto
           }
         `}
       >
@@ -95,8 +107,15 @@ export default function MenuEstud() {
           {/* Logo e nome só no modo aberto */}
           {isOpen && (
             <div className="flex items-center gap-2 overflow-hidden">
-              <img loading="lazy" src={logo555} alt="Logo" className="w-10 h-10 shrink-0" />
-              <p className="text-white font-semibold whitespace-nowrap">ClassCash</p>
+              <img
+                loading="lazy"
+                src={logo555}
+                alt="Logo"
+                className="w-10 h-10 shrink-0"
+              />
+              <p className="text-white font-semibold whitespace-nowrap">
+                ClassCash
+              </p>
             </div>
           )}
 
@@ -151,7 +170,10 @@ export default function MenuEstud() {
                 Terminar sessão
               </span>
             )}
-            <LogOut size={22} className="text-white group-hover:text-blue-700" />
+            <LogOut
+              size={22}
+              className="text-white group-hover:text-blue-700"
+            />
           </Link>
         </div>
       </aside>

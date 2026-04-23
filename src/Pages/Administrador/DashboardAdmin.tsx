@@ -1,6 +1,13 @@
 // src/Pages/Administrador/DashboardAdmin.tsx
 import { ChartAdmin } from "@/components/Charts/ChartAdmin";
-import { Bell, ChevronDown, ArrowUp, ArrowDown, RefreshCw, Loader2 } from "lucide-react";
+import {
+  Bell,
+  ChevronDown,
+  ArrowUp,
+  ArrowDown,
+  RefreshCw,
+  Loader2,
+} from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import { getToken } from "@/types/global/sessao";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
@@ -66,67 +73,69 @@ export default function DashboardAdmin() {
   }, [fetchPainel]);
 
   // ── Gráfico de barras horizontais com dados reais ──────────────
-const VerticalBarChartSimulation = () => {
-  if (!data) return null;
+  const VerticalBarChartSimulation = () => {
+    if (!data) return null;
 
-  const total =
-    data.cards.estudantes +
-    data.cards.encarregados +
-    data.cards.instituicoes;
+    const total =
+      data.cards.estudantes + data.cards.encarregados + data.cards.instituicoes;
 
-  const barData = [
-    {
-      label: "Total de Instituições",
-      value: total > 0 ? (data.cards.instituicoes / total) * 100 : 0,
-    },
-    {
-      label: "Total de Estudantes",
-      value: total > 0 ? (data.cards.estudantes / total) * 100 : 0,
-    },
-    {
-      label: "Total de Encarregados",
-      value: total > 0 ? (data.cards.encarregados / total) * 100 : 0,
-    },
-    {
-      label: "Total de Serviços",
-      value: total > 0 ? Math.min((data.cards.servicos / total) * 100, 100) : 0,
-    },
-  ];
+    const barData = [
+      {
+        label: "Total de Instituições",
+        value: total > 0 ? (data.cards.instituicoes / total) * 100 : 0,
+      },
+      {
+        label: "Total de Estudantes",
+        value: total > 0 ? (data.cards.estudantes / total) * 100 : 0,
+      },
+      {
+        label: "Total de Encarregados",
+        value: total > 0 ? (data.cards.encarregados / total) * 100 : 0,
+      },
+      {
+        label: "Total de Serviços",
+        value:
+          total > 0 ? Math.min((data.cards.servicos / total) * 100, 100) : 0,
+      },
+    ];
 
-  return (
-    <div className="bg-white p-4 sm:p-6 rounded-xl border mt-6">
-      <h1 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
-        Análise Gráfico
-      </h1>
-      {loading ? (
-        <div className="flex justify-center py-8">
-          <Loader2 className="w-6 h-6 animate-spin text-[#184d8a]" />
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {barData.map((item, index) => (
-            <div key={index} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0">
-              <div className="w-full sm:w-48 text-xs sm:text-sm text-gray-600 truncate">
-                {item.label}
-              </div>
-              <div className="flex-1 sm:ml-4 flex items-center">
-                <div className="flex-1 bg-gray-100 rounded-r-md h-6 overflow-hidden">
-                  <div
-                    className="bg-[#184d8a] h-6 rounded-r-md transition-all duration-700"
-                    style={{ width: `${item.value}%` }}
-                  />
+    return (
+      <div className="bg-white p-4 sm:p-6 rounded-xl border mt-6">
+        <h1 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
+          Análise Gráfico
+        </h1>
+        {loading ? (
+          <div className="flex justify-center py-8">
+            <Loader2 className="w-6 h-6 animate-spin text-[#184d8a]" />
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {barData.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-0"
+              >
+                <div className="w-full sm:w-48 text-xs sm:text-sm text-gray-600 truncate">
+                  {item.label}
                 </div>
-                <div className="ml-3 text-xs sm:text-sm font-medium text-gray-700 w-12 text-right">
-                  {item.value.toFixed(1)}%
+                <div className="flex-1 sm:ml-4 flex items-center">
+                  <div className="flex-1 bg-gray-100 rounded-r-md h-6 overflow-hidden">
+                    <div
+                      className="bg-primary h-6 rounded-r-md transition-all duration-700"
+                      style={{ width: `${item.value}%` }}
+                    />
+                  </div>
+                  <div className="ml-3 text-xs sm:text-sm font-medium text-gray-700 w-12 text-right">
+                    {item.value.toFixed(1)}%
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
   // ── Cards de métricas ──────────────────────────────────────────
   interface MetricCardProps {
     title: string;
@@ -201,7 +210,7 @@ const VerticalBarChartSimulation = () => {
               >
                 <RefreshCw className="w-4 h-4" />
               </button>
-              <button className="bg-[#184d8a] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-[#184d8a]/80 transition-colors shadow-md">
+              <button className="bg-primary text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-primary/80 transition-colors shadow-md">
                 Ver Alertas
               </button>
             </div>
@@ -240,7 +249,7 @@ const VerticalBarChartSimulation = () => {
                   <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
                 </div>
               </div>
-            )
+            ),
           )}
         </div>
 

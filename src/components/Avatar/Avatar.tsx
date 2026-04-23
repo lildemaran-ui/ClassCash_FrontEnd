@@ -17,15 +17,15 @@ const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
     lg: "w-20 h-20 text-xl",
   };
 
- // Dentro de Avatar.tsx
-const initials = (name ?? "") // Se name for null/undefined, vira ""
-  .trim()
-  .split(" ")
-  .filter(word => word.length > 0) // Evita erros com espaços duplos
-  .filter((_, i, arr) => i === 0 || i === arr.length - 1)
-  .map((n) => n ? n[0] : "") // Garante que a letra existe
-  .join("")
-  .toUpperCase();
+  // Dentro de Avatar.tsx
+  const initials = (name ?? "") // Se name for null/undefined, vira ""
+    .trim()
+    .split(" ")
+    .filter((word) => word.length > 0) // Evita erros com espaços duplos
+    .filter((_, i, arr) => i === 0 || i === arr.length - 1)
+    .map((n) => (n ? n[0] : "")) // Garante que a letra existe
+    .join("")
+    .toUpperCase();
   const commonClasses = `${sizeClasses[size]} rounded-full flex items-center border border-[#184d8a]/50 justify-center overflow-hidden shrink-0`;
 
   if (src && !hasError) {
@@ -42,7 +42,7 @@ const initials = (name ?? "") // Se name for null/undefined, vira ""
 
   return (
     <div
-      className={`${commonClasses} bg-gradient-to-br from-blue-400 to-[#184d8a] text-white font-medium shadow-inner`}
+      className={`${commonClasses} bg-primary text-white font-medium shadow-inner`}
     >
       {initials}
     </div>

@@ -16,7 +16,7 @@ const InputField = ({
       *{label}
     </label>
     <div className="relative">
-      <div className="absolute left-0 top-0 bottom-0 w-8 bg-[#184d8a] rounded-l-lg"></div>
+      <div className="absolute left-0 top-0 bottom-0 w-8 bg-primary rounded-l-lg"></div>
       {isTextArea ? (
         <textarea
           rows={5}
@@ -93,7 +93,7 @@ export default function Contactos() {
                 key={i}
                 className={`w-4 h-4 rounded-full ${
                   [0, 1, 5, 6, 7, 12, 13, 14, 18, 19].includes(i)
-                    ? "bg-[#184d8a]"
+                    ? "bg-primary"
                     : "bg-gray-400"
                 }`}
               />
@@ -104,7 +104,7 @@ export default function Contactos() {
         {/* Lado Direito: Formulário */}
         <div className="relative pl-0 sm:pl-8 border-l-0 sm:border-l-2 border-black/10">
           <div className="flex justify-end mb-6 sm:mb-8">
-            <div className="bg-[#184d8a] text-white px-6 py-2 rounded-l-lg shadow-sm text-sm font-bold flex items-center gap-2">
+            <div className="bg-primary text-white px-6 py-2 rounded-l-lg shadow-sm text-sm font-bold flex items-center gap-2">
               Enviar mensagem <div className="w-4 h-4 bg-[#1a5fb4]"></div>
             </div>
           </div>
@@ -121,7 +121,7 @@ export default function Contactos() {
             <InputField label="Assunto" />
             <InputField label="Sua Mensagem" isTextArea />
 
-            <button className="w-full bg-[#184d8a] text-white py-3 sm:py-4 rounded-xl font-bold hover:bg-[#184d8a]/80 transition-colors duration-500 active:scale-[0.98] shadow-lg">
+            <button className="w-full bg-primary text-white py-3 sm:py-4 rounded-xl font-bold hover:bg-primary/80 transition-colors duration-500 active:scale-[0.98] shadow-lg">
               Enviar mensagem
             </button>
           </form>

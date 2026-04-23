@@ -123,7 +123,7 @@ function ModalCadastrar({
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div className="bg-[#184d8a] px-6 py-5 flex justify-between items-center sticky top-0">
+        <div className="bg-primary px-6 py-5 flex justify-between items-center sticky top-0">
           <div>
             <h2 className="text-lg font-bold text-white">
               Cadastrar Estudante
@@ -232,7 +232,7 @@ function ModalCadastrar({
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-[#184d8a]/80 transition-colors disabled:opacity-60"
+              className="flex-1 h-10 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/80 transition-colors disabled:opacity-60"
             >
               {loading ? "A cadastrar..." : "Cadastrar"}
             </button>
@@ -396,7 +396,7 @@ function ModalEditar({
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-[#184d8a]/80 transition-colors disabled:opacity-60"
+              className="flex-1 h-10 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/80 transition-colors disabled:opacity-60"
             >
               {loading ? "A guardar..." : "Guardar Alterações"}
             </button>
@@ -432,7 +432,7 @@ function ModalVisualizar({
 
         {/* Avatar / nome destaque */}
         <div className="flex flex-col items-center gap-2 pt-6 pb-4 bg-gradient-to-b from-[#184d8a]/5 to-white px-6">
-          <div className="w-16 h-16 rounded-full bg-[#184d8a]/10 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
             <UserCircle2 size={36} className="text-[#184d8a]" />
           </div>
           <p className="text-base font-bold text-gray-800">
@@ -471,7 +471,7 @@ function ModalVisualizar({
         <div className="px-6 pb-6">
           <button
             onClick={onClose}
-            className="w-full h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-[#184d8a]/80 transition-colors"
+            className="w-full h-10 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/80 transition-colors"
           >
             Fechar
           </button>
@@ -689,7 +689,7 @@ export default function GestaoAlunos() {
                 onClick={() => setAbaAtiva(aba.id)}
                 className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                   abaAtiva === aba.id
-                    ? "bg-[#184d8a] text-white shadow-md"
+                    ? "bg-primary text-white shadow-md"
                     : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                 }`}
               >
@@ -734,7 +734,7 @@ export default function GestaoAlunos() {
 
                   <button
                     onClick={() => setModalCadastrar(true)}
-                    className="flex items-center justify-center gap-2 bg-[#184d8a] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#184d8a]/80 transition-all duration-300 shadow-md w-full sm:w-auto"
+                    className="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-primary/80 transition-all duration-300 shadow-md w-full sm:w-auto"
                   >
                     <Plus size={20} /> Cadastrar
                   </button>
@@ -744,7 +744,7 @@ export default function GestaoAlunos() {
               <div className="overflow-x-auto">
                 <table className="w-full text-center border-collapse min-w-[550px]">
                   <thead>
-                    <tr className="bg-[#184d8a]/70 text-white text-sm font-bold tracking-wide border-b border-gray-100">
+                    <tr className="bg-primary/70 text-white text-sm font-bold tracking-wide border-b border-gray-100">
                       <th className="px-4 py-3">Nº Processo</th>
                       <th
                         className="px-4 py-3 cursor-pointer"
@@ -789,7 +789,7 @@ export default function GestaoAlunos() {
                       filtrados.map((aluno) => (
                         <tr
                           key={aluno.idestudante}
-                          className="hover:bg-[#184d8a]/5 transition-colors"
+                          className="hover:bg-primary/5 transition-colors"
                         >
                           <td className="px-4 py-3 text-xs sm:text-sm font-mono text-gray-500">
                             {aluno.num_processo}
@@ -813,7 +813,7 @@ export default function GestaoAlunos() {
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalEditar(aluno)}
-                                  className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                                  className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
                                 >
                                   <PencilIcon size={16} />
                                 </div>
@@ -825,7 +825,7 @@ export default function GestaoAlunos() {
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalVisualizar(aluno)}
-                                  className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                                  className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
                                 >
                                   <EyeIcon size={16} />
                                 </div>

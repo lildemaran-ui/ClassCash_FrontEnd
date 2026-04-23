@@ -208,7 +208,7 @@ export default function GestaoLogs() {
               {/* Tabela desktop */}
               <div className="hidden sm:block overflow-x-auto border border-gray-200 rounded-xl">
                 <table className="min-w-full divide-y divide-gray-200 text-center">
-                  <thead className="bg-[#184d8a]/70">
+                  <thead className="bg-primary/70">
                     <tr>
                       {[
                         "Data/Hora",

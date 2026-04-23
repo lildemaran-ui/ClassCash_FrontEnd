@@ -2,15 +2,34 @@ import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuAdmin from "@/components/Menu/MenuAdmin";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
-import { exigirSessao, getToken, type SessaoUsuario } from "@/types/global/sessao";
 import {
-  BarChart3, Building2, CheckCircle, CreditCard,
-  Download, Loader2, TrendingUp, Users, XCircle,
+  exigirSessao,
+  getToken,
+  type SessaoUsuario,
+} from "@/types/global/sessao";
+import {
+  BarChart3,
+  Building2,
+  CheckCircle,
+  CreditCard,
+  Download,
+  Loader2,
+  TrendingUp,
+  Users,
+  XCircle,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
-  Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
-  ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
 
 const API_BASE = "http://localhost:5000/api";
@@ -31,14 +50,25 @@ interface RelatorioData {
 }
 
 function KpiCard({
-  icon: Icon, label, value, sub, color, bg,
+  icon: Icon,
+  label,
+  value,
+  sub,
+  color,
+  bg,
 }: {
-  icon: React.ElementType; label: string; value: string | number;
-  sub?: string; color: string; bg: string;
+  icon: React.ElementType;
+  label: string;
+  value: string | number;
+  sub?: string;
+  color: string;
+  bg: string;
 }) {
   return (
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3">
-      <div className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center`}>
+      <div
+        className={`w-10 h-10 rounded-xl ${bg} flex items-center justify-center`}
+      >
         <Icon className={`w-5 h-5 ${color}`} />
       </div>
       <div>
@@ -86,15 +116,31 @@ export default function GestaoDeRelatorios() {
 
   const statusInst = data
     ? [
-        { name: "Ativas", value: data.pizza.instituicoes.ativas, color: "#22c55e" },
-        { name: "Inativas", value: data.pizza.instituicoes.inativas, color: "#ef4444" },
+        {
+          name: "Ativas",
+          value: data.pizza.instituicoes.ativas,
+          color: "#22c55e",
+        },
+        {
+          name: "Inativas",
+          value: data.pizza.instituicoes.inativas,
+          color: "#ef4444",
+        },
       ]
     : [];
 
   const statusUser = data
     ? [
-        { name: "Ativos", value: data.pizza.utilizadores.ativos, color: "#184d8a" },
-        { name: "Inativos", value: data.pizza.utilizadores.inativos, color: "#f59e0b" },
+        {
+          name: "Ativos",
+          value: data.pizza.utilizadores.ativos,
+          color: "#184d8a",
+        },
+        {
+          name: "Inativos",
+          value: data.pizza.utilizadores.inativos,
+          color: "#f59e0b",
+        },
       ]
     : [];
 
@@ -111,10 +157,9 @@ export default function GestaoDeRelatorios() {
         />
 
         <main className="flex-1 overflow-y-auto p-6 md:p-8 space-y-6">
-
           {/* Botão exportar */}
           <div className="flex justify-end">
-            <button className="flex items-center gap-2 bg-[#184d8a] text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-[#184d8a]/80 transition-colors shadow-md">
+            <button className="flex items-center gap-2 bg-primary text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-primary/80 transition-colors shadow-md">
               <Download className="w-4 h-4" /> Exportar Relatório
             </button>
           </div>
@@ -150,7 +195,10 @@ export default function GestaoDeRelatorios() {
                 <KpiCard
                   icon={CreditCard}
                   label="Total Arrecadado (KZ)"
-                  value={(data?.cards.totalReceita ?? 0).toLocaleString("pt-AO", { maximumFractionDigits: 0 })}
+                  value={(data?.cards.totalReceita ?? 0).toLocaleString(
+                    "pt-AO",
+                    { maximumFractionDigits: 0 },
+                  )}
                   color="text-green-600"
                   bg="bg-green-50"
                 />
@@ -167,13 +215,23 @@ export default function GestaoDeRelatorios() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
                   <h2 className="font-bold text-gray-800 text-sm mb-4 flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-[#184d8a]" /> Estado das Instituições
+                    <Building2 className="w-4 h-4 text-[#184d8a]" /> Estado das
+                    Instituições
                   </h2>
                   <div className="flex items-center gap-6">
                     <ResponsiveContainer width={160} height={160}>
                       <PieChart>
-                        <Pie data={statusInst} cx="50%" cy="50%" innerRadius={45} outerRadius={70} dataKey="value">
-                          {statusInst.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                        <Pie
+                          data={statusInst}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={45}
+                          outerRadius={70}
+                          dataKey="value"
+                        >
+                          {statusInst.map((entry, i) => (
+                            <Cell key={i} fill={entry.color} />
+                          ))}
                         </Pie>
                         <Tooltip formatter={(v) => [`${v} instituições`]} />
                       </PieChart>
@@ -182,13 +240,19 @@ export default function GestaoDeRelatorios() {
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-green-500" />
                         <span className="text-sm text-gray-600">
-                          Ativas: <strong>{data?.pizza.instituicoes.ativas ?? 0}</strong>
+                          Ativas:{" "}
+                          <strong>
+                            {data?.pizza.instituicoes.ativas ?? 0}
+                          </strong>
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <XCircle className="w-4 h-4 text-red-500" />
                         <span className="text-sm text-gray-600">
-                          Inativas: <strong>{data?.pizza.instituicoes.inativas ?? 0}</strong>
+                          Inativas:{" "}
+                          <strong>
+                            {data?.pizza.instituicoes.inativas ?? 0}
+                          </strong>
                         </span>
                       </div>
                     </div>
@@ -197,13 +261,23 @@ export default function GestaoDeRelatorios() {
 
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
                   <h2 className="font-bold text-gray-800 text-sm mb-4 flex items-center gap-2">
-                    <Users className="w-4 h-4 text-[#184d8a]" /> Estado dos Utilizadores
+                    <Users className="w-4 h-4 text-[#184d8a]" /> Estado dos
+                    Utilizadores
                   </h2>
                   <div className="flex items-center gap-6">
                     <ResponsiveContainer width={160} height={160}>
                       <PieChart>
-                        <Pie data={statusUser} cx="50%" cy="50%" innerRadius={45} outerRadius={70} dataKey="value">
-                          {statusUser.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                        <Pie
+                          data={statusUser}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={45}
+                          outerRadius={70}
+                          dataKey="value"
+                        >
+                          {statusUser.map((entry, i) => (
+                            <Cell key={i} fill={entry.color} />
+                          ))}
                         </Pie>
                         <Tooltip formatter={(v) => [`${v} utilizadores`]} />
                       </PieChart>
@@ -212,13 +286,19 @@ export default function GestaoDeRelatorios() {
                       <div className="flex items-center gap-2">
                         <CheckCircle className="w-4 h-4 text-blue-500" />
                         <span className="text-sm text-gray-600">
-                          Ativos: <strong>{data?.pizza.utilizadores.ativos ?? 0}</strong>
+                          Ativos:{" "}
+                          <strong>
+                            {data?.pizza.utilizadores.ativos ?? 0}
+                          </strong>
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <XCircle className="w-4 h-4 text-amber-500" />
                         <span className="text-sm text-gray-600">
-                          Inativos: <strong>{data?.pizza.utilizadores.inativos ?? 0}</strong>
+                          Inativos:{" "}
+                          <strong>
+                            {data?.pizza.utilizadores.inativos ?? 0}
+                          </strong>
                         </span>
                       </div>
                     </div>
@@ -229,16 +309,28 @@ export default function GestaoDeRelatorios() {
               {/* Gráfico barras mensais */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
                 <h2 className="font-bold text-gray-800 text-sm mb-5 flex items-center gap-2">
-                  <BarChart3 className="w-4 h-4 text-[#184d8a]" /> Pagamentos Mensais (KZ)
+                  <BarChart3 className="w-4 h-4 text-[#184d8a]" /> Pagamentos
+                  Mensais (KZ)
                 </h2>
                 {data?.graficoBarra && data.graficoBarra.length > 0 ? (
                   <ResponsiveContainer width="100%" height={260}>
                     <BarChart data={data.graficoBarra} barSize={32}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                       <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
-                      <YAxis tick={{ fontSize: 11 }} tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`} />
-                      <Tooltip formatter={(v) => [`KZ ${Number(v).toLocaleString("pt-AO")}`]} />
-                      <Bar dataKey="total" fill="#184d8a" radius={[6, 6, 0, 0]} />
+                      <YAxis
+                        tick={{ fontSize: 11 }}
+                        tickFormatter={(v) => `${(v / 1000).toFixed(0)}k`}
+                      />
+                      <Tooltip
+                        formatter={(v) => [
+                          `KZ ${Number(v).toLocaleString("pt-AO")}`,
+                        ]}
+                      />
+                      <Bar
+                        dataKey="total"
+                        fill="#184d8a"
+                        radius={[6, 6, 0, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
@@ -251,8 +343,10 @@ export default function GestaoDeRelatorios() {
               {/* Tabela por instituição */}
               <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                  <h2 className="font-bold text-gray-800 text-sm">Pagamentos por Instituição</h2>
-                  <span className="text-xs bg-[#184d8a]/10 text-[#184d8a] font-semibold px-3 py-1 rounded-full">
+                  <h2 className="font-bold text-gray-800 text-sm">
+                    Pagamentos por Instituição
+                  </h2>
+                  <span className="text-xs bg-primary/10 text-[#184d8a] font-semibold px-3 py-1 rounded-full">
                     {data?.tabela.length ?? 0} instituições
                   </span>
                 </div>
@@ -261,30 +355,43 @@ export default function GestaoDeRelatorios() {
                     <thead>
                       <tr className="bg-gray-50 text-xs text-gray-500 font-semibold uppercase tracking-wide">
                         <th className="px-6 py-3 text-left">Instituição</th>
-                        <th className="px-6 py-3 text-right">Total Pago (KZ)</th>
+                        <th className="px-6 py-3 text-right">
+                          Total Pago (KZ)
+                        </th>
                         <th className="px-6 py-3 text-right">% do Total</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
                       {data?.tabela.length === 0 ? (
                         <tr>
-                          <td colSpan={3} className="px-6 py-10 text-center text-sm text-gray-400">
+                          <td
+                            colSpan={3}
+                            className="px-6 py-10 text-center text-sm text-gray-400"
+                          >
                             Sem dados disponíveis
                           </td>
                         </tr>
                       ) : (
                         data?.tabela.map((inst) => {
-                          const pct = totalTabela > 0
-                            ? ((inst.total_pago / totalTabela) * 100).toFixed(1)
-                            : "0.0";
+                          const pct =
+                            totalTabela > 0
+                              ? ((inst.total_pago / totalTabela) * 100).toFixed(
+                                  1,
+                                )
+                              : "0.0";
                           return (
-                            <tr key={inst.nome} className="hover:bg-gray-50 transition-colors">
+                            <tr
+                              key={inst.nome}
+                              className="hover:bg-gray-50 transition-colors"
+                            >
                               <td className="px-6 py-3">
                                 <div className="flex items-center gap-3">
                                   <div className="w-8 h-8 rounded-full bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
                                     <Building2 className="w-4 h-4 text-[#184d8a]" />
                                   </div>
-                                  <span className="font-semibold text-gray-900 text-xs">{inst.nome}</span>
+                                  <span className="font-semibold text-gray-900 text-xs">
+                                    {inst.nome}
+                                  </span>
                                 </div>
                               </td>
                               <td className="px-6 py-3 text-right font-bold text-gray-900 text-xs">

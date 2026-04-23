@@ -29,7 +29,7 @@ export default function Nav() {
   }, []);
 
   const navbarClasses = `fixed top-0 w-full z-50 transition-colors duration-700 ${scrolled ? "menu-translucido" : "transparent-bg "}`;
-  
+
   const CorMenu = scrolled ? "text-white" : "text-[#184d8a]";
   const borderClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? "border-white drop-shadow-md px-3 py-2 rounded-lg border-2 font-medium text-white" : "border-[#184d8a] hover:border-white px-3 py-2 rounded-lg border-2 font-medium text-white"}`;
 
@@ -110,7 +110,7 @@ export default function Nav() {
       {/* Drawer melhorado */}
       <div
         className={`lg:hidden fixed top-0 right-0 h-screen z-50 w-72 sm:w-80
-          bg-[#184d8a] flex flex-col
+          bg-primary flex flex-col
           transition-transform duration-300 ease-in-out
           ${menuOpen ? "translate-x-0" : "translate-x-full"}
         `}

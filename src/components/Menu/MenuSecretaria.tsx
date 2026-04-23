@@ -21,8 +21,6 @@ import { useState, useEffect } from "react";
 import { handleLogout } from "@/lib/logout";
 
 export default function MenuSecretaria() {
-
-
   const [menu, setMenu] = useState<boolean>(() => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
       const saved = localStorage.getItem("menu_secretaria_aberto");
@@ -62,12 +60,24 @@ export default function MenuSecretaria() {
   const links = [
     { to: "/Secretaria", icon: LayoutDashboard, label: "Painel Geral" },
     { to: "/GestaoAlunos", icon: Users, label: "Gestão de Estudantes" },
-    { to: "/GestaodeEncarregados", icon: Users2Icon, label: "Gestão de Encarregados" },
-    { to: "/SolicitacoesCadastro", icon: UserCheck2Icon, label: "Solicitações de Cadastro" },
+    {
+      to: "/GestaodeEncarregados",
+      icon: Users2Icon,
+      label: "Gestão de Encarregados",
+    },
+    {
+      to: "/SolicitacoesCadastro",
+      icon: UserCheck2Icon,
+      label: "Solicitações de Cadastro",
+    },
     { to: "/GestaoPropinas", icon: CreditCard, label: "Gestão de Propinas" },
     { to: "/GestaoPagamentos", icon: Receipt, label: "Gestão de Pagamentos" },
     { to: "/GestaodeServiços", icon: NotepadText, label: "Gestão de Serviços" },
-    { to: "/GestaodeReclamacoes", icon: MessageSquare, label: "Gestão de Reclamações" },
+    {
+      to: "/GestaodeReclamacoes",
+      icon: MessageSquare,
+      label: "Gestão de Reclamações",
+    },
     { to: "/ModulodeMulta", icon: AlertOctagon, label: "Gestão de Multas" },
     { to: "/Relatorio", icon: FileText, label: "Centro de Relatório" },
     { to: "/Configuracao", icon: Settings, label: "Configurações" },
@@ -130,23 +140,31 @@ export default function MenuSecretaria() {
       <aside
         style={{ height: "100dvh" }}
         className={`
-          bg-[#184d8a] text-white flex flex-col
+          bg-primary text-white flex flex-col
           transition-all duration-300 ease-in-out shrink-0
-          ${isMobile
-            ? menu
-              ? "fixed top-0 left-0 w-72 z-50"
-              : "hidden"
-            : isCollapsed
-              ? "sticky top-0 w-[68px]"
-              : "sticky top-0 w-64"
+          ${
+            isMobile
+              ? menu
+                ? "fixed top-0 left-0 w-72 z-50"
+                : "hidden"
+              : isCollapsed
+                ? "sticky top-0 w-[68px]"
+                : "sticky top-0 w-64"
           }
         `}
       >
         {/* Header */}
-        <div className={`pt-4 mb-6 flex items-center shrink-0 ${isCollapsed ? "justify-center px-2" : "justify-between px-4"}`}>
+        <div
+          className={`pt-4 mb-6 flex items-center shrink-0 ${isCollapsed ? "justify-center px-2" : "justify-between px-4"}`}
+        >
           {!isCollapsed && (
             <div className="flex items-center gap-1">
-              <img loading="lazy" src={logo555} alt="Logo" className="w-14 h-14" />
+              <img
+                loading="lazy"
+                src={logo555}
+                alt="Logo"
+                className="w-14 h-14"
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
           )}
@@ -155,7 +173,11 @@ export default function MenuSecretaria() {
             className="p-1.5 rounded hover:bg-white/10 transition shrink-0"
             title={isCollapsed ? "Expandir menu" : "Recolher menu"}
           >
-            {isMobile ? <X size={22} className="text-white" /> : <Menu size={22} className="text-white" />}
+            {isMobile ? (
+              <X size={22} className="text-white" />
+            ) : (
+              <Menu size={22} className="text-white" />
+            )}
           </button>
         </div>
 
@@ -167,7 +189,9 @@ export default function MenuSecretaria() {
         )}
 
         {/* Nav */}
-        <nav className={`flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 ${isCollapsed ? "px-1" : "px-3"}`}>
+        <nav
+          className={`flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 ${isCollapsed ? "px-1" : "px-3"}`}
+        >
           {links.map(({ to, icon, label }) => (
             <Link key={label} to={to}>
               <SidebarItem
@@ -181,7 +205,9 @@ export default function MenuSecretaria() {
         </nav>
 
         {/* Logout */}
-        <div className={`shrink-0 py-4 border-t border-white/10 ${isCollapsed ? "px-1" : "px-3"}`}>
+        <div
+          className={`shrink-0 py-4 border-t border-white/10 ${isCollapsed ? "px-1" : "px-3"}`}
+        >
           {isCollapsed ? (
             <Link
               to="/Login"
@@ -203,7 +229,10 @@ export default function MenuSecretaria() {
               <span className="text-sm font-medium text-white group-hover:text-blue-700">
                 Terminar sessão
               </span>
-              <LogOut size={22} className="text-white group-hover:text-blue-700" />
+              <LogOut
+                size={22}
+                className="text-white group-hover:text-blue-700"
+              />
             </Link>
           )}
         </div>

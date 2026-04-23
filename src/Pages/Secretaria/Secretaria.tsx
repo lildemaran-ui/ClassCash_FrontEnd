@@ -152,7 +152,7 @@ export default function Secretaria() {
                   </div>
                 ))}
               </div>
-              <button className="flex items-center justify-center gap-2 px-4 py-2 bg-[#184d8a] text-white rounded-md text-sm font-semibold hover:bg-[#184d8a]/80 transition-all duration-500 w-full sm:w-auto">
+              <button className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white rounded-md text-sm font-semibold hover:bg-primary/80 transition-all duration-500 w-full sm:w-auto">
                 Gerar PDF <Download size={16} />
               </button>
             </div>
@@ -212,7 +212,7 @@ export default function Secretaria() {
                       <p className="font-bold text-gray-700 mb-3 text-sm sm:text-base">
                         {s.metodo}
                       </p>
-                      <div className="h-2 w-4 bg-[#184d8a] rounded-full mb-2 mx-auto" />
+                      <div className="h-2 w-4 bg-primary rounded-full mb-2 mx-auto" />
                       <p className="text-xs sm:text-sm text-gray-400">
                         {s.total} transações
                       </p>
@@ -237,7 +237,7 @@ export default function Secretaria() {
                 : (painel?.listaAlunos?.slice(0, 3) ?? []).map((aluno, i) => (
                     <div
                       key={i}
-                      className={`p-3 sm:p-4 ${i % 2 === 0 ? "bg-[#184d8a] text-white" : "bg-white text-gray-700"}`}
+                      className={`p-3 sm:p-4 ${i % 2 === 0 ? "bg-primary text-white" : "bg-white text-gray-700"}`}
                     >
                       <p className="font-bold text-xs sm:text-sm">
                         {aluno.nome_estudante}
@@ -250,7 +250,7 @@ export default function Secretaria() {
                   ))}
             </div>
             <Link to="/GestaoAlunos">
-              <button className="mt-4 bg-[#184d8a] text-white px-6 py-2 rounded text-sm hover:px-7 transition-all duration-500 font-bold shadow-md">
+              <button className="mt-4 bg-primary text-white px-6 py-2 rounded text-sm hover:px-7 transition-all duration-500 font-bold shadow-md">
                 Ver mais
               </button>
             </Link>

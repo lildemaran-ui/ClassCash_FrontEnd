@@ -29,15 +29,18 @@ import { useClasses } from "@/Hooks/useClasses";
 const API = "http://localhost:5000/api";
 
 interface Encarregado {
-  idencarregado: number;
-  encarregado: string;
-  contacto: string;
-  nomedoeducando: string;
-  parentesco: string;
-  estado: string;
-  email?: string;
+  idencarregado: number
+  encarregado: string
+  contacto: string
+  email: string
+  nomedoeducando: string
+  email_educando: string
+  parentesco: string
+  estado: string
+  classe: string | null
+  instituicao: string | null
+  num_processo: string | null
 }
-
 interface FormData {
   nomeEncarregado: string;
   emailEncarregado: string;
@@ -61,7 +64,6 @@ const FORM_INICIAL: FormData = {
 };
 
 type Aba = "pesquisar" | "gestao";
-
 
 // ─── Modal Cadastro (melhorado) ───────────────────────────────────────────────
 function ModalCadastro({
@@ -118,7 +120,7 @@ function ModalCadastro({
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
         {/* Header */}
-        <div className="flex bg-[#184d8a] items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex bg-primary items-center justify-between px-6 py-4 border-b border-gray-100">
           <div>
             <h2 className="text-base font-bold text-white">
               Cadastrar Encarregado
@@ -139,7 +141,7 @@ function ModalCadastro({
             <div
               key={n}
               className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                step >= n ? "bg-[#184d8a]" : "bg-gray-200"
+                step >= n ? "bg-primary" : "bg-gray-200"
               }`}
             />
           ))}
@@ -243,7 +245,7 @@ function ModalCadastro({
                   type="button"
                   disabled={!step1Valido}
                   onClick={() => setStep(2)}
-                  className="flex-1 h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-[#184d8a]/80 transition-colors disabled:opacity-40"
+                  className="flex-1 h-10 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/80 transition-colors disabled:opacity-40"
                 >
                   Próximo →
                 </button>
@@ -312,7 +314,7 @@ function ModalCadastro({
               </div>
 
               {/* Resumo do encarregado */}
-              <div className="bg-[#184d8a]/5 rounded-xl p-3 border border-[#184d8a]/10">
+              <div className="bg-primary/5 rounded-xl p-3 border border-[#184d8a]/10">
                 <p className="text-xs text-gray-500 mb-1 font-medium">
                   Encarregado a associar
                 </p>
@@ -335,7 +337,7 @@ function ModalCadastro({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-[#184d8a]/80 transition-colors disabled:opacity-60"
+                  className="flex-1 h-10 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/80 transition-colors disabled:opacity-60"
                 >
                   {loading ? "A cadastrar..." : "Cadastrar"}
                 </button>
@@ -348,130 +350,82 @@ function ModalCadastro({
   );
 }
 // ─── Modal Editar ─────────────────────────────────────────────────────────────
-function ModalEditar({
-  enc,
-  onClose,
-  onSucesso,
-}: {
-  enc: Encarregado;
-  onClose: () => void;
-  onSucesso: () => void;
-}) {
+function ModalEditar({ enc, onClose, onSucesso }: { enc: Encarregado; onClose: () => void; onSucesso: () => void }) {
+  const classes = useClasses()
   const [form, setForm] = useState({
     nomeEncarregado: enc.encarregado,
     contacto: enc.contacto,
     grauParentesco: enc.parentesco,
     estado: enc.estado,
-  });
-  const [loading, setLoading] = useState(false);
+    nomeEducando: enc.nomedoeducando,
+    idClasse: '',
+  })
+  const [loading, setLoading] = useState(false)
 
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }))
 
   const submeter = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    setLoading(true)
     try {
-      const res = await fetchComAuth(
-        `${API}/GestaoEncarregados/${enc.idencarregado}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getToken()}`,
-          },
-          body: JSON.stringify(form),
-        },
-      );
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Erro ao editar");
-      toast.success("Encarregado atualizado com sucesso!");
-      onSucesso();
-      onClose();
+      const res = await fetchComAuth(`${API}/GestaoEncarregados/${enc.idencarregado}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error ?? 'Erro ao editar')
+      toast.success('Encarregado atualizado com sucesso!')
+      onSucesso()
+      onClose()
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro ao editar");
+      toast.error(err instanceof Error ? err.message : 'Erro ao editar')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
-        <div className="flex bg-[#184d8a] items-center justify-between px-6 py-4">
+        <div className="flex bg-primary items-center justify-between px-6 py-4">
           <div>
-            <h2 className="text-base font-bold text-white">
-              Editar Encarregado
-            </h2>
+            <h2 className="text-base font-bold text-white">Editar Encarregado</h2>
             <p className="text-xs text-gray-300">{enc.encarregado}</p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
-          >
+          <button onClick={onClose} className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20">
             <X size={18} />
           </button>
         </div>
 
-        <form onSubmit={submeter} className="p-6 flex flex-col gap-4">
+        <form onSubmit={submeter} className="p-6 flex flex-col gap-4 max-h-[70vh] overflow-y-auto">
+          {/* Dados do encarregado */}
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+            <UserCircle2 size={14} /> Dados do Encarregado
+          </p>
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Nome Completo
-              </label>
-              <input
-                required
-                name="nomeEncarregado"
-                value={form.nomeEncarregado}
-                onChange={handle}
-                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
-              />
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Nome Completo</label>
+              <input required name="nomeEncarregado" value={form.nomeEncarregado} onChange={handle}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a]" />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Contacto
-              </label>
-              <input
-                required
-                name="contacto"
-                value={form.contacto}
-                maxLength={9}
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    contacto: e.target.value.replace(/\D/g, ""),
-                  }))
-                }
-                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
-              />
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Contacto</label>
+              <input required name="contacto" value={form.contacto} maxLength={9}
+                onChange={(e) => setForm((f) => ({ ...f, contacto: e.target.value.replace(/\D/g, '') }))}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a]" />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Grau de Parentesco
-              </label>
-              <input
-                required
-                name="grauParentesco"
-                value={form.grauParentesco}
-                onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    grauParentesco: e.target.value.replace(/[0-9]/g, ""),
-                  }))
-                }
-                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
-              />
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Grau de Parentesco</label>
+              <input required name="grauParentesco" value={form.grauParentesco}
+                onChange={(e) => setForm((f) => ({ ...f, grauParentesco: e.target.value.replace(/[0-9]/g, '') }))}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a]" />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Estado
-              </label>
-              <select
-                name="estado"
-                value={form.estado}
-                onChange={handle}
-                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white transition-colors"
-              >
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Estado</label>
+              <select name="estado" value={form.estado} onChange={handle}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white">
                 <option value="Pendente">Pendente</option>
                 <option value="Aceite">Aceite</option>
                 <option value="Recusado">Recusado</option>
@@ -479,123 +433,113 @@ function ModalEditar({
             </div>
           </div>
 
-          {/* Info do educando (só leitura) */}
-          <div className="bg-[#184d8a]/5 rounded-xl p-3 border border-[#184d8a]/10">
-            <p className="text-xs text-gray-500 mb-1 font-medium">
-              Educando associado
-            </p>
-            <p className="text-sm font-bold text-gray-700">
-              {enc.nomedoeducando}
-            </p>
+          {/* Dados do educando */}
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5 mt-2">
+            <Users2 size={14} /> Dados do Educando
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="col-span-2">
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Nome do Educando</label>
+              <input required name="nomeEducando" value={form.nomeEducando} onChange={handle}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a]" />
+            </div>
+            <div className="col-span-2">
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Classe</label>
+              <select value={form.idClasse} onChange={(e) => setForm((f) => ({ ...f, idClasse: e.target.value }))}
+                className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white">
+                <option value="">
+                  {enc.classe ? `Atual: ${enc.classe}ª Classe` : 'Selecionar classe'}
+                </option>
+                {classes.map((c) => (
+                  <option key={c.idclasse} value={c.idclasse.toString()}>{c.nivel}ª Classe</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div className="flex gap-3 mt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 h-10 rounded-xl border-2 border-gray-200 text-sm text-gray-500 hover:bg-gray-50 transition-colors"
-            >
+            <button type="button" onClick={onClose}
+              className="flex-1 h-10 rounded-xl border-2 border-gray-200 text-sm text-gray-500 hover:bg-gray-50">
               Cancelar
             </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-[#184d8a]/80 transition-colors disabled:opacity-60"
-            >
-              {loading ? "A guardar..." : "Guardar Alterações"}
+            <button type="submit" disabled={loading}
+              className="flex-1 h-10 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/80 disabled:opacity-60">
+              {loading ? 'A guardar...' : 'Guardar Alterações'}
             </button>
           </div>
         </form>
       </div>
     </div>
-  );
+  )
 }
 
 // ─── Modal Visualizar ─────────────────────────────────────────────────────────
-function ModalVisualizar({
-  enc,
-  onClose,
-}: {
-  enc: Encarregado;
-  onClose: () => void;
-}) {
+function ModalVisualizar({ enc, onClose }: { enc: Encarregado; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="text-base font-bold text-[#184d8a]">
-            Detalhes do Encarregado
-          </h2>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
-          >
+          <h2 className="text-base font-bold text-[#184d8a]">Detalhes do Encarregado</h2>
+          <button onClick={onClose} className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors">
             <X size={18} className="text-gray-500" />
           </button>
         </div>
 
-        {/* Avatar destaque */}
         <div className="flex flex-col items-center gap-2 pt-6 pb-4 bg-gradient-to-b from-[#184d8a]/5 to-white px-6">
-          <div className="w-16 h-16 rounded-full bg-[#184d8a]/10 flex items-center justify-center">
+          <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
             <UserCircle2 size={36} className="text-[#184d8a]" />
           </div>
           <p className="text-base font-bold text-gray-800">{enc.encarregado}</p>
-          <span
-            className={`px-3 py-1 rounded-full text-xs font-bold ${colorsSit(enc.estado)}`}
-          >
+          <span className={`px-3 py-1 rounded-full text-xs font-bold ${colorsSit(enc.estado)}`}>
             {enc.estado}
           </span>
         </div>
 
-        {/* Info grid */}
         <div className="px-6 pb-2 grid grid-cols-2 gap-3">
-          <EncInfoItem
-            icon={<Phone size={14} />}
-            label="Contacto"
-            value={enc.contacto}
-          />
-          <EncInfoItem
-            icon={<Heart size={14} />}
-            label="Parentesco"
-            value={enc.parentesco}
-          />
-          {enc.email && (
-            <div className="col-span-2">
-              <EncInfoItem
-                icon={<Mail size={14} />}
-                label="Email"
-                value={enc.email}
-              />
-            </div>
-          )}
+          <EncInfoItem icon={<Phone size={14} />} label="Contacto" value={enc.contacto} />
+          <EncInfoItem icon={<Heart size={14} />} label="Parentesco" value={enc.parentesco} />
+          <div className="col-span-2">
+            <EncInfoItem icon={<Mail size={14} />} label="Email" value={enc.email} />
+          </div>
         </div>
 
-        {/* Educando associado */}
-        <div className="mx-6 mb-6 mt-3 bg-[#184d8a]/5 rounded-xl p-4 border border-[#184d8a]/10">
-          <div className="flex items-center gap-2 mb-2">
+        {/* Educando */}
+        <div className="mx-6 mb-3 mt-2 bg-primary/5 rounded-xl p-4 border border-[#184d8a]/10">
+          <div className="flex items-center gap-2 mb-3">
             <Users2 size={14} className="text-[#184d8a]" />
-            <p className="text-xs font-bold text-[#184d8a] uppercase tracking-wider">
-              Educando Associado
-            </p>
+            <p className="text-xs font-bold text-[#184d8a] uppercase tracking-wider">Educando Associado</p>
           </div>
-          <p className="text-sm font-semibold text-gray-800">
-            {enc.nomedoeducando}
-          </p>
+          <div className="grid grid-cols-2 gap-2">
+            <div>
+              <p className="text-xs text-gray-400">Nome</p>
+              <p className="text-sm font-semibold text-gray-800">{enc.nomedoeducando}</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400">Nº Processo</p>
+              <p className="text-sm font-semibold text-gray-800">{enc.num_processo ?? '—'}</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400">Classe</p>
+              <p className="text-sm font-semibold text-gray-800">
+                {enc.classe ? `${enc.classe}ª Classe` : '—'}
+              </p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-400">Instituição</p>
+              <p className="text-sm font-semibold text-gray-800">{enc.instituicao ?? '—'}</p>
+            </div>
+          </div>
         </div>
 
         <div className="px-6 pb-6">
-          <button
-            onClick={onClose}
-            className="w-full h-10 rounded-xl bg-[#184d8a] text-white text-sm font-bold hover:bg-[#184d8a]/80 transition-colors"
-          >
+          <button onClick={onClose} className="w-full h-10 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/80 transition-colors">
             Fechar
           </button>
         </div>
       </div>
     </div>
-  );
+  )
 }
-
 function EncInfoItem({
   icon,
   label,
@@ -615,7 +559,6 @@ function EncInfoItem({
     </div>
   );
 }
-
 // ─── Componente Principal ─────────────────────────────────────────────────────
 export default function GestaodeEncarregados() {
   const [ordemCrescente, setOrdemCrescente] = useState(true);
@@ -723,7 +666,7 @@ export default function GestaodeEncarregados() {
                 onClick={() => setAbaAtiva(aba.id)}
                 className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                   abaAtiva === aba.id
-                    ? "bg-[#184d8a] text-white shadow-md"
+                    ? "bg-primary text-white shadow-md"
                     : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                 }`}
               >
@@ -767,7 +710,7 @@ export default function GestaodeEncarregados() {
                   </div>
                   <button
                     onClick={() => setShowModal(true)}
-                    className="flex items-center justify-center gap-2 bg-[#184d8a] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95 w-full sm:w-auto"
+                    className="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95 w-full sm:w-auto"
                   >
                     <Plus size={20} />
                     <span>Cadastrar</span>
@@ -777,7 +720,7 @@ export default function GestaodeEncarregados() {
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse min-w-[600px]">
                   <thead>
-                    <tr className="bg-[#184d8a]/70 text-white text-sm font-bold border-b border-gray-200 text-center">
+                    <tr className="bg-primary/70 text-white text-sm font-bold border-b border-gray-200 text-center">
                       <th
                         className="px-4 py-3 cursor-pointer"
                         onClick={handleSort}
@@ -833,7 +776,7 @@ export default function GestaodeEncarregados() {
                       filtrados.map((enc) => (
                         <tr
                           key={enc.idencarregado}
-                          className="hover:bg-[#184d8a]/5 transition-colors text-center"
+                          className="hover:bg-primary/5 transition-colors text-center"
                         >
                           <td className="px-4 py-3 text-xs sm:text-sm font-medium text-gray-700">
                             {enc.encarregado}
@@ -860,7 +803,7 @@ export default function GestaodeEncarregados() {
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalEditar(enc)}
-                                  className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                                  className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
                                 >
                                   <PencilIcon size={16} />
                                 </div>
@@ -872,7 +815,7 @@ export default function GestaodeEncarregados() {
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalVisualizar(enc)}
-                                  className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                                  className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
                                 >
                                   <EyeIcon size={16} />
                                 </div>

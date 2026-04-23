@@ -66,38 +66,33 @@ export default function TelaLogin() {
       localStorage.removeItem("sessao");
       localStorage.removeItem("UsuarioAtivo");
       // ── Login bem sucedido ────────────────────────────────────────────────
+      const u = data.usuario as Record<string, unknown>;
+      const perfil = u?.perfil as string;
 
       const sessao = {
         token: data.token,
         usuario: {
-          idusuario: data.usuario?.idusuario,
-          nome: data.usuario?.nome,
-          email: data.usuario?.email,
-          foto: data.usuario?.foto ?? null,
-          perfil: data.perfil,
-          instituicao: data.instituicao,
-          idInstituicao: data.idInstituicao,
-          numProcesso: data.numProcesso,
+          idusuario: u?.idusuario,
+          nome: u?.nome,
+          email: u?.email,
+          foto: u?.foto ?? null,
+          perfil: u?.perfil,
+          instituicao: u?.instituicao,
+          idInstituicao: u?.idInstituicao,
+          processo: u?.processo,
+          classe: u?.classe,
+          codigo_plataforma: u?.codigo_plataforma,
+          relacao: u?.relacao,
+          nomeEstudante: u?.nomeEstudante,
         },
       };
+
       localStorage.setItem("sessao", JSON.stringify(sessao));
       localStorage.setItem(
         "UsuarioAtivo",
-        JSON.stringify({
-          // ✅ grava nas duas chaves
-          idusuario: data.usuario?.idusuario,
-          nome: data.usuario?.nome,
-          email: data.usuario?.email,
-          foto: data.usuario?.foto ?? null,
-          perfil: data.perfil,
-          instituicao: data.instituicao,
-          idInstituicao: data.idInstituicao,
-          numProcesso: data.numProcesso,
-          token: data.token,
-        }),
+        JSON.stringify({ ...sessao.usuario, token: data.token }),
       );
-      // Redirecionar conforme perfil
-      const perfil = data.perfil as string;
+
       if (perfil === "Estudante") navigate("/DashboardEstud");
       else if (perfil === "Encarregado") navigate("/Encarregado");
       else if (perfil === "Secretaria" || perfil === "Instituição")
@@ -204,7 +199,7 @@ export default function TelaLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#184d8a] text-white font-bold h-10 rounded-xl hover:bg-[#184d8a]/80 transition-colors disabled:opacity-60"
+            className="w-full bg-primary text-white font-bold h-10 rounded-xl hover:bg-primary/80 transition-colors disabled:opacity-60"
           >
             {loading ? "A entrar..." : "Entrar"}
           </button>

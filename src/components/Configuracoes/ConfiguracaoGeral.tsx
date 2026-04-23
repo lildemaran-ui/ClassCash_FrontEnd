@@ -114,7 +114,7 @@ export default function ConfiguracaoGeral() {
               label={
                 carregando
                   ? "Métodos de pagamentos salvos"
-                  : `Métodos de pagamentos salvos (${configs?.metodopagamento ?? "—"})`
+                  : `Métodos de pagamentos salvos (${configs?.metodopagamento ? "1 método" : "Nenhum método"})`
               }
             />
             <SettingItem label="Definir método padrão" />

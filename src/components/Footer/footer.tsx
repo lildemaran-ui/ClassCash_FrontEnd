@@ -4,7 +4,7 @@ import logo from "../../assets/logo5.5.png";
 export default function Footer() {
   return (
     <div>
-      <footer className="bg-[#184d8a] text-white w-full">
+      <footer className="bg-primary text-white w-full">
         <div className="max-w-7xl mx-auto py-10 px-6 sm:px-10 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 lg:gap-20">
           {/* Logo — ocupa as 2 colunas no mobile */}
           <div className="col-span-2 sm:col-span-2 lg:col-span-1">

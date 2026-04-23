@@ -62,7 +62,7 @@ export default function SolicitarRecuperacao() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div
-            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#184d8a] shadow-lg mb-4"
+            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary shadow-lg mb-4"
             style={{ boxShadow: "0 8px 32px rgba(24,77,138,0.35)" }}
           >
             <ShieldCheck className="w-8 h-8 text-white" />
@@ -82,7 +82,7 @@ export default function SolicitarRecuperacao() {
             <>
               <div className="px-8 pt-8 pb-6 border-b border-slate-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#184d8a]/10 flex items-center justify-center">
+                  <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
                     <Mail className="w-4 h-4 text-[#184d8a]" />
                   </div>
                   <div>
@@ -160,7 +160,7 @@ export default function SolicitarRecuperacao() {
               </div>
               <Link
                 to="/Login"
-                className="w-full flex items-center justify-center gap-2 border border-[#184d8a]/30 text-[#184d8a] font-bold py-3.5 rounded-xl text-sm hover:bg-[#184d8a] hover:text-white transition-all"
+                className="w-full flex items-center justify-center gap-2 border border-[#184d8a]/30 text-[#184d8a] font-bold py-3.5 rounded-xl text-sm hover:bg-primary hover:text-white transition-all"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Voltar ao Login

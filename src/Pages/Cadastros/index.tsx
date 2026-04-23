@@ -44,7 +44,7 @@ function InstitutionCheckModal({
   onGoCheck: () => void;
   onClose: () => void;
 }) {
-/*   useEffect(() => {
+  /*   useEffect(() => {
     // Trava o scroll
     document.body.style.overflow = "hidden";
     
@@ -62,7 +62,7 @@ function InstitutionCheckModal({
           </div>
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors hover:scale-110  hover:bg-[#184d8a]/20 p-1 rounded-3xl  "
+            className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors hover:scale-110  hover:bg-primary/20 p-1 rounded-3xl  "
           >
             <X className="w-5 h-5" />
           </button>
@@ -93,13 +93,13 @@ function InstitutionCheckModal({
           <div className="flex flex-col gap-2">
             <button
               onClick={onGoCheck}
-              className="w-full flex items-center justify-center gap-2 bg-[#184d8a] text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-[#184d8a]/80 active:scale-95 transition-all shadow-md"
+              className="w-full flex items-center justify-center gap-2 bg-primary text-white text-sm font-bold py-3 px-6 rounded-xl hover:bg-primary/80 active:scale-95 transition-all shadow-md"
             >
               Verificar Instituição <ArrowRight className="h-5 w-5" />
             </button>
             <button
               onClick={onClose}
-              className="w-full text-gray-500 text-sm rounded-xl bg-blue-100 py-2 hover:bg-[#184d8a]/10 hover:font-bold transition-all"
+              className="w-full text-gray-500 text-sm rounded-xl bg-blue-100 py-2 hover:bg-primary/10 hover:font-bold transition-all"
             >
               Já verifiquei, continuar mesmo assim
             </button>
@@ -374,15 +374,14 @@ export function TelaCadastro() {
                           <SelectValue placeholder="Classe" />
                         </SelectTrigger>
                         <SelectContent>
-                          
                           {classes.map((c) => (
                             <SelectItem
                               key={c.idclasse}
                               value={c.idclasse.toString()}
                             >
-                            {c.nivel}ª
-                          </SelectItem>
-                        ))}
+                              {c.nivel}ª
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     )}
@@ -496,7 +495,7 @@ export function TelaCadastro() {
 
                 <button
                   type="submit"
-                  className="bg-[#184d8a] h-10 w-full rounded-lg text-white font-medium hover:bg-[#184d8a]/80 transition-colors"
+                  className="bg-primary h-10 w-full rounded-lg text-white font-medium hover:bg-primary/80 transition-colors"
                 >
                   Cadastrar
                 </button>

@@ -11,7 +11,8 @@ export interface SessaoUsuario {
   processo?: string;
   nomeEstudante?: string;
   relacao?: string;
-  
+  /** Código gerado pela plataforma após a secretaria validar o cadastro */
+  codigo_plataforma?: string;
 }
 
 export interface Sessao {

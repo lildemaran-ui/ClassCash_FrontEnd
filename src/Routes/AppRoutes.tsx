@@ -28,7 +28,7 @@ import Relatorio from '@/Pages/Secretaria/Relatorio/Relatorio'
 import Secretaria from '@/Pages/Secretaria/Secretaria'
 import SolicitacoesCadastro from '@/Pages/Secretaria/Solicitacoes/SolicitacoesCadastro'
 
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Cadastro from '../Pages/Cadastros/Cadastro'
 import SobreNos from '../Pages/Index/AboutUs'
 import Contactos from '../Pages/Index/Contacts'
@@ -38,11 +38,25 @@ import Instituicoes from '../Pages/Instituições/Instituições'
 import Login from '../Pages/Login/Login'
 import Pagamento from '../Pages/Pagamento/Pagamento'
 import RecuperacaodeSenha from '@/components/Recuperacao_de_senha/recuperacaodesenha'
-import SolicitarRecuperacao from '@/Pages/Login/SolicitarRecuperacao'
+import SolicitarRecuperacao from '@/Pages/Login/solicitarRecuperacao'
+import { useEffect, useState } from 'react'
+import Spinner from '@/components/spinner'
+
 
 export default function AppRoutes() {
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+   useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(timer);
+  }, [location]); // dispara toda vez que mudar de página
+
   return (
+    <>
+    {loading && <Spinner />}
     <Routes>
+      
       <Route path="/" element={<Navigate to="/PaginaInicial" />} />
       <Route path="/PaginaInicial" element={<PaginaInicial />} />
       <Route path="/Cadastro" element={<Cadastro />} />
@@ -82,5 +96,6 @@ export default function AppRoutes() {
       <Route path='/solicitarRecuperacao' element={<SolicitarRecuperacao/>}></Route>
 
     </Routes>
+    </>
   )
 }

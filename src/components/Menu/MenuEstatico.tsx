@@ -16,20 +16,20 @@ export default function MenuEstatico() {
       <div>
         <nav className="flex h-16 sm:h-20 items-center justify-between  menu-translucido px-4 sm:px-6 lg:px-10">
           <Link to="/PaginaInicial ">
-          <div className="text-[#184d8a] flex items-center font-semibold text-xl sm:text-3xl">
-            <img
-              loading="lazy"
-              src={logo5555}
-              alt="Sosoft Logo"
-              className="h-14 sm:h-20 lg:h-24 object-contain transition-all drop-shadow-md duration-700 cursor-pointer"
-            />
+            <div className="text-[#184d8a] flex items-center font-semibold text-xl sm:text-3xl">
+              <img
+                loading="lazy"
+                src={logo5555}
+                alt="Sosoft Logo"
+                className="h-14 sm:h-20 lg:h-24 object-contain transition-all drop-shadow-md duration-700 cursor-pointer"
+              />
 
-            <div>
-              <p className="cursor-pointer text-white drop-shadow-md ">
-                ClassCash
-              </p>
+              <div>
+                <p className="cursor-pointer text-white drop-shadow-md ">
+                  ClassCash
+                </p>
+              </div>
             </div>
-          </div>
           </Link>
           <div className="hidden lg:flex lg:items-center lg:gap-4 gap-3 text-white font-semibold text-sm sm:text-base ">
             <Link
@@ -91,7 +91,7 @@ export default function MenuEstatico() {
       {/* Drawer melhorado */}
       <div
         className={`lg:hidden fixed top-0 right-0 h-screen z-50 w-72 sm:w-80
-          bg-[#184d8a] flex flex-col
+          bg-primary flex flex-col
           transition-transform duration-300 ease-in-out
           ${menuOpen ? "translate-x-0" : "translate-x-full"}
         `}

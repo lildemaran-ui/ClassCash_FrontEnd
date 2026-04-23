@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import logo555 from "../../assets/logo5.5.png";
 import { handleLogout } from "@/lib/logout";
 export default function MenuAdmin() {
-
   const [menu, setMenu] = useState<boolean>(() => {
     if (typeof window !== "undefined" && window.innerWidth >= 1024) {
       const saved = localStorage.getItem("menu_encar_aberto");
@@ -54,13 +53,17 @@ export default function MenuAdmin() {
   }
 
   const links = [
-    { to: "/Administradores",     icon: LayoutDashboard, label: "Painel Geral" },
-    { to: "/GestaoDeInstituicao", icon: School,          label: "Gestão de Instituição" },
-    { to: "/GestaoDeRelatorio",   icon: FileText,        label: "Gestão de Relatórios" },
-    { to: "/PermissoesAcessos",   icon: KeyIcon,         label: "Permissões e Acessos" },
-    { to: "/GestaoLogs",          icon: ScrollText,      label: "Gestão de Logs" },
-    { to: "/SuporteAjuda",        icon: InfoIcon,        label: "Suporte e Ajuda" },
-    { to: "/Configuracoes",       icon: SettingsIcon,    label: "Configurações" },
+    { to: "/Administradores", icon: LayoutDashboard, label: "Painel Geral" },
+    {
+      to: "/GestaoDeInstituicao",
+      icon: School,
+      label: "Gestão de Instituição",
+    },
+    { to: "/GestaoDeRelatorio", icon: FileText, label: "Gestão de Relatórios" },
+    { to: "/PermissoesAcessos", icon: KeyIcon, label: "Permissões e Acessos" },
+    { to: "/GestaoLogs", icon: ScrollText, label: "Gestão de Logs" },
+    { to: "/SuporteAjuda", icon: InfoIcon, label: "Suporte e Ajuda" },
+    { to: "/Configuracoes", icon: SettingsIcon, label: "Configurações" },
   ];
 
   const isCollapsed = !isMobile && !menu;
@@ -118,23 +121,31 @@ export default function MenuAdmin() {
       <aside
         style={{ height: "100dvh" }}
         className={`
-          bg-[#184d8a] text-white flex flex-col
+          bg-primary text-white flex flex-col
           transition-all duration-700 translate-all ease-in-out shrink-0 
-          ${isMobile
-            ? menu
-              ? "fixed top-0 left-0 w-72 z-50"
-              : "hidden"
-            : isCollapsed
-              ? "sticky top-0 w-[68px]"
-              : "sticky top-0 w-64"
+          ${
+            isMobile
+              ? menu
+                ? "fixed top-0 left-0 w-72 z-50"
+                : "hidden"
+              : isCollapsed
+                ? "sticky top-0 w-[68px]"
+                : "sticky top-0 w-64"
           }
         `}
       >
         {/* Header */}
-        <div className={`pt-4 mb-6 flex items-center shrink-0 ${isCollapsed ? "justify-center px-2" : "justify-between px-4"}`}>
+        <div
+          className={`pt-4 mb-6 flex items-center shrink-0 ${isCollapsed ? "justify-center px-2" : "justify-between px-4"}`}
+        >
           {!isCollapsed && (
             <div className="flex items-center gap-1">
-              <img loading="lazy" src={logo555} alt="Logo" className="w-14 h-14" />
+              <img
+                loading="lazy"
+                src={logo555}
+                alt="Logo"
+                className="w-14 h-14"
+              />
               <p className="text-white font-semibold">ClassCash</p>
             </div>
           )}
@@ -143,10 +154,11 @@ export default function MenuAdmin() {
             className="p-1.5 rounded hover:bg-white/10 transition shrink-0"
             title={isCollapsed ? "Expandir menu" : "Recolher menu"}
           >
-            {isMobile
-              ? <X size={22} className="text-white" />
-              : <Menu size={22} className="text-white" />
-            }
+            {isMobile ? (
+              <X size={22} className="text-white" />
+            ) : (
+              <Menu size={22} className="text-white" />
+            )}
           </button>
         </div>
 
@@ -158,7 +170,9 @@ export default function MenuAdmin() {
         )}
 
         {/* Nav */}
-        <nav className={`flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 ${isCollapsed ? "px-1" : "px-3"}`}>
+        <nav
+          className={`flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 ${isCollapsed ? "px-1" : "px-3"}`}
+        >
           {links.map(({ to, icon, label }) => (
             <Link key={label} to={to}>
               <SidebarItem
@@ -172,7 +186,9 @@ export default function MenuAdmin() {
         </nav>
 
         {/* Logout */}
-        <div className={`shrink-0 py-4 border-t border-white/10 ${isCollapsed ? "px-1" : "px-3"}`}>
+        <div
+          className={`shrink-0 py-4 border-t border-white/10 ${isCollapsed ? "px-1" : "px-3"}`}
+        >
           {isCollapsed ? (
             <Link
               to="/Login"
@@ -194,7 +210,10 @@ export default function MenuAdmin() {
               <span className="text-sm font-medium text-white group-hover:text-blue-700">
                 Terminar sessão
               </span>
-              <LogOut size={22} className="text-white group-hover:text-blue-700" />
+              <LogOut
+                size={22}
+                className="text-white group-hover:text-blue-700"
+              />
             </Link>
           )}
         </div>

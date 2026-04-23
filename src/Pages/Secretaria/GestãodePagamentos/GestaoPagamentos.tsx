@@ -132,7 +132,7 @@ const ComprovatvivoViewer = ({ url }: { url: string }) => {
 
   if (isTransacaoId) {
     return (
-      <div className="bg-[#184d8a]/5 border border-[#184d8a]/20 rounded-xl px-4 py-3 flex items-center gap-3">
+      <div className="bg-primary/5 border border-[#184d8a]/20 rounded-xl px-4 py-3 flex items-center gap-3">
         <ShieldCheck size={18} className="text-[#184d8a] shrink-0" />
         <div>
           <p className="text-[11px] text-gray-500 font-semibold uppercase tracking-wider">
@@ -194,17 +194,14 @@ const ModalDetalhes = ({
   const handleValidar = async () => {
     setValidando(true);
     try {
-      const res = await fetchComAuth(
-        `${API}/gestaoPagamentos/${row.codigo}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getToken()}`,
-          },
-          body: JSON.stringify({ status: "Confirmado" }),
+      const res = await fetchComAuth(`${API}/gestaoPagamentos/${row.codigo}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
         },
-      );
+        body: JSON.stringify({ status: "Confirmado" }),
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Erro ao confirmar");
       toast.success("Pagamento confirmado com sucesso!");
@@ -217,8 +214,7 @@ const ModalDetalhes = ({
     }
   };
 
-  const isPendente =
-    row.status?.toLowerCase() === "pendente";
+  const isPendente = row.status?.toLowerCase() === "pendente";
 
   return (
     <div
@@ -226,7 +222,7 @@ const ModalDetalhes = ({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden max-h-[90vh] overflow-y-auto">
-        <div className="bg-[#184d8a] px-6 py-5 flex justify-between items-start sticky top-0 z-10">
+        <div className="bg-primary px-6 py-5 flex justify-between items-start sticky top-0 z-10">
           <div>
             <h2 className="text-white font-bold text-lg">
               {row.nome_estudante}
@@ -293,7 +289,7 @@ const ModalDetalhes = ({
           )}
 
           {/* Valores */}
-          <div className="bg-[#184d8a]/5 rounded-2xl p-4 border border-[#184d8a]/10">
+          <div className="bg-primary/5 rounded-2xl p-4 border border-[#184d8a]/10">
             <div className="flex justify-between items-center mb-3">
               <div className="flex items-center gap-2">
                 <DollarSign size={14} className="text-[#184d8a]" />
@@ -388,7 +384,7 @@ const ModalDetalhes = ({
           >
             Fechar
           </button>
-          <button className="flex-1 py-3 rounded-xl font-bold text-white bg-[#184d8a] hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200">
+          <button className="flex-1 py-3 rounded-xl font-bold text-white bg-primary hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200">
             Imprimir Recibo
           </button>
         </div>
@@ -470,7 +466,7 @@ const ModalEditar = ({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div className="bg-[#184d8a] px-6 py-5 flex justify-between items-start">
+        <div className="bg-primary px-6 py-5 flex justify-between items-start">
           <div>
             <h2 className="text-white font-bold text-lg">Editar Pagamento</h2>
             <p className="text-blue-200 text-sm mt-0.5">
@@ -582,7 +578,7 @@ const ModalEditar = ({
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex-1 py-3 rounded-xl font-bold text-white bg-[#184d8a] hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200 flex items-center justify-center gap-2 disabled:opacity-60"
+            className="flex-1 py-3 rounded-xl font-bold text-white bg-primary hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200 flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {saving ? (
               <>
@@ -735,7 +731,7 @@ const ModalAdicionar = ({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
-        <div className="bg-[#184d8a] px-6 py-5 flex justify-between items-center sticky top-0 z-10">
+        <div className="bg-primary px-6 py-5 flex justify-between items-center sticky top-0 z-10">
           <div>
             <h2 className="text-white font-bold text-lg">Novo Pagamento</h2>
             <p className="text-blue-200 text-sm">
@@ -786,7 +782,7 @@ const ModalAdicionar = ({
                         key={e.idestudante}
                         type="button"
                         onClick={() => selecionarEstudante(e)}
-                        className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-[#184d8a]/5 transition-colors text-left"
+                        className="w-full flex items-center justify-between px-4 py-2.5 hover:bg-primary/5 transition-colors text-left"
                       >
                         <span className="text-sm font-medium text-gray-700">
                           {e.nome_estudante}
@@ -800,7 +796,7 @@ const ModalAdicionar = ({
                 )}
               </div>
               {estudanteSelecionado && (
-                <div className="mt-2 flex items-center justify-between bg-[#184d8a]/5 border border-[#184d8a]/20 rounded-xl px-3 py-2">
+                <div className="mt-2 flex items-center justify-between bg-primary/5 border border-[#184d8a]/20 rounded-xl px-3 py-2">
                   <div>
                     <p className="text-xs font-bold text-[#184d8a]">
                       {estudanteSelecionado.nome_estudante}
@@ -817,7 +813,7 @@ const ModalAdicionar = ({
                       setEstudanteSelecionado(null);
                       setPesquisa("");
                     }}
-                    className="p-1 rounded-lg hover:bg-[#184d8a]/10 text-[#184d8a] transition-colors"
+                    className="p-1 rounded-lg hover:bg-primary/10 text-[#184d8a] transition-colors"
                   >
                     <X size={14} />
                   </button>
@@ -999,7 +995,7 @@ const ModalAdicionar = ({
           <button
             onClick={handleSave}
             disabled={saving || loadingDados}
-            className="flex-1 py-3 rounded-xl font-bold text-white bg-[#184d8a] hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200 flex items-center justify-center gap-2 disabled:opacity-60"
+            className="flex-1 py-3 rounded-xl font-bold text-white bg-primary hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200 flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {saving ? (
               <>
@@ -1061,9 +1057,6 @@ export default function GestaoPagamentos() {
 
   useEffect(() => {
     carregar();
-    // Polling a cada 30s para apanhar novos pagamentos submetidos por estudantes
-    const interval = setInterval(carregar, 30_000);
-    return () => clearInterval(interval);
   }, []);
 
   const handleSort = () => {
@@ -1142,12 +1135,8 @@ export default function GestaoPagamentos() {
                   {totalPendentes > 1 ? "m" : ""} validação
                 </p>
                 <p className="text-xs text-amber-600">
-                  Clique no ícone{" "}
-                  <EyeIcon
-                    size={10}
-                    className="inline"
-                  />{" "}
-                  para ver o comprovativo e confirmar
+                  Clique no ícone <EyeIcon size={10} className="inline" /> para
+                  ver o comprovativo e confirmar
                 </p>
               </div>
               <button
@@ -1179,7 +1168,7 @@ export default function GestaoPagamentos() {
             </div>
             <button
               onClick={() => setShowAdicionar(true)}
-              className="flex items-center gap-2 bg-[#184d8a] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200 active:scale-95"
+              className="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200 active:scale-95"
             >
               <Plus size={18} /> Adicionar
             </button>
@@ -1200,7 +1189,7 @@ export default function GestaoPagamentos() {
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-center border-collapse min-w-[700px]">
                 <thead>
-                  <tr className="bg-[#184d8a] text-white text-[13px] font-semibold">
+                  <tr className="bg-primary text-white text-[13px] font-semibold">
                     <th className="px-4 py-3.5">Código</th>
                     <th
                       className="px-4 py-3.5 cursor-pointer hover:bg-[#1a5fad] transition-colors"
@@ -1249,7 +1238,7 @@ export default function GestaoPagamentos() {
                     tabelaFiltrada.map((row, i) => (
                       <tr
                         key={i}
-                        className={`hover:bg-[#184d8a]/3 transition-colors ${
+                        className={`hover:bg-primary/3 transition-colors ${
                           row.status.toLowerCase() === "pendente" &&
                           row.comprovativo_url
                             ? "bg-amber-50/40"
@@ -1293,14 +1282,14 @@ export default function GestaoPagamentos() {
                           <div className="flex justify-center gap-2">
                             <button
                               onClick={() => setSelectedRow(row)}
-                              className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all"
+                              className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all"
                               title="Ver detalhes e validar"
                             >
                               <EyeIcon size={16} />
                             </button>
                             <button
                               onClick={() => setModalEditar(row)}
-                              className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
+                              className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
                               title="Editar"
                             >
                               <PencilIcon size={16} />
@@ -1348,7 +1337,7 @@ export default function GestaoPagamentos() {
                       </div>
                       <button
                         onClick={() => setSelectedRow(row)}
-                        className="p-2 bg-[#184d8a]/10 text-[#184d8a] rounded-lg hover:bg-[#184d8a] hover:text-white transition-all"
+                        className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all"
                       >
                         <EyeIcon size={16} />
                       </button>

@@ -26,6 +26,7 @@ import {
   XCircle,
   Search,
   Filter,
+  Users,
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -537,6 +538,13 @@ function ExpandedInstitutionDetails({
               {institution.dateAdded}
             </div>
           </div>
+          {/* <div>
+            <p className="font-medium text-gray-600">Estudantes Ativos</p>
+            <div className="flex items-center text-gray-800">
+              <Users className="w-4 h-4 mr-1 text-gray-500" />
+              {institution.totalAlunos || 0}
+            </div>
+          </div> */}
         </div>
 
         <div className="flex flex-row sm:flex-col sm:items-end gap-4 sm:gap-4 text-xs sm:text-sm md:border-l md:border-gray-200 md:pl-8 justify-between sm:justify-start">
@@ -619,7 +627,7 @@ export default function GestaoDeInstituicao() {
               <div className="flex gap-2 sm:gap-3">
                 <button
                   onClick={() => setIsModalOpen(true)}
-                  className="flex items-center bg-[#184d8a] text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg hover:bg-[#184d8a]/80 transition-colors shadow-md"
+                  className="flex items-center bg-primary text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg hover:bg-primary/80 transition-colors shadow-md"
                 >
                   <Plus className="w-4 h-4 mr-1 sm:mr-2" />
                   <span className="hidden xs:inline">Adicionar</span>
@@ -635,7 +643,7 @@ export default function GestaoDeInstituicao() {
             <div className="flex border-b border-gray-200 mb-4 sm:mb-6">
               <button className="py-2 px-3 sm:px-4 text-sm sm:text-base font-medium border-b-2 border-[#184d8a] text-[#184d8a]">
                 Instituições
-                <span className="ml-2 text-xs bg-[#184d8a]/10 text-[#184d8a] px-2 py-0.5 rounded-full">
+                <span className="ml-2 text-xs bg-primary/10 text-[#184d8a] px-2 py-0.5 rounded-full">
                   {filtered.length}
                 </span>
               </button>

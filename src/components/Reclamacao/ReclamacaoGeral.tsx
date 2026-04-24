@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 interface ReclamacaoProps {
-  titulo: string;
-  nome: string;
-  descricao: string;
-  status: "Atendida" | "Pendente";
+  idreclamacao: number
+  titulo: string
+  nome: string
+  descricao: string
+  status: 'Atendida' | 'Pendente' | 'Resolvida'
+  resposta?: string | null
 }
 
 const statusConfig = {
@@ -21,6 +23,7 @@ const ReclamacaoCard = ({
   nome,
   descricao,
   status,
+  resposta,
 }: ReclamacaoProps) => {
   const cfg = statusConfig[status];
   const Icon = cfg.icon;
@@ -51,6 +54,12 @@ const ReclamacaoCard = ({
           {descricao}
         </span>
       </div>
+      {resposta && (
+  <div className="mt-2 bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+    <p className="text-xs font-semibold text-blue-700 mb-1">Resposta da Secretaria:</p>
+    <p className="text-xs text-blue-800">{resposta}</p>
+  </div>
+)}
     </div>
   );
 };
@@ -75,33 +84,24 @@ export default function ReclamacaoGeral() {
   const [carregando, setCarregando] = useState(true);
 
   // Carregar lista de reclamações
-  const carregarReclamacoes = () => {
-    setCarregando(true);
-    fetch("http://localhost:5000/api/reclamacoes", {
-      headers: { Authorization: `Bearer ${token}` },
+const carregarReclamacoes = () => {
+  setCarregando(true)
+  fetchComAuth('http://localhost:5000/api/reclamacoes')
+    .then(r => r.json())
+    .then((dados) => {
+      const mapeadas = dados.map((r: any) => ({
+        idreclamacao: r.idreclamacao,
+        titulo: r.titulo ?? r.descricao?.substring(0, 50),
+        nome: r.nome,
+        descricao: r.descricao,
+        status: r.status === 'Resolvida' ? 'Resolvida' : 'Pendente',
+        resposta: r.resposta ?? null,
+      }))
+      setListaReclamacoes(mapeadas)
     })
-      .then((r) => r.json())
-      .then(
-        (
-          dados: Array<{
-            titulo: string;
-            nome: string;
-            descricao: string;
-            status: string;
-          }>,
-        ) => {
-          const mapeadas: ReclamacaoProps[] = dados.map((r) => ({
-            titulo: r.titulo,
-            nome: r.nome,
-            descricao: r.descricao,
-            status: r.status === "atendida" ? "Atendida" : "Pendente",
-          }));
-          setListaReclamacoes(mapeadas);
-        },
-      )
-      .catch((err) => console.error("Erro ao carregar reclamações:", err))
-      .finally(() => setCarregando(false));
-  };
+    .catch(err => console.error(err))
+    .finally(() => setCarregando(false))
+}
 
   useEffect(() => {
     carregarReclamacoes();
@@ -172,7 +172,7 @@ export default function ReclamacaoGeral() {
               </p>
             ) : (
               listaReclamacoes.map((item, index) => (
-                <ReclamacaoCard key={index} {...item} />
+                <ReclamacaoCard key={index} {...item} resposta={item.resposta}/>
               ))
             )}
           </div>

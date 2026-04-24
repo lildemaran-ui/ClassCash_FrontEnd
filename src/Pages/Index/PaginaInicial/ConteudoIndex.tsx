@@ -39,10 +39,11 @@ export default function     ConteudoIndex() {
           {/* Conteúdo */}
           <div className="relative z-20 w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 py-32">
             <div className="max-w-3xl">
-              <div className="badge reveal mb-6 " >
-                <span className="w-2 h-2 rounded-full bg-[#268cff] animate-pulse inline-block" />
-                Plataforma de Gestão Escolar Angolana
-              </div>
+              <div className="badge mb-6 mx-auto"
+              style={{ display: "inline-flex", background: "rgba(255,255,255,0.08)", color: "white", borderColor: "rgba(255,255,255,0.15)" }}>
+                 <span className="w-2 h-2 rounded-full bg-[#268cff] animate-pulse inline-block" />
+              Plataforma de Gestão Escolar Angolana
+            </div>
 
               <h1 className="font-display reveal delay-1 text-white mb-6"
                 style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)", lineHeight: 1.1}}>

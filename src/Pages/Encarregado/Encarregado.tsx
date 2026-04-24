@@ -5,17 +5,20 @@ import { ProfileEditModal } from "@/components/profile_edit_modal";
 import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import {
   AlertCircle,
+  Bell,
   CheckCircle,
   Download,
   Filter,
   Loader2,
   Pen,
   Search,
+  Settings,
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { Link } from "react-router-dom";
 
 interface ResumoFinanceiro {
   ultimo_pagamento: string | null;
@@ -142,10 +145,12 @@ export default function Encarregado() {
 
   return (
     <div className="flex overflow-hidden h-screen bg-white font-sans">
+      
       <MenuEncar />
 
       <main className="flex-1 overflow-y-auto min-w-0 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         <div ref={pdfRef}>
+           
           <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
             <div className="flex flex-col sm:flex-row items-center gap-6">
               <div className="relative group">

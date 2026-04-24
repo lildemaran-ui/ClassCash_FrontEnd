@@ -30,8 +30,8 @@ export default function Nav() {
 
   const navbarClasses = `fixed top-0 w-full z-50 transition-colors duration-700 ${scrolled ? "menu-translucido" : "transparent-bg "}`;
 
-  const CorMenu = scrolled ? "text-white" : "text-[#184d8a]";
-  const borderClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? "border-white drop-shadow-md px-3 py-2 rounded-lg border-2 font-medium text-white" : "border-[#184d8a] hover:border-white px-3 py-2 rounded-lg border-2 font-medium text-white"}`;
+  const CorMenu = scrolled ? "text-white" : "text-white";
+  const borderClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? "border-white drop-shadow-md px-3 py-2 rounded-lg border-2 font-medium text-white" : "border-white hover:border-white px-3 py-2 rounded-lg border-2 font-medium text-white"}`;
 
   return (
     <header className="fixed top-0 w-full transparent-bg z-50 antialiased">

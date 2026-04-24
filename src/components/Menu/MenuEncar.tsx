@@ -1,3 +1,4 @@
+import { handleLogout } from "@/lib/logout";
 import {
   LayoutDashboard,
   LifeBuoy,
@@ -7,98 +8,80 @@ import {
   Settings,
   Wallet,
   X,
-  type LucideIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo555 from "../../assets/Logo5.5.png";
-import { handleLogout } from "@/lib/logout";
-export default function MenuEncar() {
-  const [menu, setMenu] = useState<boolean>(() => {
-    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
-      const saved = localStorage.getItem("menu_encar_aberto");
-      return saved !== "false";
-    }
-    return false;
-  });
+type MenuMode = "open" | "collapsed" | "hidden";
 
+export default function MenuEncar() {
   const [isMobile, setIsMobile] = useState<boolean>(
     typeof window !== "undefined" ? window.innerWidth < 1024 : false,
   );
+
+  // desktop: "open" | "collapsed"   mobile: "open" | "hidden"
+  const [mode, setMode] = useState<MenuMode>(() => {
+    if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+      return (localStorage.getItem("menu_encar_modo") as MenuMode) ?? "open";
+    }
+    return "hidden";
+  });
 
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 1024;
       setIsMobile(mobile);
-      if (!mobile) {
-        const saved = localStorage.getItem("menu_secretaria_aberto");
-        setMenu(saved !== "false");
-      } else {
-        setMenu(false);
-      }
+      if (mobile) setMode("hidden");
+      else
+        setMode(
+          (localStorage.getItem("menu_encar_modo") as MenuMode) ?? "open",
+        );
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  function OpenMenu() {
-    setMenu(true);
-    localStorage.setItem("menu_secretaria_aberto", "true");
+  function openMenu() {
+    const next: MenuMode = "open";
+    setMode(next);
+    localStorage.setItem("menu_encar_modo", next);
   }
-  function CloseMenu() {
-    setMenu(false);
-    localStorage.setItem("menu_secretaria_aberto", "false");
+  function collapseOrClose() {
+    // mobile → esconde totalmente | desktop → colapsa para ícones
+    const next: MenuMode = isMobile ? "hidden" : "collapsed";
+    setMode(next);
+    localStorage.setItem("menu_encar_modo", next);
   }
-
-  const SidebarItem = ({
-    icon: Icon,
-    label,
-    active = false,
-  }: {
-    icon: LucideIcon;
-    label: string;
-    active?: boolean;
-  }) => (
-    <div
-      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-300 ${
-        active ? "bg-white/20" : "hover:bg-white/10"
-      }`}
-    >
-      <Icon size={22} className="text-white shrink-0" />
-      <span className="text-white font-medium text-sm">{label}</span>
-    </div>
-  );
 
   const links = [
     { to: "/Encarregado", icon: LayoutDashboard, label: "Painel Geral" },
     { to: "/PagamentoEncar", icon: Wallet, label: "Pagamentos" },
-    {
-      to: "/ReclamacoesEncar",
-      icon: MessageSquare,
-      label: "Reclamações",
-    },
-    {
-      to: "/ConfiguracaoEncar",
-      icon: Settings,
-      label: "Configurações",
-    },
+    { to: "/ReclamacoesEncar", icon: MessageSquare, label: "Reclamações" },
+    { to: "/ConfiguracaoEncar", icon: Settings, label: "Configurações" },
     { to: "", icon: LifeBuoy, label: "Ajuda e Suporte" },
   ];
+
+  const isOpen = mode === "open";
+  const isCollapsed = mode === "collapsed";
+  const isHidden = mode === "hidden";
 
   return (
     <>
       {/* Overlay mobile */}
-      {isMobile && menu && (
-        <div className="fixed inset-0 bg-black/40 z-40" onClick={CloseMenu} />
+      {isMobile && isOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40"
+          onClick={collapseOrClose}
+        />
       )}
 
-      {/* Botão hambúrguer */}
-      {!menu && (
+      {/* Botão hambúrguer — só aparece quando sidebar está escondida (mobile) */}
+      {isHidden && (
         <button
-          onClick={OpenMenu}
-          className="fixed top-4 left-4 z-[60] p-2 rounded-lg bg-primary text-white shadow-lg"
+          onClick={openMenu}
+          className="fixed top-3.5 left-4 z-[60] p-1 rounded-lg border border-[#184d8a]/50 focus:border-[#184d8a] text-[#184d8a] "
         >
-          <Menu size={22} />
+          <Menu size={20} />
         </button>
       )}
 
@@ -106,59 +89,87 @@ export default function MenuEncar() {
       <aside
         style={{ height: "100dvh" }}
         className={`
-          bg-primary text-white
-          transition-all duration-300 ease-in-out
+          bg-primary text-white flex flex-col
+          transition-all duration-300 ease-in-out overflow-hidden shrink-0
           ${
-            !menu
+            isHidden
               ? "hidden"
-              : isMobile
-                ? "flex flex-col fixed top-0 left-0 w-72 z-50"
-                : "flex flex-col sticky top-0 w-64 shrink-0"
+              : isMobile && isOpen
+                ? "fixed top-0 left-0 z-50 w-72"
+                : isCollapsed
+                  ? "sticky top-0 w-16" // ← modo ícones
+                  : "sticky top-0 w-64" // ← modo aberto
           }
         `}
       >
-        {/* Header */}
-        <div className="px-4 pt-4 mb-8 flex items-center justify-between shrink-0">
-          <div className="flex items-center">
-            <img
-              loading="lazy"
-              src={logo555}
-              alt="Logo"
-              className="w-14 h-14"
-            />
-            <p className="text-white font-semibold">ClassCash</p>
-          </div>
+        {/* Header do sidebar */}
+        <div className="px-3 pt-4 mb-8 flex items-center justify-between shrink-0">
+          {/* Logo e nome só no modo aberto */}
+          {isOpen && (
+            <div className="flex items-center gap-2 overflow-hidden">
+              <img
+                loading="lazy"
+                src={logo555}
+                alt="Logo"
+                className="w-10 h-10 shrink-0"
+              />
+              <p className="text-white font-semibold whitespace-nowrap">
+                ClassCash
+              </p>
+            </div>
+          )}
+
+          {/* Botão toggle */}
           <button
-            onClick={CloseMenu}
-            className="p-1 rounded hover:bg-white/10 transition"
+            onClick={isOpen ? collapseOrClose : openMenu}
+            className={`p-1 rounded hover:bg-white/10 transition ml-auto`}
           >
-            {isMobile ? <X size={22} /> : <Menu size={22} />}
+            {isMobile && isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 px-3">
-          {links.map(({ to, icon, label }) => (
+        <nav className="flex-1 min-h-0 overflow-y-auto hide-scrollbar flex flex-col gap-1 px-2">
+          {links.map(({ to, icon: Icon, label }) => (
             <Link key={label} to={to}>
-              <SidebarItem
-                icon={icon}
-                label={label}
-                active={window.location.pathname === to}
-              />
+              <div
+                className={`
+                  flex items-center gap-3 p-3 rounded-lg cursor-pointer
+                  transition-colors duration-300
+                  ${window.location.pathname === to ? "bg-white/20" : "hover:bg-white/10"}
+                  ${isCollapsed ? "justify-center" : ""}
+                `}
+                title={isCollapsed ? label : undefined}
+              >
+                <Icon size={22} className="text-white shrink-0" />
+                {/* Label só no modo aberto */}
+                {isOpen && (
+                  <span className="text-white font-medium text-sm whitespace-nowrap">
+                    {label}
+                  </span>
+                )}
+              </div>
             </Link>
           ))}
         </nav>
 
         {/* Logout */}
-        <div className="shrink-0 px-3 py-4 border-t border-white/10">
+        <div className="shrink-0 px-2 py-4 border-t border-white/10">
           <Link
             to="/Login"
             onClick={handleLogout}
-            className="flex justify-between items-center p-3 rounded-lg bg-blue-500/50 hover:bg-blue-400 transition-all duration-300 group"
+            className={`
+              flex items-center p-3 rounded-lg bg-blue-500/50
+              hover:bg-blue-400 transition-all duration-300 group
+              ${isCollapsed ? "justify-center" : "justify-between"}
+            `}
+            title={isCollapsed ? "Terminar sessão" : undefined}
           >
-            <span className="text-sm font-medium text-white group-hover:text-blue-700">
-              Terminar sessão
-            </span>
+            {isOpen && (
+              <span className="text-sm font-medium text-white group-hover:text-blue-700">
+                Terminar sessão
+              </span>
+            )}
             <LogOut
               size={22}
               className="text-white group-hover:text-blue-700"

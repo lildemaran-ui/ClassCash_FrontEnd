@@ -478,10 +478,10 @@ interface Utilizador {
 }
 
 const ROLES = [
-  "Administrador",
+   "Administrador",
   "Secretária",
-  "Financeiro",
-  "Professor",
+  "Estudante",
+  "Encarregado",
   "Auxiliar",
 ];
 

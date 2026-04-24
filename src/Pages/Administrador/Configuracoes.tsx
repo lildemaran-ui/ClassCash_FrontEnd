@@ -90,8 +90,8 @@ const TABS: {
 const ROLES = [
   "Administrador",
   "Secretária",
-  "Financeiro",
-  "Professor",
+  "Estudante",
+  "Encarregado",
   "Auxiliar",
 ];
 

@@ -162,17 +162,20 @@ export default function DadosDashEstd() {
   return (
     <div className="flex flex-col w-full px-4 sm:px-6 lg:px-8 bg-[#f8fafc] mb-8">
       {/* Acções topo */}
-      <div className="flex items-end justify-end mt-3">
+      <div className="flex items-center justify-end mt-3">
         <Link to="/Config">
-          <button className="text-[#184d8a] hover:scale-110 transition-all p-1">
+          <button className="text-primary hover:scale-110 transition-all p-1">
             <Settings size={20} className="sm:hidden" />
             <Settings size={24} className="hidden sm:block" />
           </button>
         </Link>
-        <div className="relative cursor-pointer group p-1">
+        <div className="text-primary hover:scale-110 transition-all p-1 relative">
           <Bell
             size={20}
-            className="text-[#184d8a] group-hover:scale-110 transition-transform sm:hidden"
+            className="text-primary group-hover:scale-110 transition-transform sm:hidden"
+          /><Bell
+            size={24}
+            className="text-primary group-hover:scale-110 transition-transform hidden sm:block"
           />
         </div>
       </div>
@@ -210,7 +213,7 @@ export default function DadosDashEstd() {
               <h1 className="text-3xl font-black text-gray-800 mt-2 tracking-tight">
                 {user.nome}
               </h1>
-              <div className="flex flex-col justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-500 text-sm">
+              <div className="flex flex-col justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-600 text-sm">
                 {/* ID = código gerado pela plataforma após validação */}
                 <p>
                   <strong>ID:</strong>{" "}

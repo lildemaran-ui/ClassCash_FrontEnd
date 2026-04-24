@@ -1,4 +1,4 @@
-import { Pen, X } from "lucide-react";
+import { Camera, Pen, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -154,9 +154,9 @@ export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditM
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="absolute -bottom-1 -right-1 bg-[#184d8a] text-white p-2 rounded-xl shadow-lg hover:bg-[#184d8a]/80 transition border-2 border-white"
+                className="absolute -bottom-1 -right-1 bg-white border  text-primary  p-2 rounded-xl shadow-lg hover:bg-[#184d8a]/80 transition group border-white"
               >
-                <Pen size={14} />
+                <Camera size={14} className="group-hover:text-white" />
               </button>
               <input
                 ref={fileRef}

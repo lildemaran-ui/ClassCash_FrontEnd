@@ -1,7 +1,4 @@
-// ════════════════════════════════════════════════════════════════
-// FICHEIRO: src/Pages/Secretaria/GestaodeServiços.tsx
-// Melhorias: Modal Adicionar + Modal Editar serviço, responsividade
-// ════════════════════════════════════════════════════════════════
+
 import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";

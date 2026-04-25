@@ -5,8 +5,9 @@ import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import {
   Download, MessageSquare, Trash2, X, Send, CheckCircle, Clock,
+  Search, ChevronLeft, ChevronRight, Filter,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { toast } from "sonner";
 
 interface Reclamacao {
@@ -17,6 +18,13 @@ interface Reclamacao {
   status: "Pendente" | "Resolvida";
   descricao?: string;
   resposta?: string;
+}
+
+interface Paginacao {
+  total: number;
+  pagina: number;
+  limite: number;
+  totalPaginas: number;
 }
 
 /* ── Badge de Status ── */
@@ -33,6 +41,30 @@ const StatusBadge = ({ s }: { s: string }) => {
   );
 };
 
+/* ── Bloco de respostas acumuladas ── */
+// Cada resposta está no formato "[dd/mm/aaaa, hh:mm] texto"
+// Esta função separa e renderiza cada uma individualmente
+const RespostasAcumuladas = ({ texto }: { texto: string }) => {
+  const blocos = texto.split(/\n\n(?=\[)/).filter(Boolean);
+  return (
+    <div className="flex flex-col gap-2">
+      {blocos.map((bloco, i) => {
+        const match = bloco.match(/^\[(.+?)\]\s*([\s\S]*)$/);
+        const data = match?.[1] ?? "";
+        const mensagem = match?.[2]?.trim() ?? bloco;
+        return (
+          <div key={i} className="bg-blue-50 border border-blue-100 rounded-xl p-3">
+            {data && (
+              <p className="text-[10px] font-bold text-blue-400 mb-1">{data}</p>
+            )}
+            <p className="text-sm text-blue-800 leading-relaxed">{mensagem}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 /* ── Modal Resposta ── */
 const ModalResposta = ({
   rec, onClose, onUpdate,
@@ -41,14 +73,15 @@ const ModalResposta = ({
   onClose: () => void;
   onUpdate: (id: number, resposta: string, status: Reclamacao["status"]) => Promise<void>;
 }) => {
-  const [resposta, setResposta] = useState(rec.resposta ?? "");
+  // ✅ Campo de nova resposta sempre limpo — a acumulação é feita no backend
+  const [novaResposta, setNovaResposta] = useState("");
   const [status, setStatus] = useState<Reclamacao["status"]>(rec.status);
   const [saving, setSaving] = useState(false);
 
   const handleSave = async () => {
-    if (!resposta.trim()) { toast.error("Escreve uma resposta"); return; }
+    if (!novaResposta.trim()) { toast.error("Escreve uma resposta"); return; }
     setSaving(true);
-    await onUpdate(rec.id, resposta, status);
+    await onUpdate(rec.id, novaResposta, status);
     setSaving(false);
     onClose();
   };
@@ -80,21 +113,21 @@ const ModalResposta = ({
           <div>
             <h3 className="font-bold text-gray-800 mb-2">{rec.assunto}</h3>
             {rec.descricao && (
-              <p className="text-sm text-gray-600 leading-relaxed bg-gray-50 rounded-xl p-3">
-                {rec.descricao}
-              </p>
+              <p className="text-sm text-gray-600 leading-relaxed bg-gray-50 rounded-xl p-3">{rec.descricao}</p>
             )}
           </div>
 
-          {/* Resposta anterior (se existir) */}
-          {rec.resposta && (
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-3">
-              <p className="text-xs font-semibold text-blue-700 mb-1">Resposta anterior:</p>
-              <p className="text-sm text-blue-800">{rec.resposta}</p>
+          {/* Histórico de respostas anteriores */}
+          {rec.resposta && rec.resposta.trim() && (
+            <div>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
+                Respostas anteriores
+              </p>
+              <RespostasAcumuladas texto={rec.resposta} />
             </div>
           )}
 
-          {/* Status */}
+          {/* Estado */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 mb-1.5">Estado</label>
             <select
@@ -107,19 +140,19 @@ const ModalResposta = ({
             </select>
           </div>
 
-          {/* Resposta */}
+          {/* Nova resposta — sempre vazia */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-              Resposta ao Utilizador
+              Nova Resposta
             </label>
             <textarea
               rows={4}
-              placeholder="Escreve uma resposta clara e construtiva..."
-              value={resposta}
-              onChange={(e) => setResposta(e.target.value)}
+              placeholder="Escreve uma nova resposta..."
+              value={novaResposta}
+              onChange={(e) => setNovaResposta(e.target.value)}
               className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all resize-none"
             />
-            <p className="text-xs text-gray-400 mt-1 text-right">{resposta.length} caracteres</p>
+            <p className="text-xs text-gray-400 mt-1 text-right">{novaResposta.length} caracteres</p>
           </div>
         </div>
 
@@ -167,26 +200,37 @@ const ModalExclusao = ({ onClose, onConfirm }: { onClose: () => void; onConfirm:
 );
 
 /* ══════════════════════════════════════════════════════════════ */
+const LIMITE = 10;
+
 export default function GestaodeReclamacoes() {
   const [reclamacoes, setReclamacoes] = useState<Reclamacao[]>([]);
+  const [paginacao, setPaginacao] = useState<Paginacao>({ total: 0, pagina: 1, limite: LIMITE, totalPaginas: 1 });
   const [modalResposta, setModalResposta] = useState<Reclamacao | null>(null);
   const [modalExclusao, setModalExclusao] = useState<number | null>(null);
   const [user, setUser] = useState<SessaoUsuario | null>(null);
   const [carregando, setCarregando] = useState(true);
+
+  const [busca, setBusca] = useState("");
+  const [buscaActiva, setBuscaActiva] = useState("");
+  const [filtroStatus, setFiltroStatus] = useState<"" | "Pendente" | "Resolvida">("");
+  const [pagina, setPagina] = useState(1);
 
   useEffect(() => {
     const sessao = exigirSessao();
     if (sessao) setUser(sessao.usuario);
   }, []);
 
-  const carregarReclamacoes = async () => {
+  const carregarReclamacoes = useCallback(async () => {
     setCarregando(true);
     try {
-      // ✅ FIX: URL actualizada para o novo prefixo /secretaria/todas
-      const res = await fetchComAuth("http://localhost:5000/api/reclamacoes/secretaria/todas");
-      const dados = await res.json();
+      const params = new URLSearchParams({ pagina: String(pagina), limite: String(LIMITE) });
+      if (buscaActiva.trim()) params.set("busca", buscaActiva.trim());
+      if (filtroStatus) params.set("status", filtroStatus);
 
-      // ✅ A API agora devolve { reclamacoes: [...], paginacao: {...} }
+      const res = await fetchComAuth(
+        `http://localhost:5000/api/secretaria/reclamacoes?${params.toString()}`
+      );
+      const dados = await res.json();
       const lista = dados.reclamacoes ?? dados;
 
       setReclamacoes(
@@ -195,25 +239,28 @@ export default function GestaodeReclamacoes() {
           data: new Date(r.data).toLocaleDateString("pt-AO"),
           nome: r.nome,
           assunto: r.titulo ?? r.descricao?.substring(0, 50) ?? "—",
-          // ✅ Status já vem como texto da BD (CASE WHEN), não precisa converter
           status: r.status === "Resolvida" ? "Resolvida" : "Pendente",
           descricao: r.descricao,
           resposta: r.resposta ?? "",
         }))
       );
-    } catch (err) {
+      if (dados.paginacao) setPaginacao(dados.paginacao);
+    } catch {
       toast.error("Erro ao carregar reclamações");
     } finally {
       setCarregando(false);
     }
-  };
+  }, [pagina, buscaActiva, filtroStatus]);
 
-  useEffect(() => { carregarReclamacoes(); }, []);
+  useEffect(() => { carregarReclamacoes(); }, [carregarReclamacoes]);
+
+  const aplicarFiltroStatus = (valor: "" | "Pendente" | "Resolvida") => { setFiltroStatus(valor); setPagina(1); };
+  const aplicarBusca = () => { setBuscaActiva(busca); setPagina(1); };
+  const limparFiltros = () => { setBusca(""); setBuscaActiva(""); setFiltroStatus(""); setPagina(1); };
 
   const handleUpdate = async (id: number, resposta: string, status: Reclamacao["status"]) => {
     try {
-      // ✅ FIX: URL actualizada para o novo prefixo /secretaria/
-      await fetchComAuth(`http://localhost:5000/api/reclamacoes/secretaria/${id}/responder`, {
+      await fetchComAuth(`http://localhost:5000/api/secretaria/reclamacoes/${id}/responder`, {
         method: "PUT",
         body: JSON.stringify({ resposta, status }),
       });
@@ -226,10 +273,7 @@ export default function GestaodeReclamacoes() {
 
   const handleDelete = async () => {
     try {
-      // ✅ FIX: URL actualizada para o novo prefixo /secretaria/
-      await fetchComAuth(`http://localhost:5000/api/reclamacoes/secretaria/${modalExclusao}`, {
-        method: "DELETE",
-      });
+      await fetchComAuth(`http://localhost:5000/api/secretaria/reclamacoes/${modalExclusao}`, { method: "DELETE" });
       toast.success("Reclamação removida");
       setModalExclusao(null);
       await carregarReclamacoes();
@@ -238,8 +282,15 @@ export default function GestaodeReclamacoes() {
     }
   };
 
-  const pendentes = reclamacoes.filter((r) => r.status === "Pendente").length;
-  const resolvidas = reclamacoes.filter((r) => r.status === "Resolvida").length;
+  const temFiltrosActivos = buscaActiva || filtroStatus;
+
+  const paginasVisiveis = Array.from({ length: paginacao.totalPaginas }, (_, i) => i + 1)
+    .filter((p) => p === 1 || p === paginacao.totalPaginas || Math.abs(p - pagina) <= 1)
+    .reduce<(number | "...")[]>((acc, p, i, arr) => {
+      if (i > 0 && p - (arr[i - 1] as number) > 1) acc.push("...");
+      acc.push(p);
+      return acc;
+    }, []);
 
   return (
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
@@ -258,13 +309,15 @@ export default function GestaodeReclamacoes() {
 
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           {/* KPIs */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
+          <div className="grid grid-cols-2 gap-4 mb-6">
             <div className="bg-white p-5 rounded-2xl border-l-4 border-orange-400 shadow-sm">
               <div className="flex items-center gap-2 mb-1">
                 <Clock size={14} className="text-orange-400" />
                 <p className="text-xs font-medium text-gray-400">Pendentes</p>
               </div>
-              <h3 className="text-3xl font-bold text-gray-800">{String(pendentes).padStart(2, "0")}</h3>
+              <h3 className="text-3xl font-bold text-gray-800">
+                {String(reclamacoes.filter(r => r.status === "Pendente").length).padStart(2, "0")}
+              </h3>
               <span className="text-orange-500 text-[11px] font-bold">Por resolver</span>
             </div>
             <div className="bg-white p-5 rounded-2xl border-l-4 border-green-500 shadow-sm">
@@ -272,18 +325,58 @@ export default function GestaodeReclamacoes() {
                 <CheckCircle size={14} className="text-green-500" />
                 <p className="text-xs font-medium text-gray-400">Resolvidas</p>
               </div>
-              <h3 className="text-3xl font-bold text-gray-800">{String(resolvidas).padStart(2, "0")}</h3>
+              <h3 className="text-3xl font-bold text-gray-800">
+                {String(reclamacoes.filter(r => r.status === "Resolvida").length).padStart(2, "0")}
+              </h3>
               <span className="text-green-500 text-[11px] font-bold">Concluídas</span>
             </div>
           </div>
 
+          {/* Filtros */}
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm px-4 py-3 mb-4 flex flex-wrap gap-3 items-center">
+            <div className="flex-1 min-w-[200px] flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2">
+              <Search size={15} className="text-gray-400 shrink-0" />
+              <input
+                type="text"
+                placeholder="Pesquisar por nome ou assunto..."
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && aplicarBusca()}
+                className="flex-1 bg-transparent text-sm outline-none text-gray-700 placeholder:text-gray-400"
+              />
+              {busca && (
+                <button onClick={() => { setBusca(""); setBuscaActiva(""); setPagina(1); }}>
+                  <X size={14} className="text-gray-400 hover:text-gray-600" />
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Filter size={14} className="text-gray-400" />
+              {(["", "Pendente", "Resolvida"] as const).map((op) => (
+                <button
+                  key={op || "todos"}
+                  onClick={() => aplicarFiltroStatus(op)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${filtroStatus === op ? "bg-primary text-white shadow-sm" : "bg-gray-100 text-gray-500 hover:bg-gray-200"}`}
+                >
+                  {op || "Todos"}
+                </button>
+              ))}
+            </div>
+            <button onClick={aplicarBusca} className="bg-primary text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-[#1a5fad] transition-all">
+              Pesquisar
+            </button>
+            {temFiltrosActivos && (
+              <button onClick={limparFiltros} className="text-xs text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1">
+                <X size={12} /> Limpar
+              </button>
+            )}
+          </div>
+
           {/* Tabela */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-8">
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-4">
             <div className="px-5 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
               <h3 className="font-bold text-gray-700">Lista de Reclamações</h3>
-              <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border">
-                {reclamacoes.length} total
-              </span>
+              <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border">{paginacao.total} total</span>
             </div>
 
             {carregando ? (
@@ -293,7 +386,8 @@ export default function GestaodeReclamacoes() {
             ) : reclamacoes.length === 0 ? (
               <div className="text-center py-16 text-gray-400">
                 <MessageSquare size={36} className="mx-auto mb-2 opacity-30" />
-                <p className="text-sm">Nenhuma reclamação registada</p>
+                <p className="text-sm">{temFiltrosActivos ? "Nenhum resultado para os filtros aplicados" : "Nenhuma reclamação registada"}</p>
+                {temFiltrosActivos && <button onClick={limparFiltros} className="mt-2 text-xs text-primary hover:underline">Limpar filtros</button>}
               </div>
             ) : (
               <>
@@ -313,27 +407,15 @@ export default function GestaodeReclamacoes() {
                       {reclamacoes.map((r) => (
                         <tr key={r.id} className="hover:bg-primary/3 transition-colors text-center">
                           <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{r.data}</td>
-                          <td className="px-6 py-4 text-left">
-                            <p className="text-sm font-bold text-gray-700">{r.nome}</p>
-                          </td>
-                          <td className="px-6 py-4 text-sm text-gray-600 max-w-[200px] text-left">
-                            <span className="line-clamp-1">{r.assunto}</span>
-                          </td>
+                          <td className="px-6 py-4 text-left"><p className="text-sm font-bold text-gray-700">{r.nome}</p></td>
+                          <td className="px-6 py-4 text-sm text-gray-600 max-w-[200px] text-left"><span className="line-clamp-1">{r.assunto}</span></td>
                           <td className="px-6 py-4"><StatusBadge s={r.status} /></td>
                           <td className="px-6 py-4">
                             <div className="flex gap-2 justify-center">
-                              <button
-                                onClick={() => setModalResposta(r)}
-                                className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all"
-                                title="Responder"
-                              >
+                              <button onClick={() => setModalResposta(r)} className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all" title="Responder">
                                 <MessageSquare size={15} />
                               </button>
-                              <button
-                                onClick={() => setModalExclusao(r.id)}
-                                className="p-2 bg-red-50 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all"
-                                title="Remover"
-                              >
+                              <button onClick={() => setModalExclusao(r.id)} className="p-2 bg-red-50 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all" title="Remover">
                                 <Trash2 size={15} />
                               </button>
                             </div>
@@ -370,21 +452,43 @@ export default function GestaodeReclamacoes() {
               </>
             )}
           </div>
+
+          {/* Paginação */}
+          {paginacao.totalPaginas > 1 && (
+            <div className="flex items-center justify-between bg-white rounded-2xl border border-gray-200 shadow-sm px-5 py-3">
+              <p className="text-xs text-gray-400">
+                Página <span className="font-bold text-gray-600">{paginacao.pagina}</span> de{" "}
+                <span className="font-bold text-gray-600">{paginacao.totalPaginas}</span>
+                {" · "}{paginacao.total} reclamações
+              </p>
+              <div className="flex items-center gap-1.5">
+                <button onClick={() => setPagina((p) => Math.max(1, p - 1))} disabled={pagina === 1} className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                  <ChevronLeft size={15} className="text-gray-600" />
+                </button>
+                {paginasVisiveis.map((item, i) =>
+                  item === "..." ? (
+                    <span key={`dots-${i}`} className="px-1 text-gray-400 text-sm">…</span>
+                  ) : (
+                    <button key={item} onClick={() => setPagina(item as number)}
+                      className={`w-8 h-8 rounded-lg text-sm font-bold transition-all ${pagina === item ? "bg-primary text-white shadow-sm" : "border border-gray-200 text-gray-600 hover:bg-gray-50"}`}>
+                      {item}
+                    </button>
+                  )
+                )}
+                <button onClick={() => setPagina((p) => Math.min(paginacao.totalPaginas, p + 1))} disabled={pagina === paginacao.totalPaginas} className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+                  <ChevronRight size={15} className="text-gray-600" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
       {modalResposta && (
-        <ModalResposta
-          rec={modalResposta}
-          onClose={() => setModalResposta(null)}
-          onUpdate={handleUpdate}
-        />
+        <ModalResposta rec={modalResposta} onClose={() => setModalResposta(null)} onUpdate={handleUpdate} />
       )}
       {modalExclusao !== null && (
-        <ModalExclusao
-          onClose={() => setModalExclusao(null)}
-          onConfirm={handleDelete}
-        />
+        <ModalExclusao onClose={() => setModalExclusao(null)} onConfirm={handleDelete} />
       )}
     </div>
   );

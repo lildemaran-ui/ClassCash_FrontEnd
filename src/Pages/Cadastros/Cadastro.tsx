@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import img from "../../assets/ImgCadstro.png";
 import logo5555 from "../../assets/logo5.5.png";
 import FrasesRotativasLogin from "../../Hooks/FrasesRotativasLogin";
-import { TelaCadastro } from ".";
+import { TelaCadastro } from "../Cadastros/index";
 
 export default function Cadastro() {
   return (

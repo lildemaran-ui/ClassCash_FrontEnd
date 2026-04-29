@@ -837,7 +837,7 @@ export default function GestaoAlunos() {
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalDelete(aluno)}
-                                  className="p-1.5 bg-red-50 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all"
+                                  className="p-2 bg-red-50 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all"
                                 >
                                   <Trash2 size={16} />
                                 </div>

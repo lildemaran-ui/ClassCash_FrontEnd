@@ -194,7 +194,7 @@ export default function DadosDashEstd() {
                   />
                 ) : (
                   <div className="flex items-center justify-center w-full h-full bg-primary text-white shadow-inner text-4xl font-black">
-                    {user.nome?.substring(0, 2).toUpperCase()}
+                    {user.nome?.trim().split("").filter((word) => word.length > 0).filter((_, i, arr) => i === 0 || i === arr.length - 1).map((n) => (n ? n[0] : "")).join("").toUpperCase()}
                   </div>
                 )}
               </div>
@@ -329,14 +329,14 @@ export default function DadosDashEstd() {
             <h3 className="font-bold text-gray-800">Histórico de Transações</h3>
             <button
               onClick={() => setMostrarFiltros((v) => !v)}
-              className={`flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${
+              className={`flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border border-primary  transition-colors ${
                 mostrarFiltros || temFiltrosActivos
                   ? "bg-primary text-white border-primary"
-                  : "bg-white text-gray-500 border-gray-200 hover:border-primary hover:text-primary"
+                  : "bg-white text-gray-500 border-gray-200 hover:border-primary text-primary"
               }`}
             >
               <Filter size={13} />
-              Filtros
+              <span className="text">Filtros</span>
               {temFiltrosActivos && (
                 <span className="bg-white text-primary rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-black">
                   !

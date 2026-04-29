@@ -167,13 +167,17 @@ export function TelaCadastro() {
     setLoadingClasses(true);
     // FIX: rota correta — agora existe no backend
     fetch(`http://localhost:5000/api/classes/${idInstituicao}`)
-      .then((r) => r.json())
-      .then((data: Classe[]) => {
-        setClasses(data);
-        setClasse("");
-      })
+  .then((r) => r.json())
+  .then((data: Classe[]) => {
+    // Remove duplicatas por nivel (segurança extra)
+    const unicas = data.filter(
+      (c, index, self) => index === self.findIndex(x => x.nivel === c.nivel)
+    );
+    setClasses(unicas);
+    setClasse("");
+  })
       .catch(() => toast.error("Erro ao carregar classes"))
-      .finally(() => setLoadingClasses(false));
+  .finally(() => setLoadingClasses(false));
   }, [idInstituicao]);
 
   const MudarPerfil = (value: string) => {

@@ -1,11 +1,4 @@
-import {
-  ImagePlus,
-  Loader,
-  Receipt,
-  Send,
-  ShieldAlert,
-  Wallet,
-} from "lucide-react";
+import { ImagePlus, Receipt, Send, ShieldAlert, Wallet } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import img1 from "../../assets/Plain credit card-amico.svg";
@@ -171,8 +164,8 @@ function Comprovativo({
 
       {/* Aviso */}
       <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-xs text-amber-700">
-        <Send size={16} /> O seu pagamento será validado pela Secretaria. Guarde o ID de
-        transação.
+        <Send size={16} /> O seu pagamento será validado pela Secretaria. Guarde
+        o ID de transação.
       </div>
 
       {/* Botão final - idêntico para banco e digital */}
@@ -366,6 +359,9 @@ export default function PagamentoGeral() {
   const handleEnviarFinal = async () => {
     if (!user || !token || !transactionId) return;
     setLoading(true);
+    const mesesSelecionados = isPropina
+      ? mesesDoAno.slice(indexInicio, indexFim + 1).join(", ")
+      : null;
 
     const formData = new FormData();
     formData.append("usuarioId", String(user.idusuario));
@@ -386,6 +382,9 @@ export default function PagamentoGeral() {
       formData.append("id_transacao_local", transactionId);
     }
 
+    if (mesesSelecionados) {
+      formData.append("mesesReferencia", mesesSelecionados);
+    }
     try {
       const response = await fetch("http://localhost:5000/api/pagamento", {
         method: "POST",

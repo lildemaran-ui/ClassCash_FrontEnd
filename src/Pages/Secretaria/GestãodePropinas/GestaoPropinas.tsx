@@ -32,7 +32,8 @@ import { toast } from "sonner";
 const API = "http://localhost:5000/api";
 
 interface PropinaRow {
-  codigo: number;
+  codigo: string;
+  idpagamento: number;
   nome_estudante: string;
   classe: number | null;
   data: string | null;
@@ -40,6 +41,7 @@ interface PropinaRow {
   valor: string;
   multa_estimada: string;
   status: string;
+  meses_referencia?: string | null;
 }
 interface Cards {
   total_pagas: string;
@@ -192,7 +194,19 @@ const ModalDetalhes = ({
             <p className="font-bold text-gray-700 text-sm">{row.servico}</p>
           </div>
         </div>
-
+           {row.meses_referencia && (
+            <div className="bg-gray-50 rounded-2xl p-4 col-span-2">
+              <div className="flex items-center gap-2 mb-1">
+                <Calendar size={14} className="text-[#184d8a]" />
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Meses Pagos
+                </span>
+              </div>
+              <p className="font-bold text-gray-700 text-sm">
+                {row.meses_referencia}
+              </p>
+            </div>
+          )}
         {/* Valores */}
         <div className="bg-primary/5 rounded-2xl p-5 space-y-3 border border-[#184d8a]/10">
           <div className="flex justify-between items-center">
@@ -209,6 +223,7 @@ const ModalDetalhes = ({
               })}
             </span>
           </div>
+       
           {Number(row.multa_estimada) > 0 && (
             <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
               <div className="flex items-center gap-2">

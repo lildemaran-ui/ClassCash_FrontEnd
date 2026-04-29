@@ -710,7 +710,7 @@ export default function GestaodeEncarregados() {
                   </div>
                   <button
                     onClick={() => setShowModal(true)}
-                    className="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#1a76db] transition-all shadow-md active:scale-95 w-full sm:w-auto"
+                    className="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#184d8a]/80 transition-all shadow-md active:scale-95 w-full sm:w-auto"
                   >
                     <Plus size={20} />
                     <span>Cadastrar</span>

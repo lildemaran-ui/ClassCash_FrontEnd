@@ -255,7 +255,7 @@ export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditM
               className={`px-5 py-2.5 rounded-xl text-white text-sm font-bold transition flex items-center gap-2 ${
                 loading
                   ? "bg-gray-300 cursor-not-allowed"
-                  : "bg-[#184d8a] hover:bg-[#184d8a]/85 shadow-md"
+                  : "bg-[#184d8a] hover:bg-[#184d8a]/80 shadow-md"
               }`}
             >
               {loading ? (

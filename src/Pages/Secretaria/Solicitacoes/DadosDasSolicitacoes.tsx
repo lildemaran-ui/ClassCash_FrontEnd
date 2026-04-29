@@ -467,29 +467,44 @@ export default function DadosDasSolicitacoes() {
 
                     {/* Botões de ação */}
                     <div className="flex items-center gap-2 sm:shrink-0 pl-12 sm:pl-0">
-                      <button
-                        onClick={() =>
-                          setSelected({ item: s, tab: "detalhes" })
-                        }
-                        className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 border border-gray-200 px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                        <span className="hidden xs:inline">Ver dados</span>
-                      </button>
-                      <button
-                        onClick={() => setSelected({ item: s, tab: "aprovar" })}
-                        className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-green-100 transition-colors whitespace-nowrap"
-                      >
-                        <UserCheck className="w-3.5 h-3.5" />
+                      <div className="group relative">
+                        <button
+                          onClick={() =>
+                            setSelected({ item: s, tab: "detalhes" })
+                          }
+                          className="flex items-center gap-1.5 text-xs font-semibold text-primary bg-primary/10 border border-primary/20 px-2.5 sm:px-3 py-1.5  rounded-lg hover:bg-primary/30 transition-all duration-300 whitespace-nowrap"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md text-black font-normal bg-white border text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-all z-10">
+                            Visualizar
+                          </span>
+                          <span className="hidden xs:inline">Ver dados</span>
+                        </button>
+                      </div>
+                      <div className="group relative">
+                        <button
+                          onClick={() => setSelected({ item: s, tab: "aprovar" })}
+                          className="flex items-center gap-1.5 text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-green-100 transition-colors whitespace-nowrap"
+                        >
+                          <UserCheck className="w-3.5 h-3.5" />
+                          <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md text-black font-normal bg-white border text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-all z-10">
+                            Aprovar
+                          </span>
                         <span className="hidden xs:inline">Aprovar</span>
                       </button>
-                      <button
+                     </div>
+                     <div className="group relative">
+                       <button
                         onClick={() => setSelected({ item: s, tab: "recusar" })}
                         className="flex items-center gap-1.5 text-xs font-semibold text-red-600 bg-red-50 border border-red-200 px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-red-100 transition-colors whitespace-nowrap"
                       >
                         <UserX className="w-3.5 h-3.5" />
+                          <span className="pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md text-black font-normal bg-white border text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-all z-10">
+                            Recusar
+                          </span>
                         <span className="hidden xs:inline">Recusar</span>
                       </button>
+                     </div>
                     </div>
                   </div>
                 ))}

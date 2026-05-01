@@ -1,27 +1,33 @@
 // src/Pages/Instituições/Instituições.tsx
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Building2,
-  Calendar,
-  CheckCircle,
-  Mail,
-  Phone,
-  XCircle,
-  ChevronDown,
-  Search,
+  Building2, Calendar, CheckCircle, ChevronDown,
+  Mail, Phone, Search, XCircle,
 } from "lucide-react";
 import Footer from "../../components/Footer/footer";
 import MenuEstatico from "../../components/Menu/MenuEstatico";
-import { useInstitutions } from "@/Pages/Administrador/GestaoInstituicaoAdmin/InstitutionContext ";
-import type { Institution } from "@/Pages/Administrador/GestaoInstituicaoAdmin/InstitutionContext ";
 
-// ─── Detalhes expandidos (só leitura) ────────────────────────────────────────
-function ExpandedDetails({ institution }: { institution: Institution }) {
+const API_BASE = "http://localhost:5000/api";
+
+interface InstitutionPublica {
+  idinstituicao: number;
+  nome: string;
+  email: string;
+  address: string;
+  phone: string;
+  status: string;
+  contact_name: string;
+  date_added: string;
+}
+
+// ─── Detalhes expandidos ──────────────────────────────────────────────────────
+function ExpandedDetails({ inst }: { inst: InstitutionPublica }) {
   return (
     <div className="mt-3 overflow-hidden rounded-xl border border-blue-100 bg-gradient-to-br from-blue-50 to-white shadow-sm">
       <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-blue-100">
+
         {/* Col 1 — Contacto */}
         <div className="p-5 space-y-3">
           <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">
@@ -29,14 +35,14 @@ function ExpandedDetails({ institution }: { institution: Institution }) {
           </p>
           <div className="flex items-center gap-2 text-sm text-gray-700">
             <Mail className="w-4 h-4 text-blue-400 shrink-0" />
-            <span className="truncate">{institution.email}</span>
+            <span className="break-all">{inst.email || "—"}</span>
           </div>
           <div className="flex items-center gap-2 text-sm text-gray-700">
             <Phone className="w-4 h-4 text-blue-400 shrink-0" />
-            <span>{institution.phone}</span>
+            <span>{inst.phone || "—"}</span>
           </div>
           <p className="text-xs text-gray-500 leading-relaxed">
-            {institution.address}
+            {inst.address || "—"}
           </p>
         </div>
 
@@ -50,7 +56,7 @@ function ExpandedDetails({ institution }: { institution: Institution }) {
               Responsável
             </p>
             <p className="text-sm text-gray-800 mt-0.5">
-              {institution.contactName}
+              {inst.contact_name || "—"}
             </p>
           </div>
           <div>
@@ -59,7 +65,9 @@ function ExpandedDetails({ institution }: { institution: Institution }) {
             </p>
             <div className="flex items-center gap-1 text-sm text-gray-800 mt-0.5">
               <Calendar className="w-3.5 h-3.5 text-gray-400" />
-              {institution.dateAdded}
+              {inst.date_added
+                ? new Date(inst.date_added).toLocaleDateString("pt-AO")
+                : "—"}
             </div>
           </div>
         </div>
@@ -70,27 +78,24 @@ function ExpandedDetails({ institution }: { institution: Institution }) {
             <p className="text-[10px] font-bold text-blue-400 uppercase tracking-widest mb-3">
               Status
             </p>
-            <span
-              className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full ${
-                institution.status === "Ativo"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-red-100 text-red-600"
-              }`}
-            >
-              {institution.status === "Ativo" ? (
-                <CheckCircle className="w-3.5 h-3.5" />
-              ) : (
-                <XCircle className="w-3.5 h-3.5" />
-              )}
-              {institution.status}
+            <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full ${
+              inst.status === "Ativo"
+                ? "bg-green-100 text-green-700"
+                : "bg-red-100 text-red-600"
+            }`}>
+              {inst.status === "Ativo"
+                ? <CheckCircle className="w-3.5 h-3.5" />
+                : <XCircle className="w-3.5 h-3.5" />}
+              {inst.status}
             </span>
           </div>
-          {institution.status === "Inativo" && (
+          {inst.status === "Inativo" && (
             <p className="text-xs text-gray-400 mt-3 italic">
               Esta instituição não está a aceitar novos registos de momento.
             </p>
           )}
         </div>
+
       </div>
     </div>
   );
@@ -99,23 +104,31 @@ function ExpandedDetails({ institution }: { institution: Institution }) {
 // ─── Página principal ─────────────────────────────────────────────────────────
 export default function Instituicoes() {
   const navigate = useNavigate();
-  const { institutions } = useInstitutions();
-
+  const [institutions, setInstitutions] = useState<InstitutionPublica[]>([]);
+  const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [search, setSearch] = useState("");
 
+  useEffect(() => {
+    fetch(`${API_BASE}/cadastro-instituicao/publicas`)
+      .then((res) => res.json())
+      .then(setInstitutions)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
   const filtered = institutions.filter(
     (i) =>
-      i.name.toLowerCase().includes(search.toLowerCase()) ||
-      i.address.toLowerCase().includes(search.toLowerCase()),
+      i.nome.toLowerCase().includes(search.toLowerCase()) ||
+      (i.address ?? "").toLowerCase().includes(search.toLowerCase()),
   );
 
-  const handleCadastrar = (inst: Institution) => {
+  const handleCadastrar = (inst: InstitutionPublica) => {
     navigate("/Cadastro", {
       state: {
         preSelectedInstitution: {
-          idinstituicao: inst.id,
-          nome: inst.name,
+          idinstituicao: inst.idinstituicao,
+          nome: inst.nome,
         },
         fromInstitutions: true,
       },
@@ -152,17 +165,20 @@ export default function Instituicoes() {
       </section>
 
       {/* Lista */}
-      <main className="flex-1 px-6 md:px-12 pb-16">
+      <main className="flex-1 px-4 md:px-12 pb-16">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-4 px-1">
-            <p className="text-xs text-gray-400 font-medium">
-              {filtered.length} instituição{filtered.length !== 1 ? "s" : ""}{" "}
-              encontrada{filtered.length !== 1 ? "s" : ""}
-            </p>
-          </div>
+
+          <p className="text-xs text-gray-400 font-medium mb-4 px-1">
+            {filtered.length} instituição{filtered.length !== 1 ? "s" : ""}{" "}
+            encontrada{filtered.length !== 1 ? "s" : ""}
+          </p>
 
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            {filtered.length === 0 ? (
+            {loading ? (
+              <div className="py-16 text-center text-gray-400 text-sm">
+                A carregar instituições...
+              </div>
+            ) : filtered.length === 0 ? (
               <div className="py-16 text-center text-gray-400">
                 <Building2 className="w-10 h-10 mx-auto mb-3 opacity-30" />
                 <p className="text-sm">Nenhuma instituição encontrada.</p>
@@ -170,56 +186,55 @@ export default function Instituicoes() {
             ) : (
               <div className="divide-y divide-gray-50">
                 {filtered.map((inst) => (
-                  <div key={inst.id} className="px-6 py-4">
-                    {/* Linha principal */}
-                    <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
-                        <Building2 className="w-5 h-5 text-[#184d8a]" />
-                      </div>
+                  <div key={inst.idinstituicao} className="px-4 md:px-6 py-4">
 
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="text-sm font-bold text-gray-900 truncate">
-                            {inst.name}
-                          </h3>
-                          <span
-                            className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
+                    {/* Linha principal */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+
+                      {/* Ícone + Info */}
+                      <div className="flex items-start gap-3 flex-1 min-w-0">
+                        <div className="w-10 h-10 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 mt-0.5">
+                          <Building2 className="w-5 h-5 text-[#184d8a]" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="text-sm font-bold text-gray-900 leading-snug">
+                              {inst.nome}
+                            </h3>
+                            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full shrink-0 ${
                               inst.status === "Ativo"
                                 ? "bg-green-100 text-green-700"
                                 : "bg-gray-100 text-gray-500"
-                            }`}
-                          >
-                            {inst.status}
-                          </span>
+                            }`}>
+                              {inst.status}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-400 mt-0.5">
+                            {inst.address || "—"}
+                          </p>
                         </div>
-                        <p className="text-xs text-gray-400 mt-0.5 truncate">
-                          {inst.address}
-                        </p>
                       </div>
 
-                      {/* Acções */}
-                      <div className="flex items-center gap-2 shrink-0">
+                      {/* Botões */}
+                      <div className="flex items-center gap-2 sm:shrink-0">
                         <button
                           onClick={() =>
                             setExpandedId(
-                              expandedId === inst.id ? null : inst.id,
+                              expandedId === inst.idinstituicao ? null : inst.idinstituicao
                             )
                           }
-                          className="flex items-center gap-1 text-xs font-medium text-gray-500 border border-gray-200 px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-1 text-xs font-medium text-gray-500 border border-gray-200 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors flex-1 sm:flex-none justify-center"
                         >
                           Detalhes
-                          <ChevronDown
-                            className={`w-3.5 h-3.5 transition-transform duration-200 ${expandedId === inst.id ? "rotate-180" : ""}`}
-                          />
+                          <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                            expandedId === inst.idinstituicao ? "rotate-180" : ""
+                          }`} />
                         </button>
 
-                        {/* Botão Cadastrar-se — desactivado se Inativo */}
                         <button
-                          onClick={() =>
-                            inst.status === "Ativo" && handleCadastrar(inst)
-                          }
+                          onClick={() => inst.status === "Ativo" && handleCadastrar(inst)}
                           disabled={inst.status === "Inativo"}
-                          className={`text-xs font-bold px-4 py-1.5 rounded-lg transition-all duration-200 shadow-sm ${
+                          className={`text-xs font-bold px-4 py-2 rounded-lg transition-all duration-200 shadow-sm flex-1 sm:flex-none ${
                             inst.status === "Ativo"
                               ? "bg-primary text-white hover:bg-primary/80 hover:shadow-md active:scale-95"
                               : "bg-gray-100 text-gray-400 cursor-not-allowed"
@@ -231,9 +246,10 @@ export default function Instituicoes() {
                     </div>
 
                     {/* Detalhes expandidos */}
-                    {expandedId === inst.id && (
-                      <ExpandedDetails institution={inst} />
+                    {expandedId === inst.idinstituicao && (
+                      <ExpandedDetails inst={inst} />
                     )}
+
                   </div>
                 ))}
               </div>

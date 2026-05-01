@@ -32,7 +32,7 @@ export function Header(props) {
 
       <div className="flex items-center gap-3 sm:gap-4">
         {/* Botão configurações */}
-        <Link to="/Configuracao">
+        <Link to="">
         <button
           className="text-[#184d8a] hover:scale-110 transition-all p-1"
         >

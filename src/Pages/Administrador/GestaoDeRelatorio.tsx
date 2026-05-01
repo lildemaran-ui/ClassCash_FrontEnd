@@ -46,7 +46,7 @@ interface RelatorioData {
     utilizadores: { ativos: number; inativos: number };
   };
   graficoBarra: { mes: string; total: number }[];
-  tabela: { nome: string; total_pago: number; percentual: string | number }[];
+  tabela: { nome: string; total_pago: number; total_utilizadores: number; percentual: string | number }[];
 }
 
 function KpiCard({

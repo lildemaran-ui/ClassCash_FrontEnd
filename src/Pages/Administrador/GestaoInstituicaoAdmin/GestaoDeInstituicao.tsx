@@ -2,8 +2,6 @@
 import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuAdmin from "@/components/Menu/MenuAdmin";
-import type { Institution } from "@/Pages/Administrador/GestaoInstituicaoAdmin/InstitutionContext ";
-import { useInstitutions } from "@/Pages/Administrador/GestaoInstituicaoAdmin/InstitutionContext ";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
 import {
   exigirSessao,
@@ -11,28 +9,48 @@ import {
   type SessaoUsuario,
 } from "@/types/global/sessao";
 import {
-  ArrowUp,
-  Building2,
-  Calendar,
-  CheckCircle,
+  ArrowUp, Building2, Calendar, CheckCircle,
   ChevronDown,
   ImagePlus,
-  Loader2,
-  Mail,
-  Minus,
-  Phone,
-  Plus,
-  X,
-  XCircle,
-  Search,
-  Filter,
-  Users,
+  Loader2, Mail,
+  PencilIcon,
+  Phone, Plus, Search,
+  Trash2, Users, X, XCircle
 } from "lucide-react";
 import React, { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const API_BASE = "http://localhost:5000/api";
 
+
+// Deve estar aqui no topo, fora de qualquer função
 const TIPOS_INSTITUICAO = [{ id: 1, label: "Privada" }];
+
+const CATEGORIAS = [
+  { id: 1, label: "Creche" },
+  { id: 2, label: "ATL" },
+  { id: 3, label: "Escola" },
+  { id: 4, label: "Colégio" },
+  { id: 5, label: "Universidade" },
+  { id: 6, label: "Centro de Formação" },
+  { id: 7, label: "Centro de Explicação" },
+];
+interface Institution {
+  idinstituicao: number;
+  nome: string;
+  email: string;
+  address: string;
+  phone: string;
+  status: string;
+  iban: string;
+  nif: string;
+  contact_name: string;
+  admin_email: string;
+  total_alunos: number;
+  total_payment: number;
+  date_added: string;
+}
+
 
 interface FormState {
   nome: string;
@@ -41,6 +59,7 @@ interface FormState {
   contacto: string;
   nif: string;
   iban: string;
+  idCategoria: number;
   idTipoInstituicao: number;
   logoFile: File | null;
   logoPreview: string | null;
@@ -71,6 +90,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
     contacto: "",
     nif: "",
     iban: "",
+    idCategoria: 1,
     idTipoInstituicao: 1,
     logoFile: null,
     logoPreview: null,
@@ -126,6 +146,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       fd.append("nome", form.nome.trim());
       fd.append("email", form.email.trim());
       fd.append("iban", form.iban.trim());
+      fd.append("idcategoria", String(form.idCategoria));
       fd.append("idTipoInstituicao", String(form.idTipoInstituicao));
       if (form.localizacao.trim())
         fd.append("localizacao", form.localizacao.trim());
@@ -172,16 +193,19 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
         );
 
       const novaInst: Institution = {
-        id: data.instituicao.idinstituicao,
         idinstituicao: data.instituicao.idinstituicao,
-        name: form.nome.trim(),
-        address: form.localizacao.trim() || "—",
+        nome: form.nome.trim(),
         email: form.email.trim(),
-        phone: form.contacto.trim() || "—",
+        address: form.localizacao.trim(),
+        phone: form.contacto.trim(),
         status: "Ativo",
-        totalPayment: "0",
-        contactName: form.nomeRepresentante.trim() || "—",
-        dateAdded: new Date().toLocaleDateString("pt-AO"),
+        iban: form.iban.trim(),
+        nif: form.nif.trim(),
+        contact_name: form.nomeRepresentante.trim() || "Administrador",
+        admin_email: form.emailRepresentante.trim() || form.email.trim(),
+        total_alunos: 0,
+        total_payment: 0,
+        date_added: new Date().toISOString(),
       };
 
       onCreated(novaInst);
@@ -199,7 +223,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
   return (
     <div
       className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-2 sm:p-4"
-      onClick={(e) => e.target === e.currentTarget && !loading && onClose()}
+      onClick={(e) => e.target === e.currentTarget && !loading }
     >
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto">
         <div className="flex justify-between items-center p-4 sm:p-6 border-b sticky top-0 bg-white z-10">
@@ -239,33 +263,22 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
             {/* Col 1 */}
             <div className="space-y-3 sm:space-y-4">
               <div>
-                <label
-                  htmlFor="idTipoInstituicao"
-                  className="block text-xs sm:text-sm font-medium text-gray-700"
-                >
-                  Tipo de Instituição <span className="text-red-500">*</span>
-                </label>
-                <div className="relative mt-1">
-                  <select
-                    id="idTipoInstituicao"
-                    value={form.idTipoInstituicao}
-                    onChange={(e) =>
-                      setForm((p) => ({
-                        ...p,
-                        idTipoInstituicao: Number(e.target.value),
-                      }))
-                    }
-                    className="appearance-none w-full border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    {TIPOS_INSTITUICAO.map((t) => (
-                      <option key={t.id} value={t.id}>
-                        {t.label}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-                </div>
-              </div>
+  <label className="block text-xs sm:text-sm font-medium text-gray-700">
+    Categoria <span className="text-red-500">*</span>
+  </label>
+  <div className="relative mt-1">
+    <select
+      value={form.idCategoria}
+      onChange={(e) => setForm((p) => ({ ...p, idCategoria: Number(e.target.value) }))}
+      className="appearance-none w-full border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      {CATEGORIAS.map((c) => (
+        <option key={c.id} value={c.id}>{c.label}</option>
+      ))}
+    </select>
+    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+  </div>
+</div>
               {[
                 {
                   id: "nome",
@@ -488,89 +501,218 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
   );
 }
 
+// ── Detalhes Expandidos ───────────────────────────────────────────────────────
 function ExpandedInstitutionDetails({
   institution,
+  onEdit,
+  onDelete,
 }: {
   institution: Institution;
+  onEdit: () => void;
+  onDelete: () => void;
 }) {
   return (
-    <div className="mt-4 p-3 sm:p-4 border border-gray-100 bg-gray-50 rounded-lg shadow-inner">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-y-4 sm:gap-x-8 items-start">
+    <div className="mt-4 p-4 border border-gray-100 bg-gray-50 rounded-lg shadow-inner">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+        {/* Col 1 */}
         <div className="flex flex-col space-y-3">
           <div className="flex items-center">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-indigo-100 border border-indigo-300 mr-3 sm:mr-4 flex-shrink-0">
-              <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-indigo-700" />
+            <div className="w-11 h-11 flex items-center justify-center rounded-full bg-indigo-100 border border-indigo-300 mr-4 flex-shrink-0">
+              <Building2 className="w-5 h-5 text-indigo-700" />
             </div>
             <div>
-              <p className="text-xs sm:text-sm font-semibold text-gray-800">
-                Nome da Instituição
-              </p>
-              <p className="text-sm sm:text-base text-gray-600">
-                {institution.name}
-              </p>
+              <p className="text-sm font-semibold text-gray-800">Nome da Instituição</p>
+              <p className="text-sm text-gray-600">{institution.nome}</p>
             </div>
           </div>
-          <div className="space-y-1 ml-2 sm:ml-4 text-xs sm:text-sm">
+          <div className="space-y-1 ml-4 text-sm">
             <div className="flex items-center text-gray-600">
               <Mail className="w-4 h-4 mr-2 text-blue-500 flex-shrink-0" />
               <span className="truncate">{institution.email}</span>
             </div>
             <div className="flex items-center text-gray-600">
               <Phone className="w-4 h-4 mr-2 text-blue-500 flex-shrink-0" />
-              <span>{institution.phone}</span>
+              <span>{institution.phone || "—"}</span>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500 mt-2 ml-6">
-              <span className="font-semibold">Endereço:</span>{" "}
-              {institution.address}
+            <p className="text-xs text-gray-500 ml-6">
+              <span className="font-semibold">Endereço:</span> {institution.address || "—"}
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm md:border-l md:border-gray-200 md:pl-8">
+        {/* Col 2 */}
+        <div className="grid grid-cols-2 gap-3 text-sm md:border-l md:border-gray-200 md:pl-8">
           <div>
-            <p className="font-medium text-gray-600">Responsável</p>
-            <p className="text-gray-800">{institution.contactName}</p>
+            <p className="font-medium text-gray-600">Administrador</p>
+            <p className="text-gray-800">{institution.contact_name || "—"}</p>
+            <p className="text-xs text-gray-400">{institution.admin_email || ""}</p>
           </div>
           <div>
             <p className="font-medium text-gray-600">Data de adesão</p>
             <div className="flex items-center text-gray-800">
               <Calendar className="w-4 h-4 mr-1 text-gray-500" />
-              {institution.dateAdded}
+              {institution.date_added
+                ? new Date(institution.date_added).toLocaleDateString("pt-AO")
+                : "—"}
             </div>
           </div>
-          {/* <div>
-            <p className="font-medium text-gray-600">Estudantes Ativos</p>
-            <div className="flex items-center text-gray-800">
+          <div>
+            <p className="font-medium text-gray-600">Total de Utilizadores</p>
+            <div className="flex items-center text-gray-800 font-bold">
               <Users className="w-4 h-4 mr-1 text-gray-500" />
-              {institution.totalAlunos || 0}
+              {institution.total_alunos ?? 0}
             </div>
-          </div> */}
+          </div>
+          <div>
+            <p className="font-medium text-gray-600">NIF</p>
+            <p className="text-gray-800">{institution.nif || "—"}</p>
+          </div>
         </div>
 
-        <div className="flex flex-row sm:flex-col sm:items-end gap-4 sm:gap-4 text-xs sm:text-sm md:border-l md:border-gray-200 md:pl-8 justify-between sm:justify-start">
+        {/* Col 3 */}
+        <div className="flex flex-col sm:items-end gap-4 text-sm md:border-l md:border-gray-200 md:pl-8">
           <div className="flex flex-col sm:items-end">
             <p className="font-medium text-gray-600">Status</p>
-            <div
-              className={`flex items-center font-bold mt-1 ${institution.status === "Ativo" ? "text-green-600" : "text-red-600"}`}
-            >
-              {institution.status === "Ativo" ? (
-                <CheckCircle className="w-4 h-4 mr-1" />
-              ) : (
-                <XCircle className="w-4 h-4 mr-1" />
-              )}
+            <div className={`flex items-center font-bold mt-1 ${institution.status === "Ativo" ? "text-green-600" : "text-red-600"}`}>
+              {institution.status === "Ativo"
+                ? <CheckCircle className="w-4 h-4 mr-1" />
+                : <XCircle className="w-4 h-4 mr-1" />}
               {institution.status}
             </div>
           </div>
           <div className="flex flex-col sm:items-end">
             <p className="font-medium text-gray-600">Total de Pagamento</p>
-            <div className="flex items-center text-lg sm:text-xl font-bold text-gray-900 mt-1">
-              <span className="text-xs sm:text-base text-gray-600">KZ</span>
-              <span className="ml-1">{institution.totalPayment}</span>
+            <div className="flex items-center text-xl font-bold text-gray-900 mt-1">
+              <span className="text-sm text-gray-600">KZ</span>
+              <span className="ml-1">
+                {Number(institution.total_payment).toLocaleString("pt-AO", { maximumFractionDigits: 0 })}
+              </span>
               <ArrowUp className="w-4 h-4 ml-1 text-green-500" />
             </div>
           </div>
-          <button className="bg-blue-600 text-white text-xs sm:text-sm font-medium py-2 px-4 sm:px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-md">
-            Editar
+          <div className="flex gap-2">
+            <button
+              onClick={onEdit}
+              className="flex items-center gap-1 bg-blue-600 text-white text-xs font-medium py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors shadow"
+            >
+              <PencilIcon className="w-3 h-3" /> Editar
+            </button>
+            <button
+              onClick={onDelete}
+              className="flex items-center gap-1 bg-red-500 text-white text-xs font-medium py-2 px-4 rounded-lg hover:bg-red-600 transition-colors shadow"
+            >
+              <Trash2 className="w-3 h-3" /> Remover
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+// ── Modal Editar Instituição ──────────────────────────────────────────────────
+function ModalEditarInstituicao({
+  institution,
+  onClose,
+  onUpdated,
+}: {
+  institution: Institution;
+  onClose: () => void;
+  onUpdated: () => void;
+}) {
+  const [form, setForm] = useState({
+    nome: institution.nome,
+    email: institution.email,
+    localizacao: institution.address,
+    contacto: institution.phone,
+    nif: institution.nif ?? "",
+    iban: institution.iban ?? "",
+    idTipoInstituicao: 1,
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setForm((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async () => {
+    if (!form.nome.trim() || !form.email.trim()) {
+      toast.error("Nome e email são obrigatórios.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const token = getToken();
+      const res = await fetchComAuth(
+        `${API_BASE}/cadastro-instituicao/${institution.idinstituicao}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(form),
+        }
+      );
+      if (!res.ok) throw new Error("Erro ao atualizar instituição");
+      toast.success("Instituição atualizada com sucesso!");
+      onUpdated();
+      onClose();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro desconhecido.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-4"
+      onClick={(e) => e.target === e.currentTarget && !loading && onClose()}
+    >
+      <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center p-5 border-b sticky top-0 bg-white z-10">
+          <h1 className="text-lg font-bold text-gray-800">Editar Instituição</h1>
+          <button onClick={onClose} disabled={loading} className="p-1 rounded-full hover:bg-gray-100">
+            <X className="w-5 h-5 text-gray-400" />
+          </button>
+        </div>
+        <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {[
+            { id: "nome", label: "Nome", type: "text", req: true },
+            { id: "email", label: "Email", type: "email", req: true },
+            { id: "localizacao", label: "Endereço", type: "text", req: false },
+            { id: "contacto", label: "Contacto", type: "tel", req: false },
+            { id: "nif", label: "NIF", type: "text", req: false },
+            { id: "iban", label: "IBAN", type: "text", req: false },
+          ].map(({ id, label, type, req }) => (
+            <div key={id}>
+              <label htmlFor={id} className="block text-xs font-medium text-gray-700 mb-1">
+                {label} {req && <span className="text-red-500">*</span>}
+              </label>
+              <input
+                id={id}
+                type={type}
+                value={(form as any)[id]}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-end gap-3 p-5 bg-gray-50 border-t sticky bottom-0">
+          <button onClick={onClose} disabled={loading} className="text-gray-600 text-sm py-2 px-5 rounded-lg hover:bg-gray-200">
+            Cancelar
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="flex items-center gap-2 bg-blue-600 text-white text-sm py-2 px-5 rounded-lg hover:bg-blue-700 shadow disabled:opacity-60"
+          >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {loading ? "A guardar..." : "Guardar Alterações"}
           </button>
         </div>
       </div>
@@ -578,10 +720,76 @@ function ExpandedInstitutionDetails({
   );
 }
 
+// ── Modal Confirmar Remoção ───────────────────────────────────────────────────
+function ModalConfirmarRemocao({
+  institution,
+  onClose,
+  onConfirmed,
+}: {
+  institution: Institution;
+  onClose: () => void;
+  onConfirmed: () => void;
+}) {
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async () => {
+    setLoading(true);
+    try {
+      const token = getToken();
+      const res = await fetchComAuth(
+        `${API_BASE}/cadastro-instituicao/${institution.idinstituicao}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!res.ok) throw new Error("Erro ao remover instituição");
+      toast.success("Instituição marcada para encerramento.");
+      onConfirmed();
+      onClose();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro desconhecido.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm">
+        <div className="p-6 text-center">
+          <div className="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <Trash2 className="w-7 h-7 text-red-500" />
+          </div>
+          <h2 className="text-lg font-bold text-gray-800 mb-2">Remover Instituição</h2>
+          <p className="text-sm text-gray-500">
+            Tens a certeza que queres remover <strong>{institution.nome}</strong>?
+            Os dados serão preservados mas a conta ficará inativa.
+          </p>
+        </div>
+        <div className="flex gap-3 px-6 pb-6">
+          <button onClick={onClose} disabled={loading} className="flex-1 py-2.5 rounded-xl border text-gray-600 text-sm hover:bg-gray-50">
+            Cancelar
+          </button>
+          <button onClick={handleDelete} disabled={loading} className="flex-1 py-2.5 rounded-xl bg-red-500 text-white text-sm font-bold hover:bg-red-600 disabled:opacity-60 flex items-center justify-center gap-2">
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            {loading ? "A remover..." : "Remover"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+// ── Página Principal ──────────────────────────────────────────────────────────
 export default function GestaoDeInstituicao() {
-  const { institutions, recarregar, newlyAddedId } = useInstitutions();
-  const [expandedId, setExpandedId] = React.useState<number | null>(null);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [institutions, setInstitutions] = useState<Institution[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalEditar, setModalEditar] = useState<Institution | null>(null);
+  const [modalRemover, setModalRemover] = useState<Institution | null>(null);
   const [search, setSearch] = useState("");
   const [user, setUser] = useState<SessaoUsuario | null>(null);
 
@@ -589,13 +797,34 @@ export default function GestaoDeInstituicao() {
     const sessao = exigirSessao();
     if (sessao) setUser(sessao.usuario);
   }, []);
-
-  const handleCreated = (_inst: Institution) => {
-    recarregar();
+   const handleCreated = (_inst: Institution) => {
+    carregar();
   };
 
+
+  const carregar = async () => {
+    setLoading(true);
+    try {
+      const token = getToken();
+      const res = await fetchComAuth(`${API_BASE}/cadastro-instituicao/detalhadas`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error("Erro ao carregar instituições");
+      const data = await res.json();
+      setInstitutions(data);
+    } catch {
+      toast.error("Erro ao carregar instituições");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (user) carregar();
+  }, [user]);
+
   const filtered = institutions.filter((i) =>
-    i.name.toLowerCase().includes(search.toLowerCase()),
+    i.nome.toLowerCase().includes(search.toLowerCase())
   );
 
   if (!user) return null;
@@ -608,12 +837,9 @@ export default function GestaoDeInstituicao() {
           titulo="Gestão de Instituição"
           usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
         />
-
         <main className="p-4 sm:p-6 md:p-8">
           <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-200">
-            {/* Acções */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4 sm:mb-6">
-              {/* Pesquisa */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input
@@ -624,24 +850,16 @@ export default function GestaoDeInstituicao() {
                   className="pl-9 pr-4 py-2 w-full border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
-              <div className="flex gap-2 sm:gap-3">
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex items-center bg-primary text-white text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg hover:bg-primary/80 transition-colors shadow-md"
-                >
-                  <Plus className="w-4 h-4 mr-1 sm:mr-2" />
-                  <span className="hidden xs:inline">Adicionar</span>
-                  <span className="xs:hidden">Adicionar</span>
-                </button>
-                <button className="flex items-center bg-white border border-gray-300 text-gray-700 text-xs sm:text-sm font-medium py-2 px-3 sm:px-4 rounded-lg hover:bg-gray-100 transition-colors shadow-md">
-                  <Minus className="w-4 h-4 mr-1 sm:mr-2 text-red-600" />
-                  Remover
-                </button>
-              </div>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="flex items-center bg-primary text-white text-sm font-medium py-2 px-4 rounded-lg hover:bg-primary/80 shadow"
+              >
+                <Plus className="w-4 h-4 mr-2" /> Adicionar
+              </button>
             </div>
 
-            <div className="flex border-b border-gray-200 mb-4 sm:mb-6">
-              <button className="py-2 px-3 sm:px-4 text-sm sm:text-base font-medium border-b-2 border-[#184d8a] text-[#184d8a]">
+            <div className="flex border-b border-gray-200 mb-6">
+              <button className="py-2 px-4 text-sm font-medium border-b-2 border-[#184d8a] text-[#184d8a]">
                 Instituições
                 <span className="ml-2 text-xs bg-primary/10 text-[#184d8a] px-2 py-0.5 rounded-full">
                   {filtered.length}
@@ -649,54 +867,51 @@ export default function GestaoDeInstituicao() {
               </button>
             </div>
 
-            {filtered.length === 0 ? (
+            {loading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-6 h-6 animate-spin text-[#184d8a]" />
+              </div>
+            ) : filtered.length === 0 ? (
               <div className="text-center py-12 text-gray-400 text-sm">
-                {search
-                  ? "Nenhuma instituição encontrada."
-                  : "Ainda não há instituições registadas."}
+                {search ? "Nenhuma instituição encontrada." : "Ainda não há instituições registadas."}
               </div>
             ) : (
               <div className="divide-y divide-gray-200">
                 {filtered.map((inst) => (
-                  <div key={inst.id} className="pt-3 sm:pt-4 pb-3 sm:pb-4">
-                    <div
-                      className={`flex items-start transition-all duration-300 ${
-                        newlyAddedId === inst.id
-                          ? "bg-green-50 ring-2 ring-green-300 rounded-lg p-2 -mx-2"
-                          : expandedId === inst.id
-                            ? "pb-4"
-                            : "hover:bg-blue-50 cursor-pointer rounded-lg p-2 -mx-2"
-                      }`}
-                    >
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-indigo-50 border border-indigo-200 mr-3 sm:mr-4 flex-shrink-0">
-                        <Building2 className="w-5 h-5 sm:w-6 sm:h-6 text-[#184d8a]" />
+                  <div key={inst.idinstituicao} className="pt-4 pb-4">
+                    <div className="flex items-start hover:bg-blue-50 rounded-lg p-2 -mx-2 transition-colors">
+                      <div className="w-11 h-11 flex items-center justify-center rounded-full bg-indigo-50 border border-indigo-200 mr-4 flex-shrink-0">
+                        <Building2 className="w-5 h-5 text-[#184d8a]" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                            {inst.name}
-                          </h3>
-                          {newlyAddedId === inst.id && (
-                            <span className="text-xs bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded-full animate-pulse">
-                              ✦ Novo
-                            </span>
-                          )}
+                        <h3 className="text-sm font-semibold text-gray-900 truncate">{inst.nome}</h3>
+                        <p className="text-xs text-gray-500 truncate">{inst.address || "—"}</p>
+                        <div className="flex items-center gap-3 mt-1">
+                          <span className="text-xs text-gray-400 flex items-center gap-1">
+                            <Users className="w-3 h-3" /> {inst.total_alunos ?? 0} utilizadores
+                          </span>
+                          <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                            inst.status === "Ativo"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-red-100 text-red-600"
+                          }`}>
+                            {inst.status}
+                          </span>
                         </div>
-                        <p className="text-xs sm:text-sm text-gray-500 truncate">
-                          {inst.address}
-                        </p>
                       </div>
                       <button
-                        onClick={() =>
-                          setExpandedId(expandedId === inst.id ? null : inst.id)
-                        }
-                        className="ml-2 sm:ml-4 text-xs sm:text-sm font-medium py-1 px-2 sm:px-3 rounded-lg border border-[#184d8a] text-[#184d8a] hover:bg-blue-50 transition-colors flex-shrink-0"
+                        onClick={() => setExpandedId(expandedId === inst.idinstituicao ? null : inst.idinstituicao)}
+                        className="ml-4 text-xs font-medium py-1 px-3 rounded-lg border border-[#184d8a] text-[#184d8a] hover:bg-blue-50 flex-shrink-0"
                       >
-                        {expandedId === inst.id ? "Esconder" : "Detalhes"}
+                        {expandedId === inst.idinstituicao ? "Esconder" : "Detalhes"}
                       </button>
                     </div>
-                    {expandedId === inst.id && (
-                      <ExpandedInstitutionDetails institution={inst} />
+                    {expandedId === inst.idinstituicao && (
+                      <ExpandedInstitutionDetails
+                        institution={inst}
+                        onEdit={() => setModalEditar(inst)}
+                        onDelete={() => setModalRemover(inst)}
+                      />
                     )}
                   </div>
                 ))}
@@ -706,7 +921,22 @@ export default function GestaoDeInstituicao() {
         </main>
       </div>
 
-      {isModalOpen && (
+      {/* Modais */}
+      {modalEditar && (
+        <ModalEditarInstituicao
+          institution={modalEditar}
+          onClose={() => setModalEditar(null)}
+          onUpdated={carregar}
+        />
+      )}
+      {modalRemover && (
+        <ModalConfirmarRemocao
+          institution={modalRemover}
+          onClose={() => setModalRemover(null)}
+          onConfirmed={carregar}
+        />
+      )}
+        {isModalOpen && (
         <AddInstitutionModal
           onClose={() => setIsModalOpen(false)}
           onCreated={handleCreated}

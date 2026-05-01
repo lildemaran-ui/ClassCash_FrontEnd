@@ -18,7 +18,7 @@ interface LogEntry {
   nivel: "INFO" | "AVISO" | "ERRO";
   usuario: string;
   acao: string;
-  detalhe: string;
+  detalhes: string;
 }
 
 const getLevelColor = (level: LogEntry["nivel"]) => {
@@ -84,7 +84,7 @@ export default function GestaoLogs() {
       !search ||
       log.usuario.toLowerCase().includes(search.toLowerCase()) ||
       log.acao.toLowerCase().includes(search.toLowerCase()) ||
-      log.detalhe.toLowerCase().includes(search.toLowerCase());
+      log.detalhes.toLowerCase().includes(search.toLowerCase());
     return nivelOk && dataOk && searchOk;
   });
 
@@ -109,7 +109,7 @@ export default function GestaoLogs() {
         <p className="text-xs font-semibold text-gray-900">{log.acao}</p>
         <p className="text-xs text-gray-500 mt-0.5">{log.usuario}</p>
       </div>
-      <p className="text-xs text-gray-400 line-clamp-2">{log.detalhe}</p>
+      <p className="text-xs text-gray-400 line-clamp-2">{log.detalhes}</p>
     </div>
   );
 
@@ -261,8 +261,8 @@ export default function GestaoLogs() {
                           <td className="px-4 sm:px-6 py-3 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
                             {log.acao}
                           </td>
-                          <td className="px-4 sm:px-6 py-3 text-xs sm:text-sm text-gray-500 max-w-xs truncate text-left">
-                            {log.detalhe}
+                          <td className="px-4 sm:px-6 py-3 text-xs sm:text-sm text-gray-500 max-w-xs truncate text-center">
+                            {log.detalhes}
                           </td>
                         </tr>
                       ))

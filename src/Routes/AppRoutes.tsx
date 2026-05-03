@@ -34,6 +34,7 @@ import SobreNos from '../Pages/Index/AboutUs'
 import Contactos from '../Pages/Index/Contacts'
 import FAQScreen from "../Pages/Index/FAQ's"
 import PaginaInicial from '../Pages/Index/PaginaInicial/Index'
+import ClassMaps from '../Pages/Index/ClassMaps'
 import Instituicoes from '../Pages/Instituições/Instituições'
 import Login from '../Pages/Login/Login'
 import Pagamento from '../Pages/Pagamento/Pagamento'
@@ -42,60 +43,70 @@ import SolicitarRecuperacao from '@/Pages/Login/solicitarRecuperacao'
 import { useEffect, useState } from 'react'
 import Spinner from '@/components/spinner'
 
-
 export default function AppRoutes() {
-  const [loading, setLoading] = useState(false);
-  const location = useLocation();
-   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 600);
-    return () => clearTimeout(timer);
-  }, [location]); // dispara toda vez que mudar de página
+  const [loading, setLoading] = useState(false)
+  const location = useLocation()
+  useEffect(() => {
+    setLoading(true)
+    const timer = setTimeout(() => setLoading(false), 600)
+    return () => clearTimeout(timer)
+  }, [location]) // dispara toda vez que mudar de página
 
   return (
     <>
-    {loading && <Spinner />}
-    <Routes>
-      
-      <Route path="/" element={<Navigate to="/PaginaInicial" />} />
-      <Route path="/PaginaInicial" element={<PaginaInicial />} />
-      <Route path="/Cadastro" element={<Cadastro />} />
-      <Route path="/Login" element={<Login />} />
-      <Route path="/Pagamentos" element={<Pagamento />} />
-      <Route path="/DashboardAdmin" element={<DashboardAdmin />} />
-      <Route path="/AboutUs" element={<SobreNos />} />
-      <Route path="/Contacts" element={<Contactos />} />
-      <Route path="/Instituições" element={<Instituicoes />} />
-      <Route path="/FAQ's" element={<FAQScreen />} />
-      <Route path="/reclamacoes" element={<Reclamacoes />} />
-      <Route path="/Config" element={<Config />} />
-      <Route path="/DashboardEstud" element={<DashboardEstud />} />
-      <Route path="/GestaoAlunos" element={<GestaoAlunos />} />
-      <Route path="/Secretaria" element={<Secretaria />} />
-      <Route path="/GestaoPropinas" element={<GestaoPropinas />} />
-      <Route path="/GestaoPagamentos" element={<GestaoPagamentos />} />
-      <Route path="/GestaodeEncarregados" element={<GestaodeEncarregados />} />
-      <Route path="/GestaodeServiços" element={<GestaodeServiços />} />
-      <Route path="/GestaodeReclamacoes" element={<GestaodeReclamacoes />} />
-      <Route path="/ModulodeMulta" element={<ModulodeMulta />} />
-      <Route path="/Relatorio" element={<Relatorio />} />
-      <Route path="/Configuracao" element={<Configuracao />} />
-      <Route path="/Encarregado" element={<Encarregado />} />
-      <Route path="/Administradores" element={<Administaradores />} />
-      <Route path="/GestaoDeInstituicao" element={<GestaoDeInstituicao />} />
-      <Route path="/GestaoLogs" element={<GestaoLogs />} />
-      <Route path="/Configuracoes" element={<Configuracoes />} />
-      <Route path="/ConfiguracaoEncar" element={<ConfiguracaoEncar />} />
-      <Route path="/ReclamacoesEncar" element={<ReclamacoesEncar />} />
-      <Route path="/PagamentoEncar" element={<PagamentoEncar />} />
-      <Route path="/PermissoesAcessos" element={<PermissoesAcessos />} />
-      <Route path="/SuporteAjuda" element={<SuporteAjuda />} />
-      <Route path="/GestaoDeRelatorio" element={<GestaoDeRelatorios />} />
-      <Route path="/SolicitacoesCadastro" element={<SolicitacoesCadastro />} />
-      <Route path='/recuperacaodesenha' element={<RecuperacaodeSenha/>}></Route>
-      <Route path='/solicitarRecuperacao' element={<SolicitarRecuperacao/>}></Route>
-
-    </Routes>
+      {loading && <Spinner />}
+      <Routes>
+        <Route path="/" element={<Navigate to="/PaginaInicial" />} />
+        <Route path="/PaginaInicial" element={<PaginaInicial />} />
+        <Route path="/ClassMaps" element={<ClassMaps />} />
+        <Route path="/Cadastro" element={<Cadastro />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/Pagamentos" element={<Pagamento />} />
+        <Route path="/DashboardAdmin" element={<DashboardAdmin />} />
+        <Route path="/AboutUs" element={<SobreNos />} />
+        <Route path="/Contacts" element={<Contactos />} />
+        <Route path="/Instituições" element={<Instituicoes />} />
+        <Route path="/FAQ's" element={<FAQScreen />} />
+        <Route path="/reclamacoes" element={<Reclamacoes />} />
+        <Route path="/Config" element={<Config />} />
+        <Route path="/DashboardEstud" element={<DashboardEstud />} />
+        <Route path="/GestaoAlunos" element={<GestaoAlunos />} />
+        <Route path="/Secretaria" element={<Secretaria />} />
+        <Route path="/GestaoPropinas" element={<GestaoPropinas />} />
+        <Route path="/GestaoPagamentos" element={<GestaoPagamentos />} />
+        <Route
+          path="/GestaodeEncarregados"
+          element={<GestaodeEncarregados />}
+        />
+        <Route path="/GestaodeServiços" element={<GestaodeServiços />} />
+        <Route path="/GestaodeReclamacoes" element={<GestaodeReclamacoes />} />
+        <Route path="/ModulodeMulta" element={<ModulodeMulta />} />
+        <Route path="/Relatorio" element={<Relatorio />} />
+        <Route path="/Configuracao" element={<Configuracao />} />
+        <Route path="/Encarregado" element={<Encarregado />} />
+        <Route path="/Administradores" element={<Administaradores />} />
+        <Route path="/GestaoDeInstituicao" element={<GestaoDeInstituicao />} />
+        <Route path="/GestaoLogs" element={<GestaoLogs />} />
+        <Route path="/Configuracoes" element={<Configuracoes />} />
+        <Route path="/ConfiguracaoEncar" element={<ConfiguracaoEncar />} />
+        <Route path="/ReclamacoesEncar" element={<ReclamacoesEncar />} />
+        <Route path="/PagamentoEncar" element={<PagamentoEncar />} />
+        <Route path="/PermissoesAcessos" element={<PermissoesAcessos />} />
+        <Route path="/SuporteAjuda" element={<SuporteAjuda />} />
+        <Route path="/GestaoDeRelatorio" element={<GestaoDeRelatorios />} />
+        <Route
+          path="/SolicitacoesCadastro"
+          element={<SolicitacoesCadastro />}
+        />
+        <Route
+          path="/recuperacaodesenha"
+          element={<RecuperacaodeSenha />}
+        ></Route>
+        <Route
+          path="/solicitarRecuperacao"
+          element={<SolicitarRecuperacao />}
+        ></Route>
+      </Routes>
     </>
   )
 }

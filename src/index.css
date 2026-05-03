@@ -17,7 +17,27 @@
 * {
   min-width: 0;
 }
+/* index.css */
+@layer utilities {
+  @keyframes pulsar {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+    }
+    70% {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 10px rgba(220, 38, 38, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+    }
+  }
 
+  .animate-pulsa-alerta {
+    animation: pulsar 1.5s infinite;
+  }
+}
 body {
   background-color: #ffffff;
 }

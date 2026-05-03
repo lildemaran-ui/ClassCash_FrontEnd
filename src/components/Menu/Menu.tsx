@@ -1,37 +1,37 @@
-import { Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import logo5555 from "../../assets/Logo5.5.png";
+import { Menu, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import logo5555 from '../../assets/Logo5.5.png'
 
 export default function Nav() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false)
   function OpenMenu() {
-    setMenuOpen(true);
+    setMenuOpen(true)
   }
   function CloseMenu() {
-    setMenuOpen(false);
+    setMenuOpen(false)
   }
 
-  const [scrolled, setscrolled] = useState(false);
+  const [scrolled, setscrolled] = useState(false)
   const handleScroll = () => {
-    const offset = window.scrollY;
+    const offset = window.scrollY
     if (offset > 50) {
-      setscrolled(true);
+      setscrolled(true)
     } else {
-      setscrolled(false);
+      setscrolled(false)
     }
-  };
+  }
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll)
     return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
-  const navbarClasses = `fixed top-0 w-full z-50 transition-colors duration-700 ${scrolled ? "menu-translucido" : "transparent-bg "}`;
+  const navbarClasses = `fixed top-0 w-full z-50 transition-colors duration-700 ${scrolled ? 'menu-translucido' : 'transparent-bg '}`
 
-  const CorMenu = scrolled ? "text-white" : "text-white";
-  const borderClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? "border-white drop-shadow-md px-3 py-2 rounded-lg border-2 font-medium text-white" : "border-white hover:border-white px-3 py-2 rounded-lg border-2 font-medium text-white"}`;
+  const CorMenu = scrolled ? 'text-white' : 'text-white'
+  const borderClasses = `font-semibold cursor-pointer transition-colors duration-700 ${scrolled ? 'border-white drop-shadow-md px-3 py-2 rounded-lg border-2 font-medium text-white' : 'border-white hover:border-white px-3 py-2 rounded-lg border-2 font-medium text-white'}`
 
   return (
     <header className="fixed top-0 w-full transparent-bg z-50 antialiased">
@@ -87,6 +87,12 @@ export default function Nav() {
             >
               Funcionalidades
             </Link>
+            <Link
+              to="/ClassMaps"
+              className="hover:text-blue-600 transition-colors duration-300 hover:border-b hover:border-[#184d8a] drop-shadow-md"
+            >
+              ClassMaps
+            </Link>
             <Link to="/Login">
               <button className={borderClasses}>Entrar</button>
             </Link>
@@ -112,7 +118,7 @@ export default function Nav() {
         className={`lg:hidden fixed top-0 right-0 h-screen z-50 w-72 sm:w-80
           bg-primary flex flex-col
           transition-transform duration-300 ease-in-out
-          ${menuOpen ? "translate-x-0" : "translate-x-full"}
+          ${menuOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
       >
         {/* Header do drawer */}
@@ -132,12 +138,12 @@ export default function Nav() {
         {/* Links */}
         <nav className="flex flex-col flex-1 px-4 py-6 gap-1 overflow-y-auto">
           {[
-            { to: "/PaginaInicial", label: "Início" },
-            { to: "/AboutUs", label: "Sobre Nós" },
-            { to: "/Contacts", label: "Contacto" },
-            { to: "/Instituições", label: "Instituições" },
+            { to: '/PaginaInicial', label: 'Início' },
+            { to: '/AboutUs', label: 'Sobre Nós' },
+            { to: '/Contacts', label: 'Contacto' },
+            { to: '/Instituições', label: 'Instituições' },
             { to: "/FAQ's", label: "FAQ's" },
-            { to: "", label: "Funcionalidades" },
+            { to: '', label: 'Funcionalidades' },
           ].map(({ to, label }) => (
             <Link
               key={label}
@@ -160,5 +166,5 @@ export default function Nav() {
         </div>
       </div>
     </header>
-  );
+  )
 }

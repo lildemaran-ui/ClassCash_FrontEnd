@@ -6,12 +6,12 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 const API = 'http://localhost:5000/api'
 
 export interface Institution {
-  id: number           // = idinstituicao da BD
+  id: number // = idinstituicao da BD
   idinstituicao: number
-  name: string         // = nome
-  address: string      // = localizacao
+  name: string // = nome
+  address: string // = localizacao
   email: string
-  phone: string        // = contacto
+  phone: string // = contacto
   // BD: fk_status_usuario → status_usuario(1=ativo, 2=inativo)
   // listarInstituicoes faz JOIN com status_usuario e retorna su.nome
   status: 'Ativo' | 'Inativo'
@@ -24,7 +24,9 @@ export interface Institution {
 interface InstitutionContextType {
   institutions: Institution[]
   loading: boolean
-  addInstitution: (data: Partial<Institution> & { adminName?: string }) => Institution
+  addInstitution: (
+    data: Partial<Institution> & { adminName?: string },
+  ) => Institution
   removeInstitution: (id: number) => void
   recarregar: () => void
   newlyAddedId: number | null
@@ -54,15 +56,30 @@ function mapInstituicao(row: any): Institution {
 // eslint-disable-next-line react-refresh/only-export-components
 const InstitutionContext = createContext<InstitutionContextType | null>(null)
 
-export function InstitutionProvider({ children }: { children: React.ReactNode }) {
+export function InstitutionProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const [institutions, setInstitutions] = useState<Institution[]>([])
   const [loading, setLoading] = useState(true)
   const [newlyAddedId, setNewlyAddedId] = useState<number | null>(null)
 
+  // No seu arquivo InstitutionContext.tsx
+
   const carregar = async () => {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      setLoading(false)
+      return
+    }
+
     setLoading(true)
     try {
       const res = await fetchComAuth(`${API}/cadastro-instituicao`)
+
+      if (!res || !res.ok) return
+
       const data = await res.json()
       if (Array.isArray(data)) {
         setInstitutions(data.map(mapInstituicao))
@@ -74,9 +91,23 @@ export function InstitutionProvider({ children }: { children: React.ReactNode })
     }
   }
 
-  useEffect(() => { carregar() }, [])
+  // Altere o useEffect para ser mais inteligente
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      carregar()
+    } else {
+      setLoading(false)
+    }
+  }, [])
 
-  const addInstitution = (data: Partial<Institution> & { adminName?: string }): Institution => {
+  useEffect(() => {
+    carregar()
+  }, [])
+
+  const addInstitution = (
+    data: Partial<Institution> & { adminName?: string },
+  ): Institution => {
     const newInst: Institution = {
       id: Date.now(),
       idinstituicao: Date.now(),
@@ -100,10 +131,16 @@ export function InstitutionProvider({ children }: { children: React.ReactNode })
   }
 
   return (
-    <InstitutionContext.Provider value={{
-      institutions, loading, addInstitution, removeInstitution,
-      recarregar: carregar, newlyAddedId,
-    }}>
+    <InstitutionContext.Provider
+      value={{
+        institutions,
+        loading,
+        addInstitution,
+        removeInstitution,
+        recarregar: carregar,
+        newlyAddedId,
+      }}
+    >
       {children}
     </InstitutionContext.Provider>
   )
@@ -112,6 +149,9 @@ export function InstitutionProvider({ children }: { children: React.ReactNode })
 // eslint-disable-next-line react-refresh/only-export-components
 export function useInstitutions(): InstitutionContextType {
   const ctx = useContext(InstitutionContext)
-  if (!ctx) throw new Error('useInstitutions deve ser usado dentro de <InstitutionProvider>')
+  if (!ctx)
+    throw new Error(
+      'useInstitutions deve ser usado dentro de <InstitutionProvider>',
+    )
   return ctx
 }

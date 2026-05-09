@@ -82,7 +82,7 @@ export default function Secretaria() {
   const [loading, setLoading] = useState(true)
 
   // Lógica de Datas para Sanções
-  const hoje = 5 // Simula dia 5
+  const hoje = 17 // Simula dia 5
   const emAtraso = true
 
   useEffect(() => {

@@ -60,6 +60,7 @@ export default function SolicitarRecuperacao() {
       <div className="w-full max-w-md relative z-10">
 
         {/* Logo */}
+        <Link to="/Login">
         <div className="text-center mb-8">
           <div
             className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary shadow-lg mb-4"
@@ -70,6 +71,7 @@ export default function SolicitarRecuperacao() {
           <h1 className="text-2xl font-bold text-[#0f2d54] tracking-tight">ClassCash</h1>
           <p className="text-sm text-slate-500 mt-1">Plataforma de Gestão Escolar</p>
         </div>
+        </Link>
 
         {/* Card */}
         <div
@@ -131,7 +133,7 @@ export default function SolicitarRecuperacao() {
               <div className="px-8 pb-8">
                 <Link
                   to="/Login"
-                  className="flex items-center justify-center gap-2 text-xs font-semibold text-slate-400 hover:text-[#184d8a] transition-colors"
+                  className="flex items-center justify-center gap-2 text-xs font-semibold text-[#184d8a]/90 transition-colors"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   Voltar ao Login

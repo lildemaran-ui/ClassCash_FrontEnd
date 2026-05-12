@@ -1,12 +1,7 @@
-// ════════════════════════════════════════════════════════════════
-// FICHEIRO: src/Pages/Secretaria/ModulodeMulta.tsx
-// Melhorias: Modal Aplicar Multa + Modal Detalhes, responsividade
-// ════════════════════════════════════════════════════════════════
 import Avatar from "@/components/Avatar/Avatar";
 import ChartGestaoMulta from "@/components/Charts/ChartGestaoMulta";
 import ChartGestaoMulta2 from "@/components/Charts/ChartGestaoMulta2";
 import { Header } from "@/components/Header/header";
-import ItemsDoCabeçalho from "@/components/ItemsDoCabeçalho/ItemsDoCabeçalho";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
 import {
@@ -15,20 +10,19 @@ import {
   type SessaoUsuario,
 } from "@/types/global/sessao";
 import {
+  AlertTriangle,
   CheckCircle,
+  Clock,
   DollarSign,
   Download,
   EyeIcon,
-  Plus,
-  TrendingUp,
-  Trash2,
-  X,
-  Save,
-  AlertTriangle,
-  Clock,
-  User,
   FileText,
-  Calendar,
+  Plus,
+  Save,
+  Trash2,
+  TrendingUp,
+  User,
+  X
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -76,236 +70,6 @@ const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
-/* ── Modal de Aplicar Multa ── */
-const ModalAplicarMulta = ({
-  onClose,
-  onSave,
-}: {
-  onClose: () => void;
-  onSave: () => void;
-}) => {
-  const [form, setForm] = useState({
-    nome: "",
-    motivo: "",
-    valor_original: "",
-    percentual: "10",
-    dias_atraso: "",
-    status: "Pendente",
-  });
-  const [saving, setSaving] = useState(false);
-
-  const multaCalculada =
-    form.valor_original && form.percentual
-      ? (Number(form.valor_original) * Number(form.percentual)) / 100
-      : 0;
-
-  const handleSave = async () => {
-    if (!form.nome || !form.motivo || !form.valor_original) {
-      toast.error("Preencha os campos obrigatórios");
-      return;
-    }
-    setSaving(true);
-    try {
-      const token = getToken();
-      await fetch(`${API}/gestaoMultas`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ ...form, multa: multaCalculada }),
-      });
-      toast.success("Multa aplicada com sucesso!");
-      onSave();
-      onClose();
-    } catch {
-      toast.error("Erro ao aplicar multa");
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden max-h-[90vh] overflow-y-auto">
-        <div className="bg-primary px-6 py-5 flex justify-between items-center sticky top-0">
-          <div>
-            <h2 className="text-white font-bold text-lg">Aplicar Multa</h2>
-            <p className="text-blue-200 text-sm">Preencha os dados da multa</p>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
-          >
-            <X size={18} />
-          </button>
-        </div>
-
-        <div className="px-6 py-5 space-y-4">
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-              Nome do Estudante <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Ex: Maria Silva"
-              value={form.nome}
-              onChange={(e) => setForm({ ...form, nome: e.target.value })}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-              Motivo <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              placeholder="Ex: Propina em atraso - Janeiro 2025"
-              value={form.motivo}
-              onChange={(e) => setForm({ ...form, motivo: e.target.value })}
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-                Valor Original (AOA) <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="number"
-                placeholder="0.00"
-                value={form.valor_original}
-                onChange={(e) =>
-                  setForm({ ...form, valor_original: e.target.value })
-                }
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-                Percentual Multa (%)
-              </label>
-              <input
-                type="number"
-                min="0"
-                max="100"
-                value={form.percentual}
-                onChange={(e) =>
-                  setForm({ ...form, percentual: e.target.value })
-                }
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-                Dias em Atraso
-              </label>
-              <input
-                type="number"
-                placeholder="0"
-                value={form.dias_atraso}
-                onChange={(e) =>
-                  setForm({ ...form, dias_atraso: e.target.value })
-                }
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] focus:ring-2 focus:ring-[#184d8a]/10 transition-all"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-                Estado
-              </label>
-              <select
-                value={form.status}
-                onChange={(e) => setForm({ ...form, status: e.target.value })}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-[#184d8a] cursor-pointer"
-              >
-                <option value="Pendente">Pendente</option>
-                <option value="Paga">Paga</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Resumo Calculado */}
-          {form.valor_original && (
-            <div className="bg-red-50 rounded-2xl p-4 border border-red-100">
-              <p className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-3">
-                Resumo da Multa
-              </p>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Valor Original:</span>
-                  <span className="font-bold text-gray-800">
-                    {Number(form.valor_original).toLocaleString("pt-AO", {
-                      style: "currency",
-                      currency: "AOA",
-                    })}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
-                    Multa ({form.percentual}%):
-                  </span>
-                  <span className="font-bold text-red-600">
-                    {multaCalculada.toLocaleString("pt-AO", {
-                      style: "currency",
-                      currency: "AOA",
-                    })}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm border-t border-red-100 pt-2 mt-2">
-                  <span className="font-bold text-gray-700">
-                    Total a Pagar:
-                  </span>
-                  <span className="font-bold text-[#184d8a] text-base">
-                    {(
-                      Number(form.valor_original) + multaCalculada
-                    ).toLocaleString("pt-AO", {
-                      style: "currency",
-                      currency: "AOA",
-                    })}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        <div className="px-6 pb-6 flex gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 py-3 rounded-xl font-bold text-gray-500 border border-gray-200 hover:bg-gray-50 transition-all"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="flex-1 py-3 rounded-xl font-bold text-white bg-primary hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200 flex items-center justify-center gap-2 disabled:opacity-60"
-          >
-            {saving ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />{" "}
-                A aplicar...
-              </>
-            ) : (
-              <>
-                <Save size={16} /> Aplicar Multa
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 /* ── Modal de Detalhes de Multa ── */
 const ModalDetalhes = ({
@@ -432,7 +196,6 @@ export default function ModulodeMulta() {
   const [tabela, setTabela] = useState<MultaRow[]>([]);
   const [cards, setCards] = useState<Cards | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showAplicar, setShowAplicar] = useState(false);
   const [selectedRow, setSelectedRow] = useState<MultaRow | null>(null);
   const [user, setUser] = useState<SessaoUsuario | null>(null);
 
@@ -584,12 +347,7 @@ export default function ModulodeMulta() {
                 <option value="15">15+ dias</option>
                 <option value="20">20+ dias</option>
               </select>
-              <button
-                onClick={() => setShowAplicar(true)}
-                className="flex items-center gap-2 bg-primary text-white px-5 py-2 rounded-xl font-bold hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200 active:scale-95 text-sm"
-              >
-                <Plus size={16} /> Aplicar Multa
-              </button>
+              
             </div>
 
             {/* Desktop */}
@@ -743,12 +501,7 @@ export default function ModulodeMulta() {
         </div>
       </main>
 
-      {showAplicar && (
-        <ModalAplicarMulta
-          onClose={() => setShowAplicar(false)}
-          onSave={carregar}
-        />
-      )}
+    
       {selectedRow && (
         <ModalDetalhes row={selectedRow} onClose={() => setSelectedRow(null)} />
       )}

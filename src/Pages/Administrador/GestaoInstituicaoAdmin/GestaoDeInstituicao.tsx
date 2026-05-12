@@ -22,10 +22,6 @@ import { toast } from "sonner";
 
 const API_BASE = "http://localhost:5000/api";
 
-
-// Deve estar aqui no topo, fora de qualquer função
-const TIPOS_INSTITUICAO = [{ id: 1, label: "Privada" }];
-
 const CATEGORIAS = [
   { id: 1, label: "Creche" },
   { id: 2, label: "ATL" },
@@ -35,6 +31,15 @@ const CATEGORIAS = [
   { id: 6, label: "Centro de Formação" },
   { id: 7, label: "Centro de Explicação" },
 ];
+
+// ── Gera senha aleatória segura ───────────────────────────────────────────────
+function gerarSenhaAleatoria(tamanho = 12): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789@#!";
+  const array = new Uint8Array(tamanho);
+  crypto.getRandomValues(array);
+  return Array.from(array).map((b) => chars[b % chars.length]).join("");
+}
+
 interface Institution {
   idinstituicao: number;
   nome: string;
@@ -51,7 +56,7 @@ interface Institution {
   date_added: string;
 }
 
-
+// ── senhaRepresentante removida do FormState ──────────────────────────────────
 interface FormState {
   nome: string;
   email: string;
@@ -66,7 +71,6 @@ interface FormState {
   nomeRepresentante: string;
   emailRepresentante: string;
   numTelRepresentante: string;
-  senhaRepresentante: string;
 }
 
 interface ApiMsg {
@@ -97,7 +101,6 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
     nomeRepresentante: "",
     emailRepresentante: "",
     numTelRepresentante: "",
-    senhaRepresentante: "",
   });
 
   const handleChange = (
@@ -119,22 +122,14 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
 
   const handleSubmit = async () => {
     if (!form.nome.trim() || !form.email.trim() || !form.iban.trim()) {
-      setApiMsg({
-        texto: "Nome, email e IBAN são obrigatórios.",
-        tipo: "erro",
-      });
+      setApiMsg({ texto: "Nome, email e IBAN são obrigatórios.", tipo: "erro" });
       return;
     }
     if (
       createAdmin &&
-      (!form.nomeRepresentante.trim() ||
-        !form.emailRepresentante.trim() ||
-        !form.senhaRepresentante.trim())
+      (!form.nomeRepresentante.trim() || !form.emailRepresentante.trim())
     ) {
-      setApiMsg({
-        texto: "Nome, email e senha do representante são obrigatórios.",
-        tipo: "erro",
-      });
+      setApiMsg({ texto: "Nome e email do representante são obrigatórios.", tipo: "erro" });
       return;
     }
 
@@ -142,29 +137,23 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
     setApiMsg(null);
 
     try {
+      // ── Senha gerada automaticamente aqui ────────────────────────────────
+      const senhaGerada = gerarSenhaAleatoria(12);
+
       const fd = new FormData();
       fd.append("nome", form.nome.trim());
       fd.append("email", form.email.trim());
       fd.append("iban", form.iban.trim());
       fd.append("idcategoria", String(form.idCategoria));
       fd.append("idTipoInstituicao", String(form.idTipoInstituicao));
-      if (form.localizacao.trim())
-        fd.append("localizacao", form.localizacao.trim());
+      if (form.localizacao.trim()) fd.append("localizacao", form.localizacao.trim());
       if (form.contacto.trim()) fd.append("contacto", form.contacto.trim());
       if (form.nif.trim()) fd.append("nif", form.nif.trim());
       if (form.logoFile) fd.append("logotipo", form.logoFile);
-      fd.append(
-        "nomeRepresentante",
-        form.nomeRepresentante.trim() || "Administrador",
-      );
-      fd.append(
-        "emailRepresentante",
-        form.emailRepresentante.trim() || form.email.trim(),
-      );
-      fd.append(
-        "senhaRepresentante",
-        form.senhaRepresentante.trim() || "provisorio123",
-      );
+
+      fd.append("nomeRepresentante", form.nomeRepresentante.trim() || "Administrador");
+      fd.append("emailRepresentante", form.emailRepresentante.trim() || form.email.trim());
+      fd.append("senhaRepresentante", senhaGerada); // ← senha gerada, nunca digitada
       if (form.numTelRepresentante.trim())
         fd.append("numTelRepresentante", form.numTelRepresentante.trim());
 
@@ -183,14 +172,10 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       };
 
       if (!res.ok)
-        throw new Error(
-          data.error ?? data.detalhe ?? "Erro ao cadastrar instituição",
-        );
+        throw new Error(data.error ?? data.detalhe ?? "Erro ao cadastrar instituição");
 
       if (!data.instituicao?.idinstituicao)
-        throw new Error(
-          "ID da instituição não retornado pela API após cadastro.",
-        );
+        throw new Error("ID da instituição não retornado pela API após cadastro.");
 
       const novaInst: Institution = {
         idinstituicao: data.instituicao.idinstituicao,
@@ -208,6 +193,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
         date_added: new Date().toISOString(),
       };
 
+      toast.success("Instituição criada! Credenciais enviadas por email.");
       onCreated(novaInst);
       onClose();
     } catch (err) {
@@ -223,7 +209,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
   return (
     <div
       className="fixed inset-0 z-50 bg-black/50 flex justify-center items-center p-2 sm:p-4"
-      onClick={(e) => e.target === e.currentTarget && !loading }
+      onClick={(e) => e.target === e.currentTarget && !loading}
     >
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[95vh] overflow-y-auto">
         <div className="flex justify-between items-center p-4 sm:p-6 border-b sticky top-0 bg-white z-10">
@@ -256,50 +242,35 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
 
         <div className="p-4 sm:p-6">
           <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6">
-            Insira os dados da instituição e clique em "Concluir" para
-            finalizar.
+            Insira os dados da instituição e clique em "Concluir" para finalizar.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+
             {/* Col 1 */}
             <div className="space-y-3 sm:space-y-4">
               <div>
-  <label className="block text-xs sm:text-sm font-medium text-gray-700">
-    Categoria <span className="text-red-500">*</span>
-  </label>
-  <div className="relative mt-1">
-    <select
-      value={form.idCategoria}
-      onChange={(e) => setForm((p) => ({ ...p, idCategoria: Number(e.target.value) }))}
-      className="appearance-none w-full border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      {CATEGORIAS.map((c) => (
-        <option key={c.id} value={c.id}>{c.label}</option>
-      ))}
-    </select>
-    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-  </div>
-</div>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700">
+                  Categoria <span className="text-red-500">*</span>
+                </label>
+                <div className="relative mt-1">
+                  <select
+                    value={form.idCategoria}
+                    onChange={(e) => setForm((p) => ({ ...p, idCategoria: Number(e.target.value) }))}
+                    className="appearance-none w-full border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    {CATEGORIAS.map((c) => (
+                      <option key={c.id} value={c.id}>{c.label}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                </div>
+              </div>
               {[
-                {
-                  id: "nome",
-                  label: "Nome da Instituição",
-                  req: true,
-                  type: "text",
-                  ph: "Ex: Colégio Caracol",
-                },
-                {
-                  id: "email",
-                  label: "Email da Instituição",
-                  req: true,
-                  type: "email",
-                  ph: "contacto@instituicao.ao",
-                },
+                { id: "nome", label: "Nome da Instituição", req: true, type: "text", ph: "Ex: Colégio Caracol" },
+                { id: "email", label: "Email da Instituição", req: true, type: "email", ph: "contacto@instituicao.ao" },
               ].map(({ id, label, req, type, ph }) => (
                 <div key={id}>
-                  <label
-                    htmlFor={id}
-                    className="block text-xs sm:text-sm font-medium text-gray-700"
-                  >
+                  <label htmlFor={id} className="block text-xs sm:text-sm font-medium text-gray-700">
                     {label} {req && <span className="text-red-500">*</span>}
                   </label>
                   <input
@@ -313,10 +284,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                 </div>
               ))}
               <div>
-                <label
-                  htmlFor="contacto"
-                  className="block text-xs sm:text-sm font-medium text-gray-700"
-                >
+                <label htmlFor="contacto" className="block text-xs sm:text-sm font-medium text-gray-700">
                   Contacto
                 </label>
                 <input
@@ -326,10 +294,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                   maxLength={9}
                   value={form.contacto}
                   onChange={(e) =>
-                    setForm((p) => ({
-                      ...p,
-                      contacto: e.target.value.replace(/\D/g, ""),
-                    }))
+                    setForm((p) => ({ ...p, contacto: e.target.value.replace(/\D/g, "") }))
                   }
                   className="w-full border border-gray-300 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 outline-none mt-1"
                 />
@@ -339,25 +304,12 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
             {/* Col 2 */}
             <div className="space-y-3 sm:space-y-4">
               {[
-                {
-                  id: "localizacao",
-                  label: "Endereço / Localização",
-                  req: false,
-                  ph: "Rua Principal, nº X",
-                },
+                { id: "localizacao", label: "Endereço / Localização", req: false, ph: "Rua Principal, nº X" },
                 { id: "nif", label: "NIF", req: false, ph: "0000000000" },
-                {
-                  id: "iban",
-                  label: "IBAN",
-                  req: true,
-                  ph: "AO06 XXXX XXXX XXXX",
-                },
+                { id: "iban", label: "IBAN", req: true, ph: "AO06 XXXX XXXX XXXX" },
               ].map(({ id, label, req, ph }) => (
                 <div key={id}>
-                  <label
-                    htmlFor={id}
-                    className="block text-xs sm:text-sm font-medium text-gray-700"
-                  >
+                  <label htmlFor={id} className="block text-xs sm:text-sm font-medium text-gray-700">
                     {label} {req && <span className="text-red-500">*</span>}
                   </label>
                   <input
@@ -366,9 +318,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                     placeholder={ph}
                     value={(form as any)[id]}
                     onChange={handleChange}
-                    maxLength={
-                      id === "iban" ? 30 : id === "nif" ? 14 : undefined
-                    }
+                    maxLength={id === "iban" ? 30 : id === "nif" ? 14 : undefined}
                     className="w-full border border-gray-300 rounded-lg p-2 text-xs sm:text-sm focus:ring-2 focus:ring-blue-500 outline-none mt-1"
                   />
                 </div>
@@ -382,27 +332,15 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                   className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors cursor-pointer overflow-hidden"
                 >
                   {form.logoPreview ? (
-                    <img
-                      src={form.logoPreview}
-                      alt="preview"
-                      className="h-16 sm:h-20 object-contain rounded"
-                    />
+                    <img src={form.logoPreview} alt="preview" className="h-16 sm:h-20 object-contain rounded" />
                   ) : (
                     <>
                       <ImagePlus className="w-6 h-6 sm:w-7 sm:h-7 text-gray-400 mb-1" />
-                      <p className="text-xs text-gray-500">
-                        Clique para carregar
-                      </p>
+                      <p className="text-xs text-gray-500">Clique para carregar</p>
                     </>
                   )}
                 </label>
-                <input
-                  id="logoInput"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleLogo}
-                />
+                <input id="logoInput" type="file" accept="image/*" className="hidden" onChange={handleLogo} />
               </div>
             </div>
 
@@ -423,45 +361,21 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                 </label>
               </div>
               <p className="text-xs text-gray-500 mb-3 sm:mb-4 leading-relaxed">
-                Se ativado, será criado um representante com acesso
-                administrativo.
+                Se ativado, será criado um representante com acesso administrativo.
               </p>
+
               <div
                 className={`space-y-2 sm:space-y-3 transition-opacity duration-300 ${createAdmin ? "opacity-100" : "opacity-40 pointer-events-none"}`}
               >
+                {/* Apenas 3 campos — senha foi removida */}
                 {[
-                  {
-                    id: "nomeRepresentante",
-                    label: "Nome",
-                    type: "text",
-                    ph: "Nome Completo",
-                  },
-                  {
-                    id: "emailRepresentante",
-                    label: "Email",
-                    type: "email",
-                    ph: "admin@instituicao.ao",
-                  },
-                  {
-                    id: "numTelRepresentante",
-                    label: "Contacto",
-                    type: "tel",
-                    ph: "9XX XXX XXX",
-                  },
-                  {
-                    id: "senhaRepresentante",
-                    label: "Palavra-passe",
-                    type: "password",
-                    ph: "Mín. 8 caracteres",
-                  },
+                  { id: "nomeRepresentante", label: "Nome", type: "text", ph: "Nome Completo" },
+                  { id: "emailRepresentante", label: "Email", type: "email", ph: "admin@instituicao.ao" },
+                  { id: "numTelRepresentante", label: "Contacto", type: "tel", ph: "9XX XXX XXX" },
                 ].map(({ id, label, type, ph }) => (
                   <div key={id}>
-                    <label
-                      htmlFor={id}
-                      className="block text-xs font-medium text-gray-700"
-                    >
-                      {label}{" "}
-                      {createAdmin && <span className="text-red-500">*</span>}
+                    <label htmlFor={id} className="block text-xs font-medium text-gray-700">
+                      {label} {createAdmin && id !== "numTelRepresentante" && <span className="text-red-500">*</span>}
                     </label>
                     <input
                       id={id}
@@ -474,8 +388,17 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
                     />
                   </div>
                 ))}
+
+                {/* Aviso de senha automática */}
+                <div className="mt-1 p-3 bg-yellow-50 border border-yellow-200 rounded-lg flex items-start gap-2">
+                  <Mail className="w-3.5 h-3.5 text-yellow-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-yellow-800 leading-relaxed">
+                    A senha será <strong>gerada automaticamente</strong> e enviada por email ao administrador após o registo.
+                  </p>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
 
@@ -514,7 +437,6 @@ function ExpandedInstitutionDetails({
   return (
     <div className="mt-4 p-4 border border-gray-100 bg-gray-50 rounded-lg shadow-inner">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-        {/* Col 1 */}
         <div className="flex flex-col space-y-3">
           <div className="flex items-center">
             <div className="w-11 h-11 flex items-center justify-center rounded-full bg-indigo-100 border border-indigo-300 mr-4 flex-shrink-0">
@@ -540,7 +462,6 @@ function ExpandedInstitutionDetails({
           </div>
         </div>
 
-        {/* Col 2 */}
         <div className="grid grid-cols-2 gap-3 text-sm md:border-l md:border-gray-200 md:pl-8">
           <div>
             <p className="font-medium text-gray-600">Administrador</p>
@@ -569,7 +490,6 @@ function ExpandedInstitutionDetails({
           </div>
         </div>
 
-        {/* Col 3 */}
         <div className="flex flex-col sm:items-end gap-4 text-sm md:border-l md:border-gray-200 md:pl-8">
           <div className="flex flex-col sm:items-end">
             <p className="font-medium text-gray-600">Status</p>
@@ -610,7 +530,6 @@ function ExpandedInstitutionDetails({
   );
 }
 
-
 // ── Modal Editar Instituição ──────────────────────────────────────────────────
 function ModalEditarInstituicao({
   institution,
@@ -649,10 +568,7 @@ function ModalEditarInstituicao({
         `${API_BASE}/cadastro-instituicao/${institution.idinstituicao}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify(form),
         }
       );
@@ -738,10 +654,7 @@ function ModalConfirmarRemocao({
       const token = getToken();
       const res = await fetchComAuth(
         `${API_BASE}/cadastro-instituicao/${institution.idinstituicao}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        }
+        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } }
       );
       if (!res.ok) throw new Error("Erro ao remover instituição");
       toast.success("Instituição marcada para encerramento.");
@@ -771,7 +684,11 @@ function ModalConfirmarRemocao({
           <button onClick={onClose} disabled={loading} className="flex-1 py-2.5 rounded-xl border text-gray-600 text-sm hover:bg-gray-50">
             Cancelar
           </button>
-          <button onClick={handleDelete} disabled={loading} className="flex-1 py-2.5 rounded-xl bg-red-500 text-white text-sm font-bold hover:bg-red-600 disabled:opacity-60 flex items-center justify-center gap-2">
+          <button
+            onClick={handleDelete}
+            disabled={loading}
+            className="flex-1 py-2.5 rounded-xl bg-red-500 text-white text-sm font-bold hover:bg-red-600 disabled:opacity-60 flex items-center justify-center gap-2"
+          >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             {loading ? "A remover..." : "Remover"}
           </button>
@@ -780,7 +697,6 @@ function ModalConfirmarRemocao({
     </div>
   );
 }
-
 
 // ── Página Principal ──────────────────────────────────────────────────────────
 export default function GestaoDeInstituicao() {
@@ -797,10 +713,10 @@ export default function GestaoDeInstituicao() {
     const sessao = exigirSessao();
     if (sessao) setUser(sessao.usuario);
   }, []);
-   const handleCreated = (_inst: Institution) => {
+
+  const handleCreated = (_inst: Institution) => {
     carregar();
   };
-
 
   const carregar = async () => {
     setLoading(true);
@@ -921,7 +837,6 @@ export default function GestaoDeInstituicao() {
         </main>
       </div>
 
-      {/* Modais */}
       {modalEditar && (
         <ModalEditarInstituicao
           institution={modalEditar}
@@ -936,7 +851,7 @@ export default function GestaoDeInstituicao() {
           onConfirmed={carregar}
         />
       )}
-        {isModalOpen && (
+      {isModalOpen && (
         <AddInstitutionModal
           onClose={() => setIsModalOpen(false)}
           onCreated={handleCreated}

@@ -1,6 +1,7 @@
-import { Camera, Pen, X } from "lucide-react";
+import { Camera, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import Avatar from "./Avatar/Avatar";
 
 interface User {
   idusuario?: number;
@@ -23,7 +24,12 @@ interface ProfileEditModalProps {
   onSave?: (updated: Partial<User>) => void;
 }
 
-export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditModalProps) {
+export function ProfileEditModal({
+  isOpen,
+  onClose,
+  user,
+  onSave,
+}: ProfileEditModalProps) {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [contacto, setContacto] = useState("");
@@ -77,34 +83,42 @@ export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditM
           method: "PUT",
           headers: { Authorization: `Bearer ${token}` },
           body: formData,
-        }
+        },
       );
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.error || "Erro ao guardar alterações");
+        throw new Error(data.error || "Erro ao guardar alterações");
       }
 
       toast.success("Perfil atualizado com sucesso!");
 
       // Atualiza sessão no localStorage
       const sessaoAtual = localStorage.getItem("sessao");
-  if (sessaoAtual) {
-    try {
-      const parsed = JSON.parse(sessaoAtual);
-      if (parsed.usuario) {
-        parsed.usuario.nome = nome.trim();
-        parsed.usuario.email = email.trim();
-        parsed.usuario.numtel = contacto.trim();
-        if (fotoPreview) parsed.usuario.foto = fotoPreview;
-      }
-      localStorage.setItem("sessao", JSON.stringify(parsed));
+      if (sessaoAtual) {
+        try {
+          const parsed = JSON.parse(sessaoAtual);
+          if (parsed.usuario) {
+            parsed.usuario.nome = nome.trim();
+            parsed.usuario.email = email.trim();
+            parsed.usuario.contacto = contacto.trim();
+            if (data.usuario?.foto) {
+              parsed.usuario.foto = data.usuario.foto;
+            }
+          }
+          localStorage.setItem("sessao", JSON.stringify(parsed));
         } catch (_) {
           // Silently ignore JSON parsing errors
         }
       }
 
-      onSave?.({ nome: nome.trim(), email: email.trim(), contacto: contacto.trim(), foto: fotoPreview || user.foto });
+      onSave?.({
+        nome: nome.trim(),
+        email: email.trim(),
+        contacto: contacto.trim(),
+        foto: fotoPreview || user.foto,
+      });
       onClose();
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : "Erro ao guardar");
@@ -113,13 +127,6 @@ export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditM
     }
   };
 
-  const iniciais = (nome || user.nome || "U")
-    .trim()
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .substring(0, 2);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/50 backdrop-blur-sm">
@@ -127,8 +134,12 @@ export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditM
         {/* Header */}
         <div className="flex justify-between items-start mb-5">
           <div>
-            <h1 className="text-lg sm:text-xl font-bold text-gray-800">Editar Perfil</h1>
-            <p className="text-xs text-gray-400">Atualize as suas informações abaixo</p>
+            <h1 className="text-lg sm:text-xl font-bold text-gray-800">
+              Editar Perfil
+            </h1>
+            <p className="text-xs text-gray-400">
+              Atualize as suas informações abaixo
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -142,14 +153,12 @@ export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditM
           {/* Avatar com botão de upload */}
           <div className="flex justify-center mb-2">
             <div className="relative group">
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-white shadow-lg bg-primary">
-                {fotoPreview ? (
-                  <img src={fotoPreview} alt="foto" className="w-full h-full object-cover" />
-                ) : (
-                  <div className="flex items-center justify-center w-full h-full text-white text-3xl font-black">
-                    {iniciais}
-                  </div>
-                )}
+              <div >
+                <Avatar
+                  src={fotoPreview ?? user.foto} // ← mostra preview se existir
+                  name={user.nome ?? ""}
+                  size="lg"
+                />
               </div>
               <button
                 type="button"
@@ -215,7 +224,9 @@ export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditM
             <div className="flex gap-3">
               {user.classe && (
                 <div className="w-28 shrink-0">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Classe</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Classe
+                  </label>
                   <input
                     type="text"
                     readOnly
@@ -226,7 +237,9 @@ export function ProfileEditModal({ isOpen, onClose, user, onSave }: ProfileEditM
               )}
               {user.processo && (
                 <div className="flex-1">
-                  <label className="block text-sm font-semibold text-gray-700 mb-1">Nº Processo</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">
+                    Nº Processo
+                  </label>
                   <input
                     type="text"
                     readOnly

@@ -4,7 +4,7 @@ import { useState } from "react";
 interface AvatarProps {
   name: string;
   src?: string;
-  size?: "sm" | "md" | "lg"; // Adicionei tamanhos para ser mais versátil
+  size?: "sm" | "md" | "lg" | "xl"; // Adicionei tamanhos para ser mais versátil
 }
 
 const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
@@ -15,6 +15,7 @@ const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
     sm: "w-8 h-8 text-xs",
     md: "w-12 h-12 text-base",
     lg: "w-20 h-20 text-xl",
+    xl: "w-32 h-32 lg:w-40 lg:h-40 text-4xl",
   };
 
   // Dentro de Avatar.tsx

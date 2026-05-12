@@ -3,6 +3,7 @@ import { exigirSessao } from "@/types/global/sessao";
 import { MessageSquare, Send, Clock, CheckCircle, Pencil, Trash2, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import Avatar from "../Avatar/Avatar";
 
 interface ReclamacaoProps {
   idreclamacao: number;
@@ -164,7 +165,6 @@ export default function ReclamacaoGeral() {
   const nomeEstudante = sessao?.usuario?.nome ?? "Estudante";
   const token = sessao?.token;
 
-  const initials = nomeEstudante.split(" ").map((n: string) => n[0]).slice(0, 2).join("");
 
   const [listaReclamacoes, setListaReclamacoes] = useState<ReclamacaoProps[]>([]);
   const [assunto, setAssunto] = useState("");
@@ -269,7 +269,7 @@ export default function ReclamacaoGeral() {
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Remetente</label>
               <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3">
-                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-white text-xs font-bold shrink-0">{initials}</div>
+                <Avatar name={sessao?.usuario?.nome ?? "Estudante"} src={sessao?.usuario?.foto} size="sm" />
                 <span className="text-sm font-medium text-gray-700 truncate">{nomeEstudante}</span>
                 <span className="ml-auto text-[11px] text-gray-400 bg-gray-200 px-2 py-0.5 rounded-full whitespace-nowrap shrink-0">Automático</span>
               </div>

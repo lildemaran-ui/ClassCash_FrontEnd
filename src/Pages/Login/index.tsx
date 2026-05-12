@@ -31,6 +31,8 @@ export default function TelaLogin() {
         usuario?: Record<string, unknown>;
         [key: string]: unknown;
       };
+      console.log("Resposta do login:", data);
+console.log("Foto recebida:", data.usuario?.foto); 
 
       // ── Status 403 — conta pendente ou recusada ───────────────────────────
       if (res.status === 403) {

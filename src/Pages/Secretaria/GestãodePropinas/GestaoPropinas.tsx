@@ -1,7 +1,3 @@
-// ════════════════════════════════════════════════════════════════
-// FICHEIRO: src/Pages/Secretaria/GestaoPropinas.tsx
-// Melhorias: Modal de detalhes, responsividade, filtros funcionais, design refinado
-// ════════════════════════════════════════════════════════════════
 import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
@@ -12,19 +8,19 @@ import {
   type SessaoUsuario,
 } from "@/types/global/sessao";
 import {
+  AlertTriangle,
   ArrowDown,
   ArrowUp,
+  BookOpen,
+  Calendar,
+  CheckCircle,
+  Clock,
+  DollarSign,
   EyeIcon,
   TrendingDown,
   TrendingUp,
-  X,
-  Calendar,
   User,
-  BookOpen,
-  DollarSign,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
+  X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -39,17 +35,18 @@ interface PropinaRow {
   data: string | null;
   servico: string;
   valor: string;
-  multa_estimada: string;
-  status: string;
+  multa_real: string; // ← gravada no pagamento
+  multa_estimada: string; // ← calculada em tempo real
   meses_referencia?: string | null;
+  status: string;
 }
+
 interface Cards {
   total_pagas: string;
   total_pendentes: string;
   total_atrasadas: string;
 }
 
-// ── Formatar data ──
 const formatarData = (data: string | null) => {
   if (!data) return "—";
   return new Date(data).toLocaleDateString("pt-AO", {
@@ -59,7 +56,6 @@ const formatarData = (data: string | null) => {
   });
 };
 
-/* ── KPI Card ── */
 const CardKpi = ({
   title,
   value,
@@ -72,25 +68,18 @@ const CardKpi = ({
   subtext: string;
   trend?: "up" | "down";
   color: "green" | "orange" | "red";
-}) => {
-  return (
-    <div
-      className={`p-5 rounded-2xl flex flex-col items-center text-center border transition-all duration-300 hover:shadow-md`}
-    >
-      <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
-      <div className="flex items-center gap-2">
-        <span className="text-2xl font-bold">{value}</span>
-        {trend === "up" && <TrendingUp size={18} className="text-green-500" />}
-        {trend === "down" && (
-          <TrendingDown size={18} className="text-red-500" />
-        )}
-      </div>
-      <p className="text-xs text-gray-400 mt-1">{subtext}</p>
+}) => (
+  <div className="p-5 rounded-2xl flex flex-col items-center text-center border transition-all duration-300 hover:shadow-md">
+    <p className="text-sm font-medium text-gray-400 mb-1">{title}</p>
+    <div className="flex items-center gap-2">
+      <span className="text-2xl font-bold">{value}</span>
+      {trend === "up" && <TrendingUp size={18} className="text-green-500" />}
+      {trend === "down" && <TrendingDown size={18} className="text-red-500" />}
     </div>
-  );
-};
+    <p className="text-xs text-gray-400 mt-1">{subtext}</p>
+  </div>
+);
 
-/* ── Status Badge ── */
 const StatusBadge = ({ status }: { status: string }) => {
   const map: Record<string, { text: string; icon: React.ReactNode }> = {
     Paga: { text: "text-green-700", icon: <CheckCircle size={12} /> },
@@ -107,95 +96,109 @@ const StatusBadge = ({ status }: { status: string }) => {
   );
 };
 
-/* ── Modal de Detalhes de Propina ── */
+// ─── Modal de Detalhes ─────────────────────────────────────────
 const ModalDetalhes = ({
   row,
   onClose,
 }: {
   row: PropinaRow;
   onClose: () => void;
-}) => (
-  <div
-    className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
-    onClick={(e) => e.target === e.currentTarget && onClose()}
-  >
-    <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
-      {/* Header */}
-      <div className="bg-primary px-6 py-5 flex justify-between items-start">
-        <div>
-          <h2 className="text-white font-bold text-lg">{row.nome_estudante}</h2>
-          <p className="text-blue-200 text-sm mt-0.5">Propina #{row.codigo}</p>
-        </div>
-        <button
-          onClick={onClose}
-          className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
-        >
-          <X size={18} />
-        </button>
-      </div>
+}) => {
+  // Usa multa_real se foi efectivamente cobrada, senão mostra a estimada
+  const multaExibida =
+    Number(row.multa_real) > 0
+      ? Number(row.multa_real)
+      : Number(row.multa_estimada);
+  const labelMulta =
+    Number(row.multa_real) > 0 ? "Multa cobrada" : "Multa estimada";
 
-      {/* Status Banner */}
-      <div
-        className={`px-6 py-3 border-b ${
-          row.status === "Paga"
-            ? "bg-green-50"
-            : row.status === "Pendente"
-              ? "bg-orange-50"
-              : "bg-red-50"
-        }`}
-      >
-        <StatusBadge status={row.status} />
-      </div>
-
-      {/* Detalhes */}
-      <div className="px-6 py-5 space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-gray-50 rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <User size={14} className="text-[#184d8a]" />
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Estudante
-              </span>
-            </div>
-            <p className="font-bold text-gray-700 text-sm">
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        {/* Header */}
+        <div className="bg-primary px-6 py-5 flex justify-between items-start">
+          <div>
+            <h2 className="text-white font-bold text-lg">
               {row.nome_estudante}
+            </h2>
+            <p className="text-blue-200 text-sm mt-0.5">
+              Propina #{row.codigo}
             </p>
           </div>
-          <div className="bg-gray-50 rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <BookOpen size={14} className="text-[#184d8a]" />
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Classe
-              </span>
-            </div>
-            <p className="font-bold text-gray-700 text-sm">
-              {row.classe ? `${row.classe}ª Classe` : "—"}
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Calendar size={14} className="text-[#184d8a]" />
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Data
-              </span>
-            </div>
-            {/* ✅ Data formatada */}
-            <p className="font-bold text-gray-700 text-sm">
-              {formatarData(row.data)}
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-2xl p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <BookOpen size={14} className="text-[#184d8a]" />
-              <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Serviço
-              </span>
-            </div>
-            <p className="font-bold text-gray-700 text-sm">{row.servico}</p>
-          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
+          >
+            <X size={18} />
+          </button>
         </div>
-           {row.meses_referencia && (
-            <div className="bg-gray-50 rounded-2xl p-4 col-span-2">
+
+        {/* Status Banner */}
+        <div
+          className={`px-6 py-3 border-b ${
+            row.status === "Paga"
+              ? "bg-green-50"
+              : row.status === "Pendente"
+                ? "bg-orange-50"
+                : "bg-red-50"
+          }`}
+        >
+          <StatusBadge status={row.status} />
+        </div>
+
+        {/* Detalhes */}
+        <div className="px-6 py-5 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-50 rounded-2xl p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <User size={14} className="text-[#184d8a]" />
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Estudante
+                </span>
+              </div>
+              <p className="font-bold text-gray-700 text-sm">
+                {row.nome_estudante}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <BookOpen size={14} className="text-[#184d8a]" />
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Classe
+                </span>
+              </div>
+              <p className="font-bold text-gray-700 text-sm">
+                {row.classe ? `${row.classe}ª Classe` : "—"}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Calendar size={14} className="text-[#184d8a]" />
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Data
+                </span>
+              </div>
+              <p className="font-bold text-gray-700 text-sm">
+                {formatarData(row.data)}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-2xl p-4">
+              <div className="flex items-center gap-2 mb-1">
+                <BookOpen size={14} className="text-[#184d8a]" />
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Serviço
+                </span>
+              </div>
+              <p className="font-bold text-gray-700 text-sm">{row.servico}</p>
+            </div>
+          </div>
+
+          {/* Meses de referência */}
+          {row.meses_referencia && (
+            <div className="bg-gray-50 rounded-2xl p-4">
               <div className="flex items-center gap-2 mb-1">
                 <Calendar size={14} className="text-[#184d8a]" />
                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
@@ -207,70 +210,58 @@ const ModalDetalhes = ({
               </p>
             </div>
           )}
-        {/* Valores */}
-        <div className="bg-primary/5 rounded-2xl p-5 space-y-3 border border-[#184d8a]/10">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <DollarSign size={15} className="text-[#184d8a]" />
-              <span className="text-sm font-semibold text-gray-600">
-                Valor da Propina
-              </span>
-            </div>
-            <span className="font-bold text-gray-800 text-lg">
-              {Number(row.valor).toLocaleString("pt-AO", {
-                style: "currency",
-                currency: "AOA",
-              })}
-            </span>
-          </div>
-       
-          {Number(row.multa_estimada) > 0 && (
-            <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
+
+          {/* Valores */}
+          <div className="bg-primary/5 rounded-2xl p-5 space-y-3 border border-[#184d8a]/10">
+            <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <AlertTriangle size={15} className="text-red-500" />
-                <span className="text-sm font-semibold text-red-500">
-                  Multa Estimada
+                <DollarSign size={15} className="text-[#184d8a]" />
+                <span className="text-sm font-semibold text-gray-600">
+                  Valor da Propina
                 </span>
               </div>
-              <span className="font-bold text-red-600 text-lg">
-                {Number(row.multa_estimada).toLocaleString("pt-AO", {
+              <span className="font-bold text-gray-800 text-lg">
+                {Number(row.valor).toLocaleString("pt-AO", {
                   style: "currency",
                   currency: "AOA",
                 })}
               </span>
             </div>
-          )}
-          <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
-            <span className="text-sm font-bold text-gray-600">Total</span>
-            <span className="font-bold text-[#184d8a] text-xl">
-              {(Number(row.valor) + Number(row.multa_estimada)).toLocaleString(
-                "pt-AO",
-                { style: "currency", currency: "AOA" },
-              )}
-            </span>
+
+            {multaExibida > 0 && (
+              <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle size={15} className="text-red-500" />
+                  <span className="text-sm font-semibold text-red-500">
+                    {labelMulta}
+                  </span>
+                </div>
+                <span className="font-bold text-red-600 text-lg">
+                  {multaExibida.toLocaleString("pt-AO", {
+                    style: "currency",
+                    currency: "AOA",
+                  })}
+                </span>
+              </div>
+            )}
+
+            <div className="flex justify-between items-center pt-3 border-t border-[#184d8a]/10">
+              <span className="text-sm font-bold text-gray-600">Total</span>
+              <span className="font-bold text-[#184d8a] text-xl">
+                {(Number(row.valor) + multaExibida).toLocaleString("pt-AO", {
+                  style: "currency",
+                  currency: "AOA",
+                })}
+              </span>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <div className="px-6 pb-6 flex gap-3">
-        <button
-          onClick={onClose}
-          className="flex-1 py-3 rounded-xl font-bold text-gray-500 border border-gray-200 hover:bg-gray-50 transition-all"
-        >
-          Fechar
-        </button>
-        {row.status !== "Paga" && (
-          <button className="flex-1 py-3 rounded-xl font-bold text-white bg-primary hover:bg-[#1a5fad] transition-all shadow-md shadow-blue-200">
-            Registar Pagamento
-          </button>
-        )}
-      </div>
     </div>
-  </div>
-);
+  );
+};
 
-/* ══════════════════════════════════════════════════════════════ */
+// ─── Página Principal ──────────────────────────────────────────
 export default function GestaoPropinas() {
   const [tabela, setTabela] = useState<PropinaRow[]>([]);
   const [cards, setCards] = useState<Cards>({
@@ -280,7 +271,7 @@ export default function GestaoPropinas() {
   });
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<SessaoUsuario | null>(null);
-  const [ordemCrescente, setOrdemCrescente] = useState(true);
+  const [ordemCrescente, setOrdem] = useState(true);
   const [selectedRow, setSelectedRow] = useState<PropinaRow | null>(null);
   const [filtroStatus, setFiltroStatus] = useState("");
   const [filtroClasse, setFiltroClasse] = useState("");
@@ -289,9 +280,8 @@ export default function GestaoPropinas() {
     const carregar = async () => {
       setLoading(true);
       try {
-        const token = getToken();
         const res = await fetchComAuth(`${API}/gestaoPropinas`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${getToken()}` },
         });
         if (!res.ok) throw new Error("Erro ao carregar propinas");
         const data = await res.json();
@@ -322,13 +312,14 @@ export default function GestaoPropinas() {
     );
 
   const handleSort = () => {
-    const ordenados = [...tabela].sort((a, b) =>
-      ordemCrescente
-        ? a.nome_estudante.localeCompare(b.nome_estudante)
-        : b.nome_estudante.localeCompare(a.nome_estudante),
+    setTabela(
+      [...tabela].sort((a, b) =>
+        ordemCrescente
+          ? a.nome_estudante.localeCompare(b.nome_estudante)
+          : b.nome_estudante.localeCompare(a.nome_estudante),
+      ),
     );
-    setTabela(ordenados);
-    setOrdemCrescente(!ordemCrescente);
+    setOrdem(!ordemCrescente);
   };
 
   const tabelaFiltrada = tabela.filter((row) => {
@@ -422,7 +413,7 @@ export default function GestaoPropinas() {
               </span>
             </div>
 
-            {/* Desktop table */}
+            {/* Desktop */}
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full border-collapse text-center">
                 <thead>
@@ -443,7 +434,7 @@ export default function GestaoPropinas() {
                     </th>
                     <th className="px-4 py-3.5">Classe</th>
                     <th className="px-4 py-3.5">Data</th>
-                    <th className="px-4 py-3.5">Serviço</th>
+                    <th className="px-4 py-3.5">Meses</th>
                     <th className="px-4 py-3.5">Valor</th>
                     <th className="px-4 py-3.5">Multa</th>
                     <th className="px-4 py-3.5">Estado</th>
@@ -458,7 +449,7 @@ export default function GestaoPropinas() {
                         className="py-14 text-center text-sm text-gray-400"
                       >
                         <div className="flex items-center justify-center gap-2">
-                          <div className="w-4 h-4 border-2 border-[#184d8a] border-t-transparent rounded-full animate-spin" />
+                          <div className="w-4 h-4 border-2 border-[#184d8a] border-t-transparent rounded-full animate-spin" />{" "}
                           A carregar...
                         </div>
                       </td>
@@ -473,63 +464,80 @@ export default function GestaoPropinas() {
                       </td>
                     </tr>
                   ) : (
-                    tabelaFiltrada.map((row, i) => (
-                      <tr
-                        key={i}
-                        className="hover:bg-primary/3 transition-colors group"
-                      >
-                        <td className="px-4 py-4 text-sm font-mono text-gray-400">
-                          {row.codigo}
-                        </td>
-                        <td className="px-4 py-4 text-sm font-semibold text-gray-700">
-                          {row.nome_estudante}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-500">
-                          {row.classe ? `${row.classe}ª` : "—"}
-                        </td>
-                        {/* ✅ Data formatada na tabela */}
-                        <td className="px-4 py-4 text-sm text-gray-500">
-                          {formatarData(row.data)}
-                        </td>
-                        <td className="px-4 py-4 text-sm text-gray-600">
-                          {row.servico}
-                        </td>
-                        <td className="px-4 py-4 text-sm font-semibold text-gray-800">
-                          {Number(row.valor).toLocaleString("pt-AO", {
-                            style: "currency",
-                            currency: "AOA",
-                          })}
-                        </td>
-                        <td className="px-4 py-4 text-sm font-semibold text-red-500">
-                          {Number(row.multa_estimada) > 0 ? (
-                            Number(row.multa_estimada).toLocaleString("pt-AO", {
+                    tabelaFiltrada.map((row, i) => {
+                      const multaExibida =
+                        Number(row.multa_real) > 0
+                          ? Number(row.multa_real)
+                          : Number(row.multa_estimada);
+                      return (
+                        <tr
+                          key={i}
+                          className="hover:bg-primary/3 transition-colors group"
+                        >
+                          <td className="px-4 py-4 text-sm font-mono text-gray-400">
+                            {row.codigo}
+                          </td>
+                          <td className="px-4 py-4 text-sm font-semibold text-gray-700">
+                            {row.nome_estudante}
+                          </td>
+                          <td className="px-4 py-4 text-sm text-gray-500">
+                            {row.classe ? `${row.classe}ª` : "—"}
+                          </td>
+                          <td className="px-4 py-4 text-sm text-gray-500">
+                            {formatarData(row.data)}
+                          </td>
+                          {/* Meses de referência na tabela */}
+                          <td className="px-4 py-4 text-sm text-gray-500">
+                            {row.meses_referencia ? (
+                              <span
+                                title={row.meses_referencia}
+                                className=" block mx-auto"
+                              >
+                                {row.meses_referencia}
+                              </span>
+                            ) : (
+                              "—"
+                            )}
+                          </td>
+                          <td className="px-4 py-4 text-sm font-semibold text-gray-800">
+                            {Number(row.valor).toLocaleString("pt-AO", {
                               style: "currency",
                               currency: "AOA",
-                            })
-                          ) : (
-                            <span className="text-gray-300">—</span>
-                          )}
-                        </td>
-                        <td className="px-4 py-4">
-                          <StatusBadge status={row.status} />
-                        </td>
-                        <td className="px-4 py-4">
-                          <button
-                            onClick={() => setSelectedRow(row)}
-                            className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all duration-200 shadow-sm mx-auto block"
-                            title="Visualizar"
-                          >
-                            <EyeIcon size={16} />
-                          </button>
-                        </td>
-                      </tr>
-                    ))
+                            })}
+                          </td>
+                          <td className="px-4 py-4 text-sm font-semibold">
+                            {multaExibida > 0 ? (
+                              <span className="text-red-500">
+                                {multaExibida.toLocaleString("pt-AO", {
+                                  style: "currency",
+                                  currency: "AOA",
+                                })}
+                              </span>
+                            ) : (
+                              <span className="text-gray-300">—</span>
+                            )}
+                          </td>
+                          <td className="px-4 py-4">
+                            <StatusBadge status={row.status} />
+                          </td>
+                          <td className="px-4 py-4">
+                            <button
+                              onClick={() => setSelectedRow(row)}
+                              className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all duration-200 shadow-sm mx-auto block"
+                              title="Visualizar"
+                            >
+                              <EyeIcon size={16} />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
                   )}
                 </tbody>
               </table>
             </div>
 
-            {/* Mobile cards */}
+            {/* Mobile */}
             <div className="md:hidden divide-y divide-gray-100">
               {loading ? (
                 <div className="py-10 text-center text-sm text-gray-400">
@@ -540,50 +548,57 @@ export default function GestaoPropinas() {
                   Nenhuma propina encontrada
                 </div>
               ) : (
-                tabelaFiltrada.map((row, i) => (
-                  <div
-                    key={i}
-                    className="p-4 hover:bg-gray-50 transition-colors"
-                  >
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <p className="font-semibold text-gray-700 text-sm">
-                          {row.nome_estudante}
-                        </p>
-                        <p className="text-xs text-gray-400">
-                          {row.servico} · {row.classe ? `${row.classe}ª` : "—"}
-                        </p>
-                      </div>
-                      <StatusBadge status={row.status} />
-                    </div>
-                    <div className="flex justify-between items-center mt-3">
-                      <div>
-                        <p className="text-sm font-bold text-gray-800">
-                          {Number(row.valor).toLocaleString("pt-AO", {
-                            style: "currency",
-                            currency: "AOA",
-                          })}
-                        </p>
-                        {Number(row.multa_estimada) > 0 && (
-                          <p className="text-xs text-red-500 font-medium">
-                            +{" "}
-                            {Number(row.multa_estimada).toLocaleString(
-                              "pt-AO",
-                              { style: "currency", currency: "AOA" },
-                            )}{" "}
-                            multa
+                tabelaFiltrada.map((row, i) => {
+                  const multaExibida =
+                    Number(row.multa_real) > 0
+                      ? Number(row.multa_real)
+                      : Number(row.multa_estimada);
+                  return (
+                    <div
+                      key={i}
+                      className="p-4 hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="font-semibold text-gray-700 text-sm">
+                            {row.nome_estudante}
                           </p>
-                        )}
+                          <p className="text-xs text-gray-400">
+                            {row.servico} ·{" "}
+                            {row.classe ? `${row.classe}ª` : "—"}
+                          </p>
+                        </div>
+                        <StatusBadge status={row.status} />
                       </div>
-                      <button
-                        onClick={() => setSelectedRow(row)}
-                        className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all"
-                      >
-                        <EyeIcon size={16} />
-                      </button>
+                      <div className="flex justify-between items-center mt-3">
+                        <div>
+                          <p className="text-sm font-bold text-gray-800">
+                            {Number(row.valor).toLocaleString("pt-AO", {
+                              style: "currency",
+                              currency: "AOA",
+                            })}
+                          </p>
+                          {multaExibida > 0 && (
+                            <p className="text-xs text-red-500 font-medium">
+                              +{" "}
+                              {multaExibida.toLocaleString("pt-AO", {
+                                style: "currency",
+                                currency: "AOA",
+                              })}{" "}
+                              multa
+                            </p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => setSelectedRow(row)}
+                          className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all"
+                        >
+                          <EyeIcon size={16} />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))
+                  );
+                })
               )}
             </div>
           </div>

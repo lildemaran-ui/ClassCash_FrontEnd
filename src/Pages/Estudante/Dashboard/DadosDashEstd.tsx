@@ -1,3 +1,4 @@
+import Avatar from "@/components/Avatar/Avatar";
 import ChartEstud from "@/components/Charts/ChartEstud";
 import { ProfileEditModal } from "@/components/profile_edit_modal";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
@@ -33,6 +34,7 @@ interface Transacao {
   servico: string;
   valor_total: number;
   multa: number;
+  meses_referencia: string | null; // ← NOVO
   status: string;
 }
 
@@ -58,9 +60,10 @@ export default function DadosDashEstd() {
   const [carregando, setCarregando] = useState(true);
   const [gerandoPDF, setGerandoPDF] = useState(false);
 
-  // Filtros do histórico
   const [searchServico, setSearchServico] = useState("");
-  const [filtroStatus, setFiltroStatus] = useState<"todos" | "Confirmado" | "Pendente" | "Cancelado">("todos");
+  const [filtroStatus, setFiltroStatus] = useState<
+    "todos" | "Confirmado" | "Pendente" | "Cancelado"
+  >("todos");
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
   const [mostrarFiltros, setMostrarFiltros] = useState(false);
@@ -70,15 +73,14 @@ export default function DadosDashEstd() {
     if (!sessao) return;
     setUser(sessao.usuario);
 
-    const token = sessao.token;
-
     fetchComAuth(`${API_BASE}/dashboardEstud`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${sessao.token}` },
     })
       .then((r) => r.json())
       .then((dados) => {
         if (dados.resumo_financeiro) setResumo(dados.resumo_financeiro);
-        if (dados.historico_transacoes) setHistorico(dados.historico_transacoes);
+        if (dados.historico_transacoes)
+          setHistorico(dados.historico_transacoes);
         if (dados.conta_regularizada !== undefined)
           setContaRegularizada(dados.conta_regularizada);
       })
@@ -86,13 +88,16 @@ export default function DadosDashEstd() {
       .finally(() => setCarregando(false));
   }, [location]);
 
-  // Histórico filtrado
   const historicoFiltrado = useMemo(() => {
     return historico.filter((t) => {
-      const matchServico = t.servico.toLowerCase().includes(searchServico.toLowerCase());
+      const matchServico = t.servico
+        .toLowerCase()
+        .includes(searchServico.toLowerCase());
       const matchStatus = filtroStatus === "todos" || t.status === filtroStatus;
-      const matchDataInicio = !dataInicio || (t.data && new Date(t.data) >= new Date(dataInicio));
-      const matchDataFim = !dataFim || (t.data && new Date(t.data) <= new Date(dataFim));
+      const matchDataInicio =
+        !dataInicio || (t.data && new Date(t.data) >= new Date(dataInicio));
+      const matchDataFim =
+        !dataFim || (t.data && new Date(t.data) <= new Date(dataFim));
       return matchServico && matchStatus && matchDataInicio && matchDataFim;
     });
   }, [historico, searchServico, filtroStatus, dataInicio, dataFim]);
@@ -105,7 +110,10 @@ export default function DadosDashEstd() {
   };
 
   const temFiltrosActivos =
-    searchServico !== "" || filtroStatus !== "todos" || dataInicio !== "" || dataFim !== "";
+    searchServico !== "" ||
+    filtroStatus !== "todos" ||
+    dataInicio !== "" ||
+    dataFim !== "";
 
   if (!user)
     return (
@@ -125,16 +133,15 @@ export default function DadosDashEstd() {
       const largura = pdf.internal.pageSize.getWidth();
       const alturaPagina = pdf.internal.pageSize.getHeight();
       const alturaImagem = (canvas.height * largura) / canvas.width;
-
-      // Quebrar em múltiplas páginas se necessário
       let posY = 0;
       while (posY < alturaImagem) {
         if (posY > 0) pdf.addPage();
         pdf.addImage(imagem, "PNG", 0, -posY, largura, alturaImagem);
         posY += alturaPagina;
       }
-
-      pdf.save(`relatorio_${user.nome?.replace(/\s+/g, "_")}_${new Date().toISOString().slice(0, 10)}.pdf`);
+      pdf.save(
+        `relatorio_${user.nome?.replace(/\s+/g, "_")}_${new Date().toISOString().slice(0, 10)}.pdf`,
+      );
     } catch (e) {
       console.error("Erro ao gerar PDF:", e);
     } finally {
@@ -163,20 +170,23 @@ export default function DadosDashEstd() {
     <div className="flex flex-col w-full px-4 sm:px-6 lg:px-8 bg-[#f8fafc] mb-8">
       {/* Acções topo */}
       <div className="flex items-center justify-end mt-3">
-        <Link to="/Config">
-          <button className="text-primary hover:scale-110 transition-all p-1">
+        <Link to="/config">
+          <button className="text-[#184d8a] hover:scale-110 transition-all p-1">
             <Settings size={20} className="sm:hidden" />
             <Settings size={24} className="hidden sm:block" />
           </button>
         </Link>
-        <div className="text-primary hover:scale-110 transition-all p-1 relative">
+        {/* Sino de notificações */}
+        <div className="relative cursor-pointer group p-1">
           <Bell
             size={20}
-            className="text-primary group-hover:scale-110 transition-transform sm:hidden"
-          /><Bell
-            size={24}
-            className="text-primary group-hover:scale-110 transition-transform hidden sm:block"
+            className="text-[#184d8a] group-hover:scale-110 transition-transform sm:hidden"
           />
+          <Bell
+            size={24}
+            className="text-[#184d8a] group-hover:scale-110 transition-transform hidden sm:block"
+          />
+          <span className="absolute -top-0.5 -right-0.5 bg-red-500 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 border-white" />
         </div>
       </div>
 
@@ -185,19 +195,7 @@ export default function DadosDashEstd() {
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative group">
-              <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl bg-primary transition-transform group-hover:scale-[1.02]">
-                {user.foto ? (
-                  <img
-                    src={user.foto}
-                    alt={user.nome}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center w-full h-full bg-primary text-white shadow-inner text-4xl font-black">
-                    {user.nome?.trim().split("").filter((word) => word.length > 0).filter((_, i, arr) => i === 0 || i === arr.length - 1).map((n) => (n ? n[0] : "")).join("").toUpperCase()}
-                  </div>
-                )}
-              </div>
+              <Avatar src={user.foto} name={user.nome ?? ""} size="xl" />
               <button
                 onClick={() => setModal(true)}
                 className="absolute -bottom-0.5 -right-0.5 bg-white p-2 rounded-xl shadow-lg text-[#184d8a] hover:bg-blue-50 transition-colors border border-gray-100"
@@ -214,7 +212,6 @@ export default function DadosDashEstd() {
                 {user.nome}
               </h1>
               <div className="flex flex-col justify-center sm:justify-start gap-x-4 gap-y-1 mt-2 text-gray-600 text-sm">
-                {/* ID = código gerado pela plataforma após validação */}
                 <p>
                   <strong>ID:</strong>{" "}
                   {user.codigo_plataforma ?? user.processo ?? "—"}
@@ -226,13 +223,8 @@ export default function DadosDashEstd() {
             </div>
           </div>
 
-          {/* Card situação financeira */}
           <div
-            className={`bg-gradient-to-br p-4 rounded-2xl border flex items-center gap-4 shadow-sm min-w-[280px] ${
-              contaRegularizada
-                ? "from-emerald-50 to-white border-emerald-100"
-                : "from-amber-50 to-white border-amber-100"
-            }`}
+            className={`bg-gradient-to-br p-4 rounded-2xl border flex items-center gap-4 shadow-sm min-w-[280px] ${contaRegularizada ? "from-emerald-50 to-white border-emerald-100" : "from-amber-50 to-white border-amber-100"}`}
           >
             <div
               className={`p-2 rounded-xl text-white ${contaRegularizada ? "bg-emerald-500" : "bg-amber-500"}`}
@@ -252,7 +244,9 @@ export default function DadosDashEstd() {
               <p
                 className={`text-xs font-semibold ${contaRegularizada ? "text-emerald-600" : "text-amber-600"}`}
               >
-                {contaRegularizada ? "Conta Regularizada" : "Pagamentos em atraso"}
+                {contaRegularizada
+                  ? "Conta Regularizada"
+                  : "Pagamentos em atraso"}
               </p>
             </div>
           </div>
@@ -276,9 +270,8 @@ export default function DadosDashEstd() {
           </button>
         </div>
 
-        {/* Grid de conteúdo */}
+        {/* Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Resumo Financeiro */}
           <div className="lg:col-span-1 bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
             <h3 className="text-lg font-bold mb-6 text-gray-800 flex items-center gap-2">
               <span className="w-2 h-6 bg-primary rounded-full"></span>
@@ -311,7 +304,6 @@ export default function DadosDashEstd() {
             )}
           </div>
 
-          {/* Gráfico */}
           <div className="lg:col-span-2 bg-white rounded-3xl shadow-sm border border-gray-100 p-6">
             <h3 className="text-lg font-bold mb-6 text-gray-800 flex items-center gap-2">
               <span className="w-2 h-6 bg-primary rounded-full"></span>
@@ -323,20 +315,20 @@ export default function DadosDashEstd() {
           </div>
         </div>
 
-        {/* Histórico de Transações */}
+        {/* Histórico */}
         <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
           <div className="px-8 py-6 bg-gray-50/50 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h3 className="font-bold text-gray-800">Histórico de Transações</h3>
             <button
               onClick={() => setMostrarFiltros((v) => !v)}
-              className={`flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border border-primary  transition-colors ${
+              className={`flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border transition-colors ${
                 mostrarFiltros || temFiltrosActivos
                   ? "bg-primary text-white border-primary"
-                  : "bg-white text-gray-500 border-gray-200 hover:border-primary text-primary"
+                  : "bg-white text-gray-500 border-gray-200 hover:border-primary hover:text-primary"
               }`}
             >
               <Filter size={13} />
-              <span className="text">Filtros</span>
+              <span>Filtros</span>
               {temFiltrosActivos && (
                 <span className="bg-white text-primary rounded-full w-4 h-4 flex items-center justify-center text-[10px] font-black">
                   !
@@ -349,7 +341,6 @@ export default function DadosDashEstd() {
           {mostrarFiltros && (
             <div className="px-8 py-4 border-b border-gray-100 bg-gray-50/30">
               <div className="flex flex-col sm:flex-row gap-3 flex-wrap">
-                {/* Pesquisa por serviço */}
                 <div className="relative flex-1 min-w-[160px]">
                   <Search
                     size={14}
@@ -364,9 +355,10 @@ export default function DadosDashEstd() {
                   />
                 </div>
 
-                {/* Filtro por status */}
                 <div className="flex gap-2 flex-wrap">
-                  {(["todos", "Confirmado", "Pendente", "Cancelado"] as const).map((s) => (
+                  {(
+                    ["todos", "Confirmado", "Pendente", "Cancelado"] as const
+                  ).map((s) => (
                     <button
                       key={s}
                       onClick={() => setFiltroStatus(s)}
@@ -382,12 +374,15 @@ export default function DadosDashEstd() {
                           : "bg-white text-gray-500 border-gray-200 hover:border-gray-300"
                       }`}
                     >
-                      {s === "todos" ? "Todos" : s === "Confirmado" ? "Pago" : s}
+                      {s === "todos"
+                        ? "Todos"
+                        : s === "Confirmado"
+                          ? "Pago"
+                          : s}
                     </button>
                   ))}
                 </div>
 
-                {/* Intervalo de datas */}
                 <input
                   type="date"
                   value={dataInicio}
@@ -401,14 +396,12 @@ export default function DadosDashEstd() {
                   className="px-3 py-2 rounded-xl border border-gray-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none"
                 />
 
-                {/* Limpar filtros */}
                 {temFiltrosActivos && (
                   <button
                     onClick={limparFiltros}
                     className="flex items-center gap-1.5 text-xs font-semibold text-red-500 border border-red-200 px-3 py-2 rounded-xl hover:bg-red-50 transition-colors"
                   >
-                    <X size={13} />
-                    Limpar
+                    <X size={13} /> Limpar
                   </button>
                 )}
               </div>
@@ -427,21 +420,31 @@ export default function DadosDashEstd() {
                 <tr className="text-white text-xs uppercase tracking-widest">
                   <th className="px-8 py-4 font-semibold">Data</th>
                   <th className="px-8 py-4 font-semibold">Serviço</th>
+                  <th className="px-8 py-4 font-semibold">Meses</th>
                   <th className="px-8 py-4 font-semibold">Valor Total</th>
                   <th className="px-8 py-4 font-semibold">Multa</th>
-                  <th className="px-8 py-4 font-semibold text-center">Status</th>
+                  <th className="px-8 py-4 font-semibold text-center">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
                 {carregando ? (
                   <tr>
-                    <td colSpan={5} className="px-8 py-10 text-center text-sm text-gray-400">
-                      <Loader2 className="animate-spin inline mr-2" size={16} /> A carregar...
+                    <td
+                      colSpan={6}
+                      className="px-8 py-10 text-center text-sm text-gray-400"
+                    >
+                      <Loader2 className="animate-spin inline mr-2" size={16} />{" "}
+                      A carregar...
                     </td>
                   </tr>
                 ) : historicoFiltrado.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-8 py-10 text-center text-sm text-gray-400">
+                    <td
+                      colSpan={6}
+                      className="px-8 py-10 text-center text-sm text-gray-400"
+                    >
                       {temFiltrosActivos
                         ? "Nenhuma transação corresponde aos filtros aplicados."
                         : "Sem transações registadas."}
@@ -449,18 +452,40 @@ export default function DadosDashEstd() {
                   </tr>
                 ) : (
                   historicoFiltrado.map((t, i) => (
-                    <tr key={i} className="hover:bg-blue-50/30 transition-colors">
+                    <tr
+                      key={i}
+                      className="hover:bg-blue-50/30 transition-colors"
+                    >
                       <td className="px-8 py-5 text-sm font-medium text-gray-600">
                         {formatarData(t.data)}
                       </td>
                       <td className="px-8 py-5 text-sm font-semibold text-gray-800">
                         {t.servico}
                       </td>
+                      {/* Meses de referência — mostra os meses pagos se existir */}
+                      <td className="px-8 py-5 text-sm text-gray-500">
+                        {t.meses_referencia ? (
+                          <span
+                            title={t.meses_referencia}
+                            className="truncate max-w-[120px] block"
+                          >
+                            {t.meses_referencia}
+                          </span>
+                        ) : (
+                          "—"
+                        )}
+                      </td>
                       <td className="px-8 py-5 text-sm font-semibold text-gray-900">
                         {formatarValor(t.valor_total)}
                       </td>
-                      <td className="px-8 py-5 text-sm text-gray-400">
-                        {formatarValor(t.multa)}
+                      <td className="px-8 py-5 text-sm">
+                        {t.multa > 0 ? (
+                          <span className="text-red-500 font-semibold">
+                            {formatarValor(t.multa)}
+                          </span>
+                        ) : (
+                          <span className="text-gray-300">—</span>
+                        )}
                       </td>
                       <td className="px-8 py-5 text-center">
                         <span
@@ -472,7 +497,9 @@ export default function DadosDashEstd() {
                                 : "bg-gray-100 text-gray-500"
                           }`}
                         >
-                          {t.status === "Confirmado" ? "PAGO" : t.status.toUpperCase()}
+                          {t.status === "Confirmado"
+                            ? "PAGO"
+                            : t.status.toUpperCase()}
                         </span>
                       </td>
                     </tr>
@@ -491,8 +518,11 @@ export default function DadosDashEstd() {
         onSave={(updated) =>
           setUser((prev) =>
             prev
-              ? ({ ...prev, ...(updated as Partial<SessaoUsuario>) } as SessaoUsuario)
-              : prev
+              ? ({
+                  ...prev,
+                  ...(updated as Partial<SessaoUsuario>),
+                } as SessaoUsuario)
+              : prev,
           )
         }
       />

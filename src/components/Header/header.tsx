@@ -1,31 +1,47 @@
-import { Bell, Settings } from "lucide-react";
-import { useEffect, useState } from "react";
-import { ProfileEditModal } from "../profile_edit_modal";
-import { Link } from "react-router-dom";
+import { Bell, Settings } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ProfileEditModal } from '../profile_edit_modal'
+import { Link } from 'react-router-dom'
+import { NotificationBell } from '../Sancoes/NotificationBell'
 
-export function Header(props) {
-  const [Modal, setModal] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+// 1. Definição do formato do Usuário para o TypeScript não reclamar do "any"
+interface User {
+  idinstituicao: number
+  idInstituicao?: number
+  id_instituicao?: number // Adicionado para evitar o erro
+  nome?: string
+  email?: string
+}
+// 2. Definição das propriedades que o Header recebe
+interface HeaderProps {
+  titulo: string
+  usuario: React.ReactNode
+}
+
+export function Header(props: HeaderProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    const dadosDoLogin = localStorage.getItem("UsuarioAtivo");
+    const dadosDoLogin = localStorage.getItem('UsuarioAtivo')
     if (dadosDoLogin) {
-      setUser(JSON.parse(dadosDoLogin));
-    } else {
-      window.location.href = "/Login";
+      const parsedUser = JSON.parse(dadosDoLogin)
+      console.log('Dados do usuário logado:', parsedUser) // ADICIONE ISSO
+      setUser(parsedUser)
     }
-  }, []);
+  }, [])
 
-  if (!user) return null;
+  // Se o usuário ainda não carregou, não renderiza o Header para evitar erros de undefined
+  if (!user) return null
 
   return (
     <div
-      className="flex items-center justify-between  top-0 
+      className="flex items-center justify-between top-0 
       px-4 sm:px-6 lg:px-8
       py-3 sm:py-4
       w-full bg-translucido backdrop-blur-sm border-b border-gray-100 sticky z-10"
     >
-      {/* Título — menor no mobile */}
+      {/* Título dinâmico */}
       <h1 className="text-base sm:text-lg lg:text-xl pl-10 lg:pl-0 font-bold text-[#184d8a] truncate max-w-[60%] sm:max-w-none">
         {props.titulo}
       </h1>
@@ -53,15 +69,30 @@ export function Header(props) {
           <span className="absolute -top-0.5 -right-0.5 bg-red-500 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 border-white" />
         </div>
 
+        {/* --- NOVO SININHO COM PUSHER --- */}
+        <NotificationBell
+          idInstituicao={
+            user.idinstituicao ||
+            user.idInstituicao ||
+            user.id_instituicao ||
+            35
+          }
+        />
+        {/* Modal de Edição de Perfil */}
         <ProfileEditModal
-          isOpen={Modal}
-          onClose={() => setModal(false)}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
           user={user}
         />
 
-        {/* Avatar */}
-        <div className="avatar">{props.usuario}</div>
+        {/* Avatar/Usuário */}
+        <div
+          className="avatar cursor-pointer"
+          onClick={() => setIsModalOpen(true)}
+        >
+          {props.usuario}
+        </div>
       </div>
     </div>
-  );
+  )
 }

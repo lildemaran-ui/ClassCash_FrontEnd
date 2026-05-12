@@ -7,7 +7,7 @@ import {
   exigirSessao,
   getToken,
   type SessaoUsuario,
-} from "@/types/global/sessao";
+} from '@/types/global/sessao'
 import {
   ArrowUp, Building2, Calendar, CheckCircle,
   ChevronDown,
@@ -20,7 +20,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = 'http://localhost:5000/api'
 
 const CATEGORIAS = [
   { id: 1, label: "Creche" },
@@ -74,19 +74,19 @@ interface FormState {
 }
 
 interface ApiMsg {
-  texto: string;
-  tipo: "sucesso" | "erro";
+  texto: string
+  tipo: 'sucesso' | 'erro'
 }
 
 interface ModalProps {
-  onClose: () => void;
-  onCreated: (inst: Institution) => void;
+  onClose: () => void
+  onCreated: (inst: Institution) => void
 }
 
 function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
-  const [loading, setLoading] = React.useState(false);
-  const [apiMsg, setApiMsg] = React.useState<ApiMsg | null>(null);
-  const [createAdmin, setCreateAdmin] = React.useState(false);
+  const [loading, setLoading] = React.useState(false)
+  const [apiMsg, setApiMsg] = React.useState<ApiMsg | null>(null)
+  const [createAdmin, setCreateAdmin] = React.useState(false)
   const [form, setForm] = React.useState<FormState>({
     nome: "",
     email: "",
@@ -106,19 +106,19 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
-    const { id, value } = e.target;
-    setForm((prev) => ({ ...prev, [id]: value }));
-  };
+    const { id, value } = e.target
+    setForm((prev) => ({ ...prev, [id]: value }))
+  }
 
   const handleLogo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] ?? null;
-    if (!file) return;
+    const file = e.target.files?.[0] ?? null
+    if (!file) return
     setForm((prev) => ({
       ...prev,
       logoFile: file,
       logoPreview: URL.createObjectURL(file),
-    }));
-  };
+    }))
+  }
 
   const handleSubmit = async () => {
     if (!form.nome.trim() || !form.email.trim() || !form.iban.trim()) {
@@ -133,8 +133,8 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       return;
     }
 
-    setLoading(true);
-    setApiMsg(null);
+    setLoading(true)
+    setApiMsg(null)
 
     try {
       // ── Senha gerada automaticamente aqui ────────────────────────────────
@@ -155,21 +155,21 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       fd.append("emailRepresentante", form.emailRepresentante.trim() || form.email.trim());
       fd.append("senhaRepresentante", senhaGerada); // ← senha gerada, nunca digitada
       if (form.numTelRepresentante.trim())
-        fd.append("numTelRepresentante", form.numTelRepresentante.trim());
+        fd.append('numTelRepresentante', form.numTelRepresentante.trim())
 
-      const token = getToken();
+      const token = getToken()
       const res = await fetchComAuth(`${API_BASE}/cadastro-instituicao`, {
-        method: "POST",
+        method: 'POST',
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: fd,
-      });
+      })
 
       const data = (await res.json()) as {
-        message?: string;
-        error?: string;
-        detalhe?: string;
-        instituicao?: { idinstituicao: number };
-      };
+        message?: string
+        error?: string
+        detalhe?: string
+        instituicao?: { idinstituicao: number }
+      }
 
       if (!res.ok)
         throw new Error(data.error ?? data.detalhe ?? "Erro ao cadastrar instituição");
@@ -198,13 +198,13 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
       onClose();
     } catch (err) {
       setApiMsg({
-        texto: err instanceof Error ? err.message : "Erro desconhecido.",
-        tipo: "erro",
-      });
+        texto: err instanceof Error ? err.message : 'Erro desconhecido.',
+        tipo: 'erro',
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div
@@ -228,9 +228,9 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
         {apiMsg && (
           <div
             className={`mx-4 sm:mx-6 mt-4 px-4 py-3 rounded-lg text-sm flex items-start gap-2 ${
-              apiMsg.tipo === "erro"
-                ? "bg-red-50 border border-red-200 text-red-700"
-                : "bg-green-50 border border-green-200 text-green-700"
+              apiMsg.tipo === 'erro'
+                ? 'bg-red-50 border border-red-200 text-red-700'
+                : 'bg-green-50 border border-green-200 text-green-700'
             }`}
           >
             <span className="flex-1">{apiMsg.texto}</span>
@@ -365,7 +365,7 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
               </p>
 
               <div
-                className={`space-y-2 sm:space-y-3 transition-opacity duration-300 ${createAdmin ? "opacity-100" : "opacity-40 pointer-events-none"}`}
+                className={`space-y-2 sm:space-y-3 transition-opacity duration-300 ${createAdmin ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}
               >
                 {/* Apenas 3 campos — senha foi removida */}
                 {[
@@ -416,12 +416,12 @@ function AddInstitutionModal({ onClose, onCreated }: ModalProps) {
             className="flex items-center gap-2 bg-blue-600 text-white text-sm font-medium py-2 px-4 sm:px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-md disabled:opacity-60"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-            {loading ? "A guardar..." : "Concluir"}
+            {loading ? 'A guardar...' : 'Concluir'}
           </button>
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 // ── Detalhes Expandidos ───────────────────────────────────────────────────────
@@ -633,7 +633,7 @@ function ModalEditarInstituicao({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 // ── Modal Confirmar Remoção ───────────────────────────────────────────────────
@@ -710,9 +710,9 @@ export default function GestaoDeInstituicao() {
   const [user, setUser] = useState<SessaoUsuario | null>(null);
 
   useEffect(() => {
-    const sessao = exigirSessao();
-    if (sessao) setUser(sessao.usuario);
-  }, []);
+    const sessao = exigirSessao()
+    if (sessao) setUser(sessao.usuario)
+  }, [])
 
   const handleCreated = (_inst: Institution) => {
     carregar();
@@ -743,7 +743,7 @@ export default function GestaoDeInstituicao() {
     i.nome.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (!user) return null;
+  if (!user) return null
 
   return (
     <div className="flex bg-gray-50 font-sans min-h-screen">

@@ -1,10 +1,4 @@
-// ════════════════════════════════════════════════════════════════
-// FICHEIRO: src/Pages/Secretaria/Secretaria.tsx
-// Badge de não lidas no botão Headset + SuporteDrawer com Socket.io
-// ════════════════════════════════════════════════════════════════
-import Avatar from "@/components/Avatar/Avatar";
-import { MonthlyBarChart } from "@/components/Charts/MonthlyBarChart";
-import { Header } from "@/components/Header/header";
+
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 import SuporteDrawer from "../../Pages/Secretaria/SuporteDrawer";
 import {
@@ -17,31 +11,68 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
-const API = "http://localhost:5000/api";
+// src/Pages/Secretaria/Secretaria.tsx
+import Avatar from '@/components/Avatar/Avatar'
+import { MonthlyBarChart } from '@/components/Charts/MonthlyBarChart'
+import { Header } from '@/components/Header/header'
+
+import { BannerAviso } from '@/components/Sancoes/BannerAviso'
+import { ModalRestricao } from '@/components/Sancoes/ModalRestricao'
+import { BloqueioTotal } from '@/components/Sancoes/BloqueioTotal'
+
+
+const API = 'http://localhost:5000/api'
 
 interface PainelData {
-  estudantesRecentes: { nome_estudante: string; num_processo: string; classe: number | null; status: string }[];
-  contagemUltimoMes: { total_estudantes_mes: number; total_encarregados_mes: number };
-  statusEstudantes: { status: string; total: number }[];
-  listaAlunos: { nome_estudante: string; num_processo: string; classe: number | null }[];
-  faturamentoMensal: { mes: string; valor: number }[];
-  faturamentoAnual: { ano: string; valor: number }[];
-  metodosMaisUsados: { metodo: string; total: number }[];
+  statusFinanceiro?: string // Campo para controlar a sanção
+  estudantesRecentes: {
+    nome_estudante: string
+    num_processo: string
+    classe: number | null
+    status: string
+  }[]
+  contagemUltimoMes: {
+    total_estudantes_mes: number
+    total_encarregados_mes: number
+  }
+  statusEstudantes: { status: string; total: number }[]
+  listaAlunos: {
+    nome_estudante: string
+    num_processo: string
+    classe: number | null
+  }[]
+  faturamentoMensal: { mes: string; valor: number }[]
+  faturamentoAnual: { ano: string; valor: number }[]
+  metodosMaisUsados: { metodo: string; total: number }[]
 }
 
-const CardKpi = ({ title, value, subtext, trend }: { title: string; value: string; subtext: string; trend?: "up" | "down" }) => (
+const CardKpi = ({
+  title,
+  value,
+  subtext,
+  trend,
+}: {
+  title: string
+  value: string
+  subtext: string
+  trend?: 'up' | 'down'
+}) => (
   <div className="bg-white p-4 rounded-xl flex flex-col items-center text-center border">
     <p className="text-gray-400 text-xs sm:text-sm mb-1">{title}</p>
     <div className="flex items-center gap-2">
-      <span className="text-lg sm:text-xl font-bold text-gray-800">{value}</span>
-      {trend === "up" && <TrendingUp className="text-green-500" size={18} />}
-      {trend === "down" && <TrendingDown className="text-red-500" size={18} />}
+      <span className="text-lg sm:text-xl font-bold text-gray-800">
+        {value}
+      </span>
+      {trend === 'up' && <TrendingUp className="text-green-500" size={18} />}
+      {trend === 'down' && <TrendingDown className="text-red-500" size={18} />}
+
     </div>
     <p className="text-xs text-gray-400 mt-1">{subtext}</p>
   </div>
-);
+)
 
 export default function Secretaria() {
+
   const [user, setUser]           = useState<SessaoUsuario | null>(null);
   const [painel, setPainel]       = useState<PainelData | null>(null);
   const [loading, setLoading]     = useState(true);
@@ -49,10 +80,15 @@ export default function Secretaria() {
   // ✅ Total de mensagens não lidas — actualizado pelo SuporteDrawer via callback
   const [totalNaoLidas, setTotalNaoLidas] = useState(0);
 
+
+  // Lógica de Datas para Sanções
+  const hoje = 17 // Simula dia 5
+  const emAtraso = true
+
   useEffect(() => {
-    const sessao = exigirSessao();
-    if (!sessao) return;
-    setUser(sessao.usuario);
+    const sessao = exigirSessao()
+    if (!sessao) return
+    setUser(sessao.usuario)
 
     const carregar = async () => {
       setLoading(true);
@@ -68,7 +104,12 @@ export default function Secretaria() {
     carregar();
   }, []);
 
-  if (!user) return null;
+  if (!user) return null
+
+  // Verificação de Bloqueio Total (Dia 21 em diante)
+  if (emAtraso && hoje > 20) {
+    return <BloqueioTotal />
+  }
 
   const totalEstudantes = painel?.statusEstudantes?.reduce((s, r) => s + Number(r.total), 0) ?? 0;
   const ativos = painel?.statusEstudantes?.find((s) => s.status === "Aceite")?.total ?? 0;
@@ -82,13 +123,22 @@ export default function Secretaria() {
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuSecretaria />
       <main className="flex-1 overflow-y-auto min-w-0 top-0">
-        <Header titulo="Painel Geral" usuario={<Avatar name={user.nome} src={user.foto} size="sm" />} />
+        {/* ETAPA 1: Banner Amarelo (Dia 2 ao 15) */}
+        {emAtraso && hoje >= 2 && hoje <= 15 && <BannerAviso />}
+
+        {/* ETAPA 2: Modal Laranja (Dia 16 ao 20) */}
+        {emAtraso && hoje > 15 && hoje <= 20 && <ModalRestricao />}
+
+        <Header
+          titulo="Painel Geral"
+          usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
+        />
 
         <div className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
           <section className="mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
               <div className="flex flex-wrap gap-3">
-                {["Ano", "Semestre", "Mês"].map((filtro) => (
+                {['Ano', 'Semestre', 'Mês'].map((filtro) => (
                   <div key={filtro} className="w-40">
                     <label className="block text-xs text-gray-500 mb-1">{filtro}</label>
                     <Select>
@@ -171,7 +221,7 @@ export default function Secretaria() {
                 </p>
               </div>
             </div>
-            <div style={{ width: "100%", height: 288 }}>
+            <div style={{ width: '100%', height: 288 }}>
               <MonthlyBarChart dados={faturamentoMensal} />
             </div>
           </section>

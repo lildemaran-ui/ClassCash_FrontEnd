@@ -1,28 +1,29 @@
-import { EyeIcon, EyeOff, Clock, XCircle } from "lucide-react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { EyeIcon, EyeOff, Clock, XCircle } from 'lucide-react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function TelaLogin() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [mostrarSenha, setMostrar] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const [mostrarSenha, setMostrar] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [statusMsg, setStatusMsg] = useState<{
-    tipo: "pendente" | "recusado" | "erro";
-    texto: string;
-  } | null>(null);
+    tipo: 'pendente' | 'recusado' | 'erro'
+    texto: string
+  } | null>(null)
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setStatusMsg(null);
+    e.preventDefault()
+    setLoading(true)
+    setStatusMsg(null)
 
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, senha }),
+
       });
       const data = (await res.json()) as {
         message?: string;
@@ -34,80 +35,91 @@ export default function TelaLogin() {
       console.log("Resposta do login:", data);
 console.log("Foto recebida:", data.usuario?.foto); 
 
-      // ── Status 403 — conta pendente ou recusada ───────────────────────────
+
+      // ── Status 403 — Conta pendente ou recusada ───────────────────────────
       if (res.status === 403) {
-        const msg = data.message ?? "";
-        if (msg.toLowerCase().includes("pendente")) {
+        const msg = data.message ?? ''
+        if (msg.toLowerCase().includes('pendente')) {
           setStatusMsg({
-            tipo: "pendente",
+            tipo: 'pendente',
             texto:
-              "O seu cadastro ainda está a aguardar aprovação pela secretaria da instituição. Por favor aguarde.",
-          });
-        } else if (msg.toLowerCase().includes("recusado")) {
+              'O seu cadastro ainda está a aguardar aprovação pela secretaria da instituição.',
+          })
+        } else if (msg.toLowerCase().includes('recusado')) {
           setStatusMsg({
-            tipo: "recusado",
+            tipo: 'recusado',
             texto:
-              "O seu cadastro foi recusado pela secretaria. Por favor contacte a sua instituição para mais informações.",
-          });
+              'O seu cadastro foi recusado pela secretaria. Por favor contacte a sua instituição.',
+          })
         } else {
-          setStatusMsg({ tipo: "erro", texto: msg });
+          setStatusMsg({ tipo: 'erro', texto: msg })
         }
-        setLoading(false);
-        return;
+        setLoading(false)
+        return
       }
 
       if (!res.ok) {
         setStatusMsg({
-          tipo: "erro",
-          texto: data.message ?? "Credenciais inválidas.",
-        });
-        setLoading(false);
-        return;
+          tipo: 'erro',
+          texto: data.message ?? 'Credenciais inválidas.',
+        })
+        setLoading(false)
+        return
       }
-      // Sessão terminada com sucesso
-      localStorage.removeItem("sessao");
-      localStorage.removeItem("UsuarioAtivo");
+
       // ── Login bem sucedido ────────────────────────────────────────────────
-      const u = data.usuario as Record<string, unknown>;
-      const perfil = u?.perfil as string;
+      // Extraindo os dados corretamente do objeto retornado
+      const usuarioData = data.usuario || {}
+      const token = data.token
+      if (!token) {
+        setStatusMsg({
+          tipo: 'erro',
+          texto: 'Token de autenticação ausente na resposta do servidor.',
+        })
+        setLoading(false)
+        return
+      }
+      // Prioriza o perfil que vem na raiz ou dentro do objeto usuário
+      const perfil = data.perfil || usuarioData.perfil
 
       const sessao = {
-        token: data.token,
+        token: token,
         usuario: {
-          idusuario: u?.idusuario,
-          nome: u?.nome,
-          email: u?.email,
-          foto: u?.foto ?? null,
-          perfil: u?.perfil,
-          instituicao: u?.instituicao,
-          idInstituicao: u?.idInstituicao,
-          processo: u?.processo,
-          classe: u?.classe,
-          codigo_plataforma: u?.codigo_plataforma,
-          relacao: u?.relacao,
-          nomeEstudante: u?.nomeEstudante,
+          ...usuarioData,
+          perfil: perfil, // Garante que o perfil esteja aqui
         },
-      };
+      }
 
-      localStorage.setItem("sessao", JSON.stringify(sessao));
+      // Grava a sessão e o utilizador ativo simultaneamente
+      localStorage.setItem('sessao', JSON.stringify(sessao))
+      localStorage.setItem('token', token) // Salva o token puro para facilitar o uso no fetchComAuth
       localStorage.setItem(
-        "UsuarioAtivo",
-        JSON.stringify({ ...sessao.usuario, token: data.token }),
-      );
+        'UsuarioAtivo',
+        JSON.stringify({ ...sessao.usuario, token }),
+      )
 
-      if (perfil === "Estudante") navigate("/DashboardEstud");
-      else if (perfil === "Encarregado") navigate("/Encarregado");
-      else if (perfil === "Secretaria" || perfil === "Instituição")
-        navigate("/Secretaria");
-      else if (perfil === "Administrador" || perfil === "Super Admin")
-        navigate("/Administradores");
-      else navigate("/PaginaInicial");
-    } catch {
-      setStatusMsg({ tipo: "erro", texto: "Erro de ligação ao servidor." });
+      // Redirecionamento baseado no perfil (Verifique se as rotas batem com seu App.tsx)
+      console.log('Perfil identificado:', perfil)
+
+      if (perfil === 'Estudante') {
+        navigate('/DashboardEstud')
+      } else if (perfil === 'Encarregado') {
+        navigate('/Encarregado')
+      } else if (perfil === 'Secretaria' || perfil === 'Instituição') {
+        navigate('/Secretaria')
+      } else if (perfil === 'Administrador' || perfil === 'Super Admin') {
+        navigate('/Administradores')
+      } else {
+        // Se cair aqui, o perfil não foi reconhecido ou é um usuário comum
+        navigate('/PaginaInicial')
+      }
+    } catch (error) {
+      console.error('Erro no login:', error)
+      setStatusMsg({ tipo: 'erro', texto: 'Erro de ligação ao servidor.' })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
@@ -119,8 +131,8 @@ console.log("Foto recebida:", data.usuario?.foto);
           </p>
         </div>
 
-        {/* ── Banner de status pendente ── */}
-        {statusMsg?.tipo === "pendente" && (
+        {/* Banners de Status */}
+        {statusMsg?.tipo === 'pendente' && (
           <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
             <Clock className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
             <div>
@@ -134,8 +146,7 @@ console.log("Foto recebida:", data.usuario?.foto);
           </div>
         )}
 
-        {/* ── Banner de recusa ── */}
-        {statusMsg?.tipo === "recusado" && (
+        {statusMsg?.tipo === 'recusado' && (
           <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
             <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
             <div>
@@ -149,8 +160,7 @@ console.log("Foto recebida:", data.usuario?.foto);
           </div>
         )}
 
-        {/* ── Erro genérico ── */}
-        {statusMsg?.tipo === "erro" && (
+        {statusMsg?.tipo === 'erro' && (
           <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
             <p className="text-xs text-red-700">{statusMsg.texto}</p>
           </div>
@@ -178,7 +188,7 @@ console.log("Foto recebida:", data.usuario?.foto);
             <div className="relative">
               <input
                 required
-                type={mostrarSenha ? "text" : "password"}
+                type={mostrarSenha ? 'text' : 'password'}
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 placeholder="••••••••"
@@ -201,15 +211,15 @@ console.log("Foto recebida:", data.usuario?.foto);
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary text-white font-bold h-10 rounded-xl hover:bg-primary/80 transition-colors disabled:opacity-60"
+            className="w-full bg-[#184d8a] text-white font-bold h-10 rounded-xl hover:bg-[#184d8a]/90 transition-colors disabled:opacity-60"
           >
-            {loading ? "A entrar..." : "Entrar"}
+            {loading ? 'A entrar...' : 'Entrar'}
           </button>
         </form>
 
         <div className="text-center space-y-2">
           <p className="text-xs text-gray-400">
-            Não tem conta?{" "}
+            Não tem conta?{' '}
             <Link
               to="/Cadastro"
               className="text-[#184d8a] hover:underline font-medium"
@@ -218,7 +228,7 @@ console.log("Foto recebida:", data.usuario?.foto);
             </Link>
           </p>
           <p className="text-xs text-gray-400">
-            Esqueceu a palavra-passe?{" "}
+            Esqueceu a palavra-passe?{' '}
             <Link
               to="/solicitarRecuperacao"
               className="text-[#184d8a] hover:underline font-medium"
@@ -229,5 +239,5 @@ console.log("Foto recebida:", data.usuario?.foto);
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -48,7 +48,6 @@ interface DashboardData {
 
 type Aba = "pesquisar" | "gestao";
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
 const colorsSit = (status: string) => {
   switch (status) {
     case "Aceite":
@@ -62,7 +61,6 @@ const colorsSit = (status: string) => {
   }
 };
 
-// ─── Modal Cadastrar ──────────────────────────────────────────────────────────
 interface FormCadastro {
   nome_estudante: string;
   email: string;
@@ -103,9 +101,12 @@ function ModalCadastrar({
           Authorization: `Bearer ${getToken()}`,
         },
         body: JSON.stringify({
-          ...form,
-          classe: form.classe ? parseInt(form.classe) : null,
-          num_processo: parseInt(form.num_processo),
+          nome: form.nome_estudante,
+          email: form.email,
+          numProcesso: parseInt(form.num_processo),
+          idClasse: form.classe ? parseInt(form.classe) : null,
+          status: form.status,
+          numTel: "000000000",
         }),
       });
       const data = await res.json();
@@ -125,14 +126,11 @@ function ModalCadastrar({
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
         <div className="bg-primary px-6 py-5 flex justify-between items-center sticky top-0">
           <div>
-            <h2 className="text-lg font-bold text-white">
-              Cadastrar Estudante
-            </h2>
-            <p className="text-xs text-blue-200">
-              Preencha os dados do novo estudante
-            </p>
+            <h2 className="text-lg font-bold text-white">Cadastrar Estudante</h2>
+            <p className="text-xs text-blue-200">Preencha os dados do novo estudante</p>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="p-2 rounded-xl bg-white/10 text-white hover:bg-white/20 transition-all"
           >
@@ -142,9 +140,7 @@ function ModalCadastrar({
         <form onSubmit={submeter} className="p-6 flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Nome Completo
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Nome Completo</label>
               <input
                 required
                 name="nome_estudante"
@@ -155,9 +151,7 @@ function ModalCadastrar({
               />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Email
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Email</label>
               <input
                 required
                 type="email"
@@ -169,9 +163,7 @@ function ModalCadastrar({
               />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Nº Processo
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Nº Processo</label>
               <input
                 required
                 name="num_processo"
@@ -179,18 +171,13 @@ function ModalCadastrar({
                 maxLength={6}
                 placeholder="123456"
                 onChange={(e) =>
-                  setForm((f) => ({
-                    ...f,
-                    num_processo: e.target.value.replace(/\D/g, ""),
-                  }))
+                  setForm((f) => ({ ...f, num_processo: e.target.value.replace(/\D/g, "") }))
                 }
                 className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] transition-colors"
               />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Classe
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Classe</label>
               <select
                 name="classe"
                 value={form.classe}
@@ -198,17 +185,15 @@ function ModalCadastrar({
                 className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white transition-colors"
               >
                 <option value="">Selecionar classe</option>
-                {classes.map((c) => (
-                  <option key={c.idclasse} value={c.nivel.toString()}>
+                {classes.filter((c) => c.nivel != null).map((c) => (
+                  <option key={c.idclasse} value={String(c.idclasse)}>
                     {c.nivel}ª Classe
                   </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Status
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Status</label>
               <select
                 name="status"
                 value={form.status}
@@ -243,7 +228,6 @@ function ModalCadastrar({
   );
 }
 
-// ─── Modal Editar ─────────────────────────────────────────────────────────────
 function ModalEditar({
   estudante,
   onClose,
@@ -261,6 +245,7 @@ function ModalEditar({
   });
   const [loading, setLoading] = useState(false);
   const classes = useClasses();
+
   const handle = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
@@ -299,14 +284,11 @@ function ModalEditar({
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
           <div>
-            <h2 className="text-base font-bold text-[#184d8a]">
-              Editar Estudante
-            </h2>
-            <p className="text-xs text-gray-400">
-              Nº Processo: {estudante.num_processo}
-            </p>
+            <h2 className="text-base font-bold text-[#184d8a]">Editar Estudante</h2>
+            <p className="text-xs text-gray-400">Nº Processo: {estudante.num_processo}</p>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
           >
@@ -316,9 +298,7 @@ function ModalEditar({
         <form onSubmit={submeter} className="p-6 flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Nome Completo
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Nome Completo</label>
               <input
                 required
                 name="nome_estudante"
@@ -328,9 +308,7 @@ function ModalEditar({
               />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Email
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Email</label>
               <input
                 required
                 type="email"
@@ -341,9 +319,7 @@ function ModalEditar({
               />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Nº Processo
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Nº Processo</label>
               <input
                 disabled
                 value={estudante.num_processo}
@@ -351,9 +327,7 @@ function ModalEditar({
               />
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Classe
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Classe</label>
               <select
                 name="classe"
                 value={form.classe}
@@ -361,18 +335,15 @@ function ModalEditar({
                 className="w-full border-2 rounded-xl h-10 text-sm px-3 outline-none focus:border-[#184d8a] bg-white transition-colors"
               >
                 <option value="">Sem classe</option>
-                {classes.map((c) => (
-                  <option key={c.idclasse} value={c.nivel.toString()}>
-                    {c.nivel}ª Classe —{" "}
-                    {Number(c.valorservico).toLocaleString("pt-AO")} AOA
+                {classes.filter((c) => c.nivel != null).map((c) => (
+                  <option key={c.idclasse} value={String(c.idclasse)}>
+                    {c.nivel}ª Classe — {Number(c.valorservico).toLocaleString("pt-AO")} AOA
                   </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="block text-xs mb-1 text-gray-600 font-medium">
-                Status
-              </label>
+              <label className="block text-xs mb-1 text-gray-600 font-medium">Status</label>
               <select
                 name="status"
                 value={form.status}
@@ -407,7 +378,6 @@ function ModalEditar({
   );
 }
 
-// ─── Modal Visualizar ─────────────────────────────────────────────────────────
 function ModalVisualizar({
   estudante,
   onClose,
@@ -419,10 +389,9 @@ function ModalVisualizar({
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="text-base font-bold text-[#184d8a]">
-            Detalhes do Estudante
-          </h2>
+          <h2 className="text-base font-bold text-[#184d8a]">Detalhes do Estudante</h2>
           <button
+            type="button"
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
           >
@@ -430,46 +399,31 @@ function ModalVisualizar({
           </button>
         </div>
 
-        {/* Avatar / nome destaque */}
         <div className="flex flex-col items-center gap-2 pt-6 pb-4 bg-gradient-to-b from-[#184d8a]/5 to-white px-6">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
             <UserCircle2 size={36} className="text-[#184d8a]" />
           </div>
-          <p className="text-base font-bold text-gray-800">
-            {estudante.nome_estudante}
-          </p>
-          <span
-            className={`px-3 py-1 rounded-full text-xs font-bold border ${colorsSit(estudante.status)}`}
-          >
+          <p className="text-base font-bold text-gray-800">{estudante.nome_estudante}</p>
+          <span className={`px-3 py-1 rounded-full text-xs font-bold border ${colorsSit(estudante.status)}`}>
             {estudante.status}
           </span>
         </div>
 
-        {/* Info grid */}
         <div className="px-6 pb-6 grid grid-cols-2 gap-3">
-          <InfoItem
-            icon={<Hash size={14} />}
-            label="Nº Processo"
-            value={String(estudante.num_processo)}
-          />
+          <InfoItem icon={<Hash size={14} />} label="Nº Processo" value={String(estudante.num_processo)} />
           <InfoItem
             icon={<BookOpen size={14} />}
             label="Classe"
-            value={
-              estudante.classe ? `${estudante.classe}ª Classe` : "Não atribuída"
-            }
+            value={estudante.classe ? `${estudante.classe}ª Classe` : "Não atribuída"}
           />
           <div className="col-span-2">
-            <InfoItem
-              icon={<BadgeCheck size={14} />}
-              label="Email"
-              value={estudante.email}
-            />
+            <InfoItem icon={<BadgeCheck size={14} />} label="Email" value={estudante.email} />
           </div>
         </div>
 
         <div className="px-6 pb-6">
           <button
+            type="button"
             onClick={onClose}
             className="w-full h-10 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/80 transition-colors"
           >
@@ -501,7 +455,6 @@ function InfoItem({
   );
 }
 
-// ─── Modal Confirmar Delete ───────────────────────────────────────────────────
 function ModalConfirmarDelete({
   estudante,
   onClose,
@@ -515,10 +468,9 @@ function ModalConfirmarDelete({
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="text-base font-bold text-red-500">
-            Remover Estudante
-          </h2>
+          <h2 className="text-base font-bold text-red-500">Remover Estudante</h2>
           <button
+            type="button"
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-gray-100 transition-colors"
           >
@@ -528,19 +480,19 @@ function ModalConfirmarDelete({
         <div className="p-6 flex flex-col gap-4">
           <p className="text-sm text-gray-600">
             Tens a certeza que queres remover o estudante{" "}
-            <span className="font-bold text-gray-800">
-              {estudante.nome_estudante}
-            </span>
-            ? Esta ação não pode ser desfeita.
+            <span className="font-bold text-gray-800">{estudante.nome_estudante}</span>? Esta ação
+            não pode ser desfeita.
           </p>
           <div className="flex gap-3">
             <button
+              type="button"
               onClick={onClose}
               className="flex-1 h-10 rounded-xl border-2 border-gray-200 text-sm text-gray-500 hover:bg-gray-50 transition-colors"
             >
               Cancelar
             </button>
             <button
+              type="button"
               onClick={onConfirmar}
               className="flex-1 h-10 rounded-xl bg-red-500 text-white text-sm font-bold hover:bg-red-600 transition-colors"
             >
@@ -553,7 +505,6 @@ function ModalConfirmarDelete({
   );
 }
 
-// ─── Componente Principal ─────────────────────────────────────────────────────
 export default function GestaoAlunos() {
   const [estudantes, setEstudantes] = useState<Estudante[]>([]);
   const [loading, setLoading] = useState(true);
@@ -562,19 +513,15 @@ export default function GestaoAlunos() {
   const [user, setUser] = useState<SessaoUsuario | null>(null);
   const [abaAtiva, setAbaAtiva] = useState<Aba>("pesquisar");
 
-  // modais
   const [modalCadastrar, setModalCadastrar] = useState(false);
   const [modalEditar, setModalEditar] = useState<Estudante | null>(null);
-  const [modalVisualizar, setModalVisualizar] = useState<Estudante | null>(
-    null,
-  );
+  const [modalVisualizar, setModalVisualizar] = useState<Estudante | null>(null);
   const [modalDelete, setModalDelete] = useState<Estudante | null>(null);
-  const [estatisticas, setEstatisticas] = useState<
-    DashboardData["estatisticas"]
-  >({
+  const [estatisticas, setEstatisticas] = useState<DashboardData["estatisticas"]>({
     pizza: [],
     linha: [],
   });
+
   const carregar = async () => {
     setLoading(true);
     try {
@@ -646,12 +593,8 @@ export default function GestaoAlunos() {
     <div className="flex h-screen bg-gray-50 font-sans overflow-hidden custom_scroll">
       <MenuSecretaria />
 
-      {/* Modais */}
       {modalCadastrar && (
-        <ModalCadastrar
-          onClose={() => setModalCadastrar(false)}
-          onSucesso={carregar}
-        />
+        <ModalCadastrar onClose={() => setModalCadastrar(false)} onSucesso={carregar} />
       )}
       {modalEditar && (
         <ModalEditar
@@ -661,10 +604,7 @@ export default function GestaoAlunos() {
         />
       )}
       {modalVisualizar && (
-        <ModalVisualizar
-          estudante={modalVisualizar}
-          onClose={() => setModalVisualizar(null)}
-        />
+        <ModalVisualizar estudante={modalVisualizar} onClose={() => setModalVisualizar(null)} />
       )}
       {modalDelete && (
         <ModalConfirmarDelete
@@ -686,6 +626,7 @@ export default function GestaoAlunos() {
             {abas.map((aba) => (
               <button
                 key={aba.id}
+                type="button"
                 onClick={() => setAbaAtiva(aba.id)}
                 className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
                   abaAtiva === aba.id
@@ -711,7 +652,7 @@ export default function GestaoAlunos() {
                   </p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-                  {/* Pesquisa inline */}
+                  {/* ✅ Corrigido: type="text" + onKeyDown para bloquear Enter */}
                   <div className="relative w-full sm:w-56">
                     <svg
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4"
@@ -724,15 +665,18 @@ export default function GestaoAlunos() {
                       <path d="M21 21l-4.35-4.35" />
                     </svg>
                     <input
-                      type="search"
+                      type="text"
                       placeholder="Pesquisar..."
                       value={pesquisa}
                       onChange={(e) => setPesquisa(e.target.value)}
+                      onKeyDown={(e) => e.key === "Enter" && e.preventDefault()}
                       className="w-full pl-9 pr-3 py-2 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-[#184d8a]/20 text-sm"
                     />
                   </div>
 
+                  {/* ✅ Corrigido: type="button" */}
                   <button
+                    type="button"
                     onClick={() => setModalCadastrar(true)}
                     className="flex items-center justify-center gap-2 bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-primary/80 transition-all duration-300 shadow-md w-full sm:w-auto"
                   >
@@ -746,17 +690,10 @@ export default function GestaoAlunos() {
                   <thead>
                     <tr className="bg-primary/70 text-white text-sm font-bold tracking-wide border-b border-gray-100">
                       <th className="px-4 py-3">Nº Processo</th>
-                      <th
-                        className="px-4 py-3 cursor-pointer"
-                        onClick={handleSort}
-                      >
+                      <th className="px-4 py-3 cursor-pointer" onClick={handleSort}>
                         <div className="flex items-center justify-center gap-1">
                           Nome{" "}
-                          {ordemCrescente ? (
-                            <ArrowDown size={13} />
-                          ) : (
-                            <ArrowUp size={13} />
-                          )}
+                          {ordemCrescente ? <ArrowDown size={13} /> : <ArrowUp size={13} />}
                         </div>
                       </th>
                       <th className="px-4 py-3">Classe</th>
@@ -767,30 +704,19 @@ export default function GestaoAlunos() {
                   <tbody className="divide-y divide-gray-50">
                     {loading ? (
                       <tr>
-                        <td
-                          colSpan={5}
-                          className="py-12 text-center text-sm text-gray-400"
-                        >
+                        <td colSpan={5} className="py-12 text-center text-sm text-gray-400">
                           A carregar...
                         </td>
                       </tr>
                     ) : filtrados.length === 0 ? (
                       <tr>
-                        <td
-                          colSpan={5}
-                          className="py-12 text-center text-sm text-gray-400"
-                        >
-                          {pesquisa
-                            ? "Nenhum resultado encontrado"
-                            : "Nenhum estudante encontrado"}
+                        <td colSpan={5} className="py-12 text-center text-sm text-gray-400">
+                          {pesquisa ? "Nenhum resultado encontrado" : "Nenhum estudante encontrado"}
                         </td>
                       </tr>
                     ) : (
                       filtrados.map((aluno) => (
-                        <tr
-                          key={aluno.idestudante}
-                          className="hover:bg-primary/5 transition-colors"
-                        >
+                        <tr key={aluno.idestudante} className="hover:bg-primary/5 transition-colors">
                           <td className="px-4 py-3 text-xs sm:text-sm font-mono text-gray-500">
                             {aluno.num_processo}
                           </td>
@@ -809,7 +735,6 @@ export default function GestaoAlunos() {
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex justify-center gap-2">
-                              {/* Editar */}
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalEditar(aluno)}
@@ -821,7 +746,6 @@ export default function GestaoAlunos() {
                                   Editar
                                 </span>
                               </div>
-                              {/* Visualizar */}
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalVisualizar(aluno)}
@@ -833,7 +757,6 @@ export default function GestaoAlunos() {
                                   Visualizar
                                 </span>
                               </div>
-                              {/* Excluir */}
                               <div className="group relative">
                                 <div
                                   onClick={() => setModalDelete(aluno)}
@@ -859,55 +782,41 @@ export default function GestaoAlunos() {
           {/* ── ABA: GESTÃO E GRÁFICOS ── */}
           {abaAtiva === "gestao" && (
             <div className="flex flex-col gap-6 mb-8">
-              {/* Cards de resumo */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 {[
-                  {
-                    label: "Total",
-                    value: estudantes.length,
-                    sub: "estudantes registados",
-                  },
+                  { label: "Total", value: estudantes.length, sub: "estudantes registados" },
                   {
                     label: "Aceites",
-                    value: estudantes.filter((e) => e.status === "Aceite")
-                      .length,
+                    value: estudantes.filter((e) => e.status === "Aceite").length,
                     sub: "com acesso ativo",
                   },
                   {
                     label: "Pendentes",
-                    value: estudantes.filter((e) => e.status === "Pendente")
-                      .length,
+                    value: estudantes.filter((e) => e.status === "Pendente").length,
                     sub: "aguardam validação",
                   },
                   {
                     label: "Recusados",
-                    value: estudantes.filter((e) => e.status === "Recusado")
-                      .length,
+                    value: estudantes.filter((e) => e.status === "Recusado").length,
                     sub: "sem acesso",
                   },
                 ].map((card) => (
-                  <div
-                    key={card.label}
-                    className={`rounded-2xl border p-5 flex flex-col gap-1 `}
-                  >
+                  <div key={card.label} className="rounded-2xl border p-5 flex flex-col gap-1">
                     <p className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                       {card.label}
                     </p>
-                    <p className={`text-3xl font-bold `}>{card.value}</p>
+                    <p className="text-3xl font-bold">{card.value}</p>
                     <p className="text-xs text-gray-400">{card.sub}</p>
                   </div>
                 ))}
               </div>
 
-              {/* Gráficos */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-white border border-gray-200 p-6 rounded-3xl shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col">
                   <h3 className="font-semibold text-gray-800 text-sm sm:text-lg mb-1">
                     Distribuição de Ativos vs Inativos
                   </h3>
-                  <p className="text-xs text-gray-400 mb-4">
-                    Proporção atual por estado
-                  </p>
+                  <p className="text-xs text-gray-400 mb-4">Proporção atual por estado</p>
                   <div className="flex-grow flex items-center justify-center min-h-[250px] sm:min-h-[300px]">
                     <ChartGestaoEstud dados={estatisticas.pizza} />
                   </div>
@@ -916,45 +825,33 @@ export default function GestaoAlunos() {
                   <h3 className="font-semibold text-gray-800 text-sm sm:text-lg mb-1">
                     Evolução Mensal de Estudantes
                   </h3>
-                  <p className="text-xs text-gray-400 mb-4">
-                    Registo de entradas por mês
-                  </p>
+                  <p className="text-xs text-gray-400 mb-4">Registo de entradas por mês</p>
                   <div className="flex-grow flex items-center justify-center min-h-[250px] sm:min-h-[300px]">
                     <ChartGestaoEstud2 dados={estatisticas.linha} />
                   </div>
                 </div>
               </div>
 
-              {/* Distribuição por classe */}
-              {/* Distribuição por classe */}
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-                <h3 className="text-base font-bold text-gray-700 mb-1">
-                  Distribuição por Classe
-                </h3>
+                <h3 className="text-base font-bold text-gray-700 mb-1">Distribuição por Classe</h3>
                 <p className="text-xs text-gray-400 mb-5">
                   Número de estudantes registados por classe
                 </p>
 
                 {estudantes.length === 0 ? (
-                  <p className="text-sm text-gray-400 text-center py-8">
-                    Sem dados disponíveis
-                  </p>
+                  <p className="text-sm text-gray-400 text-center py-8">Sem dados disponíveis</p>
                 ) : (
                   (() => {
                     const agrupado = estudantes.reduce(
                       (acc, e) => {
-                        const c = e.classe
-                          ? `${e.classe}ª Classe`
-                          : "Sem classe";
+                        const c = e.classe ? `${e.classe}ª Classe` : "Sem classe";
                         acc[c] = (acc[c] || 0) + 1;
                         return acc;
                       },
                       {} as Record<string, number>,
                     );
 
-                    const lista = Object.entries(agrupado).sort(
-                      (a, b) => b[1] - a[1],
-                    );
+                    const lista = Object.entries(agrupado).sort((a, b) => b[1] - a[1]);
                     const totalGeral = lista.reduce((s, [, v]) => s + v, 0);
                     const maximo = Math.max(...lista.map(([, v]) => v));
                     const cores = ["#185FA5", "#1D9E75", "#BA7517", "#888780"];
@@ -967,13 +864,9 @@ export default function GestaoAlunos() {
                           return (
                             <div key={classe} className="mb-5">
                               <div className="flex justify-between items-center mb-1.5">
-                                <span className="text-sm font-medium text-gray-700">
-                                  {classe}
-                                </span>
+                                <span className="text-sm font-medium text-gray-700">{classe}</span>
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xs text-gray-400">
-                                    {count} estudantes
-                                  </span>
+                                  <span className="text-xs text-gray-400">{count} estudantes</span>
                                   <span className="text-xs font-medium bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full border border-gray-200">
                                     {pct}%
                                   </span>
@@ -992,9 +885,7 @@ export default function GestaoAlunos() {
                           );
                         })}
                         <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between items-center">
-                          <span className="text-sm text-gray-400">
-                            Total geral
-                          </span>
+                          <span className="text-sm text-gray-400">Total geral</span>
                           <span className="text-sm font-bold text-gray-700">
                             {totalGeral} estudantes
                           </span>

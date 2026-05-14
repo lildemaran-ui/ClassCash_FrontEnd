@@ -13,6 +13,7 @@ import {
   Circle,
   Clock,
   Loader2,
+  MessageSquarePlusIcon,
   Plus,
   Send,
   Sparkles,
@@ -389,19 +390,12 @@ function ListaTickets({
       <div className="bg-[#184d8a] px-4 py-4">
         <div className="flex items-center justify-between mb-1">
           <p className="text-white font-bold text-sm">Suporte & Ajuda</p>
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-purple-200 text-purple-800">
-            <Sparkles size={9} /> IA Activa
-          </span>
+          
         </div>
         <p className="text-blue-200 text-xs">As tuas reclamações são respondidas automaticamente pela IA</p>
       </div>
 
-      <div className="px-4 pt-4 pb-2">
-        <button onClick={onNovo}
-          className="w-full flex items-center justify-center gap-2 bg-[#184d8a] text-white py-2.5 rounded-xl font-bold text-sm hover:bg-[#1a5fad] transition-all shadow-md">
-          <Plus size={16} /> Nova Reclamação
-        </button>
-      </div>
+      
 
       <div className="flex-1 overflow-y-auto divide-y divide-gray-100 px-2">
         {loading ? (
@@ -419,7 +413,7 @@ function ListaTickets({
             const naoLidasCount = naoLidas[t.idsuporte] || 0;
             return (
               <button key={t.idsuporte} onClick={() => onSelecionar(t)}
-                className="w-full text-left px-3 py-3 hover:bg-gray-50 transition-colors flex items-center gap-3 group">
+                className="w-full text-left px-3 py-3 hover:bg-gray-50 transition-colors flex items-center gap-3 group border-b">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-bold text-gray-800 truncate">{t.assunto}</p>
@@ -443,6 +437,12 @@ function ListaTickets({
             );
           })
         )}
+      </div>
+      <div className="px-4 pt-4 pb-2 flex justify-end">
+        <button onClick={onNovo}
+          className=" flex items-center justify-center gap-2 bg-[#184d8a] text-white w-16 h-16 rounded-2xl font-bold text-sm hover:bg-[#1a5fad] transition-all shadow-md ">
+          <MessageSquarePlusIcon size={28} /> 
+        </button>
       </div>
     </div>
   );

@@ -54,7 +54,6 @@ export default function AppRoutes() {
 
   return (
     <>
-      {loading && <Spinner />}
       <Routes>
         <Route path="/" element={<Navigate to="/PaginaInicial" />} />
         <Route path="/PaginaInicial" element={<PaginaInicial />} />

@@ -4,6 +4,7 @@ import Avatar from "@/components/Avatar/Avatar";
 import { Header } from "@/components/Header/header";
 import ReclamacaoGeral from "@/components/Reclamacao/ReclamacaoGeral";
 import { Layout } from "../layout";
+import ContentLoader from "@/components/contentLoader";
 
 export default function Reclamacoes() {
   const [user, setUser] = useState<User | null>(null);
@@ -28,7 +29,9 @@ export default function Reclamacoes() {
             usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
           />
           <div className="">
+            <ContentLoader>
             <ReclamacaoGeral />
+            </ContentLoader>
           </div>
         </div>
       </div>

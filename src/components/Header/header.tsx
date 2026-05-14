@@ -56,21 +56,11 @@ export function Header(props: HeaderProps) {
           <Settings size={24} className="hidden sm:block" />
         </button></Link>
 
-        {/* Sino de notificações */}
-        <div className="relative cursor-pointer group p-1">
-          <Bell
-            size={20}
-            className="text-[#184d8a] group-hover:scale-110 transition-transform sm:hidden"
-          />
-          <Bell
-            size={24}
-            className="text-[#184d8a] group-hover:scale-110 transition-transform hidden sm:block"
-          />
-          <span className="absolute -top-0.5 -right-0.5 bg-red-500 w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full border-2 border-white" />
-        </div>
+       
 
         {/* --- NOVO SININHO COM PUSHER --- */}
-        <NotificationBell
+       <div>
+         <NotificationBell
           idInstituicao={
             user.idinstituicao ||
             user.idInstituicao ||
@@ -78,6 +68,8 @@ export function Header(props: HeaderProps) {
             35
           }
         />
+        
+       </div>
         {/* Modal de Edição de Perfil */}
         <ProfileEditModal
           isOpen={isModalOpen}

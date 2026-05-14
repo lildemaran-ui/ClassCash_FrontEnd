@@ -1,5 +1,6 @@
 import Avatar from "@/components/Avatar/Avatar";
 import ChartEstud from "@/components/Charts/ChartEstud";
+import ContentLoader from "@/components/contentLoader";
 import { ProfileEditModal } from "@/components/profile_edit_modal";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
@@ -191,6 +192,7 @@ export default function DadosDashEstd() {
       </div>
 
       <div ref={pdfRef} className="space-y-8">
+        <ContentLoader>
         {/* Header */}
         <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -509,6 +511,7 @@ export default function DadosDashEstd() {
             </table>
           </div>
         </div>
+        </ContentLoader>
       </div>
 
       <ProfileEditModal

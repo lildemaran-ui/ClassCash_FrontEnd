@@ -1,11 +1,31 @@
-export default function Spinner() {
+interface SpinnerProps {
+  local?: boolean
+}
+
+export default function Spinner({ local = false }: SpinnerProps) {
+  const containerStyle: React.CSSProperties = local
+    ? {
+        position: 'absolute',
+        inset: 0,
+        background: 'rgba(255, 255, 255, 1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10,
+       
+      }
+    : {
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(255, 255, 255, 1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 9999,
+      }
+
   return (
-    <div style={{
-      position: 'fixed', inset: 0,
-      background: '#d9e8ff',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      zIndex: 9999
-    }}>
+    <div style={containerStyle}>
       <div style={{ width: 48, height: 48, animation: 'morph 1.6s ease-in-out infinite' }} />
       <style>{`
         @keyframes morph {
@@ -16,5 +36,5 @@ export default function Spinner() {
         }
       `}</style>
     </div>
-  );
+  )
 }

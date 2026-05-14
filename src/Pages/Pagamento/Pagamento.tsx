@@ -4,6 +4,7 @@ import PagamentoGeral from "@/components/Pagamento/PagamentoGeral";
 import { useEffect, useState } from "react";
 import { Layout } from "../layout";
 import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
+import ContentLoader from "@/components/contentLoader";
 
 export default function Pagamentos() {
  const [user, setUser] = useState<SessaoUsuario | null>(null);
@@ -22,7 +23,9 @@ export default function Pagamentos() {
             usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
           />
           <div className="flex-1 p-4 sm:p-6 overflow-auto">
+            <ContentLoader>
             <PagamentoGeral />
+            </ContentLoader>
           </div>
     </Layout>
   );

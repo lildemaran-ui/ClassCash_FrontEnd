@@ -1,16 +1,19 @@
-// src/components/Avatar.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface AvatarProps {
   name: string;
   src?: string;
-  size?: "sm" | "md" | "lg" | "xl"; // Adicionei tamanhos para ser mais versátil
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
   const [hasError, setHasError] = useState(false);
 
-  // Configuração de tamanhos com Tailwind
+  // ✅ Reseta o erro sempre que o src muda
+  useEffect(() => {
+    setHasError(false);
+  }, [src]);
+
   const sizeClasses = {
     sm: "w-8 h-8 text-xs",
     md: "w-12 h-12 text-base",
@@ -18,15 +21,15 @@ const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
     xl: "w-32 h-32 lg:w-40 lg:h-40 text-4xl",
   };
 
-  // Dentro de Avatar.tsx
-  const initials = (name ?? "") // Se name for null/undefined, vira ""
+  const initials = (name ?? "")
     .trim()
     .split(" ")
-    .filter((word) => word.length > 0) // Evita erros com espaços duplos
+    .filter((word) => word.length > 0)
     .filter((_, i, arr) => i === 0 || i === arr.length - 1)
-    .map((n) => (n ? n[0] : "")) // Garante que a letra existe
+    .map((n) => (n ? n[0] : ""))
     .join("")
     .toUpperCase();
+
   const commonClasses = `${sizeClasses[size]} rounded-full flex items-center border border-[#184d8a]/50 justify-center overflow-hidden shrink-0`;
 
   if (src && !hasError) {
@@ -42,9 +45,7 @@ const Avatar = ({ name, src, size = "md" }: AvatarProps) => {
   }
 
   return (
-    <div
-      className={`${commonClasses} bg-primary text-white font-medium shadow-inner`}
-    >
+    <div className={`${commonClasses} bg-primary text-white font-medium shadow-inner`}>
       {initials}
     </div>
   );

@@ -214,18 +214,18 @@ export function TelaCadastro() {
             senha: senha.trim(),
             numProcesso: numProcesso.trim(),
             idInstituicao,
-            idclasse: idclasse || null,
+            idClasse: idclasse || null,
             numTel: contacto || "000000000",
           }
         : {
-            nome: nome.trim(),
-            email: email.trim().toLowerCase(),
-            senha: senha.trim(),
-            numTel: contacto || "000000000",
-            nomeEstudante: nomeEstudante.trim(),
+            nomeEncarregado: nome.trim(),
+            emailEncarregado: email.trim().toLowerCase(),
+            senhaEncarregado: senha.trim(),
+            numTelEncarregado: contacto || "000000000",
+            nomeEducando: nomeEstudante.trim(),
             numProcesso: numProcesso.trim(),
             idInstituicao,
-            idclasse: idclasse || null,
+            idClasse: idclasse || null,
             grauParentesco: grauParentesco.trim(),
           };
 
@@ -371,7 +371,7 @@ export function TelaCadastro() {
                       </div>
                     ) : (
                       <Select
-                        value={idclasse}
+                        value={idclasse !== "" ? idclasse.toString() : ""}
                         onValueChange={(value) => setClasse(parseInt(value))}
                       >
                         <SelectTrigger className="w-full border-2 rounded-lg h-10 text-xs px-4 outline-none focus:border-[#184d8a]/80">
@@ -383,7 +383,7 @@ export function TelaCadastro() {
                               key={c.idclasse}
                               value={c.idclasse.toString()}
                             >
-                              {c.nivel}ª
+                              {c.nivel != null ? `${c.nivel}ª` : null}
                             </SelectItem>
                           ))}
                         </SelectContent>

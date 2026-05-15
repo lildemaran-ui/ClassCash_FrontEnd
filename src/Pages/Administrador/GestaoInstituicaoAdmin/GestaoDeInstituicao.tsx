@@ -754,6 +754,7 @@ export default function GestaoDeInstituicao() {
           usuario={<Avatar name={user.nome} src={user.foto} size="sm" />}
         />
         <main className="p-4 sm:p-6 md:p-8">
+          
           <div className="bg-white p-4 sm:p-6 rounded-xl border border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
               <div className="relative flex-1">

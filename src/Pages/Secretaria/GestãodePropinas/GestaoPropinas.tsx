@@ -474,10 +474,10 @@ export default function GestaoPropinas() {
                           key={i}
                           className="hover:bg-primary/3 transition-colors group"
                         >
-                          <td className="px-4 py-4 text-sm font-mono text-gray-400">
+                          <td className="px-4 py-4 text-sm font-mono text-gray-400 whitespace-nowrap">
                             {row.codigo}
                           </td>
-                          <td className="px-4 py-4 text-sm font-semibold text-gray-700">
+                          <td className="px-4 py-4 text-sm font-semibold text-gray-700 whitespace-nowrap">
                             {row.nome_estudante}
                           </td>
                           <td className="px-4 py-4 text-sm text-gray-500">
@@ -487,7 +487,7 @@ export default function GestaoPropinas() {
                             {formatarData(row.data)}
                           </td>
                           {/* Meses de referência na tabela */}
-                          <td className="px-4 py-4 text-sm text-gray-500">
+                          <td className="max-w-[200px] truncate px-4 py-4 text-sm text-gray-500 whitespace-nowrap w-2 ">
                             {row.meses_referencia ? (
                               <span
                                 title={row.meses_referencia}

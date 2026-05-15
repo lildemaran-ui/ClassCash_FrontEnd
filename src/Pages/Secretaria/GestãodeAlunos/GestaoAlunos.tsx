@@ -262,8 +262,10 @@ function ModalEditar({
             Authorization: `Bearer ${getToken()}`,
           },
           body: JSON.stringify({
-            ...form,
-            classe: form.classe ? parseInt(form.classe) : null,
+            nome: form.nome_estudante,
+            email: form.email,
+            idClasse: form.classe ? parseInt(form.classe) : null,
+            status: form.status,
           }),
         },
       );
@@ -337,7 +339,7 @@ function ModalEditar({
                 <option value="">Sem classe</option>
                 {classes.filter((c) => c.nivel != null).map((c) => (
                   <option key={c.idclasse} value={String(c.idclasse)}>
-                    {c.nivel}ª Classe — {Number(c.valorservico).toLocaleString("pt-AO")} AOA
+                    {c.nivel}ª Classe
                   </option>
                 ))}
               </select>

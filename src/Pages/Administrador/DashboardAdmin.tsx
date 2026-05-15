@@ -72,7 +72,7 @@ export default function DashboardAdmin() {
     fetchPainel();
   }, [fetchPainel]);
 
-  // ── Gráfico de barras horizontais com dados reais ──────────────
+  // ── Gráfico de barras horizontais ──────────────────────────────
   const VerticalBarChartSimulation = () => {
     if (!data) return null;
 
@@ -100,7 +100,7 @@ export default function DashboardAdmin() {
     ];
 
     return (
-      <div className="bg-white p-4 sm:p-6 rounded-xl border mt-6">
+      <div className="bg-white p-4 sm:p-6 rounded-xl border h-full">
         <h1 className="text-base sm:text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
           Análise Gráfico
         </h1>
@@ -136,6 +136,7 @@ export default function DashboardAdmin() {
       </div>
     );
   };
+
   // ── Cards de métricas ──────────────────────────────────────────
   interface MetricCardProps {
     title: string;
@@ -299,12 +300,12 @@ export default function DashboardAdmin() {
           />
         </div>
 
-        {/* Gráficos */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 ">
-          <div className="w-full h-full ">
+        {/* Gráficos — altura igual nos dois lados */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 items-stretch">
+          <div className="flex flex-col">
             <VerticalBarChartSimulation />
           </div>
-          <div className="w-full h-full ">
+          <div className="flex flex-col">
             <ChartAdmin data={data?.graficoCadastros} />
           </div>
         </div>

@@ -4,7 +4,7 @@ import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { exigirSessao, type SessaoUsuario } from "@/types/global/sessao";
 import {
-  Download, MessageSquare, Trash2, X, Send, CheckCircle, Clock,
+  MessageSquare, Trash2, X, Send, CheckCircle, Clock,
   Search, ChevronLeft, ChevronRight, Filter,
 } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
@@ -27,40 +27,87 @@ interface Paginacao {
   totalPaginas: number;
 }
 
-/* ── Badge de Status ── */
-const StatusBadge = ({ s }: { s: string }) => {
-  const map: Record<string, { cls: string; icon: React.ReactNode }> = {
-    Pendente: { cls: "bg-orange-50 text-orange-700 border-orange-200", icon: <Clock size={10} /> },
-    Resolvida: { cls: "bg-green-50 text-green-700 border-green-200", icon: <CheckCircle size={10} /> },
-  };
-  const c = map[s] ?? { cls: "bg-gray-50 text-gray-600 border-gray-200", icon: null };
-  return (
-    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border ${c.cls}`}>
-      {c.icon} {s}
-    </span>
-  );
-};
-
-/* ── Bloco de respostas acumuladas ── */
-// Cada resposta está no formato "[dd/mm/aaaa, hh:mm] texto"
-// Esta função separa e renderiza cada uma individualmente
+/* ── Respostas acumuladas ── */
 const RespostasAcumuladas = ({ texto }: { texto: string }) => {
   const blocos = texto.split(/\n\n(?=\[)/).filter(Boolean);
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 mt-2">
       {blocos.map((bloco, i) => {
         const match = bloco.match(/^\[(.+?)\]\s*([\s\S]*)$/);
         const data = match?.[1] ?? "";
         const mensagem = match?.[2]?.trim() ?? bloco;
         return (
-          <div key={i} className="bg-blue-50 border border-blue-100 rounded-xl p-3">
-            {data && (
-              <p className="text-[10px] font-bold text-blue-400 mb-1">{data}</p>
-            )}
-            <p className="text-sm text-blue-800 leading-relaxed">{mensagem}</p>
+          <div key={i} className="bg-blue-50 border border-blue-100 rounded-lg px-3 py-2">
+            {data && <p className="text-[10px] font-bold text-blue-400 mb-1">{data}</p>}
+            <p className="text-xs text-blue-800 leading-relaxed">{mensagem}</p>
           </div>
         );
       })}
+    </div>
+  );
+};
+
+/* ── Card de Reclamação ── */
+const statusConfig = {
+  Resolvida: { color: "bg-green-100 text-green-700 border-green-200", icon: CheckCircle },
+  Pendente:  { color: "bg-amber-100 text-amber-700 border-amber-200",  icon: Clock },
+};
+
+const ReclamacaoCard = ({
+  rec,
+  onResponder,
+  onEliminar,
+}: {
+  rec: Reclamacao;
+  onResponder: (rec: Reclamacao) => void;
+  onEliminar: (id: number) => void;
+}) => {
+  const cfg = statusConfig[rec.status] ?? statusConfig.Pendente;
+  const Icon = cfg.icon;
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-100 p-4 sm:p-5 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="bg-primary/10 p-2 rounded-lg shrink-0">
+            <MessageSquare size={15} className="text-[#184d8a]" />
+          </div>
+          <h3 className="font-semibold text-gray-800 text-sm leading-tight line-clamp-2">{rec.assunto}</h3>
+        </div>
+        <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full whitespace-nowrap shrink-0 border ${cfg.color}`}>
+          <Icon size={11} />{rec.status}
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-1 text-xs text-gray-500 pl-9">
+        <span><span className="font-medium text-gray-700">Remetente:</span> {rec.nome}</span>
+        <span><span className="font-medium text-gray-700">Data:</span> {rec.data}</span>
+        {rec.descricao && (
+          <span><span className="font-medium text-gray-700">Descrição:</span> {rec.descricao}</span>
+        )}
+      </div>
+
+      {rec.resposta && rec.resposta.trim() && (
+        <div className="pl-9">
+          <p className="text-xs font-semibold text-blue-700 mb-1">Respostas enviadas:</p>
+          <RespostasAcumuladas texto={rec.resposta} />
+        </div>
+      )}
+
+      <div className="flex gap-2 justify-end pt-1 border-t border-gray-50">
+        <button
+          onClick={() => onResponder(rec)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary/10 text-[#184d8a] text-xs font-bold hover:bg-primary hover:text-white transition-all"
+        >
+          <MessageSquare size={12} /> Responder
+        </button>
+        <button
+          onClick={() => onEliminar(rec.id)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 text-red-500 text-xs font-bold hover:bg-red-500 hover:text-white transition-all"
+        >
+          <Trash2 size={12} /> Remover
+        </button>
+      </div>
     </div>
   );
 };
@@ -73,7 +120,6 @@ const ModalResposta = ({
   onClose: () => void;
   onUpdate: (id: number, resposta: string, status: Reclamacao["status"]) => Promise<void>;
 }) => {
-  // ✅ Campo de nova resposta sempre limpo — a acumulação é feita no backend
   const [novaResposta, setNovaResposta] = useState("");
   const [status, setStatus] = useState<Reclamacao["status"]>(rec.status);
   const [saving, setSaving] = useState(false);
@@ -103,13 +149,11 @@ const ModalResposta = ({
         </div>
 
         <div className="px-6 py-5 space-y-5">
-          {/* Reclamante */}
           <div className="bg-gray-50 rounded-2xl p-4">
             <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Reclamante</p>
             <p className="font-bold text-gray-700">{rec.nome}</p>
           </div>
 
-          {/* Assunto + Descrição */}
           <div>
             <h3 className="font-bold text-gray-800 mb-2">{rec.assunto}</h3>
             {rec.descricao && (
@@ -117,17 +161,13 @@ const ModalResposta = ({
             )}
           </div>
 
-          {/* Histórico de respostas anteriores */}
           {rec.resposta && rec.resposta.trim() && (
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                Respostas anteriores
-              </p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Respostas anteriores</p>
               <RespostasAcumuladas texto={rec.resposta} />
             </div>
           )}
 
-          {/* Estado */}
           <div>
             <label className="block text-xs font-semibold text-gray-500 mb-1.5">Estado</label>
             <select
@@ -140,11 +180,8 @@ const ModalResposta = ({
             </select>
           </div>
 
-          {/* Nova resposta — sempre vazia */}
           <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1.5">
-              Nova Resposta
-            </label>
+            <label className="block text-xs font-semibold text-gray-500 mb-1.5">Nova Resposta</label>
             <textarea
               rows={4}
               placeholder="Escreve uma nova resposta..."
@@ -228,7 +265,7 @@ export default function GestaodeReclamacoes() {
       if (filtroStatus) params.set("status", filtroStatus);
 
       const res = await fetchComAuth(
-        `http://localhost:5000/api/secretaria/reclamacoes?${params.toString()}`
+        `http://localhost:5000/api/reclamacoes/secretaria/todas?${params.toString()}`
       );
       const dados = await res.json();
       const lista = dados.reclamacoes ?? dados;
@@ -260,7 +297,7 @@ export default function GestaodeReclamacoes() {
 
   const handleUpdate = async (id: number, resposta: string, status: Reclamacao["status"]) => {
     try {
-      await fetchComAuth(`http://localhost:5000/api/secretaria/reclamacoes/${id}/responder`, {
+      await fetchComAuth(`http://localhost:5000/api/reclamacoes/secretaria/${id}/responder`, {
         method: "PUT",
         body: JSON.stringify({ resposta, status }),
       });
@@ -273,7 +310,7 @@ export default function GestaodeReclamacoes() {
 
   const handleDelete = async () => {
     try {
-      await fetchComAuth(`http://localhost:5000/api/secretaria/reclamacoes/${modalExclusao}`, { method: "DELETE" });
+      await fetchComAuth(`http://localhost:5000/api/reclamacoes/secretaria/${modalExclusao}`, { method: "DELETE" });
       toast.success("Reclamação removida");
       setModalExclusao(null);
       await carregarReclamacoes();
@@ -297,13 +334,10 @@ export default function GestaodeReclamacoes() {
       <MenuSecretaria />
 
       <main className="flex-1 flex flex-col overflow-hidden">
-        
-          <Header
-            titulo="Gestão de Reclamações"
-            usuario={user ? <Avatar name={user.nome} src={user.foto} size="sm" /> : null}
-          />
-         
-        
+        <Header
+          titulo="Gestão de Reclamações"
+          usuario={user ? <Avatar name={user.nome} src={user.foto} size="sm" /> : null}
+        />
 
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           {/* KPIs */}
@@ -370,11 +404,13 @@ export default function GestaodeReclamacoes() {
             )}
           </div>
 
-          {/* Tabela */}
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden mb-4">
-            <div className="px-5 py-4 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-              <h3 className="font-bold text-gray-700">Lista de Reclamações</h3>
-              <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border">{paginacao.total} total</span>
+          {/* Cards */}
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <h3 className="font-bold text-gray-700">Lista de Reclamações</h3>
+                <span className="text-xs text-gray-400 bg-white px-3 py-1 rounded-full border">{paginacao.total} total</span>
+              </div>
             </div>
 
             {carregando ? (
@@ -382,72 +418,24 @@ export default function GestaodeReclamacoes() {
                 <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
               </div>
             ) : reclamacoes.length === 0 ? (
-              <div className="text-center py-16 text-gray-400">
+              <div className="text-center py-16 text-gray-400 bg-white rounded-2xl border border-gray-200">
                 <MessageSquare size={36} className="mx-auto mb-2 opacity-30" />
                 <p className="text-sm">{temFiltrosActivos ? "Nenhum resultado para os filtros aplicados" : "Nenhuma reclamação registada"}</p>
-                {temFiltrosActivos && <button onClick={limparFiltros} className="mt-2 text-xs text-primary hover:underline">Limpar filtros</button>}
+                {temFiltrosActivos && (
+                  <button onClick={limparFiltros} className="mt-2 text-xs text-primary hover:underline">Limpar filtros</button>
+                )}
               </div>
             ) : (
-              <>
-                {/* Desktop */}
-                <div className="hidden md:block overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-primary text-white text-[13px] font-semibold text-center">
-                        <th className="px-6 py-3.5">Data</th>
-                        <th className="px-6 py-3.5">Remetente</th>
-                        <th className="px-6 py-3.5">Assunto</th>
-                        <th className="px-6 py-3.5">Estado</th>
-                        <th className="px-6 py-3.5">Ação</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-50">
-                      {reclamacoes.map((r) => (
-                        <tr key={r.id} className="hover:bg-primary/3 transition-colors text-center">
-                          <td className="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{r.data}</td>
-                          <td className="px-6 py-4 text-left"><p className="text-sm font-bold text-gray-700">{r.nome}</p></td>
-                          <td className="px-6 py-4 text-sm text-gray-600 max-w-[200px] text-left"><span className="line-clamp-1">{r.assunto}</span></td>
-                          <td className="px-6 py-4"><StatusBadge s={r.status} /></td>
-                          <td className="px-6 py-4">
-                            <div className="flex gap-2 justify-center">
-                              <button onClick={() => setModalResposta(r)} className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all" title="Responder">
-                                <MessageSquare size={15} />
-                              </button>
-                              <button onClick={() => setModalExclusao(r.id)} className="p-2 bg-red-50 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all" title="Remover">
-                                <Trash2 size={15} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Mobile */}
-                <div className="md:hidden divide-y divide-gray-100">
-                  {reclamacoes.map((r) => (
-                    <div key={r.id} className="p-4 hover:bg-gray-50">
-                      <div className="flex justify-between items-start mb-2 gap-2">
-                        <div className="flex-1 min-w-0">
-                          <p className="font-bold text-gray-700 text-sm truncate">{r.nome}</p>
-                          <p className="text-[11px] text-gray-400">{r.data}</p>
-                        </div>
-                        <StatusBadge s={r.status} />
-                      </div>
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-1">{r.assunto}</p>
-                      <div className="flex justify-end gap-2">
-                        <button onClick={() => setModalResposta(r)} className="p-2 bg-primary/10 text-[#184d8a] rounded-lg hover:bg-primary hover:text-white transition-all">
-                          <MessageSquare size={14} />
-                        </button>
-                        <button onClick={() => setModalExclusao(r.id)} className="p-2 bg-red-50 text-red-400 rounded-lg hover:bg-red-500 hover:text-white transition-all">
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
+              <div className="flex flex-col gap-3">
+                {reclamacoes.map((r) => (
+                  <ReclamacaoCard
+                    key={r.id}
+                    rec={r}
+                    onResponder={setModalResposta}
+                    onEliminar={setModalExclusao}
+                  />
+                ))}
+              </div>
             )}
           </div>
 

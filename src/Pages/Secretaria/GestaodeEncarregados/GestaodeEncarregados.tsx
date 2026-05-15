@@ -772,7 +772,7 @@ export default function GestaodeEncarregados() {
         },
       );
       if (!res.ok) throw new Error("Erro ao remover");
-      toast.success("Estudante removido com sucesso");
+      toast.success("Encarregado removido com sucesso");
       setModalDelete(null);
       carregarEncarregados();
     } catch (e) {

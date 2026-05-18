@@ -67,7 +67,7 @@ export function ChartPieLegend() {
           <PieChart>
             <Pie data={chartData} dataKey="visitors" />
             <ChartLegend
-              content={<ChartLegendContent nameKey="browser" />}
+              content={<ChartLegendContent payload={chartData} nameKey="browser" />}
               className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
             />
           </PieChart>

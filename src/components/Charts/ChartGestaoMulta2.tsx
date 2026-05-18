@@ -1,4 +1,3 @@
-import * as React from "react";
 import { BarChart } from "@mui/x-charts/BarChart";
 import { dataset } from "../DataSet/weather"; // Mantendo seu dataset original
 

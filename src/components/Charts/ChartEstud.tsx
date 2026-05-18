@@ -1,8 +1,7 @@
-import * as React from "react";
-import { PieChart } from "@mui/x-charts/PieChart";
 import { exigirSessao } from "@/types/global/sessao";
-import { useEffect, useState } from "react";
+import { PieChart } from "@mui/x-charts/PieChart";
 import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const CORES = ["#184d8a", "#393b3b", "#72a7ff", "#22c55e", "#f59e0b"];
 

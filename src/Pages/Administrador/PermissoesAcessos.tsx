@@ -308,7 +308,7 @@ export default function PermissoesAcessos() {
                           </td>
                           <td className="px-6 py-4 text-center">
                             <button
-                              onClick={() => setUtilizadorSelecionado(u)}
+                              onClick={() => setUtilizadorSelecionado(u as unknown as UtilizadorDetalhes)}
                               className="text-[12px] font-bold text-[#184d8a] border border-[#184d8a]/30 px-4 py-1.5 rounded-lg hover:bg-[#184d8a] hover:text-white transition-all inline-flex items-center gap-2"
                             >
                               Ver <ChevronRight className="w-3 h-3" />
@@ -408,7 +408,7 @@ export default function PermissoesAcessos() {
                             </td>
                             <td className="px-6 py-4 text-center">
                               <button
-                                onClick={() => setUtilizadorSelecionado(u)}
+                                onClick={() => setUtilizadorSelecionado(u as unknown as UtilizadorDetalhes)}
                                 className="text-[12px] font-bold text-[#184d8a] border border-[#184d8a]/30 px-4 py-1.5 rounded-lg hover:bg-[#184d8a] hover:text-white transition-all"
                               >
                                 Ver Detalhes

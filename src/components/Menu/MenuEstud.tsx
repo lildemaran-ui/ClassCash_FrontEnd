@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import logo555 from "../../assets/Logo5.5.png";
+import logo555 from "../../assets/logo5.5.png";
 type MenuMode = "open" | "collapsed" | "hidden";
 
 export default function MenuEstud() {

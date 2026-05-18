@@ -16,7 +16,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo555 from "../../assets/Logo5.5.png";
+import logo555 from "../../assets/logo5.5.png";
 import { useState, useEffect } from "react";
 import { handleLogout } from "@/lib/logout";
 

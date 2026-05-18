@@ -215,7 +215,7 @@ export default function SuporteAjuda() {
       toast.success("Resposta gerada pela IA. Podes editar antes de enviar.", {
         icon: "✨",
       });
-    } catch (err) {
+    } catch {
       toast.error("Erro ao gerar resposta com IA");
     } finally {
       setRegenerando(false);

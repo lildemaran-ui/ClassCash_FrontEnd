@@ -231,12 +231,12 @@ export default function Secretaria() {
       {/* ── Botão de Suporte com badge de não lidas ── */}
       <button
         onClick={() => { setSuporteAberto(true); setTotalNaoLidas(0); }}
-        className="bg-primary animate-pulse duration-1500 text-white rounded-full w-16 h-16 lg:w-20 lg:h-20 hover:animate-none hover:scale-110 transition-all font-bold shadow-md fixed bottom-4 flex items-center justify-center right-2 lg:right-12 z-30"
+        className="bg-primary animate-pulse duration-1500 text-white rounded-full w-14 h-14 lg:w-16 lg:h-16 hover:animate-none hover:scale-110 transition-all font-bold shadow-md fixed bottom-4 flex items-center justify-center right-2 lg:right-12 z-30"
         title="Abrir Suporte"
       >
         <div className="relative">
-          <div className="hidden lg:block"><Headset size={32} /></div>
-          <div className="lg:hidden"><Headset size={28} /></div>
+          <div className="hidden lg:block"><Headset size={30} /></div>
+          <div className="lg:hidden"><Headset size={24} /></div>
           {/* ✅ Badge de não lidas — estilo WhatsApp */}
           {totalNaoLidas > 0 && (
             <span className="absolute -top-2 -right-2 min-w-[20px] h-5 bg-red-500 text-white text-[11px] font-bold rounded-full flex items-center justify-center px-1 shadow-lg border-2 border-white animate-bounce">

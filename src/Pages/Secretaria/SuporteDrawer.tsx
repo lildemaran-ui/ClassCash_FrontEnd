@@ -4,7 +4,7 @@
 // ════════════════════════════════════════════════════════════════
 import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { getToken } from "@/types/global/sessao";
-import { getSocket } from "@/hooks/useSocket";
+import { getSocket } from "@/Hooks/useSocket";
 import {
   ArrowLeft,
   Bot,

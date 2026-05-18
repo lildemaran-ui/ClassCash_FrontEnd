@@ -1,4 +1,5 @@
 import Avatar from "@/components/Avatar/Avatar";
+import HelpButton from "@/components/Botoes/helpbutton";
 import ChartGestaoMulta from "@/components/Charts/ChartGestaoMulta";
 import ChartGestaoMulta2 from "@/components/Charts/ChartGestaoMulta2";
 import { Header } from "@/components/Header/header";
@@ -499,6 +500,7 @@ export default function ModulodeMulta() {
             </div>
           </div>
         </div>
+        <HelpButton/>
       </main>
 
     

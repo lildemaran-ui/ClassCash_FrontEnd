@@ -1,4 +1,5 @@
 import Avatar from "@/components/Avatar/Avatar";
+import HelpButton from "@/components/Botoes/helpbutton";
 import { Header } from "@/components/Header/header";
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
@@ -603,6 +604,7 @@ export default function GestaoPropinas() {
             </div>
           </div>
         </div>
+        <HelpButton/>
       </main>
 
       {selectedRow && (

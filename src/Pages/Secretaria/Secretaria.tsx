@@ -1,24 +1,24 @@
 
 import MenuSecretaria from "@/components/Menu/MenuSecretaria";
-import SuporteDrawer from "../../Pages/Secretaria/SuporteDrawer";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { exigirSessao, getToken, type SessaoUsuario } from "@/types/global/sessao";
-import { Download, Headset, TrendingDown, TrendingUp } from "lucide-react";
+import { Download, TrendingDown, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 // src/Pages/Secretaria/Secretaria.tsx
-import Avatar from '@/components/Avatar/Avatar'
-import { MonthlyBarChart } from '@/components/Charts/MonthlyBarChart'
-import { Header } from '@/components/Header/header'
+import Avatar from '@/components/Avatar/Avatar';
+import { MonthlyBarChart } from '@/components/Charts/MonthlyBarChart';
+import { Header } from '@/components/Header/header';
 
-import { BannerAviso } from '@/components/Sancoes/BannerAviso'
-import { ModalRestricao } from '@/components/Sancoes/ModalRestricao'
-import { BloqueioTotal } from '@/components/Sancoes/BloqueioTotal'
+import HelpButton from "@/components/Botoes/helpbutton";
+import { BannerAviso } from '@/components/Sancoes/BannerAviso';
+import { BloqueioTotal } from '@/components/Sancoes/BloqueioTotal';
+import { ModalRestricao } from '@/components/Sancoes/ModalRestricao';
 
 
 const API = 'http://localhost:5000/api'
@@ -76,9 +76,8 @@ export default function Secretaria() {
   const [user, setUser]           = useState<SessaoUsuario | null>(null);
   const [painel, setPainel]       = useState<PainelData | null>(null);
   const [loading, setLoading]     = useState(true);
-  const [suporteAberto, setSuporteAberto] = useState(false);
   // ✅ Total de mensagens não lidas — actualizado pelo SuporteDrawer via callback
-  const [totalNaoLidas, setTotalNaoLidas] = useState(0);
+ 
 
 
   // Lógica de Datas para Sanções
@@ -229,29 +228,9 @@ export default function Secretaria() {
       </main>
 
       {/* ── Botão de Suporte com badge de não lidas ── */}
-      <button
-        onClick={() => { setSuporteAberto(true); setTotalNaoLidas(0); }}
-        className="bg-primary animate-pulse duration-1500 text-white rounded-full w-14 h-14 lg:w-16 lg:h-16 hover:animate-none hover:scale-110 transition-all font-bold shadow-md fixed bottom-4 flex items-center justify-center right-2 lg:right-12 z-30"
-        title="Abrir Suporte"
-      >
-        <div className="relative">
-          <div className="hidden lg:block"><Headset size={30} /></div>
-          <div className="lg:hidden"><Headset size={24} /></div>
-          {/* ✅ Badge de não lidas — estilo WhatsApp */}
-          {totalNaoLidas > 0 && (
-            <span className="absolute -top-2 -right-2 min-w-[20px] h-5 bg-red-500 text-white text-[11px] font-bold rounded-full flex items-center justify-center px-1 shadow-lg border-2 border-white animate-bounce">
-              {totalNaoLidas > 99 ? "99+" : totalNaoLidas}
-            </span>
-          )}
-        </div>
-      </button>
+     <HelpButton/>
 
-      {/* ── Drawer de Suporte ── */}
-      <SuporteDrawer
-        aberto={suporteAberto}
-        onFechar={() => setSuporteAberto(false)}
-        onNaoLidasChange={setTotalNaoLidas}
-      />
+
     </div>
   );
 }

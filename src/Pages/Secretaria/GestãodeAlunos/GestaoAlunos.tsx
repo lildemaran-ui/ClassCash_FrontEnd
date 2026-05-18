@@ -1,5 +1,6 @@
 // src/Pages/Secretaria/GestaoAlunos.tsx
 import Avatar from "@/components/Avatar/Avatar";
+import HelpButton from "@/components/Botoes/helpbutton";
 import ChartGestaoEstud from "@/components/Charts/ChartGestaoEstud";
 import ChartGestaoEstud2 from "@/components/Charts/ChartGestaoEstud2";
 import { Header } from "@/components/Header/header";
@@ -900,6 +901,7 @@ export default function GestaoAlunos() {
             </div>
           )}
         </div>
+        <HelpButton/>
       </main>
     </div>
   );

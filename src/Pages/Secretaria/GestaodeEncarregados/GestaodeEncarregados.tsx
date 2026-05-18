@@ -26,6 +26,7 @@ import {
 } from "@/types/global/sessao";
 import { fetchComAuth } from "@/types/global/fetchComAuth";
 import { useClasses } from "@/Hooks/useClasses";
+import HelpButton from "@/components/Botoes/helpbutton";
 
 const API = "http://localhost:5000/api";
 
@@ -1157,6 +1158,7 @@ export default function GestaodeEncarregados() {
             </div>
           )}
         </div>
+        <HelpButton />
       </main>
     </div>
   );
